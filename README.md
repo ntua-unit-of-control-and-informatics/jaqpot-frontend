@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Jaqpot Frontend V2
 
-## Getting Started
+This repository contains the source code for Jaqpot Frontend V2, a modern web application built using Next.js. It leverages NextAuth for robust authentication mechanisms, providing a secure and efficient way to manage user sessions and access control. The app is designed to interface with the Jaqpot API, facilitating advanced model management and prediction functionalities.
 
-First, run the development server:
+## Features
+
+- **Model Management:** Upload, modify, and manage models directly through the UI.
+- **Predictions:** Run predictions using stored models and view results in real-time.
+- **User Authentication:** Secure user authentication and session management with NextAuth.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+- Node.js (>=18.x)
+- npm/yarn
+
+## Installation
+
+Clone the repository and install the dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2.git
+cd jaqpot-frontend-v2
+npm install  # or yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running the Application
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To start the development server, run:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm run dev  # or yarn dev
+```
 
-## Learn More
+Open http://localhost:3000 in your browser to view the application.
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
