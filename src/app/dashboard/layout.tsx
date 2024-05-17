@@ -8,7 +8,7 @@ export default function Dashboard({
   return (
     <>
       <Sidebar />
-      <div className="p-4 sm:ml-64">{children}</div>
+      <div className="p-4 h-screen sm:ml-64">{children}</div>
     </>
   );
 }
