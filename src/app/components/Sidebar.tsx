@@ -1,23 +1,48 @@
+'use client';
+
 import Logo from '@/app/components/Logo';
 import Link from 'next/link';
-import { auth, signIn } from '@/auth';
+
 import {
   CircleStackIcon,
   Cog8ToothIcon,
   HomeIcon,
   InboxIcon,
   UsersIcon,
+  XCircleIcon,
 } from '@heroicons/react/24/solid';
+import { signIn, signOut } from 'next-auth/react';
+import { useState } from 'react';
+import { Session } from 'next-auth';
 
-export default async function Sidebar() {
-  const session = await auth();
+export default function Sidebar({ session }: { session: Session | null }) {
+  const [showSidebarOnMobile, setShowSideBarOnMobile] = useState(false);
+
+  const sidebarClassName = () => {
+    const sidebarDefaultClassnames =
+      'fixed top-0 left-0 z-40 w-64 h-screen bg-indigo-600 dark:bg-gray-1000 transition-transform sm:translate-x-0';
+    if (showSidebarOnMobile) {
+      return sidebarDefaultClassnames;
+    } else {
+      return `${sidebarDefaultClassnames} -translate-x-full`;
+    }
+  };
+
+  const ModalOverlay = () => (
+    <div
+      className={`flex justify-end items-start w-full p-4 md:hidden fixed top-0 right-0 bottom-0 left-0 bg-black/50 z-30`}
+      onClick={() => {
+        setShowSideBarOnMobile(false);
+      }}
+    >
+      <XCircleIcon className="h-10 w-10 text-white cursor-pointer" />
+    </div>
+  );
 
   return (
     <>
       <button
-        data-drawer-target="default-sidebar"
-        data-drawer-toggle="default-sidebar"
-        aria-controls="default-sidebar"
+        onClick={() => setShowSideBarOnMobile(!showSidebarOnMobile)}
         type="button"
         className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
@@ -38,7 +63,7 @@ export default async function Sidebar() {
       </button>
       <aside
         id="default-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen bg-indigo-600 dark:bg-gray-1000 transition-transform -translate-x-full sm:translate-x-0"
+        className={sidebarClassName()}
         aria-label="Sidebar"
       >
         <div className="flex flex-col h-full">
@@ -108,65 +133,57 @@ export default async function Sidebar() {
                 </a>
               </li>
               {!session && (
-                <form
-                  action={async () => {
-                    'use server';
+                <button
+                  onClick={async () => {
                     await signIn('keycloak');
                   }}
+                  type="submit"
+                  className="flex gap-x-3 w-full p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group"
                 >
-                  <button
-                    type="submit"
-                    className="flex gap-x-3 w-full p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group"
+                  <svg
+                    className="flex-shrink-0 w-5 h-5 text-indigo-200 transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 16"
                   >
-                    <svg
-                      className="flex-shrink-0 w-5 h-5 text-indigo-200 transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
-                      />
-                    </svg>
-                    Sign In
-                  </button>
-                </form>
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
+                    />
+                  </svg>
+                  Sign In
+                </button>
               )}
-              {/*{!!session && (*/}
-              {/*  <form*/}
-              {/*    action={async () => {*/}
-              {/*      'use server';*/}
-              {/*      await signOut();*/}
-              {/*    }}*/}
-              {/*  >*/}
-              {/*    <button*/}
-              {/*      type="submit"*/}
-              {/*      className="flex gap-x-3 w-full p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group"*/}
-              {/*    >*/}
-              {/*      <svg*/}
-              {/*        className="flex-shrink-0 w-5 h-5 text-indigo-200 transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"*/}
-              {/*        aria-hidden="true"*/}
-              {/*        xmlns="http://www.w3.org/2000/svg"*/}
-              {/*        fill="none"*/}
-              {/*        viewBox="0 0 18 16"*/}
-              {/*      >*/}
-              {/*        <path*/}
-              {/*          stroke="currentColor"*/}
-              {/*          strokeLinecap="round"*/}
-              {/*          strokeLinejoin="round"*/}
-              {/*          strokeWidth="2"*/}
-              {/*          d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"*/}
-              {/*        />*/}
-              {/*      </svg>*/}
-              {/*      Log out*/}
-              {/*    </button>*/}
-              {/*  </form>*/}
-              {/*)}*/}
+              {!!session && (
+                <button
+                  onClick={async () => {
+                    await signOut();
+                  }}
+                  type="submit"
+                  className="flex gap-x-3 w-full p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group"
+                >
+                  <svg
+                    className="flex-shrink-0 w-5 h-5 text-indigo-200 transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 16"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
+                    />
+                  </svg>
+                  Log out
+                </button>
+              )}
               <li>
                 <a
                   href="#"
@@ -177,12 +194,10 @@ export default async function Sidebar() {
                 </a>
               </li>
             </ul>
-            <div>
-              <ul></ul>
-            </div>
           </nav>
         </div>
       </aside>
+      {showSidebarOnMobile && <ModalOverlay />}
     </>
   );
 }
