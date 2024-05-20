@@ -1,28 +1,41 @@
-import Image from 'next/image';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard | Jaqpot',
+  description: 'From model upload to prediction, all in one place',
+  // openGraph: {
+  //   images: ['https://i.imgur.com/Tamd8rD.png'],
+  // },
+};
 
 export default function Dashboard() {
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <div style={{ padding: '20px' }}>
       <h1>Welcome to Your Dashboard!</h1>
+      <br />
       <p>Get started by exploring the different sections of our dashboard:</p>
       <ul>
+        <br />
         <li>
           <strong>Models:</strong> Click on &apos;Models&apos; in the sidebar to
           view and manage your machine learning models.
         </li>
-
+        <br />
         <li>
           <strong>Datasets:</strong> Access &apos;Datasets&apos; to view data
           you can use for training and testing.
         </li>
+        <br />
         <li>
           <strong>Features:</strong> Review and manage the features of your
           models under the &apos;Features&apos; section.
         </li>
+        <br />
         <li>
           <strong>Run Models:</strong> Use the &apos;Run Models&apos; section to
           execute your models and see their performance in action.
         </li>
+        <br />
       </ul>
       <p>
         Dumbledore waited, but Madame Maxime did not speak, she merely glared.
