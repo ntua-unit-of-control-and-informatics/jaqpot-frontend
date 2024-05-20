@@ -1,7 +1,10 @@
-import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+'use client';
+
+import { BellIcon } from '@heroicons/react/24/outline';
 import UserAvatar from '@/app/dashboard/components/UserAvatar';
 import { Session } from 'next-auth';
 import SearchBar from '@/app/dashboard/components/SearchBar';
+import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
 
 export default function TopBar({ session }: { session: Session | null }) {
   return (
@@ -11,6 +14,13 @@ export default function TopBar({ session }: { session: Session | null }) {
         <div className="flex gap-x-5 items-center">
           <button type="button" className="p-2.5">
             <BellIcon className="size-6 text-gray-400" />
+          </button>
+          <button
+            onClick={() => document.body.classList.toggle('dark')}
+            className="h-12 w-12 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <MoonIcon className="text-violet-700 block dark:hidden" />
+            <SunIcon className="text-yellow-500  hidden dark:block" />
           </button>
           {/*DIVIDER*/}
           <div

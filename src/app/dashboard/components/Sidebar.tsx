@@ -77,7 +77,7 @@ export default function Sidebar({ session }: { session: Session | null }) {
 
   const sidebarClassName = () => {
     const sidebarDefaultClassnames =
-      'fixed top-0 left-0 z-40 w-72 h-screen bg-indigo-600 dark:bg-gray-1000 transition-transform sm:translate-x-0';
+      'fixed top-0 left-0 z-40 w-72 h-screen bg-indigo-600 dark:bg-gray-900 transition-transform sm:translate-x-0';
     if (showSidebarOnMobile) {
       return sidebarDefaultClassnames;
     } else {
