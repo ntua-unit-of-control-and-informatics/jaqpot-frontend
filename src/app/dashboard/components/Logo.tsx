@@ -2,7 +2,6 @@ export default function Logo() {
   return (
     <svg
       viewBox="0 0 300 100"
-      preserveAspectRatio="meet"
       version="1.1"
       id="svg1"
       xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,6 @@
 'use client';
 
-import Logo from '@/app/components/Logo';
+import Logo from '@/app/dashboard/components/Logo';
 import Link from 'next/link';
 
 import {
@@ -8,7 +8,6 @@ import {
   Cog8ToothIcon,
   HomeIcon,
   InboxIcon,
-  UsersIcon,
   XCircleIcon,
 } from '@heroicons/react/24/solid';
 import { signIn, signOut } from 'next-auth/react';
@@ -18,25 +17,14 @@ import { usePathname } from 'next/navigation';
 
 export default function Sidebar({ session }: { session: Session | null }) {
   const [showSidebarOnMobile, setShowSideBarOnMobile] = useState(false);
-  const pathname = usePathname();
-
-  const sidebarClassName = () => {
-    const sidebarDefaultClassnames =
-      'fixed top-0 left-0 z-40 w-64 h-screen bg-indigo-600 dark:bg-gray-1000 transition-transform sm:translate-x-0';
-    if (showSidebarOnMobile) {
-      return sidebarDefaultClassnames;
-    } else {
-      return `${sidebarDefaultClassnames} -translate-x-full`;
-    }
-  };
-
   const navElement = (
+    index: number,
     href: string,
     name: string,
     icon: ReactElement,
     after?: ReactElement,
   ) => (
-    <li>
+    <li key={index}>
       <Link
         href={`/${href}`}
         className={`flex items-center p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group ${pathname === `/${href}` ? 'bg-indigo-700' : ''}`}
@@ -52,32 +40,50 @@ export default function Sidebar({ session }: { session: Session | null }) {
     </li>
   );
 
+  const pathname = usePathname();
+
   const iconClassName =
     'w-5 h-5 text-indigo-200 transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white';
 
   const navElements = [
-    navElement(
-      'dashboard',
-      'Dashboard',
-      <HomeIcon className={iconClassName} />,
-    ),
-    navElement('models', 'Models', <HomeIcon className={iconClassName} />),
-    navElement(
-      'inbox',
-      'Inbox',
-      <CircleStackIcon className={iconClassName} />,
-      <>
-        <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-          3
-        </span>
-      </>,
-    ),
-    navElement(
-      'settings',
-      'Settings',
-      <Cog8ToothIcon className={iconClassName} />,
-    ),
+    {
+      href: 'dashboard',
+      name: 'Dashboard',
+      icon: <HomeIcon className={iconClassName} />,
+    },
+    {
+      href: 'dashboard/models',
+      name: 'Models',
+      icon: <CircleStackIcon className={iconClassName} />,
+    },
+    {
+      href: 'inbox',
+      name: 'Inbox',
+      icon: <InboxIcon className={iconClassName} />,
+      after: (
+        <>
+          <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+            3
+          </span>
+        </>
+      ),
+    },
+    {
+      href: 'settings',
+      name: 'Settings',
+      icon: <Cog8ToothIcon className={iconClassName} />,
+    },
   ];
+
+  const sidebarClassName = () => {
+    const sidebarDefaultClassnames =
+      'fixed top-0 left-0 z-40 w-72 h-screen bg-indigo-600 dark:bg-gray-1000 transition-transform sm:translate-x-0';
+    if (showSidebarOnMobile) {
+      return sidebarDefaultClassnames;
+    } else {
+      return `${sidebarDefaultClassnames} -translate-x-full`;
+    }
+  };
 
   const ModalOverlay = () => (
     <div
@@ -126,7 +132,9 @@ export default function Sidebar({ session }: { session: Session | null }) {
           </Link>
           <nav className="h-full px-3 py-4 overflow-y-auto">
             <ul className="space-y-2 font-medium">
-              {navElements.map((navElement) => navElement)}
+              {navElements.map(({ href, name, icon, after }, index) =>
+                navElement(index, href, name, icon, after),
+              )}
 
               {!session && (
                 <button

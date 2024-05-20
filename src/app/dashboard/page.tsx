@@ -3,9 +3,6 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Dashboard | Jaqpot',
   description: 'From model upload to prediction, all in one place',
-  // openGraph: {
-  //   images: ['https://i.imgur.com/Tamd8rD.png'],
-  // },
 };
 
 export default function Dashboard() {
