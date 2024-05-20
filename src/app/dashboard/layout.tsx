@@ -1,17 +1,22 @@
-import Sidebar from '@/app/components/Sidebar';
+import Sidebar from '@/app/dashboard/components/Sidebar';
 import { auth } from '@/auth';
+import { ReactNode } from 'react';
+import TopBar from '@/app/dashboard/components/TopBar';
 
 export default async function Dashboard({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   const session = await auth();
 
   return (
     <>
       <Sidebar session={session} />
-      <div className="p-4 h-screen sm:ml-64">{children}</div>
+      <div className="h-screen sm:ml-72">
+        <TopBar session={session} />
+        <main>{children}</main>
+      </div>
     </>
   );
 }
