@@ -15,7 +15,7 @@ export default async function Dashboard({
       <Sidebar session={session} />
       <div className="h-screen sm:ml-72">
         <TopBar session={session} />
-        <main>{children}</main>
+        <main className="p-8">{children}</main>
       </div>
     </>
   );

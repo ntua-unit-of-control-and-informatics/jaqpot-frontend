@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function Dashboard() {
   return (
-    <div style={{ padding: '20px' }}>
+    <div>
       <h1>Welcome to Your Dashboard!</h1>
       <br />
       <p>Get started by exploring the different sections of our dashboard:</p>

@@ -10,13 +10,13 @@ export default function SearchBar() {
         Search
       </label>
       <div className="relative">
-        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+        <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none">
           <MagnifyingGlassIcon className="size-6 text-gray-400" />
         </div>
         <input
           type="search"
           id="default-search"
-          className="block w-full h-full p-4 ps-12 text-gray-900 outline-none dark:placeholder-gray-400 dark:text-white"
+          className="block w-full h-full p-4 ps-10 text-gray-900 outline-none dark:placeholder-gray-400 dark:text-white"
           placeholder="Search..."
           required
         />

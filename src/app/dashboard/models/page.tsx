@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function Dashboard() {
   return (
-    <div style={{ padding: '20px' }}>
+    <div>
       <h1>Hello from models</h1>
     </div>
   );

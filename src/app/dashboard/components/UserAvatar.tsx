@@ -21,7 +21,7 @@ export default function UserAvatar({ session }: { session: Session | null }) {
   return (
     <Menu as="div" className="relative inline-block">
       <div>
-        <MenuButton className="inline-flex  items-center w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900">
+        <MenuButton className="inline-flex  items-center w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold">
           {session?.user?.image ? (
             <Image
               alt="user avatar"
@@ -59,8 +59,8 @@ export default function UserAvatar({ session }: { session: Session | null }) {
                   href="#"
                   className={classNames(
                     focus
-                      ? 'bg-gray-100 text-gray-900  dark:bg-gray-900 dark:text-gray-100'
-                      : 'text-gray-700 dark:text-gray-100',
+                      ? 'bg-gray-100 text-gray-900  dark:bg-slate-800 dark:text-slate-400'
+                      : 'text-gray-700 dark:text-slate-400',
                     'block px-4 py-2 text-sm',
                   )}
                 >
@@ -74,8 +74,8 @@ export default function UserAvatar({ session }: { session: Session | null }) {
                   href="#"
                   className={classNames(
                     focus
-                      ? 'bg-gray-100 text-gray-900  dark:bg-gray-900 dark:text-gray-100'
-                      : 'text-gray-700 dark:text-gray-100',
+                      ? 'bg-gray-100 text-gray-900  dark:bg-slate-800 dark:text-slate-400'
+                      : 'text-gray-700 dark:text-slate-400',
                     'block px-4 py-2 text-sm',
                   )}
                 >
@@ -89,8 +89,8 @@ export default function UserAvatar({ session }: { session: Session | null }) {
                   href="#"
                   className={classNames(
                     focus
-                      ? 'bg-gray-100 text-gray-900  dark:bg-gray-900 dark:text-gray-100'
-                      : 'text-gray-700 dark:text-gray-100',
+                      ? 'bg-gray-100 text-gray-900  dark:bg-slate-800 dark:text-slate-400'
+                      : 'text-gray-700 dark:text-slate-400',
                     'block px-4 py-2 text-sm',
                   )}
                 >
@@ -105,8 +105,8 @@ export default function UserAvatar({ session }: { session: Session | null }) {
                     type="submit"
                     className={classNames(
                       focus
-                        ? 'bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100'
-                        : 'text-gray-700 dark:text-gray-100',
+                        ? 'bg-gray-100 text-gray-900 dark:bg-slate-800 dark:text-slate-400'
+                        : 'text-gray-700 dark:text-slate-400',
                       'block w-full px-4 py-2 text-left text-sm',
                     )}
                   >
