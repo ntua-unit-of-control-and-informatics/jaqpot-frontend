@@ -1,6 +1,6 @@
 'use client';
 
-import Logo from '@/app/dashboard/components/Logo';
+import Logo from '@/app/dashboard/components/Logo/Logo';
 import Link from 'next/link';
 
 import {
@@ -124,13 +124,10 @@ export default function Sidebar({ session }: { session: Session | null }) {
         aria-label="Sidebar"
       >
         <div className="flex flex-col h-full">
-          <Link
-            href={'/dashboard'}
-            className="mt-8 p-8 h-16 w-full p-3 flex items-center"
-          >
+          <Link href="/dashboard">
             <Logo />
           </Link>
-          <nav className="h-full px-3 py-4 overflow-y-auto">
+          <nav className="h-full px-3 pb-4 overflow-y-auto">
             <ul className="space-y-2 font-medium">
               {navElements.map(({ href, name, icon, after }, index) =>
                 navElement(index, href, name, icon, after),
