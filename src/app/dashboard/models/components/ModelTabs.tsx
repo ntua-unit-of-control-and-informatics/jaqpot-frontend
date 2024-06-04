@@ -16,7 +16,8 @@ export default function ModelTabs({ model }: ModelTabsProps) {
 
   return (
     <Tabs
-      aria-label="Options"
+      aria-label="Tabs"
+      disabledKeys={['discussion']}
       classNames={{
         tabList: 'gap-8 w-full bg-transparent rounded-none border-b-1 p-0',
         cursor:
@@ -32,7 +33,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       <Tab key="features" title="Features">
         <FeaturesTab model={model} />
       </Tab>
-      <Tab key="predict" title="Predict">
+      <Tab key="discussion" title="Discussion">
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
         officia deserunt mollit anim id est laborum.
       </Tab>

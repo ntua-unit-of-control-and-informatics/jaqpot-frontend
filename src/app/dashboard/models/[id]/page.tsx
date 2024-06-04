@@ -8,8 +8,6 @@ import {
   UserIcon,
   ChevronDownIcon,
 } from '@heroicons/react/24/solid';
-import { Tabs, Tab } from '@nextui-org/tabs';
-import { Card, CardBody } from '@nextui-org/card';
 import ModelTabs from '@/app/dashboard/models/components/ModelTabs';
 
 async function getModel(id: string): Promise<ModelDto> {
@@ -40,9 +38,8 @@ export default async function Page({ params }: { params: { id: string } }) {
         {/* Predict */}
         <div className="col-end-7 col-span-1 flex md:flex md:flex-grow flex-row justify-end space-x-1 py-3 items-center">
           <Link
-            href="/"
-            target="_blank"
-            className="w-30 h-10 inline-flex items-center rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            href={`/dashboard/models/${params.id}/predict`}
+            className="w-30 h-10 inline-flex items-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-300 dark:bg-gray-500 dark:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Predict{' '}
             <svg
@@ -66,7 +63,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           {model.type && (
             <>
               <BeakerIcon className="size-5 text-gray-400" />
-              <p className="mx-2">{model.type}</p>
+              <p className="ml-2 mr-4">{model.type}</p>
             </>
           )}
 
