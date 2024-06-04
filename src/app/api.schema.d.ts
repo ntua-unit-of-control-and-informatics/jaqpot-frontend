@@ -103,6 +103,7 @@ export interface components {
       };
       /** @example Feature Name */
       name: string;
+      description: string;
       /**
        * @example NUMERICAL
        * @enum {string}
@@ -115,6 +116,7 @@ export interface components {
       featureDependency?: "DEPENDENT" | "INDEPENDENT";
       /** @example true */
       visible?: boolean;
+      possibleValues?: string[];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
