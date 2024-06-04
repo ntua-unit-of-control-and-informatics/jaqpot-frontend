@@ -2,42 +2,39 @@
 
 import { usePathname } from 'next/navigation';
 import { Tab, Tabs } from '@nextui-org/tabs';
-import { Card, CardBody } from '@nextui-org/card';
+import { ModelDto } from '@/app/api.types';
+import FeaturesTab from '@/app/dashboard/models/components/tabs/FeaturesTab';
+
+interface ModelTabsProps {
+  model: ModelDto;
+}
 
 // TODO when https://github.com/nextui-org/nextui/issues/2934 is fixed
 // add navigation
-export default function ModelTabs() {
+export default function ModelTabs({ model }: ModelTabsProps) {
   const pathname = usePathname();
 
   return (
-    <Tabs aria-label="Options">
-      <Tab key="photos" title="Photos">
-        <Card>
-          <CardBody>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </CardBody>
-        </Card>
+    <Tabs
+      aria-label="Options"
+      classNames={{
+        tabList: 'gap-8 w-full bg-transparent rounded-none border-b-1 p-0',
+        cursor:
+          'w-full rounded-none bg-transparent group-data-[selected=true]:border-b-2 group-data-[selected=true]:border-indigo-800 shadow-none',
+        tab: 'max-w-fit px-0 h-12 rounded-none border-none box-shadow-none',
+        tabContent:
+          'rounded-none border-none box-shadow-none group-data-[selected=true]:text-indigo-600',
+      }}
+    >
+      <Tab key="description" title="Description">
+        {model.description}
       </Tab>
-      <Tab key="music" title="Music">
-        <Card>
-          <CardBody>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur.
-          </CardBody>
-        </Card>
+      <Tab key="features" title="Features">
+        <FeaturesTab model={model} />
       </Tab>
-      <Tab key="videos" title="Videos">
-        <Card>
-          <CardBody>
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum.
-          </CardBody>
-        </Card>
+      <Tab key="predict" title="Predict">
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+        officia deserunt mollit anim id est laborum.
       </Tab>
     </Tabs>
   );
