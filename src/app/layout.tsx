@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import GoogleAnalytics from '@/app/components/GoogleAnalytics';
+import { useRouter } from 'next/navigation';
+import { Providers } from '@/app/providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,7 +23,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-white dark:bg-slate-800 dark:text-slate-400`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

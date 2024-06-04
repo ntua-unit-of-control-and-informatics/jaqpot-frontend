@@ -2,7 +2,7 @@ import './logo.css';
 
 export default function Logo() {
   return (
-    <div className="flex justify-center pt-6">
+    <div className="flex justify-center pt-6 pb-3">
       {/*<svg*/}
       {/*  className="transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-300 rainbow-glow hover:rainbow-glow w-24 h-24"*/}
       {/*  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">*/}
