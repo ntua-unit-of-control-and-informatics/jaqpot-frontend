@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest",
     "generate:schema": "npx openapi-typescript ../jaqpot-api-v2/src/main/resources/openapi.yaml -o ./src/app/api.schema.d.ts"
+  },
+  "engines": {
+    "node": ">=20.12.2"
   },
   "dependencies": {
     "@headlessui/react": "^2.0.3",
@@ -20,15 +24,19 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@testing-library/react": "^16.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@vitejs/plugin-react": "^4.3.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "jsdom": "^24.1.0",
     "openapi-typescript": "^6.7.6",
     "postcss": "^8",
     "prettier": "3.2.5",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   }
 }

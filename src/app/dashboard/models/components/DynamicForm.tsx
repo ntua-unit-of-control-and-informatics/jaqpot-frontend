@@ -144,10 +144,12 @@ interface DynamicFormProps {
 }
 
 export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
-  const [formData, setFormData] = useState<{ [key: string]: string }>({});
+  const [formData, setFormData] = useState<{ [key: string]: string | boolean }>(
+    {},
+  );
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
@@ -156,7 +158,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   };
 
   const handleValidation = () => {
-    let errors = {};
+    let errors: { [key: string]: string } = {};
     let formIsValid = true;
 
     schema.forEach((section) => {
@@ -174,14 +176,14 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     return formIsValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (handleValidation()) {
       onSubmit(formData);
     }
   };
 
-  const renderField = (field) => {
+  const renderField = (field: any) => {
     switch (field.type) {
       case 'select':
         return (
@@ -192,7 +194,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             required={field.required}
           >
             {/*<SelectItem value="">Select...</SelectItem>*/}
-            {field.options.map((option: string, index: number) => (
+            {field.options.map((option: any, index: number) => (
               <SelectItem key={index} value={option.value}>
                 {option.label}
               </SelectItem>
@@ -202,7 +204,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
       case 'radio':
         return (
           <RadioGroup label="Select...">
-            {field.options.map((option: string, index: number) => (
+            {field.options.map((option: any, index: number) => (
               <Radio
                 key={index}
                 type="radio"
@@ -223,7 +225,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             name={field.name}
             onChange={handleChange}
             required={field.required}
-            checked={formData[field.name]}
+            checked={formData[field.name] as boolean | undefined}
           />
         );
       case 'textarea':
@@ -234,7 +236,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             placeholder={field.placeholder}
             onChange={handleChange}
             required={field.required}
-            value={formData[field.name] || ''}
+            value={(formData[field.name] || '') as string}
           />
         );
       default:
@@ -246,7 +248,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             placeholder={field.placeholder}
             onChange={handleChange}
             required={field.required}
-            value={formData[field.name] || ''}
+            value={(formData[field.name] || '') as string}
           />
         );
     }
