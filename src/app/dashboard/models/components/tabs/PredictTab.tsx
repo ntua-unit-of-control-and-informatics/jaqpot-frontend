@@ -1,116 +1,91 @@
 'use client';
 
-import { ModelDto } from '@/app/api.types';
-import { Card, CardBody } from '@nextui-org/card';
+import { DatasetDto, ModelDto } from '@/app/api.types';
 import DynamicForm, {
   DynamicFormSchema,
 } from '@/app/dashboard/models/components/DynamicForm';
+import { auth } from '@/auth';
+import { useParams } from 'next/navigation';
+import { useState } from 'react';
+import PredictionResult from '@/app/dashboard/models/components/PredictionResult';
+
+async function createPrediction(
+  modelId: string,
+  data: any,
+): Promise<string | null> {
+  const res = await fetch(`/api/models/${modelId}/predict`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (res.ok) {
+    return res.text();
+  } else {
+    return null;
+  }
+}
+
+async function getPredictionResult(
+  datasetId: string,
+): Promise<DatasetDto | null> {
+  const res = await fetch(`/api/datasets/${datasetId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    return res.json();
+  } else {
+    return null;
+  }
+}
 
 interface PredictTabProps {
   model: ModelDto;
 }
 
-const json: DynamicFormSchema[] = [
-  {
-    sectionTitle: 'User Information',
-    fields: [
-      {
-        name: 'fullName',
-        label: 'Full Name',
-        type: 'text',
-        required: true,
-        placeholder: 'Enter full name',
-      },
-      {
-        name: 'email',
-        label: 'Email Address',
-        type: 'email',
-        required: true,
-        placeholder: 'Enter email',
-      },
-      {
-        name: 'password',
-        label: 'Password',
-        type: 'password',
-        required: true,
-        placeholder: 'Enter password',
-      },
-      {
-        name: 'birthday',
-        label: 'Date of Birth',
-        type: 'date',
-        required: false,
-      },
-    ],
-  },
-  {
-    sectionTitle: 'Preferences',
-    fields: [
-      {
-        name: 'colorPreference',
-        label: 'Favorite Color',
-        type: 'color',
-        required: false,
-      },
-      {
-        name: 'experienceLevel',
-        label: 'Experience Level',
-        type: 'range',
-        min: 0,
-        max: 10,
-        step: 1,
-        required: false,
-      },
-      {
-        name: 'developmentSkills',
-        label: 'Development Skills',
-        type: 'select',
-        options: [
-          { label: 'Frontend', value: 'frontend' },
-          { label: 'Backend', value: 'backend' },
-          { label: 'Full Stack', value: 'fullstack' },
-          { label: 'Data Science', value: 'datascience' },
-        ],
-        required: true,
-      },
-    ],
-  },
-  {
-    sectionTitle: 'Feedback',
-    fields: [
-      {
-        name: 'websiteFeedback',
-        label: 'Your Feedback',
-        type: 'textarea',
-        required: false,
-        placeholder: 'Share your thoughts',
-      },
-      {
-        name: 'termsAgreement',
-        label: 'Agree to Terms',
-        type: 'checkbox',
-        required: true,
-      },
-      {
-        name: 'fileUpload',
-        label: 'Upload File',
-        type: 'file',
-        required: false,
-      },
-      {
-        name: 'searchQuery',
-        label: 'Search',
-        type: 'search',
-        required: false,
-        placeholder: 'Search...',
-      },
-    ],
-  },
-];
-
 export default function PredictTab({ model }: PredictTabProps) {
-  const handleFormSubmit = (formData: any) => {
+  const params = useParams<{ modelId: string }>();
+  const [isPredictionLoading, setIsPredictionLoading] = useState(false);
+  const [dataset, setDataset] = useState<DatasetDto | undefined>(undefined);
+
+  async function handlePredictionResults(datasetUrl: string | null) {
+    if (!datasetUrl) {
+      console.error('Dataset was not created successfully');
+      return;
+    }
+
+    const datasetUrlParts = datasetUrl.split('/');
+    const datasetId = datasetUrlParts[datasetUrlParts.length - 1];
+
+    setIsPredictionLoading(true);
+
+    const predictionDataset = await new Promise<DatasetDto>((resolve) => {
+      const intervalId = setInterval(async () => {
+        const dataset = await getPredictionResult(datasetId);
+        if (dataset?.status === 'SUCCESS' || dataset?.status === 'FAILURE') {
+          clearInterval(intervalId);
+          resolve(dataset);
+        }
+      }, 5000);
+    });
+
+    setIsPredictionLoading(false);
+
+    setDataset(predictionDataset);
+  }
+
+  const handleFormSubmit = async (formData: any) => {
     console.log('Form Data:', formData);
+    const datasetUrl = await createPrediction(
+      params.modelId,
+      Object.values(formData),
+    );
+    await handlePredictionResults(datasetUrl);
   };
 
   function generatePredictionFormSchema(model: ModelDto): DynamicFormSchema[] {
@@ -145,6 +120,12 @@ export default function PredictTab({ model }: PredictTabProps) {
   return (
     <div className="container mt-5">
       <DynamicForm schema={predictionFormSchema} onSubmit={handleFormSubmit} />
+
+      <PredictionResult
+        model={model}
+        loading={isPredictionLoading}
+        dataset={dataset}
+      />
     </div>
   );
 }
