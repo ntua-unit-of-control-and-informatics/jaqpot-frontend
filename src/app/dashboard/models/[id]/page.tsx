@@ -9,8 +9,9 @@ import {
   ChevronDownIcon,
 } from '@heroicons/react/24/solid';
 import ModelTabs from '@/app/dashboard/models/components/ModelTabs';
+import { notFound } from 'next/navigation';
 
-async function getModel(id: string): Promise<ModelDto> {
+async function getModel(id: string): Promise<ModelDto | undefined> {
   const session = await auth();
   if (!session) {
     throw new Error('Unauthorized');
@@ -22,11 +23,16 @@ async function getModel(id: string): Promise<ModelDto> {
       'Content-Type': 'application/json',
     },
   });
+
+  if (!res.ok) return undefined;
   return res.json();
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
   const model = await getModel(params.id);
+  if (!model) {
+    notFound();
+  }
 
   return (
     <>
