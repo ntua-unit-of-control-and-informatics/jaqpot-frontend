@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Button } from '@nextui-org/button';
 
 export default function NotFound() {
   return (
@@ -18,12 +19,9 @@ export default function NotFound() {
         Oops! It looks like you are lost. Our mascot is empty-handed and sad
         because the page you are looking for does not exist.
       </p>
-      <Link
-        href="/dashboard"
-        className="mt-6 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-      >
+      <Button as={Link} color="primary" href="/dashboard">
         Go to the Dashboard
-      </Link>
+      </Button>
     </div>
   );
 }
