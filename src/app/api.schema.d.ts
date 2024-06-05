@@ -23,6 +23,13 @@ export interface paths {
      */
     post: operations["predictWithModel"];
   };
+  "/v1/datasets/{id}": {
+    /**
+     * Get a Dataset
+     * @description Retrieve a single dataset by its ID
+     */
+    get: operations["getDatasetById"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -142,6 +149,9 @@ export interface components {
       type: "PREDICTION";
       input: components["schemas"]["DataEntry"][];
       results?: components["schemas"]["DataEntry"][];
+      /** @enum {string} */
+      status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
+      failureReason?: string;
       created_at?: Record<string, never>;
       updated_at?: Record<string, never>;
     };
@@ -254,6 +264,30 @@ export interface operations {
       };
       /** @description Internal Server Error */
       500: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get a Dataset
+   * @description Retrieve a single dataset by its ID
+   */
+  getDatasetById: {
+    parameters: {
+      path: {
+        /** @description The ID of the dataset to retrieve */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Dataset"];
+        };
+      };
+      /** @description Model not found */
+      404: {
         content: never;
       };
     };

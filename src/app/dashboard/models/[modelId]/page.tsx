@@ -11,13 +11,13 @@ import {
 import ModelTabs from '@/app/dashboard/models/components/ModelTabs';
 import { notFound } from 'next/navigation';
 
-async function getModel(id: string): Promise<ModelDto | undefined> {
+async function getModel(modelId: string): Promise<ModelDto | undefined> {
   const session = await auth();
   if (!session) {
     throw new Error('Unauthorized');
   }
 
-  const res = await fetch(`${process.env.API_URL}/v1/models/${id}`, {
+  const res = await fetch(`${process.env.API_URL}/v1/models/${modelId}`, {
     headers: {
       Authorization: `Bearer ${session.token}`,
       'Content-Type': 'application/json',
@@ -28,8 +28,12 @@ async function getModel(id: string): Promise<ModelDto | undefined> {
   return res.json();
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const model = await getModel(params.id);
+export default async function Page({
+  params,
+}: {
+  params: { modelId: string };
+}) {
+  const model = await getModel(params.modelId);
   if (!model) {
     notFound();
   }
@@ -44,7 +48,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         {/* Predict */}
         <div className="col-end-7 col-span-1 flex md:flex md:flex-grow flex-row justify-end space-x-1 py-3 items-center">
           <Link
-            href={`/dashboard/models/${params.id}/predict`}
+            href={`/dashboard/models/${params.modelId}/predict`}
             className="w-30 h-10 inline-flex items-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-300 dark:bg-gray-500 dark:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Predict{' '}
