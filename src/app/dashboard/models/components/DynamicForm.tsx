@@ -6,6 +6,104 @@ import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 import { Checkbox } from '@nextui-org/checkbox';
 
+// const jsonExample: DynamicFormSchema[] = [
+//   {
+//     sectionTitle: 'User Information',
+//     fields: [
+//       {
+//         name: 'fullName',
+//         label: 'Full Name',
+//         type: 'text',
+//         required: true,
+//         placeholder: 'Enter full name',
+//       },
+//       {
+//         name: 'email',
+//         label: 'Email Address',
+//         type: 'email',
+//         required: true,
+//         placeholder: 'Enter email',
+//       },
+//       {
+//         name: 'password',
+//         label: 'Password',
+//         type: 'password',
+//         required: true,
+//         placeholder: 'Enter password',
+//       },
+//       {
+//         name: 'birthday',
+//         label: 'Date of Birth',
+//         type: 'date',
+//         required: false,
+//       },
+//     ],
+//   },
+//   {
+//     sectionTitle: 'Preferences',
+//     fields: [
+//       {
+//         name: 'colorPreference',
+//         label: 'Favorite Color',
+//         type: 'color',
+//         required: false,
+//       },
+//       {
+//         name: 'experienceLevel',
+//         label: 'Experience Level',
+//         type: 'range',
+//         min: 0,
+//         max: 10,
+//         step: 1,
+//         required: false,
+//       },
+//       {
+//         name: 'developmentSkills',
+//         label: 'Development Skills',
+//         type: 'select',
+//         options: [
+//           { label: 'Frontend', value: 'frontend' },
+//           { label: 'Backend', value: 'backend' },
+//           { label: 'Full Stack', value: 'fullstack' },
+//           { label: 'Data Science', value: 'datascience' },
+//         ],
+//         required: true,
+//       },
+//     ],
+//   },
+//   {
+//     sectionTitle: 'Feedback',
+//     fields: [
+//       {
+//         name: 'websiteFeedback',
+//         label: 'Your Feedback',
+//         type: 'textarea',
+//         required: false,
+//         placeholder: 'Share your thoughts',
+//       },
+//       {
+//         name: 'termsAgreement',
+//         label: 'Agree to Terms',
+//         type: 'checkbox',
+//         required: true,
+//       },
+//       {
+//         name: 'fileUpload',
+//         label: 'Upload File',
+//         type: 'file',
+//         required: false,
+//       },
+//       {
+//         name: 'searchQuery',
+//         label: 'Search',
+//         type: 'search',
+//         required: false,
+//         placeholder: 'Search...',
+//       },
+//     ],
+//   },
+// ];
+
 export interface DynamicFormSchema {
   sectionTitle: string;
   fields: DynamicFormField[];
@@ -46,10 +144,12 @@ interface DynamicFormProps {
 }
 
 export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
-  const [formData, setFormData] = useState<{ [key: string]: string }>({});
+  const [formData, setFormData] = useState<{ [key: string]: string | boolean }>(
+    {},
+  );
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
@@ -58,7 +158,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   };
 
   const handleValidation = () => {
-    let errors = {};
+    let errors: { [key: string]: string } = {};
     let formIsValid = true;
 
     schema.forEach((section) => {
@@ -76,14 +176,14 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     return formIsValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (handleValidation()) {
       onSubmit(formData);
     }
   };
 
-  const renderField = (field) => {
+  const renderField = (field: any) => {
     switch (field.type) {
       case 'select':
         return (
@@ -94,7 +194,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             required={field.required}
           >
             {/*<SelectItem value="">Select...</SelectItem>*/}
-            {field.options.map((option: string, index: number) => (
+            {field.options.map((option: any, index: number) => (
               <SelectItem key={index} value={option.value}>
                 {option.label}
               </SelectItem>
@@ -104,7 +204,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
       case 'radio':
         return (
           <RadioGroup label="Select...">
-            {field.options.map((option: string, index: number) => (
+            {field.options.map((option: any, index: number) => (
               <Radio
                 key={index}
                 type="radio"
@@ -125,7 +225,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             name={field.name}
             onChange={handleChange}
             required={field.required}
-            checked={formData[field.name]}
+            checked={formData[field.name] as boolean | undefined}
           />
         );
       case 'textarea':
@@ -136,7 +236,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             placeholder={field.placeholder}
             onChange={handleChange}
             required={field.required}
-            value={formData[field.name] || ''}
+            value={(formData[field.name] || '') as string}
           />
         );
       default:
@@ -148,7 +248,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             placeholder={field.placeholder}
             onChange={handleChange}
             required={field.required}
-            value={formData[field.name] || ''}
+            value={(formData[field.name] || '') as string}
           />
         );
     }

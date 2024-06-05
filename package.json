@@ -9,6 +9,9 @@
     "lint": "next lint",
     "generate:schema": "npx openapi-typescript ../jaqpot-api-v2/src/main/resources/openapi.yaml -o ./src/app/api.schema.d.ts"
   },
+  "engines": {
+    "node": ">=20.12.2"
+  },
   "dependencies": {
     "@headlessui/react": "^2.0.3",
     "@heroicons/react": "^2.1.3",
