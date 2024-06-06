@@ -15,11 +15,11 @@ export default function NotFound() {
       <h1 className="text-4xl font-bold text-gray-800 mt-5">
         404 - Page Not Found
       </h1>
-      <p className="text-gray-600 mt-4">
+      <p className="text-gray-600 mt-4 max-w-xl">
         Oops! It looks like you are lost. Our mascot is empty-handed and sad
         because the page you are looking for does not exist.
       </p>
-      <Button as={Link} color="primary" href="/dashboard">
+      <Button as={Link} color="primary" href="/dashboard" className="mt-10">
         Go to the Dashboard
       </Button>
     </div>
