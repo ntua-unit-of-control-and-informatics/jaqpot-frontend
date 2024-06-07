@@ -12,14 +12,15 @@ import ModelTabs from '@/app/dashboard/models/components/ModelTabs';
 import { notFound } from 'next/navigation';
 
 async function getModel(modelId: string): Promise<ModelDto | undefined> {
+  const authorizationHeader: Record<string, string> = {};
   const session = await auth();
-  if (!session) {
-    throw new Error('Unauthorized');
+  if (session?.user) {
+    authorizationHeader['Authorization'] = `Bearer ${session.token}`;
   }
 
   const res = await fetch(`${process.env.API_URL}/v1/models/${modelId}`, {
     headers: {
-      Authorization: `Bearer ${session.token}`,
+      ...authorizationHeader,
       'Content-Type': 'application/json',
     },
   });
