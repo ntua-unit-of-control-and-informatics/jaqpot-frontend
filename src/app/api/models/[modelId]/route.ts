@@ -9,14 +9,10 @@ export async function GET(
     throw new Error('Unauthorized');
   }
 
-  const res = await fetch(
-    `${process.env.API_URL}/v1/models/${params.modelId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-        'Content-Type': 'application/json',
-      },
+  return await fetch(`${process.env.API_URL}/v1/models/${params.modelId}`, {
+    headers: {
+      Authorization: `Bearer ${session.token}`,
+      'Content-Type': 'application/json',
     },
-  );
-  return res;
+  });
 }
