@@ -4,7 +4,7 @@ import { Button } from '@nextui-org/button';
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center mt-5">
+    <div className="flex flex-col items-center justify-center text-center mt-5 p-5">
       <Image
         src="/sad-mascot.png" // Ensure this image is in your public folder
         alt="Sad Mascot"
