@@ -1,3 +1,5 @@
+[![Node.js CI](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/node.js.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/node.js.yml) [![Publish Docker image](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/publish.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/publish.yml)
+
 # Jaqpot Frontend V2
 
 This repository contains the source code for Jaqpot Frontend V2, a modern web application built using Next.js. It leverages NextAuth for robust authentication mechanisms, providing a secure and efficient way to manage user sessions and access control. The app is designed to interface with the Jaqpot API, facilitating advanced model management and prediction functionalities.
