@@ -133,7 +133,7 @@ export default function Sidebar({ session }: { session: Session | null }) {
                 navElement(index, href, name, icon, after),
               )}
 
-              {!session && (
+              {!session?.user && (
                 <button
                   onClick={async () => {
                     await signIn('keycloak');
@@ -159,7 +159,7 @@ export default function Sidebar({ session }: { session: Session | null }) {
                   Sign In
                 </button>
               )}
-              {!!session && (
+              {session?.user && (
                 <button
                   onClick={async () => {
                     await signOut();
