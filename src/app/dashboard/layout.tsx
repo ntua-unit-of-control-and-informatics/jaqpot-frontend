@@ -13,7 +13,7 @@ export default async function Dashboard({
   return (
     <>
       <Sidebar session={session} />
-      <div className="h-screen sm:ml-72">
+      <div className="sm:ml-72">
         <TopBar session={session} />
         <main className="p-8">{children}</main>
       </div>
