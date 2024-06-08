@@ -54,7 +54,7 @@ export default function Page() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+      <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
         Create Organization
       </h2>
 
