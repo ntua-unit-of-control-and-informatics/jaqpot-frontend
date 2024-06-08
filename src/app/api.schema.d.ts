@@ -42,6 +42,10 @@ export interface paths {
     /** Update an existing organization */
     put: operations["updateOrganization"];
   };
+  "/v1/organizations/{name}": {
+    /** Get organization by name */
+    get: operations["getOrganizationByName"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -207,17 +211,8 @@ export interface components {
       website?: string | null;
       /** @example 123 Organization St., City, Country */
       address?: string | null;
-      /**
-       * Format: date-time
-       * @description The date and time when the feature was created.
-       * @example 2023-01-01T12:00:00Z
-       */
-      createdAt?: Record<string, never>;
-      /**
-       * @description The date and time when the feature was last updated.
-       * @example 2023-01-01T12:00:00Z
-       */
-      updatedAt?: Record<string, never>;
+      created_at?: Record<string, never>;
+      updated_at?: Record<string, never>;
     };
     /** @description Can be any value - string, number, boolean, array or object. */
     AnyValue: unknown;
@@ -395,6 +390,26 @@ export interface operations {
     };
     responses: {
       /** @description Organization updated successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Organization"];
+        };
+      };
+      /** @description Organization not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /** Get organization by name */
+  getOrganizationByName: {
+    parameters: {
+      path: {
+        name: string;
+      };
+    };
+    responses: {
+      /** @description Successful response */
       200: {
         content: {
           "application/json": components["schemas"]["Organization"];

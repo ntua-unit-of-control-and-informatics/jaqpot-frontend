@@ -5,17 +5,20 @@ import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 import { OrganizationDto } from '@/app/api.types';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const router = useRouter();
   const [formData, setFormData] = useState<OrganizationDto>({
     name: '',
     description: null,
     userIds: [],
-    contactEmail: null,
+    contactEmail: '',
     contactPhone: null,
     website: null,
     address: null,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value } = e.target;
@@ -28,6 +31,7 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       const res = await fetch('/api/organizations', {
         method: 'POST',
         body: JSON.stringify(formData),
@@ -35,12 +39,16 @@ export default function Page() {
       const data = await res.json();
       if (res.ok) {
         toast.success(`Organization created successfully`);
+
+        router.push(`/dashboard/organizations/${data.organizationName}`);
       } else {
         toast.error(`Error creating organization:  ${data?.message}`);
       }
       // Redirect or display success message as needed
     } catch (error: unknown) {
       // Display error message as needed
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -71,7 +79,7 @@ export default function Page() {
             name="contactEmail"
             label="Contact Email"
             validationBehavior="native"
-            value={formData.contactEmail}
+            value={formData.contactEmail ?? ''}
             onChange={handleChange}
             isRequired
             errorMessage="Please enter a valid email"
@@ -81,7 +89,7 @@ export default function Page() {
           <Textarea
             name="description"
             label="Description"
-            value={formData.description}
+            value={formData.description ?? ''}
             onChange={handleChange}
             minLength={3}
             maxLength={2000}
@@ -93,7 +101,7 @@ export default function Page() {
               type="tel"
               name="contactPhone"
               label="Contact Phone"
-              value={formData.contactPhone}
+              value={formData.contactPhone ?? ''}
               onChange={handleChange}
             />
           </div>
@@ -102,7 +110,7 @@ export default function Page() {
               type="url"
               name="website"
               label="Website"
-              value={formData.website}
+              value={formData.website ?? ''}
               onChange={handleChange}
             />
           </div>
@@ -111,13 +119,18 @@ export default function Page() {
               type="text"
               name="address"
               label="Address"
-              value={formData.address}
+              value={formData.address ?? ''}
               onChange={handleChange}
             />
           </div>
         </div>
 
-        <Button color="primary" type="submit" className="mt-6">
+        <Button
+          color="primary"
+          type="submit"
+          className="mt-6"
+          isLoading={isLoading}
+        >
           Create Organization
         </Button>
       </form>

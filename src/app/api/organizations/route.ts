@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import { DatasetDto } from '@/app/api.types';
 import { errorResponse } from '@/app/util/response';
+import { redirect } from 'next/navigation';
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -19,12 +20,15 @@ export async function POST(request: Request) {
     body: JSON.stringify(organizationDto),
   });
 
-  if (!res.ok || !res.headers.get('Location')) {
+  const organizationUrl = res.headers.get('Location');
+
+  if (!res.ok || !organizationUrl) {
     const data = await res.json();
     return errorResponse(data.message || null);
   }
+  const organizationUrlParts = organizationUrl.split('/');
+  const organizationName =
+    organizationUrlParts[organizationUrlParts.length - 1];
 
-  const organizationUrl = res.headers.get('Location');
-
-  return Response.json({ organizationUrl }, { status: 201 });
+  return Response.json({ organizationName }, { status: 201 });
 }
