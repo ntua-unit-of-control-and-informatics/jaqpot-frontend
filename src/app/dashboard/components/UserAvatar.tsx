@@ -12,10 +12,8 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { Session } from 'next-auth';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { signIn, signOut } from 'next-auth/react';
+import { classNames } from '@/app/util/classname';
 
 export default function UserAvatar({ session }: { session: Session | null }) {
   return (
@@ -53,55 +51,13 @@ export default function UserAvatar({ session }: { session: Session | null }) {
       >
         <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-white dark:bg-gray-600 dark:text-gray-100">
           <div className="py-1">
-            <MenuItem>
-              {({ focus }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    focus
-                      ? 'bg-gray-100 text-gray-900  dark:bg-slate-800 dark:text-slate-400'
-                      : 'text-gray-700 dark:text-slate-400',
-                    'block px-4 py-2 text-sm',
-                  )}
-                >
-                  Account settings
-                </a>
-              )}
-            </MenuItem>
-            <MenuItem>
-              {({ focus }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    focus
-                      ? 'bg-gray-100 text-gray-900  dark:bg-slate-800 dark:text-slate-400'
-                      : 'text-gray-700 dark:text-slate-400',
-                    'block px-4 py-2 text-sm',
-                  )}
-                >
-                  Support
-                </a>
-              )}
-            </MenuItem>
-            <MenuItem>
-              {({ focus }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    focus
-                      ? 'bg-gray-100 text-gray-900  dark:bg-slate-800 dark:text-slate-400'
-                      : 'text-gray-700 dark:text-slate-400',
-                    'block px-4 py-2 text-sm',
-                  )}
-                >
-                  License
-                </a>
-              )}
-            </MenuItem>
-            <form method="POST" action="#">
+            {!session?.user && (
               <MenuItem>
                 {({ focus }) => (
                   <button
+                    onClick={async () => {
+                      await signIn('keycloak');
+                    }}
                     type="submit"
                     className={classNames(
                       focus
@@ -110,11 +66,79 @@ export default function UserAvatar({ session }: { session: Session | null }) {
                       'block w-full px-4 py-2 text-left text-sm',
                     )}
                   >
-                    Sign out
+                    Sign in
                   </button>
                 )}
               </MenuItem>
-            </form>
+            )}
+
+            {session?.user && (
+              <>
+                <MenuItem>
+                  {({ focus }) => (
+                    <a
+                      href="#"
+                      className={classNames(
+                        focus
+                          ? 'bg-gray-100 text-gray-900  dark:bg-slate-800 dark:text-slate-400'
+                          : 'text-gray-700 dark:text-slate-400',
+                        'block px-4 py-2 text-sm',
+                      )}
+                    >
+                      Account settings
+                    </a>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {({ focus }) => (
+                    <a
+                      href="#"
+                      className={classNames(
+                        focus
+                          ? 'bg-gray-100 text-gray-900  dark:bg-slate-800 dark:text-slate-400'
+                          : 'text-gray-700 dark:text-slate-400',
+                        'block px-4 py-2 text-sm',
+                      )}
+                    >
+                      Support
+                    </a>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {({ focus }) => (
+                    <a
+                      href="#"
+                      className={classNames(
+                        focus
+                          ? 'bg-gray-100 text-gray-900  dark:bg-slate-800 dark:text-slate-400'
+                          : 'text-gray-700 dark:text-slate-400',
+                        'block px-4 py-2 text-sm',
+                      )}
+                    >
+                      License
+                    </a>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={async () => {
+                        await signOut();
+                      }}
+                      type="submit"
+                      className={classNames(
+                        focus
+                          ? 'bg-gray-100 text-gray-900 dark:bg-slate-800 dark:text-slate-400'
+                          : 'text-gray-700 dark:text-slate-400',
+                        'block w-full px-4 py-2 text-left text-sm',
+                      )}
+                    >
+                      Sign out
+                    </button>
+                  )}
+                </MenuItem>
+              </>
+            )}
           </div>
         </MenuItems>
       </Transition>

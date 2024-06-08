@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import { DatasetDto } from '@/app/api.types';
+import { errorResponse } from '@/app/util/response';
 
 export async function POST(
   request: Request,
@@ -22,7 +23,6 @@ export async function POST(
     ],
   };
 
-  console.log(dataset);
   const res = await fetch(
     `${process.env.API_URL}/v1/models/${params.modelId}/predict`,
     {
@@ -37,8 +37,8 @@ export async function POST(
   const predictionUrl = res.headers.get('Location');
 
   if (!res.ok || !res.headers.get('Location')) {
-    return new Response('Oops! There seems to be a problem.', { status: 500 });
+    return errorResponse('Unexpected error ocurred', 500);
   }
 
-  return new Response(predictionUrl, { status: 200 });
+  return Response.json({ predictionUrl }, { status: 200 });
 }
