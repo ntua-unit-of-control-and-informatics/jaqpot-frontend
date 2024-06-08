@@ -30,6 +30,18 @@ export interface paths {
      */
     get: operations["getDatasetById"];
   };
+  "/v1/organizations": {
+    /** Get all organizations */
+    get: operations["getAllOrganizations"];
+    /** Create a new organization */
+    post: operations["createOrganization"];
+  };
+  "/v1/organizations/{id}": {
+    /** Get organization by ID */
+    get: operations["getOrganizationById"];
+    /** Update an existing organization */
+    put: operations["updateOrganization"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -57,6 +69,8 @@ export interface components {
       libraries: components["schemas"]["Library"][];
       dependentFeatures: components["schemas"]["Feature"][];
       independentFeatures: components["schemas"]["Feature"][];
+      /** @enum {string} */
+      visibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
       /** @example 5 */
       reliability?: number;
       /** @example false */
@@ -175,6 +189,36 @@ export interface components {
       id?: string;
       name?: string;
     };
+    Organization: {
+      /** Format: int64 */
+      id?: number;
+      /** @example my-awesome-org */
+      name: string;
+      creatorId?: string;
+      /** @example An awesome organization for managing models. */
+      description?: string | null;
+      userIds?: string[];
+      models?: components["schemas"]["Model"][];
+      /** @example contact@my-awesome-org.com */
+      contactEmail?: string | null;
+      /** @example +1234567890 */
+      contactPhone?: string | null;
+      /** @example http://www.my-awesome-org.com */
+      website?: string | null;
+      /** @example 123 Organization St., City, Country */
+      address?: string | null;
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was created.
+       * @example 2023-01-01T12:00:00Z
+       */
+      createdAt?: Record<string, never>;
+      /**
+       * @description The date and time when the feature was last updated.
+       * @example 2023-01-01T12:00:00Z
+       */
+      updatedAt?: Record<string, never>;
+    };
     /** @description Can be any value - string, number, boolean, array or object. */
     AnyValue: unknown;
   };
@@ -287,6 +331,76 @@ export interface operations {
         };
       };
       /** @description Model not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /** Get all organizations */
+  getAllOrganizations: {
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Organization"][];
+        };
+      };
+    };
+  };
+  /** Create a new organization */
+  createOrganization: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Organization"];
+      };
+    };
+    responses: {
+      /** @description Organization created successfully */
+      201: {
+        content: never;
+      };
+    };
+  };
+  /** Get organization by ID */
+  getOrganizationById: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Organization"];
+        };
+      };
+      /** @description Organization not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /** Update an existing organization */
+  updateOrganization: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Organization"];
+      };
+    };
+    responses: {
+      /** @description Organization updated successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Organization"];
+        };
+      };
+      /** @description Organization not found */
       404: {
         content: never;
       };

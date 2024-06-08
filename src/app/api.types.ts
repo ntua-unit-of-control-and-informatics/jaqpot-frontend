@@ -4,3 +4,4 @@ export type ModelDto = components['schemas']['Model'];
 export type FeatureDto = components['schemas']['Feature'];
 export type DatasetDto = components['schemas']['Dataset'];
 export type DataEntryDto = components['schemas']['DataEntry'];
+export type OrganizationDto = components['schemas']['Organization'];

@@ -11,7 +11,7 @@
     "generate:schema": "npx openapi-typescript ../jaqpot-api-v2/src/main/resources/openapi.yaml -o ./src/app/api.schema.d.ts"
   },
   "engines": {
-    "node": ">=20.12.2"
+    "node": ">=18.17.0"
   },
   "dependencies": {
     "@headlessui/react": "^2.0.3",
@@ -21,7 +21,8 @@
     "next": "14.2.3",
     "next-auth": "^5.0.0-beta.19",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
     "@testing-library/react": "^16.0.0",
