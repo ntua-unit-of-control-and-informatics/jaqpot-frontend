@@ -13,7 +13,6 @@ import Image from 'next/image';
 import { Session } from 'next-auth';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { signIn, signOut } from 'next-auth/react';
-import toast from 'react-hot-toast';
 import { classNames } from '@/app/util/classname';
 
 export default function UserAvatar({ session }: { session: Session | null }) {
@@ -124,8 +123,7 @@ export default function UserAvatar({ session }: { session: Session | null }) {
                   {({ focus }) => (
                     <button
                       onClick={async () => {
-                        await signOut({ redirect: false });
-                        toast.success('Successfully logged out');
+                        await signOut();
                       }}
                       type="submit"
                       className={classNames(

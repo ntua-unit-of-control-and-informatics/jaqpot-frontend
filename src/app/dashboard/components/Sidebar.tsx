@@ -159,32 +159,6 @@ export default function Sidebar({ session }: { session: Session | null }) {
                   Sign In
                 </button>
               )}
-              {session?.user && (
-                <button
-                  onClick={async () => {
-                    await signOut();
-                  }}
-                  type="submit"
-                  className="flex gap-x-3 w-full p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group"
-                >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-indigo-200 transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 18 16"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
-                    />
-                  </svg>
-                  Log out
-                </button>
-              )}
             </ul>
           </nav>
         </div>

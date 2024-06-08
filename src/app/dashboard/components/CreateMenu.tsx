@@ -47,7 +47,7 @@ export default function CreateMenu() {
               <MenuItem>
                 {({ focus }) => (
                   <Link
-                    href="/dashboard/organizations/create"
+                    href="/dashboard/new/organization"
                     type="submit"
                     className={classNames(
                       focus

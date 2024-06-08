@@ -1,27 +1,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@nextui-org/button';
+import CustomErrorPage from '@/app/components/CustomErrorPage';
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center text-center mt-5 p-5">
-      <Image
-        src="/sad-mascot.png" // Ensure this image is in your public folder
-        alt="Sad Mascot"
-        width={200}
-        height={200}
-        className="mx-auto"
-      />
-      <h1 className="text-4xl font-bold text-gray-800 mt-5">
-        404 - Page Not Found
-      </h1>
-      <p className="text-gray-600 mt-4 max-w-xl">
-        Oops! It looks like you are lost. Our mascot is empty-handed and sad
-        because the page you are looking for does not exist.
-      </p>
-      <Button as={Link} color="primary" href="/dashboard" className="mt-10">
-        Go to the Dashboard
-      </Button>
-    </div>
+    <CustomErrorPage
+      title="404 - Page Not Found"
+      description="Oops! It looks like you are lost. Our mascot is empty-handed and sad
+        because the page you are looking for does not exist."
+    />
   );
 }
