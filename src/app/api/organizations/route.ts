@@ -19,10 +19,12 @@ export async function POST(request: Request) {
     body: JSON.stringify(organizationDto),
   });
 
-  const data = await res.json();
-  if (!res.ok) {
+  if (!res.ok || !res.headers.get('Location')) {
+    const data = await res.json();
     return errorResponse(data.message || null);
   }
 
-  return data;
+  const organizationUrl = res.headers.get('Location');
+
+  return Response.json({ organizationUrl }, { status: 201 });
 }

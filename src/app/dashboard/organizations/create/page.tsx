@@ -9,13 +9,12 @@ import toast from 'react-hot-toast';
 export default function Page() {
   const [formData, setFormData] = useState<OrganizationDto>({
     name: '',
-    creatorId: '',
-    description: '',
+    description: null,
     userIds: [],
-    contactEmail: '',
-    contactPhone: '',
-    website: '',
-    address: '',
+    contactEmail: null,
+    contactPhone: null,
+    website: null,
+    address: null,
   });
 
   const handleChange = (e: React.ChangeEvent<any>) => {
