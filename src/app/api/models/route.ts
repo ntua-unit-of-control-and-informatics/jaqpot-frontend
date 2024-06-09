@@ -1,12 +1,16 @@
 import { auth } from '@/auth';
 import { NextRequest } from 'next/server';
+import { errorResponse } from '@/app/util/response';
 
 const PAGE_SIZE = '10';
 
 export async function GET(request: NextRequest) {
   const session = await auth();
   if (!session) {
-    throw new Error('Unauthorized');
+    return errorResponse(
+      'You need to be authenticated to access this endpoint',
+      401,
+    );
   }
 
   const searchParams = request.nextUrl.searchParams;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -14,9 +14,23 @@ import { ModelDto, ModelsResponseDto } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
 import { Spinner } from '@nextui-org/spinner';
 import { useRouter } from 'next/navigation';
+import ClientFetchError from '@/app/components/ClientFetchError';
+import { CustomError } from '@/app/types/CustomError';
 
-const fetcher: Fetcher<ModelsResponseDto, string> = (url: string) =>
-  fetch(url).then((res) => res.json());
+const fetcher: Fetcher<ModelsResponseDto, string> = async (url) => {
+  const res = await fetch(url);
+
+  // If the status code is not in the range 200-299,
+  // we still try to parse and throw it.
+  if (!res.ok) {
+    const message = (await res.json()).message;
+    const status = res.status;
+    // Attach extra info to the error object.
+    throw new CustomError(message, status);
+  }
+
+  return res.json();
+};
 
 function useModelsPage(page: number) {
   const { data, error, isLoading } = useSWR(
@@ -27,7 +41,7 @@ function useModelsPage(page: number) {
   return {
     data,
     isLoading,
-    isError: error,
+    error,
   };
 }
 
@@ -35,11 +49,13 @@ export default function ModelsTable() {
   const router = useRouter();
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, isError } = useModelsPage(page - 1);
+  const { data, isLoading, error } = useModelsPage(page - 1);
 
   const loadingState =
     isLoading || data?.content?.length === 0 ? 'loading' : 'idle';
 
+  if (error) return <ClientFetchError error={error} />;
+  if (isLoading) return <Spinner />;
   return (
     <Table
       aria-label="Example table with client async pagination"
@@ -58,6 +74,7 @@ export default function ModelsTable() {
           </div>
         ) : null
       }
+      className="max-w-3xl mx-auto"
     >
       <TableHeader>
         <TableColumn key="name">Name</TableColumn>

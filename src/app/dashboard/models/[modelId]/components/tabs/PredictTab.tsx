@@ -4,28 +4,18 @@ import { DatasetDto, ModelDto } from '@/app/api.types';
 import DynamicForm, {
   DynamicFormSchema,
 } from '@/app/dashboard/models/[modelId]/components/DynamicForm';
-import { auth } from '@/auth';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import PredictionResult from '@/app/dashboard/models/[modelId]/components/PredictionResult';
 
-async function createPrediction(
-  modelId: string,
-  data: any,
-): Promise<string | null> {
-  const res = await fetch(`/api/models/${modelId}/predict`, {
+async function createPrediction(modelId: string, data: any) {
+  return await fetch(`/api/models/${modelId}/predict`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
-
-  if (res.ok) {
-    return res.text();
-  } else {
-    return null;
-  }
 }
 
 async function getPredictionResult(
@@ -81,11 +71,14 @@ export default function PredictTab({ model }: PredictTabProps) {
 
   const handleFormSubmit = async (formData: any) => {
     console.log('Form Data:', formData);
-    const datasetUrl = await createPrediction(
-      params.modelId,
-      Object.values(formData),
-    );
-    await handlePredictionResults(datasetUrl);
+    const res = await createPrediction(params.modelId, Object.values(formData));
+
+    if (res.ok) {
+      const datasetUrl = (await res.json()).datasetUrl;
+      await handlePredictionResults(datasetUrl);
+    } else {
+      await handlePredictionResults(null);
+    }
   };
 
   function generatePredictionFormSchema(model: ModelDto): DynamicFormSchema[] {

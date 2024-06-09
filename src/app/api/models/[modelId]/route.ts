@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import { errorResponse } from '@/app/util/response';
 
 export async function GET(
   request: Request,
@@ -6,7 +7,10 @@ export async function GET(
 ) {
   const session = await auth();
   if (!session) {
-    throw new Error('Unauthorized');
+    return errorResponse(
+      'You need to be authenticated to access this endpoint',
+      401,
+    );
   }
 
   return await fetch(`${process.env.API_URL}/v1/models/${params.modelId}`, {

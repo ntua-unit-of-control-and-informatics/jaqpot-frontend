@@ -6,7 +6,10 @@ import { redirect } from 'next/navigation';
 export async function POST(request: Request) {
   const session = await auth();
   if (!session) {
-    return errorResponse('Oops! There seems to be a problem.', 401);
+    return errorResponse(
+      'You need to be authenticated to access this endpoint',
+      401,
+    );
   }
 
   const organizationDto = await request.json();

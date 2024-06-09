@@ -265,7 +265,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
                 section.fields.map((field, fieldIndex) => (
                   <div key={fieldIndex}>
                     <div className="mb-3">
-                      <div className="my-5">
+                      <div className="mb-5">
                         <label>{field.label}</label>
                       </div>
                       {renderField(field)}

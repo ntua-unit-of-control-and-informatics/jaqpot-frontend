@@ -8,7 +8,10 @@ export async function POST(
 ) {
   const session = await auth();
   if (!session) {
-    throw new Error('Unauthorized');
+    return errorResponse(
+      'You need to be authenticated to access this endpoint',
+      401,
+    );
   }
 
   const values = await request.json();
@@ -34,11 +37,11 @@ export async function POST(
       body: JSON.stringify(dataset),
     },
   );
-  const predictionUrl = res.headers.get('Location');
+  const datasetUrl = res.headers.get('Location');
 
   if (!res.ok || !res.headers.get('Location')) {
     return errorResponse('Unexpected error ocurred', 500);
   }
 
-  return Response.json({ predictionUrl }, { status: 200 });
+  return Response.json({ datasetUrl }, { status: 200 });
 }
