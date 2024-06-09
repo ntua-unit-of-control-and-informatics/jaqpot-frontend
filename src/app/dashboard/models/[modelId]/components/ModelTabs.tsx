@@ -3,8 +3,8 @@
 import { usePathname } from 'next/navigation';
 import { Tab, Tabs } from '@nextui-org/tabs';
 import { ModelDto } from '@/app/api.types';
-import FeaturesTab from '@/app/dashboard/models/components/tabs/FeaturesTab';
-import PredictTab from '@/app/dashboard/models/components/tabs/PredictTab';
+import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
+import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/PredictTab';
 
 interface ModelTabsProps {
   model: ModelDto;

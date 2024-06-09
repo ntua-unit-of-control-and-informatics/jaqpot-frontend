@@ -11,12 +11,8 @@ export default function Page() {
   const router = useRouter();
   const [formData, setFormData] = useState<OrganizationDto>({
     name: '',
-    description: null,
     userIds: [],
     contactEmail: '',
-    contactPhone: null,
-    website: null,
-    address: null,
   });
   const [isLoading, setIsLoading] = useState(false);
 

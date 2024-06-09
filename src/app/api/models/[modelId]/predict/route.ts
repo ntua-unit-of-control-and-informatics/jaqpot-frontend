@@ -40,5 +40,5 @@ export async function POST(
     return errorResponse('Unexpected error ocurred', 500);
   }
 
-  return Response.json({ predictionUrl }, { status: 200 });
+  return new Response(predictionUrl, { status: 200 });
 }

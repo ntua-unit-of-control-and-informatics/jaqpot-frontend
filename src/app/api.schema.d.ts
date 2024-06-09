@@ -6,6 +6,8 @@
 
 export interface paths {
   "/v1/models": {
+    /** Get paginated models */
+    get: operations["getModels"];
     /** Create a new model */
     post: operations["createModel"];
   };
@@ -23,6 +25,10 @@ export interface paths {
      */
     post: operations["predictWithModel"];
   };
+  "/v1/models/{modelId}/organizations": {
+    /** Update organizations for a model */
+    put: operations["updateModelOrganizations"];
+  };
   "/v1/datasets/{id}": {
     /**
      * Get a Dataset
@@ -37,8 +43,6 @@ export interface paths {
     post: operations["createOrganization"];
   };
   "/v1/organizations/{id}": {
-    /** Get organization by ID */
-    get: operations["getOrganizationById"];
     /** Update an existing organization */
     put: operations["updateOrganization"];
   };
@@ -73,6 +77,7 @@ export interface components {
       libraries: components["schemas"]["Library"][];
       dependentFeatures: components["schemas"]["Feature"][];
       independentFeatures: components["schemas"]["Feature"][];
+      organizations?: components["schemas"]["Organization"][];
       /** @enum {string} */
       visibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
       /** @example 5 */
@@ -200,17 +205,17 @@ export interface components {
       name: string;
       creatorId?: string;
       /** @example An awesome organization for managing models. */
-      description?: string | null;
+      description?: string;
       userIds?: string[];
       models?: components["schemas"]["Model"][];
       /** @example contact@my-awesome-org.com */
-      contactEmail?: string | null;
+      contactEmail: string;
       /** @example +1234567890 */
-      contactPhone?: string | null;
+      contactPhone?: string;
       /** @example http://www.my-awesome-org.com */
-      website?: string | null;
+      website?: string;
       /** @example 123 Organization St., City, Country */
-      address?: string | null;
+      address?: string;
       created_at?: Record<string, never>;
       updated_at?: Record<string, never>;
     };
@@ -230,6 +235,33 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** Get paginated models */
+  getModels: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+    };
+    responses: {
+      /** @description Paginated list of models */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["Model"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+    };
+  };
   /** Create a new model */
   createModel: {
     requestBody: {
@@ -307,6 +339,36 @@ export interface operations {
       };
     };
   };
+  /** Update organizations for a model */
+  updateModelOrganizations: {
+    parameters: {
+      path: {
+        modelId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          organizationIds?: number[];
+        };
+      };
+    };
+    responses: {
+      /** @description Organizations updated successfully */
+      200: {
+        content: {
+          "application/json": {
+            /** @example Organizations updated successfully */
+            message?: string;
+          };
+        };
+      };
+      /** @description Model or Organization not found */
+      404: {
+        content: never;
+      };
+    };
+  };
   /**
    * Get a Dataset
    * @description Retrieve a single dataset by its ID
@@ -352,26 +414,6 @@ export interface operations {
     responses: {
       /** @description Organization created successfully */
       201: {
-        content: never;
-      };
-    };
-  };
-  /** Get organization by ID */
-  getOrganizationById: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description Successful response */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Organization"];
-        };
-      };
-      /** @description Organization not found */
-      404: {
         content: never;
       };
     };
