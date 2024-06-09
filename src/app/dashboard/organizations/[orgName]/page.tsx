@@ -3,14 +3,15 @@ import { ModelDto, OrganizationDto } from '@/app/api.types';
 import { auth } from '@/auth';
 import React from 'react';
 import { BuildingOfficeIcon } from '@heroicons/react/24/solid';
+import { isAuthenticated } from '@/app/util/auth';
 
 async function getOrganizationByName(
   orgName: string,
 ): Promise<OrganizationDto | undefined> {
   const authorizationHeader: Record<string, string> = {};
   const session = await auth();
-  if (session?.user) {
-    authorizationHeader['Authorization'] = `Bearer ${session.token}`;
+  if (isAuthenticated(session)) {
+    authorizationHeader['Authorization'] = `Bearer ${session!.token}`;
   }
 
   const res = await fetch(
@@ -33,7 +34,6 @@ export default async function Page({
   params: { orgName: string };
 }) {
   const organization = await getOrganizationByName(params.orgName);
-  console.log(organization);
   if (!organization) {
     notFound();
   }

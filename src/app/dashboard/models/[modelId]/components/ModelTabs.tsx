@@ -5,6 +5,7 @@ import { Tab, Tabs } from '@nextui-org/tabs';
 import { ModelDto } from '@/app/api.types';
 import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
 import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/PredictTab';
+import { useClientSession } from '@/app/util/auth';
 
 interface ModelTabsProps {
   model: ModelDto;
@@ -14,6 +15,7 @@ interface ModelTabsProps {
 // add navigation
 export default function ModelTabs({ model }: ModelTabsProps) {
   const pathname = usePathname();
+  const { data: session } = useClientSession();
 
   return (
     <Tabs
@@ -37,9 +39,13 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       <Tab key="predict" title="Predict">
         <PredictTab model={model} />
       </Tab>
+      {session?.user?.id === model.creator?.id && (
+        <Tab key="share" title="Share">
+          Not implemented yet
+        </Tab>
+      )}
       <Tab key="discussion" title="Discussion">
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-        officia deserunt mollit anim id est laborum.
+        Not implemented yet
       </Tab>
     </Tabs>
   );
