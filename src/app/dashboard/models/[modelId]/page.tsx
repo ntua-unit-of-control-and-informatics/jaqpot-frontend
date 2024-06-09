@@ -8,7 +8,7 @@ import {
   UserIcon,
   ChevronDownIcon,
 } from '@heroicons/react/24/solid';
-import ModelTabs from '@/app/dashboard/models/components/ModelTabs';
+import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
 import { notFound } from 'next/navigation';
 
 async function getModel(modelId: string): Promise<ModelDto | undefined> {

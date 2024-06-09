@@ -3,11 +3,11 @@
 import { DatasetDto, ModelDto } from '@/app/api.types';
 import DynamicForm, {
   DynamicFormSchema,
-} from '@/app/dashboard/models/components/DynamicForm';
+} from '@/app/dashboard/models/[modelId]/components/DynamicForm';
 import { auth } from '@/auth';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import PredictionResult from '@/app/dashboard/models/components/PredictionResult';
+import PredictionResult from '@/app/dashboard/models/[modelId]/components/PredictionResult';
 
 async function createPrediction(
   modelId: string,
