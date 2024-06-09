@@ -70,7 +70,6 @@ export default function PredictTab({ model }: PredictTabProps) {
   }
 
   const handleFormSubmit = async (formData: any) => {
-    console.log('Form Data:', formData);
     const res = await createPrediction(params.modelId, Object.values(formData));
 
     if (res.ok) {

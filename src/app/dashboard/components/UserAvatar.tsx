@@ -14,6 +14,7 @@ import { Session } from 'next-auth';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { signIn, signOut } from 'next-auth/react';
 import { classNames } from '@/app/util/classname';
+import { isAuthenticated } from '@/app/util/auth';
 
 export default function UserAvatar({ session }: { session: Session | null }) {
   return (
@@ -51,7 +52,7 @@ export default function UserAvatar({ session }: { session: Session | null }) {
       >
         <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-white dark:bg-gray-600 dark:text-gray-100">
           <div className="py-1">
-            {!session?.user && (
+            {!isAuthenticated(session) && (
               <MenuItem>
                 {({ focus }) => (
                   <button
@@ -72,7 +73,7 @@ export default function UserAvatar({ session }: { session: Session | null }) {
               </MenuItem>
             )}
 
-            {session?.user && (
+            {isAuthenticated(session) && (
               <>
                 <MenuItem>
                   {({ focus }) => (

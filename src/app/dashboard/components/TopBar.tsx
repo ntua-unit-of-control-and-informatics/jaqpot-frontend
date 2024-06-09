@@ -7,8 +7,11 @@ import SearchBar from '@/app/dashboard/components/SearchBar';
 import { MoonIcon, PlusIcon, SunIcon } from '@heroicons/react/24/solid';
 import React from 'react';
 import CreateMenu from '@/app/dashboard/components/CreateMenu';
+import { useSession } from 'next-auth/react';
 
-export default function TopBar({ session }: { session: Session | null }) {
+export default function TopBar() {
+  const { data: session } = useSession();
+
   return (
     <div className="w-full px-8 py-3 border-b border-b-gray-300 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px]">
       <div className="flex flex-row sm:gap-x-6 ">

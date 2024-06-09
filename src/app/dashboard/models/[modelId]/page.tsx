@@ -10,12 +10,13 @@ import {
 } from '@heroicons/react/24/solid';
 import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
 import { notFound } from 'next/navigation';
+import { isAuthenticated } from '@/app/util/auth';
 
 async function getModel(modelId: string): Promise<ModelDto | undefined> {
   const authorizationHeader: Record<string, string> = {};
   const session = await auth();
-  if (session?.user) {
-    authorizationHeader['Authorization'] = `Bearer ${session.token}`;
+  if (isAuthenticated(session)) {
+    authorizationHeader['Authorization'] = `Bearer ${session!.token}`;
   }
 
   const res = await fetch(`${process.env.API_URL}/v1/models/${modelId}`, {

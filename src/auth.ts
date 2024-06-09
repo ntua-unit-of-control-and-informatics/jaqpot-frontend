@@ -2,6 +2,7 @@ import NextAuth, { DefaultSession } from 'next-auth';
 import KeycloakProvider from 'next-auth/providers/keycloak';
 
 import { DefaultJWT } from '@auth/core/jwt';
+import { jwtDecode } from 'jwt-decode';
 
 declare module 'next-auth' {
   // Extend user to reveal access_token
@@ -38,8 +39,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token;
     },
     session: async ({ session, token, user }) => {
-      // If we want to make the accessToken available in components, then we have to explicitly forward it here.
-      return { ...session, token: token.accessToken };
+      // Next Auth shenanigans :(
+
+      // add userId from decoding the jwt and the sub value cause the sub was a different id
+      let userId: string | undefined = '';
+      if (token?.accessToken) {
+        const decodedToken = jwtDecode(token.accessToken as string);
+        userId = decodedToken.sub;
+      }
+
+      // add user token for backend requests and add user id in the user object to use it in client-side logic
+      return {
+        ...session,
+        token: token.accessToken,
+        user: { ...session.user, id: userId },
+      };
     },
   },
 });

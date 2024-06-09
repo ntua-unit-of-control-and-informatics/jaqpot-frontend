@@ -10,12 +10,14 @@ import {
   InboxIcon,
   XCircleIcon,
 } from '@heroicons/react/24/solid';
-import { signIn, signOut } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { ReactElement, useState } from 'react';
 import { Session } from 'next-auth';
 import { usePathname } from 'next/navigation';
+import { isAuthenticated } from '@/app/util/auth';
 
-export default function Sidebar({ session }: { session: Session | null }) {
+export default function Sidebar() {
+  const { data: session } = useSession();
   const [showSidebarOnMobile, setShowSideBarOnMobile] = useState(false);
   const navElement = (
     index: number,
@@ -133,7 +135,7 @@ export default function Sidebar({ session }: { session: Session | null }) {
                 navElement(index, href, name, icon, after),
               )}
 
-              {!session?.user && (
+              {!isAuthenticated(session) && (
                 <button
                   onClick={async () => {
                     await signIn('keycloak');
