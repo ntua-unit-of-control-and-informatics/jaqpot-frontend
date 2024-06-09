@@ -11,15 +11,12 @@ import {
 } from '@nextui-org/table';
 import { Pagination } from '@nextui-org/pagination';
 import { ModelDto, ModelsResponseDto } from '@/app/api.types';
-import { auth } from '@/auth';
-import toast from 'react-hot-toast';
-import { getKeyValue } from '@nextui-org/react';
-import useSWR from 'swr';
+import useSWR, { Fetcher } from 'swr';
 import { Spinner } from '@nextui-org/spinner';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+const fetcher: Fetcher<ModelsResponseDto, string> = (url: string) =>
+  fetch(url).then((res) => res.json());
 
 function useModelsPage(page: number) {
   const { data, error, isLoading } = useSWR(
@@ -41,13 +38,13 @@ export default function ModelsTable() {
   const { data, isLoading, isError } = useModelsPage(page - 1);
 
   const loadingState =
-    isLoading || data?.content.length === 0 ? 'loading' : 'idle';
+    isLoading || data?.content?.length === 0 ? 'loading' : 'idle';
 
   return (
     <Table
       aria-label="Example table with client async pagination"
       bottomContent={
-        data?.totalPages > 0 ? (
+        data?.totalPages ?? 0 > 0 ? (
           <div className="flex w-full justify-center">
             <Pagination
               isCompact
@@ -55,7 +52,7 @@ export default function ModelsTable() {
               showShadow
               color="primary"
               page={page}
-              total={data?.totalPages}
+              total={data?.totalPages ?? 0}
               onChange={(page) => setPage(page)}
             />
           </div>
