@@ -70,8 +70,8 @@ export interface components {
       name: string;
       /** @example A description of your model */
       description: string;
-      /** @example some type */
-      type?: string;
+      /** @enum {string} */
+      type: "SKLEARN" | "TORCH" | "R";
       /** @example 1.0.0 */
       jaqpotpyVersion: string;
       libraries: components["schemas"]["Library"][];
@@ -215,6 +215,8 @@ export interface components {
       contactEmail: string;
       /** @example +1234567890 */
       contactPhone?: string;
+      /** @enum {string} */
+      visibility: "PUBLIC" | "PRIVATE";
       /** @example http://www.my-awesome-org.com */
       website?: string;
       /** @example 123 Organization St., City, Country */

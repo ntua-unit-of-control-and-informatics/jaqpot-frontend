@@ -40,7 +40,7 @@ const orgFetcher: Fetcher<OrganizationDto[], string> = async (url) => {
   return res.json();
 };
 
-export default function EditTab({ model }: FeaturesTabProps) {
+export default function EditModelTab({ model }: FeaturesTabProps) {
   const possibleValues: VisibilityValue[] = [
     {
       key: 'PUBLIC',

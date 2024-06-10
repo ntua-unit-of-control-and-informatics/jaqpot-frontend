@@ -6,7 +6,7 @@ import { ModelDto } from '@/app/api.types';
 import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
 import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/PredictTab';
 import { useClientSession } from '@/app/util/auth';
-import EditTab from '@/app/dashboard/models/[modelId]/components/tabs/EditTab';
+import EditModelTab from '@/app/dashboard/models/[modelId]/components/tabs/EditModelTab';
 
 interface ModelTabsProps {
   model: ModelDto;
@@ -42,7 +42,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       </Tab>
       {model.canEdit && (
         <Tab key="edit" title="Edit">
-          <EditTab model={model} />
+          <EditModelTab model={model} />
         </Tab>
       )}
       <Tab key="discussion" title="Discussion">
