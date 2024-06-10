@@ -147,6 +147,7 @@ export default function EditTab({ model }: FeaturesTabProps) {
               selectedKeys={[formData.visibility]}
               label="Visibility"
               className="max-w-xs"
+              // @ts-ignore
               onSelectionChange={handleVisibilityChange}
               isRequired
             >
@@ -166,6 +167,7 @@ export default function EditTab({ model }: FeaturesTabProps) {
                 selectionMode="multiple"
                 label="Organizations to share with"
                 className="max-w-xs"
+                // @ts-ignore
                 onSelectionChange={handleOrganizationsChange}
               >
                 {allOrganizations.map((org) => (
