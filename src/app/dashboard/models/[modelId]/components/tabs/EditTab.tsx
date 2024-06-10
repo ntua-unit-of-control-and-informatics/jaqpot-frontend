@@ -102,6 +102,14 @@ export default function EditTab({ model }: FeaturesTabProps) {
     });
   };
 
+  const handleInputChange = (e: React.ChangeEvent<any>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -136,8 +144,10 @@ export default function EditTab({ model }: FeaturesTabProps) {
           <div>
             <Input
               label="Name"
+              name="name"
               placeholder="Enter the model name"
-              value={model.name}
+              value={formData.name}
+              onChange={handleInputChange}
               isRequired
             ></Input>
           </div>
