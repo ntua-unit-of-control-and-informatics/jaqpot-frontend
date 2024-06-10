@@ -8,3 +8,5 @@ export type OrganizationDto = components['schemas']['Organization'];
 
 export type ModelsResponseDto =
   operations['getModels']['responses']['200']['content']['application/json'];
+export type PartiallyUpdateModelRequestDto =
+  operations['partiallyUpdateModel']['requestBody']['content']['application/json'];

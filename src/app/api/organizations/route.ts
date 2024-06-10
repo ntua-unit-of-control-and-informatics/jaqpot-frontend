@@ -3,6 +3,23 @@ import { DatasetDto } from '@/app/api.types';
 import { errorResponse } from '@/app/util/response';
 import { redirect } from 'next/navigation';
 
+export async function GET() {
+  const session = await auth();
+  if (!session) {
+    return errorResponse(
+      'You need to be authenticated to access this endpoint',
+      401,
+    );
+  }
+
+  return await fetch(`${process.env.API_URL}/v1/organizations`, {
+    headers: {
+      Authorization: `Bearer ${session.token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
 export async function POST(request: Request) {
   const session = await auth();
   if (!session) {

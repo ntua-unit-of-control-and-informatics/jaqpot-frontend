@@ -51,8 +51,7 @@ export default function ModelsTable() {
 
   const { data, isLoading, error } = useModelsPage(page - 1);
 
-  const loadingState =
-    isLoading || data?.content?.length === 0 ? 'loading' : 'idle';
+  const loadingState = isLoading ? 'loading' : 'idle';
 
   if (error) return <ClientFetchError error={error} />;
   if (isLoading) return <Spinner />;
