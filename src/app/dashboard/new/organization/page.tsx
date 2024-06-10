@@ -3,9 +3,30 @@
 import React, { useState } from 'react';
 import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
-import { OrganizationDto } from '@/app/api.types';
+import { ModelDto, OrganizationDto } from '@/app/api.types';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { Select, SelectItem } from '@nextui-org/react';
+
+interface VisibilityValue {
+  key: ModelDto['visibility'];
+  label: string;
+  description: string;
+}
+
+const possibleValues: VisibilityValue[] = [
+  {
+    key: 'PUBLIC',
+    label: 'Public',
+    description: 'Anyone can view your organization and share models with it',
+  },
+  {
+    key: 'PRIVATE',
+    label: 'Private',
+    description:
+      'Organization is not presented when searching for organizations',
+  },
+];
 
 export default function Page() {
   const router = useRouter();
@@ -13,6 +34,7 @@ export default function Page() {
     name: '',
     userIds: [],
     contactEmail: '',
+    visibility: 'PUBLIC',
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -80,6 +102,22 @@ export default function Page() {
             isRequired
             errorMessage="Please enter a valid email"
           />
+        </div>
+        <div>
+          <Select
+            label="Visibility"
+            name="visibility"
+            className="max-w-xs"
+            // @ts-ignore
+            onChange={handleChange}
+            isRequired
+          >
+            {possibleValues.map((val) => (
+              <SelectItem key={val.key} description={val.description}>
+                {val.label}
+              </SelectItem>
+            ))}
+          </Select>
         </div>
         <div className="my-6">
           <Textarea
