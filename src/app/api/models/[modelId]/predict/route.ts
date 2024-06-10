@@ -40,7 +40,14 @@ export async function POST(
   const datasetUrl = res.headers.get('Location');
 
   if (!res.ok || !res.headers.get('Location')) {
-    return errorResponse('Unexpected error ocurred', 500);
+    if (res.status === 401 || res.status === 403) {
+      return errorResponse(
+        'You are not authorized to predict on this model',
+        res.status,
+      );
+    }
+
+    return errorResponse('Unexpected error occurred', 500);
   }
 
   return Response.json({ datasetUrl }, { status: 200 });

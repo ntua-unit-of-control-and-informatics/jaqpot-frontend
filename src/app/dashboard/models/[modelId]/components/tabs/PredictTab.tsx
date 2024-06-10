@@ -7,6 +7,7 @@ import DynamicForm, {
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import PredictionResult from '@/app/dashboard/models/[modelId]/components/PredictionResult';
+import toast from 'react-hot-toast';
 
 async function createPrediction(modelId: string, data: any) {
   return await fetch(`/api/models/${modelId}/predict`, {
@@ -43,9 +44,13 @@ export default function PredictTab({ model }: PredictTabProps) {
   const [isPredictionLoading, setIsPredictionLoading] = useState(false);
   const [dataset, setDataset] = useState<DatasetDto | undefined>(undefined);
 
-  async function handlePredictionResults(datasetUrl: string | null) {
-    if (!datasetUrl) {
-      console.error('Dataset was not created successfully');
+  async function handlePredictionResults(res: Response) {
+    let datasetUrl;
+    const data = await res.json();
+    if (res.ok) {
+      datasetUrl = data.datasetUrl;
+    } else {
+      toast.error(`Error getting prediction:  ${data?.message}`);
       return;
     }
 
@@ -72,12 +77,7 @@ export default function PredictTab({ model }: PredictTabProps) {
   const handleFormSubmit = async (formData: any) => {
     const res = await createPrediction(params.modelId, Object.values(formData));
 
-    if (res.ok) {
-      const datasetUrl = (await res.json()).datasetUrl;
-      await handlePredictionResults(datasetUrl);
-    } else {
-      await handlePredictionResults(null);
-    }
+    await handlePredictionResults(res);
   };
 
   function generatePredictionFormSchema(model: ModelDto): DynamicFormSchema[] {
