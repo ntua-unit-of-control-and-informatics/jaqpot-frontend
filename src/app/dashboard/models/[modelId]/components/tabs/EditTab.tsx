@@ -85,7 +85,6 @@ export default function EditTab({ model }: FeaturesTabProps) {
     new Set(organizationIds),
   );
 
-  console.log(formData);
   const handleVisibilityChange = (keys: Set<number>) => {
     const first = keys.keys().next().value;
     setFormData({
