@@ -25,9 +25,9 @@ export interface paths {
      */
     post: operations["predictWithModel"];
   };
-  "/v1/models/{modelId}/organizations": {
-    /** Update organizations for a model */
-    put: operations["updateModelOrganizations"];
+  "/v1/models/{id}/partial": {
+    /** Partially update specific fields of a model */
+    patch: operations["partiallyUpdateModel"];
   };
   "/v1/datasets/{id}": {
     /**
@@ -78,8 +78,7 @@ export interface components {
       dependentFeatures: components["schemas"]["Feature"][];
       independentFeatures: components["schemas"]["Feature"][];
       organizations?: components["schemas"]["Organization"][];
-      /** @enum {string} */
-      visibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
+      visibility: components["schemas"]["ModelVisibility"];
       /** @example 5 */
       reliability?: number;
       /** @example false */
@@ -90,6 +89,8 @@ export interface components {
        */
       actualModel: string;
       creator?: components["schemas"]["User"];
+      /** @description This is an internal api property, feel free to ignore it */
+      canEdit?: boolean;
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -102,6 +103,8 @@ export interface components {
        */
       updatedAt?: Record<string, never>;
     };
+    /** @enum {string} */
+    ModelVisibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
     Library: {
       /** Format: int64 */
       id?: number;
@@ -339,31 +342,34 @@ export interface operations {
       };
     };
   };
-  /** Update organizations for a model */
-  updateModelOrganizations: {
+  /** Partially update specific fields of a model */
+  partiallyUpdateModel: {
     parameters: {
       path: {
-        modelId: number;
+        id: number;
       };
     };
     requestBody: {
       content: {
         "application/json": {
+          name: string;
+          visibility: components["schemas"]["ModelVisibility"];
           organizationIds?: number[];
         };
       };
     };
     responses: {
-      /** @description Organizations updated successfully */
+      /** @description Model fields updated successfully */
       200: {
         content: {
-          "application/json": {
-            /** @example Organizations updated successfully */
-            message?: string;
-          };
+          "application/json": components["schemas"]["Model"];
         };
       };
-      /** @description Model or Organization not found */
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+      /** @description Model not found */
       404: {
         content: never;
       };
