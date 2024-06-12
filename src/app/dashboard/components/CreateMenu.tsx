@@ -14,28 +14,34 @@ export default function CreateMenu() {
   const router = useRouter();
 
   return (
-    <Dropdown>
-      <DropdownTrigger>
-        <Button variant="light">
-          <PlusIcon className="w-6 h-6 text-gray-400" />
-          <ChevronDownIcon
-            className="w-4 h-4 text-gray-400 ml-1"
-            aria-hidden="true"
-          />
-        </Button>
-      </DropdownTrigger>
-      <DropdownMenu aria-label="Create new items">
-        <DropdownItem
-          key="new-organization"
-          textValue="New Organization"
-          onClick={() => router.push('/dashboard/new/organization')}
-        >
-          <div className="flex">
-            <BuildingOfficeIcon className="w-6 h-6 mr-2" />
-            New Organization
-          </div>
-        </DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
+    <div className="p-2">
+      <Dropdown
+        classNames={{
+          trigger: 'p-0 min-w-0 gap-0', // change arrow background
+        }}
+      >
+        <DropdownTrigger>
+          <Button variant="light">
+            <PlusIcon className="w-6 h-6 text-gray-400" />
+            <ChevronDownIcon
+              className="w-4 h-4 text-gray-400 ml-1"
+              aria-hidden="true"
+            />
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu aria-label="Create new items">
+          <DropdownItem
+            key="new-organization"
+            textValue="New Organization"
+            onClick={() => router.push('/dashboard/new/organization')}
+          >
+            <div className="flex">
+              <BuildingOfficeIcon className="w-6 h-6 mr-2" />
+              New Organization
+            </div>
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    </div>
   );
 }

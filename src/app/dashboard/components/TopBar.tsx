@@ -8,6 +8,7 @@ import { MoonIcon, PlusIcon, SunIcon } from '@heroicons/react/24/solid';
 import React from 'react';
 import CreateMenu from '@/app/dashboard/components/CreateMenu';
 import { useSession } from 'next-auth/react';
+import { Button } from '@nextui-org/button';
 
 export default function TopBar() {
   const { data: session } = useSession();
@@ -18,16 +19,17 @@ export default function TopBar() {
         <SearchBar />
         <div className="flex gap-x-2 items-center">
           <CreateMenu />
-          <button type="button" className="p-2.5">
+          <Button variant="light" className="p-2 min-w-10">
             <BellIcon className="size-6 text-gray-400" />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="light"
+            className="p-2 min-w-10"
             onClick={() => document.body.classList.toggle('dark')}
-            className="h-12 w-12 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            <MoonIcon className="text-violet-700 block dark:hidden" />
-            <SunIcon className="text-yellow-500  hidden dark:block" />
-          </button>
+            <MoonIcon className="size-6 text-violet-700 block dark:hidden" />
+            <SunIcon className="size-6 text-yellow-500  hidden dark:block" />
+          </Button>
           {/*DIVIDER*/}
           <div
             className="bg-gray-900 w-px h-6 bg-opacity-10"
