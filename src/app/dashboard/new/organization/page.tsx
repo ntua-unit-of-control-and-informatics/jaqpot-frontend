@@ -58,7 +58,9 @@ export default function Page() {
 
       const { success, message, data }: ApiResponse = await res.json();
       if (success) {
-        toast.success(`Organization created successfully`);
+        toast.success(
+          'Organization created successfully! You will be redirected to the organization’s page shortly.',
+        );
         router.push(`/dashboard/organizations/${data.organizationName}`);
       } else {
         toast.error(`Organization could not be created: ${message}`);
