@@ -6,11 +6,34 @@ import { Button } from '@nextui-org/button';
 import { OrganizationDto } from '@/app/api.types';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { Select, SelectItem } from '@nextui-org/react';
+import { ApiResponse } from '@/app/util/response';
+
+interface VisibilityValue {
+  key: OrganizationDto['visibility'];
+  label: string;
+  description: string;
+}
+
+const possibleVisibilityValues: VisibilityValue[] = [
+  {
+    key: 'PUBLIC',
+    label: 'Public',
+    description: 'Anyone can view your organization and share models with it',
+  },
+  {
+    key: 'PRIVATE',
+    label: 'Private',
+    description:
+      'Only you and the organization member can see this organization',
+  },
+];
 
 export default function Page() {
   const router = useRouter();
   const [formData, setFormData] = useState<OrganizationDto>({
     name: '',
+    visibility: 'PUBLIC',
     userIds: [],
     contactEmail: '',
   });
@@ -32,13 +55,15 @@ export default function Page() {
         method: 'POST',
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (res.ok) {
-        toast.success(`Organization created successfully`);
 
+      const { success, message, data }: ApiResponse = await res.json();
+      if (success) {
+        toast.success(
+          'Organization created successfully! You will be redirected to the organization’s page shortly.',
+        );
         router.push(`/dashboard/organizations/${data.organizationName}`);
       } else {
-        toast.error(`Error creating organization:  ${data?.message}`);
+        toast.error(`Organization could not be created: ${message}`);
       }
       // Redirect or display success message as needed
     } catch (error: unknown) {
@@ -80,6 +105,21 @@ export default function Page() {
             isRequired
             errorMessage="Please enter a valid email"
           />
+          <Select
+            defaultSelectedKeys={[formData.visibility]}
+            selectedKeys={[formData.visibility]}
+            name="visibility"
+            label="Visibility"
+            className="max-w-xs"
+            onChange={handleChange}
+            isRequired
+          >
+            {possibleVisibilityValues.map((val) => (
+              <SelectItem key={val.key} description={val.description}>
+                {val.label}
+              </SelectItem>
+            ))}
+          </Select>
         </div>
         <div className="my-6">
           <Textarea

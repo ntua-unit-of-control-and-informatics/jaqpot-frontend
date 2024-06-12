@@ -1,28 +1,38 @@
 import { auth } from '@/auth';
 import { DatasetDto } from '@/app/api.types';
-import { errorResponse } from '@/app/util/response';
+import {
+  ApiResponse,
+  errorResponse,
+  handleApiResponse,
+} from '@/app/util/response';
 import { redirect } from 'next/navigation';
+import { isAuthenticated } from '@/app/util/auth';
+import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
-  if (!session) {
+  if (!isAuthenticated(session)) {
     return errorResponse(
       'You need to be authenticated to access this endpoint',
       401,
     );
   }
 
-  return await fetch(`${process.env.API_URL}/v1/organizations`, {
+  const res = await fetch(`${process.env.API_URL}/v1/organizations`, {
     headers: {
-      Authorization: `Bearer ${session.token}`,
+      Authorization: `Bearer ${session!.token}`,
       'Content-Type': 'application/json',
     },
   });
+
+  return handleApiResponse(res);
 }
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
-  if (!session) {
+  if (!isAuthenticated(session)) {
     return errorResponse(
       'You need to be authenticated to access this endpoint',
       401,
@@ -34,21 +44,26 @@ export async function POST(request: Request) {
   const res = await fetch(`${process.env.API_URL}/v1/organizations`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${session.token}`,
+      Authorization: `Bearer ${session!.token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(organizationDto),
   });
 
-  const organizationUrl = res.headers.get('Location');
+  const apiResponse = await handleApiResponse(res);
+  const data = await apiResponse.json();
 
-  if (!res.ok || !organizationUrl) {
-    const data = await res.json();
-    return errorResponse(data.message || null);
+  if (data.success) {
+    const organizationUrl = res.headers.get('Location')!;
+    const organizationUrlParts = organizationUrl.split('/');
+    const organizationName =
+      organizationUrlParts[organizationUrlParts.length - 1];
+
+    return NextResponse.json(
+      { success: true, data: { organizationName } },
+      { status: 201 },
+    );
+  } else {
+    return errorResponse(data.message);
   }
-  const organizationUrlParts = organizationUrl.split('/');
-  const organizationName =
-    organizationUrlParts[organizationUrlParts.length - 1];
-
-  return Response.json({ organizationName }, { status: 201 });
 }

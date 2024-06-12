@@ -14,6 +14,7 @@ import { CustomError } from '@/app/types/CustomError';
 import { Button } from '@nextui-org/button';
 import toast from 'react-hot-toast';
 import { router } from 'next/client';
+import { ApiResponse } from '@/app/util/response';
 
 interface FeaturesTabProps {
   model: ModelDto;
@@ -41,7 +42,7 @@ const orgFetcher: Fetcher<OrganizationDto[], string> = async (url) => {
 };
 
 export default function EditTab({ model }: FeaturesTabProps) {
-  const possibleValues: VisibilityValue[] = [
+  const possibleVisibilityValues: VisibilityValue[] = [
     {
       key: 'PUBLIC',
       label: 'Public',
@@ -117,8 +118,8 @@ export default function EditTab({ model }: FeaturesTabProps) {
         method: 'PATCH',
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (res.ok) {
+      const { success, data }: ApiResponse = await res.json();
+      if (success) {
         toast.success(`Model updated successfully`);
       } else {
         toast.error(`Error updating model:  ${data?.message}`);
@@ -160,7 +161,7 @@ export default function EditTab({ model }: FeaturesTabProps) {
               onSelectionChange={handleVisibilityChange}
               isRequired
             >
-              {possibleValues.map((val) => (
+              {possibleVisibilityValues.map((val) => (
                 <SelectItem key={val.key} description={val.description}>
                   {val.label}
                 </SelectItem>
