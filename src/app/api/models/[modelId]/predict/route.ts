@@ -44,7 +44,8 @@ export async function POST(
     },
   );
 
-  const data = await (await handleApiResponse(res)).json();
+  const apiResponse = await handleApiResponse(res);
+  const data = await apiResponse.json();
 
   if (data.success) {
     const datasetUrl = res.headers.get('Location')!;
