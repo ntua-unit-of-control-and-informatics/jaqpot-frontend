@@ -89,7 +89,7 @@ export interface components {
        */
       actualModel: string;
       creator?: components["schemas"]["User"];
-      /** @description This is an internal api property, feel free to ignore it */
+      /** @description If the current user can edit the model */
       canEdit?: boolean;
       /**
        * Format: date-time
@@ -221,6 +221,8 @@ export interface components {
       website?: string;
       /** @example 123 Organization St., City, Country */
       address?: string;
+      /** @description If the current user can edit the organization */
+      canEdit?: boolean;
       created_at?: Record<string, never>;
       updated_at?: Record<string, never>;
     };

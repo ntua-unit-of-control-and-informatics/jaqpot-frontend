@@ -1,5 +1,4 @@
 import { ModelDto } from '@/app/api.types';
-import { Card, CardBody } from '@nextui-org/card';
 import {
   Table,
   TableBody,

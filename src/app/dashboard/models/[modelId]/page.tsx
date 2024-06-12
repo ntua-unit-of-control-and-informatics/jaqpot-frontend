@@ -11,6 +11,8 @@ import {
 import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
 import { notFound } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
+import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
+import ModelBreadcrumbs from '@/app/dashboard/models/[modelId]/components/ModelBreadcrumbs';
 
 async function getModel(modelId: string): Promise<ModelDto | undefined> {
   const authorizationHeader: Record<string, string> = {};
@@ -44,6 +46,8 @@ export default async function Page({
 
   return (
     <>
+      <ModelBreadcrumbs model={model} />
+
       <div className="grid grid-cols-6 pl-2 sm:pl-0">
         {/* Title */}
         <div className="text-3xl font-semibold col-span-4 py-3">

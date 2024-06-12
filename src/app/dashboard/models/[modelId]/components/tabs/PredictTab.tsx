@@ -62,6 +62,7 @@ export default function PredictTab({ model }: PredictTabProps) {
   }
 
   const handleFormSubmit = async (formData: any) => {
+    setIsPredictionLoading(true);
     const res = await createPrediction(params.modelId, Object.values(formData));
     const { success, data, message }: ApiResponse<{ datasetId: string }> =
       await res.json();
