@@ -45,7 +45,7 @@ export default async function Page({
     <div className="min-h-screen">
       <OrganizationBreadcrumbs organization={organization} />
       <div className="max-w-4xl mx-auto rounded-lg">
-        <div className="flex mb-10 items-center text-2xl font-bold leading-7  sm:truncate sm:text-3xl sm:tracking-tight">
+        <div className="flex text-3xl font-semibold py-3 items-center leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
           <BuildingOfficeIcon className="size-8 mr-2" />
           {organization.name}
         </div>
