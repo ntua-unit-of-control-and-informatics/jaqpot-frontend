@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import PredictionResult from '@/app/dashboard/models/[modelId]/components/PredictionResult';
 import toast from 'react-hot-toast';
+import { ApiResponse } from '@/app/util/response';
 
 async function createPrediction(modelId: string, data: any) {
   return await fetch(`/api/models/${modelId}/predict`, {
@@ -19,7 +20,7 @@ async function createPrediction(modelId: string, data: any) {
   });
 }
 
-async function getPredictionResult(datasetId: string) {
+async function getDataset(datasetId: string) {
   return fetch(`/api/datasets/${datasetId}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -36,27 +37,24 @@ export default function PredictTab({ model }: PredictTabProps) {
   const [isPredictionLoading, setIsPredictionLoading] = useState(false);
   const [dataset, setDataset] = useState<DatasetDto | undefined>(undefined);
 
-  async function handlePredictionResults(datasetUrl: string | null) {
-    if (!datasetUrl) {
+  async function handlePredictionResults(datasetId: string | null) {
+    if (!datasetId) {
       toast.error('Dataset was not created successfully');
       return;
     }
-
-    const datasetUrlParts = datasetUrl.split('/');
-    const datasetId = datasetUrlParts[datasetUrlParts.length - 1];
 
     setIsPredictionLoading(true);
 
     const predictionDataset = await new Promise<DatasetDto>((resolve) => {
       const intervalId = setInterval(async () => {
-        const res = await getPredictionResult(datasetId);
-        const { success, dataset } = await res.json();
+        const res = await getDataset(datasetId);
+        const { success, data }: ApiResponse = await res.json();
 
-        if (dataset?.status === 'SUCCESS' || dataset?.status === 'FAILURE') {
+        if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
           clearInterval(intervalId);
-          resolve(dataset);
+          resolve(data);
         }
-      }, 5000);
+      }, 3000);
     });
 
     setIsPredictionLoading(false);
@@ -65,12 +63,13 @@ export default function PredictTab({ model }: PredictTabProps) {
 
   const handleFormSubmit = async (formData: any) => {
     const res = await createPrediction(params.modelId, Object.values(formData));
-    const { success, data } = await res.json();
+    const { success, data, message }: ApiResponse<{ datasetId: string }> =
+      await res.json();
     if (success) {
-      const datasetUrl = data.datasetUrl;
-      await handlePredictionResults(datasetUrl);
+      const datasetId = data!.datasetId;
+      await handlePredictionResults(datasetId);
     } else {
-      toast.error(`Error creating prediction:  ${data?.message}`);
+      toast.error(`Error creating prediction:  ${message}`);
       await handlePredictionResults(null);
     }
   };

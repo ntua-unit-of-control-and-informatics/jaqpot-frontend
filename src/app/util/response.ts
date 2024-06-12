@@ -1,10 +1,10 @@
 import toast from 'react-hot-toast';
 import { NextResponse } from 'next/server';
 
-export interface ApiResponse {
+export interface ApiResponse<T = any> {
   success: boolean;
   message?: string;
-  data: any | null;
+  data: T | null;
 }
 
 const defaultUnknownErrorMessage =

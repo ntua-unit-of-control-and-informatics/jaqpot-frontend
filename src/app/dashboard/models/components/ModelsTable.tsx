@@ -16,8 +16,11 @@ import { Spinner } from '@nextui-org/spinner';
 import { useRouter } from 'next/navigation';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { CustomError } from '@/app/types/CustomError';
+import { ApiResponse } from '@/app/util/response';
 
-const fetcher: Fetcher<ModelsResponseDto, string> = async (url) => {
+const fetcher: Fetcher<ApiResponse<ModelsResponseDto>, string> = async (
+  url,
+) => {
   const res = await fetch(url);
 
   // If the status code is not in the range 200-299,
@@ -33,10 +36,16 @@ const fetcher: Fetcher<ModelsResponseDto, string> = async (url) => {
 };
 
 function useModelsPage(page: number) {
-  const { data, error, isLoading } = useSWR(
-    `/api/models?page=${page}`,
-    fetcher,
-  );
+  const {
+    data: apiResponse,
+    error,
+    isLoading,
+  } = useSWR(`/api/models?page=${page}`, fetcher);
+
+  let data;
+  if (apiResponse?.success) {
+    data = apiResponse?.data;
+  }
 
   return {
     data,

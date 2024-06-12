@@ -52,7 +52,7 @@ export async function POST(
     const datasetId = datasetUrlParts[datasetUrlParts.length - 1];
 
     return NextResponse.json(
-      { success: true, data: { datasetName: datasetId } },
+      { success: true, data: { datasetId } },
       { status: 201 },
     );
   } else {

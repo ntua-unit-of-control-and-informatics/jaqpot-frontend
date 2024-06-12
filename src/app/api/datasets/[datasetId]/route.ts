@@ -1,10 +1,16 @@
 import { auth } from '@/auth';
-import { errorResponse } from '@/app/util/response';
+import {
+  ApiResponse,
+  errorResponse,
+  handleApiResponse,
+} from '@/app/util/response';
+import { isAuthenticated } from '@/app/util/auth';
+import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,
   { params }: { params: { datasetId: string } },
-) {
+): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -17,10 +23,10 @@ export async function GET(
     `${process.env.API_URL}/v1/datasets/${params.datasetId}`,
     {
       headers: {
-        Authorization: `Bearer ${session.token}`,
+        Authorization: `Bearer ${session!.token}`,
         'Content-Type': 'application/json',
       },
     },
   );
-  return res;
+  return handleApiResponse(res);
 }
