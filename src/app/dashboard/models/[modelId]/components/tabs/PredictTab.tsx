@@ -7,6 +7,7 @@ import DynamicForm, {
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import PredictionResult from '@/app/dashboard/models/[modelId]/components/PredictionResult';
+import { errorResponse } from '@/app/util/response';
 
 async function createPrediction(modelId: string, data: any) {
   return await fetch(`/api/models/${modelId}/predict`, {
@@ -71,6 +72,14 @@ export default function PredictTab({ model }: PredictTabProps) {
 
   const handleFormSubmit = async (formData: any) => {
     const res = await createPrediction(params.modelId, Object.values(formData));
+
+    const datasetUrl = res.headers.get('Location');
+
+    if (!res.ok || !res.headers.get('Location')) {
+      return errorResponse('Unexpected error ocurred', 500);
+    }
+
+    return Response.json({ datasetUrl }, { status: 200 });
 
     if (res.ok) {
       const datasetUrl = (await res.json()).datasetUrl;

@@ -1,28 +1,31 @@
 import { auth } from '@/auth';
 import { DatasetDto } from '@/app/api.types';
-import { errorResponse } from '@/app/util/response';
+import { errorResponse, handleApiResponse } from '@/app/util/response';
 import { redirect } from 'next/navigation';
+import { isAuthenticated } from '@/app/util/auth';
 
 export async function GET() {
   const session = await auth();
-  if (!session) {
+  if (!isAuthenticated(session)) {
     return errorResponse(
       'You need to be authenticated to access this endpoint',
       401,
     );
   }
 
-  return await fetch(`${process.env.API_URL}/v1/organizations`, {
+  const res = await fetch(`${process.env.API_URL}/v1/organizations`, {
     headers: {
-      Authorization: `Bearer ${session.token}`,
+      Authorization: `Bearer ${session!.token}`,
       'Content-Type': 'application/json',
     },
   });
+
+  return handleApiResponse(res);
 }
 
 export async function POST(request: Request) {
   const session = await auth();
-  if (!session) {
+  if (!isAuthenticated(session)) {
     return errorResponse(
       'You need to be authenticated to access this endpoint',
       401,
@@ -34,7 +37,7 @@ export async function POST(request: Request) {
   const res = await fetch(`${process.env.API_URL}/v1/organizations`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${session.token}`,
+      Authorization: `Bearer ${session!.token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(organizationDto),

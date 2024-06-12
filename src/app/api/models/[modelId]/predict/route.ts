@@ -1,13 +1,14 @@
 import { auth } from '@/auth';
 import { DatasetDto } from '@/app/api.types';
-import { errorResponse } from '@/app/util/response';
+import { errorResponse, handleApiResponse } from '@/app/util/response';
+import { isAuthenticated } from '@/app/util/auth';
 
 export async function POST(
   request: Request,
   { params }: { params: { modelId: string } },
 ) {
   const session = await auth();
-  if (!session) {
+  if (!isAuthenticated(session)) {
     return errorResponse(
       'You need to be authenticated to access this endpoint',
       401,
@@ -31,17 +32,11 @@ export async function POST(
     {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${session.token}`,
+        Authorization: `Bearer ${session!.token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(dataset),
     },
   );
-  const datasetUrl = res.headers.get('Location');
-
-  if (!res.ok || !res.headers.get('Location')) {
-    return errorResponse('Unexpected error ocurred', 500);
-  }
-
-  return Response.json({ datasetUrl }, { status: 200 });
+  const data = (await handleApiResponse(res)).json();
 }

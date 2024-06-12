@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { datasetId: string } },
 ) {
   const session = await auth();
-  if (!session) {
+  if (!isAuthenticated(session)) {
     return errorResponse(
       'You need to be authenticated to access this endpoint',
       401,

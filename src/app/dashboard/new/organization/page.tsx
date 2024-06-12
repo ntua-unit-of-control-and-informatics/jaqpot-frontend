@@ -32,6 +32,7 @@ export default function Page() {
         method: 'POST',
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
       if (res.ok) {
         toast.success(`Organization created successfully`);
