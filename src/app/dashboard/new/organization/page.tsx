@@ -80,7 +80,7 @@ export default function Page() {
       </h2>
 
       <form onSubmit={handleSubmit} className="mt-6">
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Input
             type="text"
             name="name"
