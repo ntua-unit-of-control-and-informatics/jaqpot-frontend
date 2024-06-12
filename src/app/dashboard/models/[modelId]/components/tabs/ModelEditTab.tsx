@@ -15,6 +15,7 @@ import { Button } from '@nextui-org/button';
 import toast from 'react-hot-toast';
 import { router } from 'next/client';
 import { ApiResponse } from '@/app/util/response';
+import { useRouter } from 'next/navigation';
 
 interface FeaturesTabProps {
   model: ModelDto;
@@ -41,6 +42,8 @@ const orgFetcher: Fetcher<OrganizationDto[], string> = async (url) => {
 };
 
 export default function ModelEditTab({ model }: FeaturesTabProps) {
+  const router = useRouter();
+
   const possibleVisibilityValues: VisibilityValue[] = [
     {
       key: 'PUBLIC',
@@ -121,6 +124,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
       const { success, data, message }: ApiResponse = await res.json();
       if (success) {
         toast.success(`Model updated successfully`);
+        router.refresh();
       } else {
         toast.error(`Error updating model:  ${message}`);
       }
