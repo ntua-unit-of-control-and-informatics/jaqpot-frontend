@@ -28,20 +28,19 @@ interface VisibilityValue {
 
 const orgFetcher: Fetcher<OrganizationDto[], string> = async (url) => {
   const res = await fetch(url);
-
+  const { success, data, message } = await res.json();
   // If the status code is not in the range 200-299,
   // we still try to parse and throw it.
-  if (!res.ok) {
-    const message = (await res.json()).message;
+  if (!success) {
     const status = res.status;
     // Attach extra info to the error object.
     throw new CustomError(message, status);
   }
 
-  return res.json();
+  return data;
 };
 
-export default function EditTab({ model }: FeaturesTabProps) {
+export default function ModelEditTab({ model }: FeaturesTabProps) {
   const possibleVisibilityValues: VisibilityValue[] = [
     {
       key: 'PUBLIC',
@@ -67,6 +66,7 @@ export default function EditTab({ model }: FeaturesTabProps) {
     `/api/organizations`,
     orgFetcher,
   );
+
   type PartialModelUpdate = Omit<
     PartiallyUpdateModelRequestDto,
     'organizationIds'
@@ -118,11 +118,11 @@ export default function EditTab({ model }: FeaturesTabProps) {
         method: 'PATCH',
         body: JSON.stringify(formData),
       });
-      const { success, data }: ApiResponse = await res.json();
+      const { success, data, message }: ApiResponse = await res.json();
       if (success) {
         toast.success(`Model updated successfully`);
       } else {
-        toast.error(`Error updating model:  ${data?.message}`);
+        toast.error(`Error updating model:  ${message}`);
       }
     } catch (error: unknown) {
       // Display error message as needed
