@@ -8,26 +8,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Select, SelectItem } from '@nextui-org/react';
 import { ApiResponse } from '@/app/util/response';
-
-interface VisibilityValue {
-  key: OrganizationDto['visibility'];
-  label: string;
-  description: string;
-}
-
-const possibleVisibilityValues: VisibilityValue[] = [
-  {
-    key: 'PUBLIC',
-    label: 'Public',
-    description: 'Anyone can view your organization and share models with it',
-  },
-  {
-    key: 'PRIVATE',
-    label: 'Private',
-    description:
-      'Only you and the organization member can see this organization',
-  },
-];
+import { organizationVisibilitySelectValues } from '@/app/types/organization-select.types';
 
 export default function Page() {
   const router = useRouter();
@@ -114,7 +95,7 @@ export default function Page() {
             onChange={handleChange}
             isRequired
           >
-            {possibleVisibilityValues.map((val) => (
+            {organizationVisibilitySelectValues.map((val) => (
               <SelectItem key={val.key} description={val.description}>
                 {val.label}
               </SelectItem>
