@@ -5,7 +5,6 @@ import { Tab, Tabs } from '@nextui-org/tabs';
 import { ModelDto } from '@/app/api.types';
 import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
 import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/PredictTab';
-import { useClientSession } from '@/app/util/auth';
 import ModelEditTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelEditTab';
 
 interface ModelTabsProps {
@@ -16,7 +15,6 @@ interface ModelTabsProps {
 // add navigation
 export default function ModelTabs({ model }: ModelTabsProps) {
   const pathname = usePathname();
-  const { data: session } = useClientSession();
 
   return (
     <Tabs
