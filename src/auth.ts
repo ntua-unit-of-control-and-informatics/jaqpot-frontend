@@ -3,6 +3,7 @@ import KeycloakProvider from 'next-auth/providers/keycloak';
 
 import { DefaultJWT } from '@auth/core/jwt';
 import { jwtDecode } from 'jwt-decode';
+import Keycloak from 'next-auth/providers/keycloak';
 
 declare module 'next-auth' {
   // Extend user to reveal access_token
@@ -22,13 +23,7 @@ declare module 'next-auth' {
 }
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  providers: [
-    KeycloakProvider({
-      clientId: process.env.KEYCLOAK_CLIENT_ID!,
-      clientSecret: process.env.KEYCLOAK_CLIENT_SECRET!,
-      issuer: process.env.KEYCLOAK_ISSUER,
-    }),
-  ],
+  providers: [Keycloak],
   callbacks: {
     jwt: async ({ token, user, account }) => {
       if (account && account.access_token) {

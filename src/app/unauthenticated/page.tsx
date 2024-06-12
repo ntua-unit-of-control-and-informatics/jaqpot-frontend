@@ -1,6 +1,3 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { Button } from '@nextui-org/button';
 import CustomErrorPage from '@/app/components/CustomErrorPage';
 
 export default function Unauthorized() {

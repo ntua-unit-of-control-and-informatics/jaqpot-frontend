@@ -27,6 +27,8 @@ async function getModel(modelId: string): Promise<ModelDto | undefined> {
   });
 
   if (!res.ok) return undefined;
+  else if (res.status === 401 || res.status === 403) {
+  }
   return res.json();
 }
 

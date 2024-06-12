@@ -3,18 +3,19 @@
 import React, { useState } from 'react';
 import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
-import { ModelDto, OrganizationDto } from '@/app/api.types';
+import { OrganizationDto } from '@/app/api.types';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Select, SelectItem } from '@nextui-org/react';
+import { ApiResponse } from '@/app/util/response';
 
 interface VisibilityValue {
-  key: ModelDto['visibility'];
+  key: OrganizationDto['visibility'];
   label: string;
   description: string;
 }
 
-const possibleValues: VisibilityValue[] = [
+const possibleVisibilityValues: VisibilityValue[] = [
   {
     key: 'PUBLIC',
     label: 'Public',
@@ -24,7 +25,7 @@ const possibleValues: VisibilityValue[] = [
     key: 'PRIVATE',
     label: 'Private',
     description:
-      'Organization is not presented when searching for organizations',
+      'Only you and the organization member can see this organization',
   },
 ];
 
@@ -32,9 +33,9 @@ export default function Page() {
   const router = useRouter();
   const [formData, setFormData] = useState<OrganizationDto>({
     name: '',
+    visibility: 'PUBLIC',
     userIds: [],
     contactEmail: '',
-    visibility: 'PUBLIC',
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,13 +55,15 @@ export default function Page() {
         method: 'POST',
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (res.ok) {
-        toast.success(`Organization created successfully`);
 
+      const { success, message, data }: ApiResponse = await res.json();
+      if (success) {
+        toast.success(
+          'Organization created successfully! You will be redirected to the organization’s page shortly.',
+        );
         router.push(`/dashboard/organizations/${data.organizationName}`);
       } else {
-        toast.error(`Error creating organization:  ${data?.message}`);
+        toast.error(`Organization could not be created: ${message}`);
       }
       // Redirect or display success message as needed
     } catch (error: unknown) {
@@ -102,17 +105,16 @@ export default function Page() {
             isRequired
             errorMessage="Please enter a valid email"
           />
-        </div>
-        <div>
           <Select
-            label="Visibility"
+            defaultSelectedKeys={[formData.visibility]}
+            selectedKeys={[formData.visibility]}
             name="visibility"
+            label="Visibility"
             className="max-w-xs"
-            // @ts-ignore
             onChange={handleChange}
             isRequired
           >
-            {possibleValues.map((val) => (
+            {possibleVisibilityValues.map((val) => (
               <SelectItem key={val.key} description={val.description}>
                 {val.label}
               </SelectItem>
