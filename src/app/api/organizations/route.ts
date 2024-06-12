@@ -43,15 +43,19 @@ export async function POST(request: Request) {
     body: JSON.stringify(organizationDto),
   });
 
-  const organizationUrl = res.headers.get('Location');
+  const apiResponse = await handleApiResponse(res);
+  const data = await apiResponse.json();
 
-  if (!res.ok || !organizationUrl) {
-    const data = await res.json();
-    return errorResponse(data.message || null);
+  console.log(data);
+
+  if (data.success) {
+    const organizationUrl = res.headers.get('Location')!;
+    const organizationUrlParts = organizationUrl.split('/');
+    const organizationName =
+      organizationUrlParts[organizationUrlParts.length - 1];
+
+    return Response.json({ organizationName }, { status: 201 });
+  } else {
+    return errorResponse(data.message);
   }
-  const organizationUrlParts = organizationUrl.split('/');
-  const organizationName =
-    organizationUrlParts[organizationUrlParts.length - 1];
-
-  return Response.json({ organizationName }, { status: 201 });
 }

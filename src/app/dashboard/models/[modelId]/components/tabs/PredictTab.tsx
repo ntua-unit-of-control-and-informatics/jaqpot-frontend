@@ -7,7 +7,7 @@ import DynamicForm, {
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import PredictionResult from '@/app/dashboard/models/[modelId]/components/PredictionResult';
-import { errorResponse } from '@/app/util/response';
+import toast from 'react-hot-toast';
 
 async function createPrediction(modelId: string, data: any) {
   return await fetch(`/api/models/${modelId}/predict`, {
@@ -19,20 +19,12 @@ async function createPrediction(modelId: string, data: any) {
   });
 }
 
-async function getPredictionResult(
-  datasetId: string,
-): Promise<DatasetDto | null> {
-  const res = await fetch(`/api/datasets/${datasetId}`, {
+async function getPredictionResult(datasetId: string) {
+  return fetch(`/api/datasets/${datasetId}`, {
     headers: {
       'Content-Type': 'application/json',
     },
   });
-
-  if (res.ok) {
-    return res.json();
-  } else {
-    return null;
-  }
 }
 
 interface PredictTabProps {
@@ -46,7 +38,7 @@ export default function PredictTab({ model }: PredictTabProps) {
 
   async function handlePredictionResults(datasetUrl: string | null) {
     if (!datasetUrl) {
-      console.error('Dataset was not created successfully');
+      toast.error('Dataset was not created successfully');
       return;
     }
 
@@ -57,7 +49,9 @@ export default function PredictTab({ model }: PredictTabProps) {
 
     const predictionDataset = await new Promise<DatasetDto>((resolve) => {
       const intervalId = setInterval(async () => {
-        const dataset = await getPredictionResult(datasetId);
+        const res = await getPredictionResult(datasetId);
+        const { success, dataset } = await res.json();
+
         if (dataset?.status === 'SUCCESS' || dataset?.status === 'FAILURE') {
           clearInterval(intervalId);
           resolve(dataset);
@@ -66,25 +60,17 @@ export default function PredictTab({ model }: PredictTabProps) {
     });
 
     setIsPredictionLoading(false);
-
     setDataset(predictionDataset);
   }
 
   const handleFormSubmit = async (formData: any) => {
     const res = await createPrediction(params.modelId, Object.values(formData));
-
-    const datasetUrl = res.headers.get('Location');
-
-    if (!res.ok || !res.headers.get('Location')) {
-      return errorResponse('Unexpected error ocurred', 500);
-    }
-
-    return Response.json({ datasetUrl }, { status: 200 });
-
-    if (res.ok) {
-      const datasetUrl = (await res.json()).datasetUrl;
+    const { success, data } = await res.json();
+    if (success) {
+      const datasetUrl = data.datasetUrl;
       await handlePredictionResults(datasetUrl);
     } else {
+      toast.error(`Error creating prediction:  ${data?.message}`);
       await handlePredictionResults(null);
     }
   };

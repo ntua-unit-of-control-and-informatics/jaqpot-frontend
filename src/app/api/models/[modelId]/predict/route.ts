@@ -38,5 +38,16 @@ export async function POST(
       body: JSON.stringify(dataset),
     },
   );
-  const data = (await handleApiResponse(res)).json();
+
+  const data = await (await handleApiResponse(res)).json();
+
+  if (data.success) {
+    const datasetUrl = res.headers.get('Location')!;
+    const datasetUrlParts = datasetUrl.split('/');
+    const datasetId = datasetUrlParts[datasetUrlParts.length - 1];
+
+    return Response.json({ datasetName: datasetId }, { status: 201 });
+  } else {
+    return errorResponse(data.message);
+  }
 }

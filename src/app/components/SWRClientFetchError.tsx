@@ -6,7 +6,7 @@ interface ClientFetchErrorProps {
   error: CustomError;
 }
 
-export default function ClientFetchError({ error }: ClientFetchErrorProps) {
+export default function SWRClientFetchError({ error }: ClientFetchErrorProps) {
   return (
     <div>
       Failed to load <p>{error?.message}</p>

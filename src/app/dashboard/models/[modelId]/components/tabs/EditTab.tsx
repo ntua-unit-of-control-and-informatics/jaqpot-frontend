@@ -117,8 +117,8 @@ export default function EditTab({ model }: FeaturesTabProps) {
         method: 'PATCH',
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (res.ok) {
+      const { success, data } = await res.json();
+      if (data.success) {
         toast.success(`Model updated successfully`);
       } else {
         toast.error(`Error updating model:  ${data?.message}`);

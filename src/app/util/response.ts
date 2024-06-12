@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export interface ApiResponse {
   success: boolean;
   message?: string;
-  data?: unknown;
+  data?: any;
 }
 
 export function errorResponse(
@@ -17,26 +17,29 @@ export function errorResponse(
 export async function handleApiResponse(
   res: Response,
 ): Promise<NextResponse<ApiResponse>> {
+  let message;
   if (!res.ok) {
-    return errorResponse();
-  } else if (res.status === 401) {
-    return errorResponse('Unauthenticated', 401);
-  } else if (res.status === 403) {
-    return errorResponse('Unauthorized', 403);
-  } else {
-    const data = await res.json();
-    return NextResponse.json({ success: true, data }, { status: res.status });
+    switch (res.status) {
+      case 401:
+        message = 'You are not authenticated. Please log in and try again';
+        break;
+      case 403:
+        message = 'You are not authorized to access this resource.';
+        break;
+      default:
+        message =
+          'Uh-oh! Looks like something went wrong. Our crack team of chemical engineers and electrotechnicians is on the case. Please try again later!';
+    }
+    return errorResponse(message, res.status);
   }
-}
 
-export async function handleRouteHandlerResponse<T = void>(
-  res: Response,
-): Promise<T | undefined> {
-  const body = await res.json();
-  if (body.success) {
-    return body.data;
-  } else {
-    toast.error(body.message);
-    return undefined;
+  const contentType = res.headers.get('Content-Type') || '';
+  let data;
+  if (contentType.includes('application/json')) {
+    data = await res.json();
+  } else if (contentType.includes('text/')) {
+    data = await res.text();
   }
+
+  return NextResponse.json({ success: true, data }, { status: res.status });
 }

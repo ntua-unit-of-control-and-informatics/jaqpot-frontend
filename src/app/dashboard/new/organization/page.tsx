@@ -33,13 +33,12 @@ export default function Page() {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
-      if (res.ok) {
+      const { success, message, data } = await res.json();
+      if (success) {
         toast.success(`Organization created successfully`);
-
         router.push(`/dashboard/organizations/${data.organizationName}`);
       } else {
-        toast.error(`Error creating organization:  ${data?.message}`);
+        toast.error(`Organization could not be created: ${message}`);
       }
       // Redirect or display success message as needed
     } catch (error: unknown) {

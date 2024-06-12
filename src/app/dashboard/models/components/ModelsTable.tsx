@@ -14,7 +14,7 @@ import { ModelDto, ModelsResponseDto } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
 import { Spinner } from '@nextui-org/spinner';
 import { useRouter } from 'next/navigation';
-import ClientFetchError from '@/app/components/ClientFetchError';
+import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { CustomError } from '@/app/types/CustomError';
 
 const fetcher: Fetcher<ModelsResponseDto, string> = async (url) => {
@@ -53,7 +53,7 @@ export default function ModelsTable() {
 
   const loadingState = isLoading ? 'loading' : 'idle';
 
-  if (error) return <ClientFetchError error={error} />;
+  if (error) return <SWRClientFetchError error={error} />;
   if (isLoading) return <Spinner />;
   return (
     <Table
