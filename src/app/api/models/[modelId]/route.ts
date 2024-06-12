@@ -1,11 +1,16 @@
 import { auth } from '@/auth';
-import { errorResponse, handleApiResponse } from '@/app/util/response';
+import {
+  ApiResponse,
+  errorResponse,
+  handleApiResponse,
+} from '@/app/util/response';
 import { isAuthenticated } from '@/app/util/auth';
+import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,
   { params }: { params: { modelId: string } },
-) {
+): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(

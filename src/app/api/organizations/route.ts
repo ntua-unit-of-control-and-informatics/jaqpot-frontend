@@ -1,10 +1,15 @@
 import { auth } from '@/auth';
 import { DatasetDto } from '@/app/api.types';
-import { errorResponse, handleApiResponse } from '@/app/util/response';
+import {
+  ApiResponse,
+  errorResponse,
+  handleApiResponse,
+} from '@/app/util/response';
 import { redirect } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
+import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -23,7 +28,9 @@ export async function GET() {
   return handleApiResponse(res);
 }
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -46,15 +53,16 @@ export async function POST(request: Request) {
   const apiResponse = await handleApiResponse(res);
   const data = await apiResponse.json();
 
-  console.log(data);
-
   if (data.success) {
     const organizationUrl = res.headers.get('Location')!;
     const organizationUrlParts = organizationUrl.split('/');
     const organizationName =
       organizationUrlParts[organizationUrlParts.length - 1];
 
-    return Response.json({ organizationName }, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: { organizationName } },
+      { status: 201 },
+    );
   } else {
     return errorResponse(data.message);
   }

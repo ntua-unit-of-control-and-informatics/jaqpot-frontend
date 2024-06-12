@@ -1,11 +1,17 @@
 import { auth } from '@/auth';
-import { NextRequest } from 'next/server';
-import { errorResponse, handleApiResponse } from '@/app/util/response';
+import { NextRequest, NextResponse } from 'next/server';
+import {
+  ApiResponse,
+  errorResponse,
+  handleApiResponse,
+} from '@/app/util/response';
 import { isAuthenticated } from '@/app/util/auth';
 
 const PAGE_SIZE = '10';
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(

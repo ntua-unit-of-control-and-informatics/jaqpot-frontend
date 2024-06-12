@@ -1,12 +1,17 @@
 import { auth } from '@/auth';
 import { DatasetDto } from '@/app/api.types';
-import { errorResponse, handleApiResponse } from '@/app/util/response';
+import {
+  ApiResponse,
+  errorResponse,
+  handleApiResponse,
+} from '@/app/util/response';
 import { isAuthenticated } from '@/app/util/auth';
+import { NextResponse } from 'next/server';
 
 export async function POST(
   request: Request,
   { params }: { params: { modelId: string } },
-) {
+): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -46,7 +51,10 @@ export async function POST(
     const datasetUrlParts = datasetUrl.split('/');
     const datasetId = datasetUrlParts[datasetUrlParts.length - 1];
 
-    return Response.json({ datasetName: datasetId }, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: { datasetName: datasetId } },
+      { status: 201 },
+    );
   } else {
     return errorResponse(data.message);
   }
