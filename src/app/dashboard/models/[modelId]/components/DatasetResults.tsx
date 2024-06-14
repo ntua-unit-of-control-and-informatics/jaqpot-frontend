@@ -125,11 +125,7 @@ export default function DatasetResults({
         </Chip>
       );
     } else {
-      return (
-        <Chip color="primary" variant="flat">
-          In progress
-        </Chip>
-      );
+      return <Chip color="primary">In progress</Chip>;
     }
   }
 
@@ -147,6 +143,7 @@ export default function DatasetResults({
           href={`/dashboard/models/${model.id}/datasets/${datasetId}`}
           isExternal
           showAnchorIcon
+          className="mr-2"
         >
           ID {datasetId}
         </Link>
@@ -160,7 +157,7 @@ export default function DatasetResults({
           <Skeleton className="h-3 w-5/5 rounded-lg" />
         </div>
       )}
-      {isLoaded && (
+      {isLoaded && dataset?.status === 'SUCCESS' && (
         <Table aria-label="Prediction table">
           <TableHeader>{tableHeaders}</TableHeader>
           <TableBody loadingState={loadingState}>{tableRows}</TableBody>

@@ -5,10 +5,9 @@ import React from 'react';
 import { BuildingOfficeIcon } from '@heroicons/react/24/solid';
 import { isAuthenticated } from '@/app/util/auth';
 import OrganizationTabs from '@/app/dashboard/organizations/[orgName]/components/OrganizationTabs';
-import { BreadcrumbItem, Breadcrumbs } from '@nextui-org/breadcrumbs';
 import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
 
-async function getOrganizationByName(
+export async function getOrganizationByName(
   orgName: string,
 ): Promise<OrganizationDto | undefined> {
   const authorizationHeader: Record<string, string> = {};

@@ -26,7 +26,6 @@ export default function OrganizationEditTab({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
   };
 
   const handleChange = (e: React.ChangeEvent<any>) => {

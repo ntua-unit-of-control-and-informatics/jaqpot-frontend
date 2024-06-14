@@ -76,7 +76,7 @@ export default function PredictTab({ model }: PredictTabProps) {
     <div className="container mt-5">
       <DynamicForm schema={predictionFormSchema} onSubmit={handleFormSubmit} />
 
-      {loading && <Spinner />}
+      {loading && <Spinner className="my-3" />}
       {datasetId && <DatasetResults model={model} datasetId={datasetId} />}
     </div>
   );
