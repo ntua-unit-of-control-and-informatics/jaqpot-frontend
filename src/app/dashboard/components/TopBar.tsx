@@ -9,6 +9,7 @@ import React from 'react';
 import CreateMenu from '@/app/dashboard/components/CreateMenu';
 import { useSession } from 'next-auth/react';
 import { Button } from '@nextui-org/button';
+import GithubLogo from '@/app/dashboard/components/GithubLogo';
 
 export default function TopBar() {
   const { data: session } = useSession();
@@ -18,6 +19,7 @@ export default function TopBar() {
       <div className="flex flex-row sm:gap-x-6 ">
         <SearchBar />
         <div className="flex gap-x-2 items-center">
+          <GithubLogo />
           <CreateMenu />
           <Button variant="light" className="p-2 min-w-10">
             <BellIcon className="size-6 text-gray-400" />
