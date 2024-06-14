@@ -11,7 +11,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <>
       <NextUIProvider navigate={router.push}>
         <div>
-          <Toaster toastOptions={{ duration: 5000 }} />
+          <Toaster toastOptions={{ duration: 7500 }} />
         </div>
         {children}
       </NextUIProvider>
