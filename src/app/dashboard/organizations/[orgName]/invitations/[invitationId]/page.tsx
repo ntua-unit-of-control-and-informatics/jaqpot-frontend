@@ -4,9 +4,9 @@ import React from 'react';
 import { Checkbox } from '@nextui-org/checkbox';
 import { Button } from '@nextui-org/button';
 import OrganizationInvitation from '@/app/dashboard/organizations/[orgName]/invitations/[invitationId]/components/OrganizationInvitation';
-import { getOrganizationByName } from '@/app/dashboard/organizations/[orgName]/page';
 import { notFound } from 'next/navigation';
 import { OrganizationDto, OrganizationInvitationDto } from '@/app/api.types';
+import { getOrganizationByName } from '@/app/dashboard/organizations/[orgName]/requests';
 
 async function getOrganizationInvitation(
   orgName: string,
