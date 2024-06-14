@@ -19,11 +19,11 @@ export default function TopBar() {
       <div className="flex flex-row sm:gap-x-6 ">
         <SearchBar />
         <div className="flex gap-x-2 items-center">
-          <GithubLogo />
           <CreateMenu />
           <Button variant="light" className="p-2 min-w-10">
             <BellIcon className="size-6 text-gray-400" />
           </Button>
+          <GithubLogo />
           <Button
             variant="light"
             className="p-2 min-w-10"
