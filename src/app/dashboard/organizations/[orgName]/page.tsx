@@ -6,29 +6,7 @@ import { BuildingOfficeIcon } from '@heroicons/react/24/solid';
 import { isAuthenticated } from '@/app/util/auth';
 import OrganizationTabs from '@/app/dashboard/organizations/[orgName]/components/OrganizationTabs';
 import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
-
-export async function getOrganizationByName(
-  orgName: string,
-): Promise<OrganizationDto | undefined> {
-  const authorizationHeader: Record<string, string> = {};
-  const session = await auth();
-  if (isAuthenticated(session)) {
-    authorizationHeader['Authorization'] = `Bearer ${session!.token}`;
-  }
-
-  const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${orgName}`,
-    {
-      headers: {
-        ...authorizationHeader,
-        'Content-Type': 'application/json',
-      },
-    },
-  );
-
-  if (!res.ok) return undefined;
-  return res.json();
-}
+import { getOrganizationByName } from '@/app/dashboard/organizations/[orgName]/requests';
 
 export default async function Page({
   params,
