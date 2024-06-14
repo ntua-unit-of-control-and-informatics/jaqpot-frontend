@@ -5,7 +5,6 @@ import { Tab, Tabs } from '@nextui-org/tabs';
 import { ModelDto } from '@/app/api.types';
 import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
 import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/PredictTab';
-import { useClientSession } from '@/app/util/auth';
 import ModelEditTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelEditTab';
 
 interface ModelTabsProps {
@@ -16,14 +15,15 @@ interface ModelTabsProps {
 // add navigation
 export default function ModelTabs({ model }: ModelTabsProps) {
   const pathname = usePathname();
-  const { data: session } = useClientSession();
 
   return (
     <Tabs
       aria-label="Tabs"
       disabledKeys={['discussion']}
       classNames={{
-        tabList: 'gap-8 w-full bg-transparent rounded-none border-b-1 p-0',
+        base: 'w-full',
+        tabList:
+          'gap-8 w-full bg-transparent dark:bg-transparent rounded-none border-b-1 p-0 w-full',
         cursor:
           'w-full rounded-none bg-transparent group-data-[selected=true]:border-b-2 group-data-[selected=true]:border-indigo-800 dark:group-data-[selected=true]:border-b-2 dark:group-data-[selected=true]:border-white shadow-none dark:text-white',
         tab: 'max-w-fit px-0 h-12 rounded-none border-none box-shadow-none',

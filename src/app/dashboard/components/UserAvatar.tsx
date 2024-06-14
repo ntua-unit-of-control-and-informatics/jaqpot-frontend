@@ -15,6 +15,7 @@ import {
 } from '@nextui-org/dropdown';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
+import { User } from '@nextui-org/react';
 
 interface MenuItem {
   key: string;
@@ -53,23 +54,22 @@ export default function UserAvatar({ session }: { session: Session | null }) {
   ];
 
   return (
-    <Dropdown backdrop="blur">
+    <Dropdown
+      backdrop="blur"
+      classNames={{
+        trigger: 'min-w-0 gap-0', // change arrow background
+      }}
+    >
       <DropdownTrigger>
         <Button variant="light">
-          {session?.user?.image ? (
-            <Image
-              alt="user avatar"
-              src={session?.user?.image}
-              width={40}
-              height={40}
-              className="rounded-full w-8 h-8 aspect-square object-cover"
-            />
-          ) : (
-            <UserCircleIcon className="size-6 text-gray-300" />
-          )}
-          {isAuthenticated(session) && (
-            <span className="hidden md:block ml-2">{session?.user?.name}</span>
-          )}
+          <User
+            avatarProps={{
+              size: 'sm',
+              showFallback: true,
+              src: session?.user?.image || undefined,
+            }}
+            name={session?.user?.name}
+          />
           <ChevronDownIcon
             className="ml-2 h-5 w-5 text-gray-400"
             aria-hidden="true"

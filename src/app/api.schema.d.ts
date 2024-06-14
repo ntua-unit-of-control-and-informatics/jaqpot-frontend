@@ -50,6 +50,20 @@ export interface paths {
     /** Get organization by name */
     get: operations["getOrganizationByName"];
   };
+  "/v1/organizations/{orgName}/invitations": {
+    /**
+     * Create new invitations for an organization
+     * @description This endpoint allows an organization admin to create new invitations for users.
+     */
+    post: operations["createInvitations"];
+  };
+  "/v1/organizations/{name}/invitations/{uuid}": {
+    /**
+     * Get the status of an invitation
+     * @description This endpoint allows a user to check the status of an invitation.
+     */
+    get: operations["getInvitation"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -89,7 +103,7 @@ export interface components {
        */
       actualModel: string;
       creator?: components["schemas"]["User"];
-      /** @description This is an internal api property, feel free to ignore it */
+      /** @description If the current user can edit the model */
       canEdit?: boolean;
       /**
        * Format: date-time
@@ -221,8 +235,29 @@ export interface components {
       website?: string;
       /** @example 123 Organization St., City, Country */
       address?: string;
+      /** @description If the current user can edit the organization */
+      canEdit?: boolean;
       created_at?: Record<string, never>;
       updated_at?: Record<string, never>;
+    };
+    OrganizationInvitation: {
+      /**
+       * Format: uuid
+       * @description ID of the invitation
+       */
+      id?: string;
+      /**
+       * Format: email
+       * @description Email address of the invited user
+       */
+      userEmail: string;
+      /**
+       * @description Status of the invitation
+       * @enum {string}
+       */
+      status: "PENDING" | "REJECTED" | "ACCEPTED";
+      /** @description Expiration date of the invitation */
+      expirationDate: Record<string, never>;
     };
     /** @description Can be any value - string, number, boolean, array or object. */
     AnyValue: unknown;
@@ -466,6 +501,81 @@ export interface operations {
         };
       };
       /** @description Organization not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Create new invitations for an organization
+   * @description This endpoint allows an organization admin to create new invitations for users.
+   */
+  createInvitations: {
+    parameters: {
+      path: {
+        /** @description Name of the organization */
+        orgName: string;
+      };
+    };
+    /** @description Invitation request payload */
+    requestBody: {
+      content: {
+        "application/json": {
+          /**
+           * @description List of email addresses to invite
+           * @example [
+           *   "user1@example.com",
+           *   "user2@example.com"
+           * ]
+           */
+          emails?: string[];
+        };
+      };
+    };
+    responses: {
+      /** @description Invitations created successfully */
+      201: {
+        content: never;
+      };
+      /** @description Bad request, invalid input */
+      400: {
+        content: never;
+      };
+      /** @description Unauthorized, only admins can create invitations */
+      401: {
+        content: never;
+      };
+      /** @description Too many requests, rate limit exceeded */
+      429: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get the status of an invitation
+   * @description This endpoint allows a user to check the status of an invitation.
+   */
+  getInvitation: {
+    parameters: {
+      path: {
+        /** @description Name of the organization */
+        name: string;
+        /** @description UUID of the invitation */
+        uuid: string;
+      };
+    };
+    responses: {
+      /** @description Invitation status retrieved successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrganizationInvitation"];
+        };
+      };
+      /** @description Bad request, invalid input */
+      400: {
+        content: never;
+      };
+      /** @description Invitation not found */
       404: {
         content: never;
       };

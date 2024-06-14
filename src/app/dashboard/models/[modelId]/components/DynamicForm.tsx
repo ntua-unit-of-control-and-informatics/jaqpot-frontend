@@ -195,7 +195,8 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
           >
             {/*<SelectItem value="">Select...</SelectItem>*/}
             {field.options.map((option: any, index: number) => (
-              <SelectItem key={index} value={option.value}>
+              // Send keys so the model can decide how to split the values
+              <SelectItem key={index} value={option.key}>
                 {option.label}
               </SelectItem>
             ))}

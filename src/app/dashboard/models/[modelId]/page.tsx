@@ -11,8 +11,11 @@ import {
 import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
 import { notFound } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
+import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
+import ModelBreadcrumbs from '@/app/dashboard/models/[modelId]/components/ModelBreadcrumbs';
+import toast from 'react-hot-toast';
 
-async function getModel(modelId: string): Promise<ModelDto | undefined> {
+export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   const authorizationHeader: Record<string, string> = {};
   const session = await auth();
   if (isAuthenticated(session)) {
@@ -27,8 +30,7 @@ async function getModel(modelId: string): Promise<ModelDto | undefined> {
   });
 
   if (!res.ok) return undefined;
-  else if (res.status === 401 || res.status === 403) {
-  }
+
   return res.json();
 }
 
@@ -44,6 +46,8 @@ export default async function Page({
 
   return (
     <>
+      <ModelBreadcrumbs model={model} />
+
       <div className="grid grid-cols-6 pl-2 sm:pl-0">
         {/* Title */}
         <div className="text-3xl font-semibold col-span-4 py-3">

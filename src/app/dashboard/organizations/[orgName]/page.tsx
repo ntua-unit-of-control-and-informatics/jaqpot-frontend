@@ -4,29 +4,9 @@ import { auth } from '@/auth';
 import React from 'react';
 import { BuildingOfficeIcon } from '@heroicons/react/24/solid';
 import { isAuthenticated } from '@/app/util/auth';
-
-async function getOrganizationByName(
-  orgName: string,
-): Promise<OrganizationDto | undefined> {
-  const authorizationHeader: Record<string, string> = {};
-  const session = await auth();
-  if (isAuthenticated(session)) {
-    authorizationHeader['Authorization'] = `Bearer ${session!.token}`;
-  }
-
-  const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${orgName}`,
-    {
-      headers: {
-        ...authorizationHeader,
-        'Content-Type': 'application/json',
-      },
-    },
-  );
-
-  if (!res.ok) return undefined;
-  return res.json();
-}
+import OrganizationTabs from '@/app/dashboard/organizations/[orgName]/components/OrganizationTabs';
+import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
+import { getOrganizationByName } from '@/app/dashboard/organizations/[orgName]/requests';
 
 export default async function Page({
   params,
@@ -40,27 +20,13 @@ export default async function Page({
 
   return (
     <div className="min-h-screen">
+      <OrganizationBreadcrumbs organization={organization} />
       <div className="max-w-4xl mx-auto rounded-lg">
-        <div className="flex mb-10 items-center text-2xl font-bold leading-7  sm:truncate sm:text-3xl sm:tracking-tight">
+        <div className="flex text-3xl font-semibold py-3 items-center leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
           <BuildingOfficeIcon className="size-8 mr-2" />
-          Organization
+          {organization.name}
         </div>
-
-        <p>Name: {organization.name}</p>
-
-        <h5>Description:</h5>
-        <p className="text-gray-700 mb-4">{organization.description}</p>
-
-        <div className="mb-4">
-          {organization.website && (
-            <p className="text-gray-700">
-              Website:{' '}
-              <a href={organization.website} className="text-blue-500">
-                {organization.website}
-              </a>
-            </p>
-          )}
-        </div>
+        <OrganizationTabs organization={organization} />
       </div>
     </div>
   );
