@@ -57,7 +57,7 @@ export default function UserAvatar({ session }: { session: Session | null }) {
     <Dropdown
       backdrop="blur"
       classNames={{
-        trigger: 'min-w-0 gap-0', // change arrow background
+        trigger: 'min-w-0 gap-0 px-0 pl-2', // change arrow background
       }}
     >
       <DropdownTrigger>
