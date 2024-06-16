@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { ReactNode } from 'react';
 import TopBar from '@/app/dashboard/components/TopBar';
 import { SessionProvider } from 'next-auth/react';
+import DashboardLayout from '@/app/dashboard/dashboard-layout';
 
 export default async function Dashboard({
   children,
@@ -13,11 +14,7 @@ export default async function Dashboard({
   return (
     <>
       <SessionProvider session={session}>
-        <Sidebar />
-        <div className="min-h-screen sm:ml-72">
-          <TopBar />
-          <main className="p-8">{children}</main>
-        </div>
+        <DashboardLayout>{children}</DashboardLayout>
       </SessionProvider>
     </>
   );

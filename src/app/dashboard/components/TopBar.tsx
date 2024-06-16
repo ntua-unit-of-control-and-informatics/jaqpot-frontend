@@ -4,19 +4,46 @@ import { BellIcon } from '@heroicons/react/24/outline';
 import UserAvatar from '@/app/dashboard/components/UserAvatar';
 import { Session } from 'next-auth';
 import SearchBar from '@/app/dashboard/components/SearchBar';
-import { MoonIcon, PlusIcon, SunIcon } from '@heroicons/react/24/solid';
-import React from 'react';
+import {
+  ArrowLeftStartOnRectangleIcon,
+  ArrowRightStartOnRectangleIcon,
+  ArrowsPointingInIcon,
+  ArrowsPointingOutIcon,
+  MoonIcon,
+  PlusIcon,
+  SunIcon,
+} from '@heroicons/react/24/solid';
+import React, { useContext } from 'react';
 import CreateMenu from '@/app/dashboard/components/CreateMenu';
 import { useSession } from 'next-auth/react';
 import { Button } from '@nextui-org/button';
 import GithubLogo from '@/app/dashboard/components/GithubLogo';
+import {
+  SidebarContext,
+  SidebarContextType,
+} from '@/app/dashboard/dashboard-layout';
+import { Tooltip } from '@nextui-org/tooltip';
 
 export default function TopBar() {
   const { data: session } = useSession();
+  const { isCollapsed, setIsCollapsed } =
+    useContext<SidebarContextType>(SidebarContext);
 
   return (
     <div className="w-full px-8 py-3 border-b border-b-gray-300 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px]">
       <div className="flex flex-row sm:gap-x-6 ">
+        <div className={`hidden ${isCollapsed ? 'sm:flex' : ''} items-center`}>
+          <Tooltip content="Open sidebar">
+            <Button
+              isIconOnly
+              className="bg-transparent justify-start"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+            >
+              <ArrowRightStartOnRectangleIcon className="size-6" />
+            </Button>
+          </Tooltip>
+        </div>
+
         <SearchBar />
         <div className="flex gap-0 sm:gap-x-2 items-center">
           <CreateMenu />

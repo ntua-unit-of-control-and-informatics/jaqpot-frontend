@@ -51,6 +51,8 @@ export default function DatasetResults({
   datasetId,
   model,
 }: PredictionResultProps) {
+  // how often to refresh to check if the dataset is ready, setting to 0 will disable the interval
+  const [refreshInterval, setRefreshInterval] = useState(3000);
   const allFeatures: FeatureDto[] = [
     ...model.independentFeatures,
     ...model.dependentFeatures,
@@ -58,7 +60,7 @@ export default function DatasetResults({
   const { data, isLoading, error } = useSWR(
     `/api/datasets/${datasetId}`,
     fetcher,
-    { refreshInterval: 1000 },
+    { refreshInterval },
   );
   const dataset = data?.data;
   const isLoaded =
@@ -113,12 +115,21 @@ export default function DatasetResults({
     if (!dataset) {
       return <></>;
     } else if (dataset?.status === 'SUCCESS') {
+      // avoid swr bug:https://github.com/vercel/swr/issues/632
+      setTimeout(() => {
+        setRefreshInterval(0);
+      });
+
       return (
         <Chip color="success" variant="flat">
           Success
         </Chip>
       );
     } else if (dataset?.status === 'FAILURE') {
+      // avoid swr bug:https://github.com/vercel/swr/issues/632
+      setTimeout(() => {
+        setRefreshInterval(0);
+      });
       return (
         <Chip color="danger" variant="flat">
           Failed
