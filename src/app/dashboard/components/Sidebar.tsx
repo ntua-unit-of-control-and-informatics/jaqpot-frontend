@@ -13,6 +13,7 @@ import {
   HomeIcon,
   InboxIcon,
   QueueListIcon,
+  TableCellsIcon,
   XCircleIcon,
 } from '@heroicons/react/24/solid';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -71,6 +72,11 @@ export default function Sidebar() {
       href: 'dashboard/models',
       name: 'Your models',
       icon: <CircleStackIcon className={iconClassName} />,
+    },
+    {
+      href: 'dashboard/datasets',
+      name: 'Your datasets',
+      icon: <TableCellsIcon className={iconClassName} />,
     },
     {
       href: 'dashboard/settings',
@@ -158,6 +164,9 @@ export default function Sidebar() {
           </div>
           <nav className="h-full px-3 pt-4 pb-4 overflow-y-auto">
             <ul className="space-y-2 font-medium">
+              <div className="text-xs p-2 uppercase text-indigo-200 dark:text-white">
+                Navigation
+              </div>
               {navElements.map(({ href, name, icon, after }, index) =>
                 navElement(index, href, name, icon, after),
               )}
