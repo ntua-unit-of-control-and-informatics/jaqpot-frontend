@@ -18,12 +18,12 @@ export default function TopBar() {
     <div className="w-full px-8 py-3 border-b border-b-gray-300 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px]">
       <div className="flex flex-row sm:gap-x-6 ">
         <SearchBar />
-        <div className="flex gap-x-2 items-center">
+        <div className="flex gap-0 sm:gap-x-2 items-center">
           <CreateMenu />
           <Button variant="light" className="p-2 min-w-10">
             <BellIcon className="size-6 text-gray-400" />
           </Button>
-          <GithubLogo />
+          <GithubLogo className="hidden sm:block" />
           <Button
             variant="light"
             className="p-2 min-w-10"

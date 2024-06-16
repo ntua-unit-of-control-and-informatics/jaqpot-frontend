@@ -9,6 +9,7 @@ export default function GithubLogo(props: any) {
     <Link
       href="https://github.com/ntua-unit-of-control-and-informatics/jaqpotpy"
       target="_blank"
+      {...props}
     >
       <Button variant="light" isIconOnly className="p-2">
         <Image
