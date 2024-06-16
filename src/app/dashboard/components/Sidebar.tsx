@@ -27,6 +27,13 @@ import {
 } from '@/app/dashboard/dashboard-layout';
 import { Tooltip } from '@nextui-org/tooltip';
 
+interface NavElement {
+  name: string;
+  icon: ReactElement;
+  href: string;
+  after?: ReactElement;
+}
+
 export default function Sidebar() {
   const { data: session } = useSession();
   const { isCollapsed, setIsCollapsed } =
@@ -59,26 +66,14 @@ export default function Sidebar() {
   const iconClassName =
     'w-5 h-5 text-indigo-200 transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white';
 
-  const navElements = [
+  const navElements: NavElement[] = [
     {
       href: 'dashboard/models',
       name: 'Your models',
       icon: <CircleStackIcon className={iconClassName} />,
     },
     {
-      href: 'inbox',
-      name: 'Inbox',
-      icon: <InboxIcon className={iconClassName} />,
-      after: (
-        <>
-          <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-            3
-          </span>
-        </>
-      ),
-    },
-    {
-      href: 'settings',
+      href: 'dashboard/settings',
       name: 'Settings',
       icon: <Cog8ToothIcon className={iconClassName} />,
     },
