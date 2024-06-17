@@ -6,6 +6,7 @@ import { OrganizationDto, OrganizationInvitationDto } from '@/app/api.types';
 import { BreadcrumbItem, Breadcrumbs } from '@nextui-org/breadcrumbs';
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 interface OrganizationInvitationProps {
   organization: OrganizationDto;
@@ -30,6 +31,8 @@ export default function OrganizationInvitation({
   organization,
   invitation,
 }: OrganizationInvitationProps) {
+  const router = useRouter();
+
   async function handleSubmit(status: OrganizationInvitationDto['status']) {
     const res = await updateInvitation(
       { ...invitation, status: 'ACCEPTED' },
@@ -43,6 +46,7 @@ export default function OrganizationInvitation({
       toast.success(
         `You have successfully been added to the organization: ${organization.name}. You can now view and execute the models shared with that organization.`,
       );
+      router.push('/dashboard');
     } else {
       toast.error(`Invitation could not be updated: ${message}`);
     }

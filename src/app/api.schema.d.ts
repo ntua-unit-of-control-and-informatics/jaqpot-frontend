@@ -52,6 +52,11 @@ export interface paths {
   };
   "/v1/organizations/{orgName}/invitations": {
     /**
+     * Get all invitations for an organization
+     * @description This endpoint allows an organization admin to get all invitations for their organization.
+     */
+    get: operations["getAllInvitations"];
+    /**
      * Create new invitations for an organization
      * @description This endpoint allows an organization admin to create new invitations for users.
      */
@@ -63,6 +68,11 @@ export interface paths {
      * @description This endpoint allows a user to check the status of an invitation.
      */
     get: operations["getInvitation"];
+    /**
+     * Update the status of an invitation
+     * @description This endpoint allows a user to update the status of an invitation.
+     */
+    put: operations["updateInvitation"];
   };
 }
 
@@ -83,7 +93,7 @@ export interface components {
       /** @example My Model */
       name: string;
       /** @example A description of your model */
-      description: string;
+      description?: string;
       /** @enum {string} */
       type: "SKLEARN" | "TORCH" | "R";
       /** @example 1.0.0 */
@@ -210,11 +220,6 @@ export interface components {
       type: "ARRAY";
       values: unknown[];
     };
-    /** User */
-    User: {
-      id?: string;
-      name?: string;
-    };
     Organization: {
       /** Format: int64 */
       id?: number;
@@ -246,6 +251,8 @@ export interface components {
        * @description ID of the invitation
        */
       id?: string;
+      /** @description The user id associated with that invitation */
+      userId?: string;
       /**
        * Format: email
        * @description Email address of the invited user
@@ -258,6 +265,18 @@ export interface components {
       status: "PENDING" | "REJECTED" | "ACCEPTED";
       /** @description Expiration date of the invitation */
       expirationDate: Record<string, never>;
+    };
+    /** User */
+    User: {
+      id: string;
+      name?: string;
+      emailVerified?: boolean;
+    };
+    ErrorResponse: {
+      /** @description Error message */
+      message?: string;
+      /** @description Error code */
+      code?: number;
     };
     /** @description Can be any value - string, number, boolean, array or object. */
     AnyValue: unknown;
@@ -507,6 +526,44 @@ export interface operations {
     };
   };
   /**
+   * Get all invitations for an organization
+   * @description This endpoint allows an organization admin to get all invitations for their organization.
+   */
+  getAllInvitations: {
+    parameters: {
+      path: {
+        /** @description Name of the organization */
+        orgName: string;
+      };
+    };
+    responses: {
+      /** @description Invitations retrieved successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrganizationInvitation"][];
+        };
+      };
+      /** @description Bad request, invalid input */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Unauthorized, only admins can access this endpoint */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Organization not found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /**
    * Create new invitations for an organization
    * @description This endpoint allows an organization admin to create new invitations for users.
    */
@@ -566,6 +623,42 @@ export interface operations {
     };
     responses: {
       /** @description Invitation status retrieved successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrganizationInvitation"];
+        };
+      };
+      /** @description Bad request, invalid input */
+      400: {
+        content: never;
+      };
+      /** @description Invitation not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Update the status of an invitation
+   * @description This endpoint allows a user to update the status of an invitation.
+   */
+  updateInvitation: {
+    parameters: {
+      path: {
+        /** @description Name of the organization */
+        name: string;
+        /** @description UUID of the invitation */
+        uuid: string;
+      };
+    };
+    /** @description Invitation status update payload */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["OrganizationInvitation"];
+      };
+    };
+    responses: {
+      /** @description Invitation status updated successfully */
       200: {
         content: {
           "application/json": components["schemas"]["OrganizationInvitation"];
