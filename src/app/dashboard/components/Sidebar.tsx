@@ -27,6 +27,7 @@ import {
   SidebarContextType,
 } from '@/app/dashboard/dashboard-layout';
 import { Tooltip } from '@nextui-org/tooltip';
+import JLogo from '@/app/dashboard/components/Logo/JLogo';
 
 interface NavElement {
   name: string;
@@ -149,8 +150,7 @@ export default function Sidebar() {
               href={`/dashboard`}
               className={`flex items-center p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 ${pathname === `/dashboard` ? 'bg-indigo-700' : ''} group`}
             >
-              <BeakerIcon className="size-6" />
-
+              <JLogo />
               <span className="ms-3">Jaqpot</span>
             </Link>
             <Link
