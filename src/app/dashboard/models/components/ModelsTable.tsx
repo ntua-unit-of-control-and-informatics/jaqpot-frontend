@@ -93,6 +93,7 @@ export default function ModelsTable() {
         items={data?.content ?? []}
         loadingContent={<Spinner />}
         loadingState={loadingState}
+        emptyContent={'No rows to display.'}
       >
         {(item: ModelDto) => (
           <TableRow
