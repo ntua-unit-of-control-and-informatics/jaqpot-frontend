@@ -6,6 +6,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --primary-color-rgb: 79, 70, 229;
 }
 
 /*@media (prefers-color-scheme: dark) {*/
@@ -29,4 +30,14 @@ input {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+::-moz-selection { /* Code for Firefox */
+  color: white;
+  background: rgb(var(--primary-color-rgb));
+}
+
+::selection {
+  color: white;
+  background: rgb(var(--primary-color-rgb));
 }

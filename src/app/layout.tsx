@@ -4,12 +4,20 @@ import './globals.css';
 import GoogleAnalytics from '@/app/components/GoogleAnalytics';
 import { useRouter } from 'next/navigation';
 import { Providers } from '@/app/providers';
+import { openGraphImage } from '@/app/shared.metadata';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Jaqpot',
-  description: 'From model upload to prediction, all in one place',
+  description:
+    "The Jaqpot project's frontend app serves as the interactive gateway for users to engage with our predictive modeling platform. Users can upload models and obtain predictions seamlessly.",
+  openGraph: {
+    title: 'Jaqpot',
+    description:
+      "The Jaqpot project's frontend app serves as the interactive gateway for users to engage with our predictive modeling platform. Users can upload models and obtain predictions seamlessly.",
+    ...openGraphImage,
+  },
 };
 
 export default function RootLayout({

@@ -14,6 +14,8 @@ import { isAuthenticated } from '@/app/util/auth';
 import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
 import ModelBreadcrumbs from '@/app/dashboard/models/[modelId]/components/ModelBreadcrumbs';
 import toast from 'react-hot-toast';
+import { Metadata } from 'next';
+import { generateSharedMetadata } from '@/app/shared.metadata';
 
 export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   const authorizationHeader: Record<string, string> = {};
@@ -32,6 +34,16 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   if (!res.ok) return undefined;
 
   return res.json();
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { modelId: string };
+}): Promise<Metadata> {
+  const model = await getModel(params.modelId);
+
+  return generateSharedMetadata(model?.name, model?.description);
 }
 
 export default async function Page({

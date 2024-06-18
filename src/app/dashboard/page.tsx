@@ -1,9 +1,7 @@
 import { Metadata } from 'next';
+import { generateSharedMetadata, openGraphImage } from '@/app/shared.metadata';
 
-export const metadata: Metadata = {
-  title: 'Dashboard | Jaqpot',
-  description: 'From model upload to prediction, all in one place',
-};
+export const metadata: Metadata = generateSharedMetadata('Dashboard', '');
 
 export default function Dashboard() {
   return (
