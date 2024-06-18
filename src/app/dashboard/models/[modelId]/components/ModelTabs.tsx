@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { Tab, Tabs } from '@nextui-org/tabs';
 import { ModelDto } from '@/app/api.types';
 import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
@@ -12,10 +12,11 @@ interface ModelTabsProps {
   model: ModelDto;
 }
 
-// TODO when https://github.com/nextui-org/nextui/issues/2934 is fixed
-// add navigation
 export default function ModelTabs({ model }: ModelTabsProps) {
   const pathname = usePathname();
+  const params = useParams<{ tabName: string }>();
+
+  const pathnameWithoutTab = pathname.substring(0, pathname.lastIndexOf('/'));
 
   return (
     <Tabs
@@ -31,22 +32,36 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         tabContent:
           'rounded-none border-none box-shadow-none group-data-[selected=true]:text-indigo-600 dark:group-data-[selected=true]:text-white',
       }}
+      selectedKey={params.tabName}
+      defaultSelectedKey="description"
     >
-      <Tab key="description" title="Description">
+      <Tab
+        key="description"
+        title="Description"
+        href={`${pathnameWithoutTab}/description`}
+      >
         <MarkdownRenderer>{model.description}</MarkdownRenderer>
       </Tab>
-      <Tab key="features" title="Features">
+      <Tab
+        key="features"
+        title="Features"
+        href={`${pathnameWithoutTab}/features`}
+      >
         <FeaturesTab model={model} />
       </Tab>
-      <Tab key="predict" title="Predict">
+      <Tab key="predict" title="Predict" href={`${pathnameWithoutTab}/predict`}>
         <PredictTab model={model} />
       </Tab>
       {model.canEdit && (
-        <Tab key="edit" title="Edit">
+        <Tab key="edit" title="Edit" href={`${pathnameWithoutTab}/edit`}>
           <ModelEditTab model={model} />
         </Tab>
       )}
-      <Tab key="discussion" title="Discussion">
+      <Tab
+        key="discussion"
+        title="Discussion"
+        href={`${pathnameWithoutTab}/discussion`}
+      >
         Not implemented yet
       </Tab>
     </Tabs>
