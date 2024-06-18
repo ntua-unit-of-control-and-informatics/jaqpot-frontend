@@ -41,7 +41,7 @@ export default function OrganizationEditTab({
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4">
           <div className="mb-4">
-            <p className="text-sm italic">
+            <p className="text-tiny text-gray-600">
               Note: As the creator of this organization, only you have access to
               this edit tab. No one else can make changes to your organization.
             </p>

@@ -6,6 +6,7 @@ import { ModelDto } from '@/app/api.types';
 import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
 import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/PredictTab';
 import ModelEditTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelEditTab';
+import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
 
 interface ModelTabsProps {
   model: ModelDto;
@@ -32,7 +33,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       }}
     >
       <Tab key="description" title="Description">
-        {model.description}
+        <MarkdownRenderer>{model.description}</MarkdownRenderer>
       </Tab>
       <Tab key="features" title="Features">
         <FeaturesTab model={model} />

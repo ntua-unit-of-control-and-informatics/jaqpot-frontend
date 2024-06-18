@@ -7,7 +7,7 @@ import {
   PartiallyUpdateModelRequestDto,
 } from '@/app/api.types';
 import { Select, SelectItem } from '@nextui-org/react';
-import { Input } from '@nextui-org/input';
+import { Input, Textarea } from '@nextui-org/input';
 import React, { useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
 import { CustomError } from '@/app/types/CustomError';
@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 import { router } from 'next/client';
 import { ApiResponse } from '@/app/util/response';
 import { useRouter } from 'next/navigation';
+import { Link } from '@nextui-org/link';
 
 interface FeaturesTabProps {
   model: ModelDto;
@@ -82,6 +83,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
   const [formData, setFormData] = useState<PartialModelUpdate>({
     name: model.name,
     visibility: model.visibility,
+    description: model.description,
     organizationIds,
   });
 
@@ -105,7 +107,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
     });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<any>) => {
+  const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -140,7 +142,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4">
           <div className="mb-4">
-            <p className="text-sm italic">
+            <p className="text-tiny text-gray-600">
               Note: As the creator of this model, only you have access to this
               edit tab. No one else can make changes to your model.
             </p>
@@ -151,9 +153,30 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
               name="name"
               placeholder="Enter the model name"
               value={formData.name}
-              onChange={handleInputChange}
+              onChange={handleChange}
               isRequired
             ></Input>
+          </div>
+          <div>
+            <Textarea
+              label="Description"
+              name="description"
+              description={
+                <>
+                  The description of your model. Supports{' '}
+                  <Link
+                    href="https://www.markdownguide.org/basic-syntax/"
+                    target="_blank"
+                    className="text-tiny"
+                  >
+                    basic markdown
+                  </Link>
+                </>
+              }
+              placeholder="Enter the model description"
+              value={formData.description}
+              onChange={handleChange}
+            />
           </div>
           <div>
             <Select

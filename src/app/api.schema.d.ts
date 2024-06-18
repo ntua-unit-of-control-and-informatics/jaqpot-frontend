@@ -409,6 +409,7 @@ export interface operations {
       content: {
         "application/json": {
           name: string;
+          description?: string;
           visibility: components["schemas"]["ModelVisibility"];
           organizationIds?: number[];
         };
