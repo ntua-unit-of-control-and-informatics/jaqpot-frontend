@@ -35,12 +35,12 @@ const fetcher: Fetcher<ApiResponse<ModelsResponseDto>, string> = async (
   return res.json();
 };
 
-function useModelsPage(page: number) {
+function useModelsPage(page: number, modelsEndpoint: string) {
   const {
     data: apiResponse,
     error,
     isLoading,
-  } = useSWR(`/api/models?page=${page}`, fetcher);
+  } = useSWR(`${modelsEndpoint}?page=${page}`, fetcher);
 
   let data;
   if (apiResponse?.success) {
@@ -54,11 +54,15 @@ function useModelsPage(page: number) {
   };
 }
 
-export default function ModelsTable() {
+interface ModelsTableProps {
+  modelsEndpoint: string;
+}
+
+export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
   const router = useRouter();
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, error } = useModelsPage(page - 1);
+  const { data, isLoading, error } = useModelsPage(page - 1, modelsEndpoint);
 
   const loadingState = isLoading ? 'loading' : 'idle';
 
@@ -66,7 +70,7 @@ export default function ModelsTable() {
   if (isLoading) return <Spinner />;
   return (
     <Table
-      aria-label="Example table with client async pagination"
+      aria-label="Models table"
       bottomContent={
         data?.totalPages ?? 0 > 0 ? (
           <div className="flex w-full justify-center">
@@ -97,7 +101,7 @@ export default function ModelsTable() {
       >
         {(item: ModelDto) => (
           <TableRow
-            key={item?.name}
+            key={item?.id}
             className="cursor-pointer hover:bg-indigo-100"
             onClick={() => router.push(`/dashboard/models/${item.id}`)}
           >

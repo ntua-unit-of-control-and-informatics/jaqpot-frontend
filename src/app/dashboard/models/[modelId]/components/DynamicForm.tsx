@@ -267,7 +267,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
                   <div key={fieldIndex}>
                     <div className="mb-3">
                       <div className="mb-5">
-                        <label>{field.label}</label>
+                        <label className="break-words">{field.label}</label>
                       </div>
                       {renderField(field)}
                       {formErrors[field.name] && (

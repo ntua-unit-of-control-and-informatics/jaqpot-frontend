@@ -83,7 +83,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
   const [formData, setFormData] = useState<PartialModelUpdate>({
     name: model.name,
     visibility: model.visibility,
-    description: model.description,
+    description: model.description ?? '',
     organizationIds,
   });
 
