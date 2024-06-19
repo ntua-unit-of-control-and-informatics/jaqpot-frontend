@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { ApiResponse } from '@/app/util/response';
 import useSWR, { Fetcher } from 'swr';
@@ -53,6 +53,7 @@ export default function DatasetResults({
 }: PredictionResultProps) {
   // how often to refresh to check if the dataset is ready, setting to 0 will disable the interval
   const [refreshInterval, setRefreshInterval] = useState(1000);
+  console.log(refreshInterval);
   const allFeatures: FeatureDto[] = [
     ...model.independentFeatures,
     ...model.dependentFeatures,
@@ -62,12 +63,21 @@ export default function DatasetResults({
     fetcher,
     { refreshInterval },
   );
+
   const dataset = data?.data;
   const isLoaded =
     !isLoading &&
     dataset?.status !== 'CREATED' &&
     dataset?.status !== 'EXECUTING';
   const loadingState = isLoading ? 'loading' : 'idle';
+
+  useEffect(() => {
+    if (dataset?.status === 'SUCCESS' || dataset?.status === 'FAILURE') {
+      setRefreshInterval(0);
+    } else if (dataset?.status === 'EXECUTING') {
+      setRefreshInterval(1000);
+    }
+  }, [dataset]);
 
   const tableHeaders = allFeatures.map((feature, index) => (
     <TableColumn key={index}>{feature.name}</TableColumn>
@@ -115,21 +125,12 @@ export default function DatasetResults({
     if (!dataset) {
       return <></>;
     } else if (dataset?.status === 'SUCCESS') {
-      // avoid swr bug:https://github.com/vercel/swr/issues/632
-      setTimeout(() => {
-        setRefreshInterval(0);
-      });
-
       return (
         <Chip color="success" variant="flat">
           Success
         </Chip>
       );
     } else if (dataset?.status === 'FAILURE') {
-      // avoid swr bug:https://github.com/vercel/swr/issues/632
-      setTimeout(() => {
-        setRefreshInterval(0);
-      });
       return (
         <Chip color="danger" variant="flat">
           Failed
