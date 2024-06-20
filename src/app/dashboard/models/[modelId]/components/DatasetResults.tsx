@@ -53,7 +53,6 @@ export default function DatasetResults({
 }: PredictionResultProps) {
   // how often to refresh to check if the dataset is ready, setting to 0 will disable the interval
   const [refreshInterval, setRefreshInterval] = useState(1000);
-  console.log(refreshInterval);
   const allFeatures: FeatureDto[] = [
     ...model.independentFeatures,
     ...model.dependentFeatures,
