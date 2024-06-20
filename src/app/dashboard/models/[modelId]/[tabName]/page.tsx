@@ -7,7 +7,7 @@ import {
   CalendarDaysIcon,
 } from '@heroicons/react/24/solid';
 import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
 import ModelBreadcrumbs from '@/app/dashboard/models/[modelId]/components/ModelBreadcrumbs';
 import toast from 'react-hot-toast';
@@ -15,6 +15,30 @@ import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import TimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
+
+export async function getLegacyModel(
+  modelId: string,
+): Promise<ModelDto | undefined> {
+  const authorizationHeader: Record<string, string> = {};
+  const session = await auth();
+  if (isAuthenticated(session)) {
+    authorizationHeader['Authorization'] = `Bearer ${session!.token}`;
+  }
+
+  const res = await fetch(
+    `${process.env.API_URL}/v1/models/legacy/${modelId}`,
+    {
+      headers: {
+        ...authorizationHeader,
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+
+  if (!res.ok) return undefined;
+
+  return res.json();
+}
 
 export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   const authorizationHeader: Record<string, string> = {};
@@ -50,7 +74,17 @@ export default async function Page({
 }: {
   params: { modelId: string };
 }) {
-  const model = await getModel(params.modelId);
+  let model;
+  if (isNaN(Number(params.modelId))) {
+    // legacy id detected
+    model = await getLegacyModel(params.modelId);
+    if (!model) {
+      notFound();
+    }
+    redirect(`/dashboard/models/${model.id}/description`);
+  }
+
+  model = await getModel(params.modelId);
   if (!model) {
     notFound();
   }
