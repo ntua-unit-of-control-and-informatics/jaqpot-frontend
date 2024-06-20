@@ -258,7 +258,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-4 gap-6 mb-4">
           {schema.map((section, sectionIndex) => (
             <div key={sectionIndex}>
               <h3>{section.sectionTitle}</h3>

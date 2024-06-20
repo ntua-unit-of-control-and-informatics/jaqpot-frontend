@@ -6,6 +6,7 @@ import {
   jaqpotAppDescription,
   openGraphImage,
 } from '@/app/shared.metadata';
+import ModelsBreadcrumbs from '@/app/dashboard/models/components/ModelsBreadcrumbs';
 
 export const metadata: Metadata = generateSharedMetadata(
   'Your models',
@@ -15,6 +16,7 @@ export const metadata: Metadata = generateSharedMetadata(
 export default function Dashboard() {
   return (
     <div>
+      <ModelsBreadcrumbs />
       <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight mb-5">
         Your models
       </h2>

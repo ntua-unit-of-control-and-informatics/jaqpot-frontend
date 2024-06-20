@@ -5,13 +5,8 @@ import Link from 'next/link';
 
 import {
   ArrowLeftStartOnRectangleIcon,
-  ArrowsPointingInIcon,
-  BeakerIcon,
-  ChevronRightIcon,
   CircleStackIcon,
   Cog8ToothIcon,
-  HomeIcon,
-  InboxIcon,
   QueueListIcon,
   TableCellsIcon,
   XCircleIcon,
@@ -28,6 +23,7 @@ import {
 } from '@/app/dashboard/dashboard-layout';
 import { Tooltip } from '@nextui-org/tooltip';
 import JLogo from '@/app/dashboard/components/Logo/JLogo';
+import UserOrganizations from '@/app/dashboard/components/UserOrganizations';
 
 interface NavElement {
   name: string;
@@ -162,7 +158,7 @@ export default function Sidebar() {
               <span className="ms-3">Explore models</span>
             </Link>
           </div>
-          <nav className="h-full px-3 pt-4 pb-4 overflow-y-auto">
+          <nav className="px-3 pt-4 pb-4 overflow-y-auto">
             <ul className="space-y-2 font-medium">
               <div className="text-xs p-2 uppercase text-indigo-200 dark:text-white">
                 Navigation
@@ -198,6 +194,10 @@ export default function Sidebar() {
                 </button>
               )}
             </ul>
+          </nav>
+
+          <nav className="px-3 pt-4 pb-4 overflow-y-auto">
+            <UserOrganizations />
           </nav>
         </div>
       </aside>

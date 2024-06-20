@@ -3,6 +3,7 @@ import DatasetResults from '@/app/dashboard/models/[modelId]/components/DatasetR
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
+import DatasetBreadcrumbs from '@/app/dashboard/models/[modelId]/datasets/[datasetId]/components/DatasetBreadcrumbs';
 
 export const metadata: Metadata = generateSharedMetadata(
   'Dataset',
@@ -19,5 +20,13 @@ export default async function Page({
     notFound();
   }
 
-  return <DatasetResults datasetId={params.datasetId} model={model} />;
+  return (
+    <>
+      <DatasetBreadcrumbs
+        modelId={params.modelId}
+        datasetId={params.datasetId}
+      />
+      <DatasetResults datasetId={params.datasetId} model={model} />
+    </>
+  );
 }
