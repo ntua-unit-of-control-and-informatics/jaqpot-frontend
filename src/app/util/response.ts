@@ -1,5 +1,6 @@
 import toast from 'react-hot-toast';
 import { NextResponse } from 'next/server';
+import { signOut } from '@/auth';
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -33,6 +34,7 @@ export async function handleApiResponse(
     switch (res.status) {
       case 401:
         message = 'You are not authenticated. Please log in and try again.';
+        await signOut();
         break;
       case 403:
         message = 'You are not authorized to access this resource.';
