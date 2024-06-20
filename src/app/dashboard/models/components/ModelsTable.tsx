@@ -86,11 +86,18 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
           </div>
         ) : null
       }
-      className="max-w-3xl mx-auto"
     >
       <TableHeader>
         <TableColumn key="name">Name</TableColumn>
         <TableColumn key="type">Type</TableColumn>
+        <TableColumn key="description">Description</TableColumn>
+        <TableColumn key="independentLength">
+          Independent Features length
+        </TableColumn>
+        <TableColumn key="dependentLength">
+          Dependent Features length
+        </TableColumn>
+
         <TableColumn key="visibility">Visibility</TableColumn>
       </TableHeader>
       <TableBody
@@ -107,6 +114,9 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
           >
             <TableCell>{item.name}</TableCell>
             <TableCell>{item.type}</TableCell>
+            <TableCell>{item.description}</TableCell>
+            <TableCell>{item.independentFeatures.length}</TableCell>
+            <TableCell>{item.dependentFeatures.length}</TableCell>
             <TableCell>{item.visibility}</TableCell>
           </TableRow>
         )}
