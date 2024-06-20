@@ -4,12 +4,13 @@ import { CustomError } from '@/app/types/CustomError';
 
 interface ClientFetchErrorProps {
   error: CustomError;
+  className?: string;
 }
 
-export default function SWRClientFetchError({ error }: ClientFetchErrorProps) {
+export default function SWRClientFetchError(props: ClientFetchErrorProps) {
   return (
-    <div>
-      Failed to load <p>{error?.message}</p>
+    <div {...props}>
+      Failed to load <p>{props.error?.message}</p>
     </div>
   );
 }

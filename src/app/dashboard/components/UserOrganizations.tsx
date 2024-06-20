@@ -38,7 +38,8 @@ export default function UserOrganizations() {
 
   const userOrganizations = data?.data;
 
-  if (error) return <SWRClientFetchError error={error} />;
+  if (error)
+    return <SWRClientFetchError error={error} className="text-white" />;
   if (isLoading) return <Spinner />;
 
   return (

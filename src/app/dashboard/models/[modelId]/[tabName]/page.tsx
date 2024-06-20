@@ -1,21 +1,20 @@
 import { auth } from '@/auth';
 import { ModelDto } from '@/app/api.types';
-import Link from 'next/link';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
   BeakerIcon,
-  ChevronRightIcon,
   UserIcon,
-  ChevronDownIcon,
+  CalendarIcon,
+  CalendarDaysIcon,
 } from '@heroicons/react/24/solid';
 import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
 import { notFound } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
-import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
 import ModelBreadcrumbs from '@/app/dashboard/models/[modelId]/components/ModelBreadcrumbs';
 import toast from 'react-hot-toast';
 import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
+import TimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
+import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 
 export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   const authorizationHeader: Record<string, string> = {};
@@ -60,26 +59,38 @@ export default async function Page({
     <>
       <ModelBreadcrumbs model={model} />
 
-      <div className="grid grid-cols-6 pl-2 sm:pl-0">
+      <div className="flex flex-col pl-0">
         {/* Title */}
-        <div className="text-3xl font-semibold col-span-4 py-3">
+        <div className="max-w-3xl text-3xl font-semibold py-3">
           {model.name}
         </div>
-        {/* model type */}
-        <div className="text-sm inline-flex col-start-1 col-span-8 sm:col-span-4 py-3">
-          {model.type && (
-            <>
-              <BeakerIcon className="size-5 text-gray-400" />
-              <p className="ml-2 mr-4">{model.type}</p>
-            </>
-          )}
-
-          {model.creator && (
-            <>
-              <UserIcon className="size-5 text-gray-400" />
-              <p className="ml-2">{model.creator?.name}</p>
-            </>
-          )}
+        <div className="flex gap-4 items-center py-3">
+          <div className="text-sm flex items-center">
+            {model.type && (
+              <>
+                <BeakerIcon className="size-5 mr-2 text-gray-400" />
+                <span>{model.type}</span>
+              </>
+            )}
+          </div>
+          <div className="text-sm flex items-center">
+            {model.creator && (
+              <>
+                <UserIcon className="size-5 mr-2 text-gray-400" />
+                <span>{model.creator?.name}</span>
+              </>
+            )}
+          </div>
+          <div className="text-sm flex items-center">
+            {model.createdAt && (
+              <>
+                <CalendarDaysIcon className="size-5 mr-2 text-gray-400" />
+                <JaqpotTimeAgo
+                  date={new Date(model.createdAt as unknown as string)}
+                />
+              </>
+            )}
+          </div>
         </div>
       </div>
 
