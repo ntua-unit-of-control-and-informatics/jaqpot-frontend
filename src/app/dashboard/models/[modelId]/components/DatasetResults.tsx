@@ -72,8 +72,7 @@ export default function DatasetResults({
     }
   }, [dataset]);
 
-  if (error || !apiResponse?.success)
-    return <SWRClientFetchError error={error} />;
+  if (error) return <SWRClientFetchError error={error} />;
 
   const isLoaded =
     !isLoading &&

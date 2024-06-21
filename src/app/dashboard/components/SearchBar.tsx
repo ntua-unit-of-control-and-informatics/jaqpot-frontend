@@ -75,7 +75,6 @@ export default function SearchBar() {
     <div className="flex-1 flex flex-row items-center">
       <Autocomplete
         aria-label="Search for a model"
-        defaultItems={apiResponse?.data?.content || []}
         items={apiResponse?.data?.content || []}
         isLoading={isLoading}
         placeholder="Search for a model"
