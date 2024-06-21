@@ -48,7 +48,7 @@ export default function DashboardStats({
         <Bar
           type="monotone"
           dataKey="predictions"
-          fill="#8884d8"
+          fill="rgb(52 211 153)"
           maxBarSize={50}
           name="Predictions per day"
         />

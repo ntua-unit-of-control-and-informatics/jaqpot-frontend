@@ -35,7 +35,12 @@ export async function getLegacyModel(
     },
   );
 
-  if (!res.ok) return undefined;
+  if (!res.ok) {
+    console.error(
+      `Legacy model with id ${modelId} not found, status returned: ${res.status}`,
+    );
+    return undefined;
+  }
 
   return res.json();
 }
@@ -54,7 +59,12 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
     },
   });
 
-  if (!res.ok) return undefined;
+  if (!res.ok) {
+    console.error(
+      `Model with id ${modelId} not found, status returned: ${res.status}`,
+    );
+    return undefined;
+  }
 
   return res.json();
 }

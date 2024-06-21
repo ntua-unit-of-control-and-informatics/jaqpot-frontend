@@ -57,19 +57,13 @@ export default function DatasetResults({
     ...model.independentFeatures,
     ...model.dependentFeatures,
   ];
-  const { data, isLoading, error } = useSWR(
-    `/api/datasets/${datasetId}`,
-    fetcher,
-    { refreshInterval },
-  );
+  const {
+    data: apiResponse,
+    isLoading,
+    error,
+  } = useSWR(`/api/datasets/${datasetId}`, fetcher, { refreshInterval });
 
-  const dataset = data?.data;
-  const isLoaded =
-    !isLoading &&
-    dataset?.status !== 'CREATED' &&
-    dataset?.status !== 'EXECUTING';
-  const loadingState = isLoading ? 'loading' : 'idle';
-
+  const dataset = apiResponse?.data;
   useEffect(() => {
     if (dataset?.status === 'SUCCESS' || dataset?.status === 'FAILURE') {
       setRefreshInterval(0);
@@ -77,6 +71,15 @@ export default function DatasetResults({
       setRefreshInterval(1000);
     }
   }, [dataset]);
+
+  if (error || !apiResponse?.success)
+    return <SWRClientFetchError error={error} />;
+
+  const isLoaded =
+    !isLoading &&
+    dataset?.status !== 'CREATED' &&
+    dataset?.status !== 'EXECUTING';
+  const loadingState = isLoading ? 'loading' : 'idle';
 
   const tableHeaders = allFeatures.map((feature, index) => (
     <TableColumn key={index}>{feature.name}</TableColumn>
@@ -141,8 +144,6 @@ export default function DatasetResults({
   }
 
   const tableRows = generateTableRows();
-
-  if (error) return <SWRClientFetchError error={error} />;
 
   return (
     <div className="mt-5 flex flex-col gap-4">

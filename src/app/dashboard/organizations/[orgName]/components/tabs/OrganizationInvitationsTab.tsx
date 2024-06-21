@@ -65,13 +65,17 @@ const fetcher: Fetcher<
 export default function OrganizationInvitationsTab({
   organization,
 }: OrganizationInvitationsTabProps) {
-  const { data, isLoading, error } = useSWR(
-    `/api/organizations/${organization.name}/invitations`,
-    fetcher,
-  );
+  const {
+    data: apiResponse,
+    isLoading,
+    error,
+  } = useSWR(`/api/organizations/${organization.name}/invitations`, fetcher);
+
+  if (error || !apiResponse?.success)
+    return <SWRClientFetchError error={error} />;
 
   const tableRows =
-    data?.data?.map((invitation, index) => {
+    apiResponse?.data?.map((invitation, index) => {
       return {
         ...invitation,
         expirationDate: new Date(
@@ -80,8 +84,6 @@ export default function OrganizationInvitationsTab({
         key: index,
       };
     }) ?? [];
-
-  if (error) return <SWRClientFetchError error={error} />;
 
   return (
     <div>

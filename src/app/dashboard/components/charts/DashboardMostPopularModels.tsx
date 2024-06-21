@@ -48,7 +48,7 @@ export default function DashboardMostPopularModels({
         <Bar
           type="monotone"
           dataKey="predictions"
-          fill="#82ca9d"
+          fill="rgb(34 211 238)"
           maxBarSize={50}
           name="Most popular models predictions"
         />

@@ -20,12 +20,12 @@ export default function Dashboard() {
       <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight mb-5">
         Your models
       </h2>
-      <ModelsTable modelsEndpoint="/api/models" />
+      <ModelsTable modelsEndpoint="/api/user/models" />
 
       <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight my-5">
         Shared with you
       </h2>
-      <ModelsTable modelsEndpoint="/api/shared-models" />
+      <ModelsTable modelsEndpoint="/api/user/shared-models" />
     </div>
   );
 }
