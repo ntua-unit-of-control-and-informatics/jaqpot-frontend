@@ -12,7 +12,6 @@ import {
   YAxis,
   Bar,
 } from 'recharts';
-import { format, sub } from 'date-fns';
 
 function getRandomInt(min: number, max: number) {
   const minCeiled = Math.ceil(min);
@@ -20,7 +19,7 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
 }
 
-export default function DashboardStats({
+export default function DashboardMostPopularModels({
   width,
   height,
 }: {
@@ -29,18 +28,19 @@ export default function DashboardStats({
 }) {
   const data = [];
   const now = new Date();
-  for (let day = 7; day >= 1; day--) {
+  let randomInt = getRandomInt(1000, 1500);
+  for (let i = 7; i >= 1; i--) {
+    randomInt -= getRandomInt(20, 200);
     data.push({
-      name: `${day} days ago`,
-      x: format(sub(now, { days: day }), 'MM/dd/yyyy'),
-      predictions: getRandomInt(100, 1500),
+      name: `Linear regression ${i}`,
+      predictions: randomInt,
     });
   }
 
   return (
-    <ResponsiveContainer width={width} height={height} className="p-2">
+    <ResponsiveContainer width={width} height={height} className="p-2 resize">
       <BarChart data={data}>
-        <XAxis dataKey="x" />
+        <XAxis dataKey="name" />
         <YAxis dataKey="predictions" />
         <Tooltip />
         <Legend />
@@ -48,9 +48,9 @@ export default function DashboardStats({
         <Bar
           type="monotone"
           dataKey="predictions"
-          fill="#8884d8"
+          fill="#82ca9d"
           maxBarSize={50}
-          name="Predictions per day"
+          name="Most popular models predictions"
         />
       </BarChart>
     </ResponsiveContainer>

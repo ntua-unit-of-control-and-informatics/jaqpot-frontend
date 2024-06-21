@@ -38,7 +38,7 @@ export default function DashboardLayout({
         className={`min-h-screen transition-all ml-0 ${isCollapsed ? 'sm:ml-0' : 'sm:ml-72'}`}
       >
         <TopBar />
-        <main className="p-8">{children}</main>
+        <main className="p-2 sm:p-8">{children}</main>
       </div>
     </SidebarContext.Provider>
   );

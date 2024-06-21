@@ -20,6 +20,7 @@ const fetcher: Fetcher<ApiResponse<OrganizationDto[]>, string> = async (
   if (!res.ok) {
     const message = (await res.json()).message;
     const status = res.status;
+    console.error(message);
     // Attach extra info to the error object.
     throw new CustomError(message, status);
   }
@@ -38,8 +39,7 @@ export default function UserOrganizations() {
 
   const userOrganizations = data?.data;
 
-  if (error)
-    return <SWRClientFetchError error={error} className="text-white" />;
+  if (error) return;
   if (isLoading) return <Spinner />;
 
   return (
