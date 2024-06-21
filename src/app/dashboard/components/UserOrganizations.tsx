@@ -35,9 +35,22 @@ function backgroundColorRotation(index: number) {
 }
 
 export default function UserOrganizations() {
-  const { data, isLoading, error } = useSWR(`/api/organizations/user`, fetcher);
+  const {
+    data: apiResponse,
+    isLoading,
+    error,
+  } = useSWR(`/api/organizations/user`, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
-  const userOrganizations = data?.data;
+  let userOrganizations;
+  if (apiResponse?.success) {
+    userOrganizations = apiResponse.data;
+  } else {
+    return;
+  }
 
   if (error) return;
   if (isLoading) return <Spinner />;

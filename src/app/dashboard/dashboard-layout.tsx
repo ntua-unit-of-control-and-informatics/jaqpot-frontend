@@ -17,7 +17,7 @@ export type SidebarContextType = {
   setIsCollapsed: Dispatch<SetStateAction<boolean>>;
 };
 
-const isMobileSize = global.window.innerWidth < 768;
+const isMobileSize = false; //global.window && global.window.innerWidth < 768;
 
 export const SidebarContext = createContext<SidebarContextType>({
   isCollapsed: isMobileSize,

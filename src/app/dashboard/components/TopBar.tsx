@@ -30,8 +30,8 @@ export default function TopBar() {
     useContext<SidebarContextType>(SidebarContext);
 
   return (
-    <div className="w-full px-8 py-3 border-b border-b-gray-300 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px]">
-      <div className="flex flex-row sm:gap-x-6 ">
+    <div className="w-full px-4 sm:px-8 py-3 border-b border-b-gray-300 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px]">
+      <div className="flex flex-row gap-2 sm:gap-x-6 ">
         <div className={`hidden ${isCollapsed ? 'sm:flex' : ''} items-center`}>
           <Tooltip content="Open sidebar">
             <Button

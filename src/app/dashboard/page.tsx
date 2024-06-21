@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
 import { generateSharedMetadata, openGraphImage } from '@/app/shared.metadata';
 import DashboardBreadcrumbs from '@/app/dashboard/components/DashboardBreadcrumbs';
-import DashboardStats from '@/app/dashboard/components/DashboardStats';
-import { ResponsiveContainer } from 'recharts';
-import DashboardMostPopularModels from '@/app/dashboard/components/DashboardMostPopularModels';
+import DashboardStats from '@/app/dashboard/components/charts/DashboardStats';
+import DashboardMostPopularModels from '@/app/dashboard/components/charts/DashboardMostPopularModels';
 
 export const metadata: Metadata = generateSharedMetadata('Dashboard', '');
 
