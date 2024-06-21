@@ -21,12 +21,13 @@ export async function GET(
   const searchParams = request.nextUrl.searchParams;
   const page = searchParams.get('page') || '0';
   const size = PAGE_SIZE;
-  const query = searchParams.get('query');
-  if (!query) {
+  const hasQuery = searchParams.has('query');
+  if (!hasQuery) {
     return errorResponse(
       'You need to provide a search query to search for models',
     );
   }
+  const query = searchParams.get('query')!;
 
   const res = await fetch(
     `${process.env.API_URL}/v1/models/search?${new URLSearchParams({ page, size, query })}`,

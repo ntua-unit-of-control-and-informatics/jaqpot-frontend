@@ -13,6 +13,7 @@ import { CustomError } from '@/app/types/CustomError';
 import { useRouter } from 'next/navigation';
 import { Key } from '@react-types/shared';
 import { KeyboardEvent } from '@react-types/shared/src/events';
+import { Button } from '@nextui-org/button';
 
 const fetchWithQueryParams = async (
   url: string,
@@ -41,14 +42,8 @@ const fetchWithQueryParams = async (
 
 // TODO update when https://github.com/nextui-org/nextui/issues/2962 is fixed
 export default function SearchBar() {
-  let models: ModelDto[] = [];
-
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const [query, debouncedQuery, setQuery] = useDebouncedState<string | null>(
-    null,
-    1000,
-  );
+  const [query, debouncedQuery, setQuery] = useDebouncedState<string>('', 1000);
   const [page, setPage] = useState(1);
 
   const {
@@ -60,52 +55,59 @@ export default function SearchBar() {
     ([url, query, page]) => fetchWithQueryParams(url, query, page),
   );
 
-  if (apiResponse?.success) {
-    models = apiResponse?.data?.content || [];
-  }
-
   function onSelectionChange(modelId: Key | null) {
     if (modelId !== null) {
       router.push(`/dashboard/models/${modelId}`);
     }
-
-    setQuery('');
   }
 
   function onKeyDown(e: KeyboardEvent): void {
     if (e.key === 'Enter') {
-      e.stopPropagation();
-      e.preventDefault();
+      router.push(
+        `/dashboard/models/search?${new URLSearchParams({ query, page: '1' })}`,
+      );
     }
   }
 
   if (error) return;
 
   return (
-    <div className="flex-1 items-center">
+    <div className="flex-1 flex flex-row items-center">
       <Autocomplete
         aria-label="Search for a model"
-        defaultItems={models}
+        defaultItems={apiResponse?.data?.content || []}
+        items={apiResponse?.data?.content || []}
         isLoading={isLoading}
         placeholder="Search for a model"
         labelPlacement="outside"
-        selectorIcon={<></>}
+        selectorIcon={isLoading && <></>}
         className="flex-1 max-w-xl"
         disableSelectorIconRotation
+        onKeyDown={onKeyDown}
         onInputChange={setQuery}
         onSelectionChange={onSelectionChange}
-        onKeyDown={onKeyDown}
-        onKeyUp={onKeyDown}
-        onOpenChange={setIsOpen}
-        popoverProps={{
-          isOpen: models.length > 0,
-        }}
+        allowsCustomValue={true}
         inputProps={{
           classNames: {
             input: 'ml-1',
             inputWrapper:
               'bg-transparent shadow-none text-gray-400 hover:bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent',
           },
+        }}
+        listboxProps={{
+          bottomContent: (
+            <Button
+              color="primary"
+              className="max-w-1/2"
+              onPress={() =>
+                router.push(
+                  `/dashboard/models/search?${new URLSearchParams({ query, page: '1' })}`,
+                )
+              }
+            >
+              Advanced search...
+            </Button>
+          ),
         }}
         startContent={<MagnifyingGlassIcon className="size-6 text-gray-400" />}
       >
