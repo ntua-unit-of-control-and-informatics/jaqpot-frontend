@@ -39,7 +39,7 @@ export default function UserOrganizations() {
     data: apiResponse,
     isLoading,
     error,
-  } = useSWR(`/api/organizations/user`, fetcher, {
+  } = useSWR(`/api/user/organizations`, fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
