@@ -18,7 +18,7 @@ export async function GET(): Promise<NextResponse<ApiResponse>> {
     );
   }
 
-  const res = await fetch(`${process.env.API_URL}/v1/organizations/user`, {
+  const res = await fetch(`${process.env.API_URL}/v1/user/organizations`, {
     headers: {
       Authorization: `Bearer ${session!.token}`,
       'Content-Type': 'application/json',

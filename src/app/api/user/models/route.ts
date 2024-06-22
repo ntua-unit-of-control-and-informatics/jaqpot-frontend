@@ -25,7 +25,7 @@ export async function GET(
   const size = PAGE_SIZE;
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/models?${new URLSearchParams({ page, size })}`,
+    `${process.env.API_URL}/v1/user/models?${new URLSearchParams({ page, size })}`,
     {
       headers: {
         Authorization: `Bearer ${session!.token}`,
