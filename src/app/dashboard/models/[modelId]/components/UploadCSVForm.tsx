@@ -3,6 +3,7 @@ import { ArrowDownTrayIcon, ArrowUpTrayIcon } from '@heroicons/react/24/solid';
 import React, { ChangeEvent, useState } from 'react';
 import { ModelDto } from '@/app/api.types';
 import { Input } from '@nextui-org/input';
+import { Tooltip } from '@nextui-org/tooltip';
 
 interface UploadCSVFormProps {
   onSubmit: (formData: any) => Promise<void>;
@@ -54,7 +55,7 @@ export default function UploadCSVForm({ onSubmit, model }: UploadCSVFormProps) {
     <>
       <form onSubmit={handleOnSubmit}>
         <div className="flex gap-5">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 ">
             <p className="text-tiny">Upload the input CSV</p>
             <input
               type="file"
@@ -71,23 +72,26 @@ export default function UploadCSVForm({ onSubmit, model }: UploadCSVFormProps) {
             {/*  Upload CSV*/}
             {/*</Button>*/}
           </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-tiny">
-              Download a sample CSV with the header columns prefilled for you
-            </p>
-            <Button
-              color="default"
-              className="max-w-fit"
-              startContent={<ArrowDownTrayIcon className="size-6" />}
-              onPress={() => downloadSampleFile(model!)}
-            >
-              Download Sample CSV
+        </div>
+        <div className="mt-10 flex gap-5">
+          <div>
+            <Button type="submit" color="primary">
+              Submit
             </Button>
           </div>
+          <div>
+            <Tooltip content="Download a sample CSV with the header columns prefilled for you">
+              <Button
+                color="default"
+                className="max-w-fit"
+                startContent={<ArrowDownTrayIcon className="size-6" />}
+                onPress={() => downloadSampleFile(model!)}
+              >
+                Download sample CSV
+              </Button>
+            </Tooltip>
+          </div>
         </div>
-        <Button type="submit" color="primary" className="mt-10">
-          Submit
-        </Button>
       </form>
     </>
   );

@@ -107,9 +107,23 @@ export default function PredictTab({ model }: PredictTabProps) {
           label: 'text-tiny',
         }}
       >
-        <Radio value="form">Fill out the form</Radio>
+        <Radio
+          value="form"
+          classNames={{
+            label: 'text-sm',
+          }}
+        >
+          Fill out the form
+        </Radio>
         <span className="mx-4">or</span>
-        <Radio value="csv">Upload a CSV file</Radio>
+        <Radio
+          value="csv"
+          classNames={{
+            label: 'text-sm',
+          }}
+        >
+          Upload a CSV file
+        </Radio>
       </RadioGroup>
 
       {predictionUploadType === 'form' && (
