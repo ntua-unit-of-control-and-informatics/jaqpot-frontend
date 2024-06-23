@@ -38,7 +38,11 @@ export default function DashboardStats({
   }
 
   return (
-    <ResponsiveContainer width={width} height={height} className="p-2">
+    <ResponsiveContainer
+      width={width}
+      height={height}
+      className="p-5 border-1 rounded"
+    >
       <BarChart data={data}>
         <XAxis dataKey="x" />
         <YAxis dataKey="predictions" />

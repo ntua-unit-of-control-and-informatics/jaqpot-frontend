@@ -14,7 +14,7 @@ interface FeaturesTabProps {
 
 export default function FeaturesTab({ model }: FeaturesTabProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 divide-dashed divide-x">
+    <div className="grid grid-cols-1 md:grid-cols-2 sm:divide-dashed sm:divide-x">
       <div className="p-4">
         <h2 className="font-semibold mb-4">Independent Features</h2>
 

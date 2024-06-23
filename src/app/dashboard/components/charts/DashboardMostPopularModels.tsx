@@ -38,7 +38,11 @@ export default function DashboardMostPopularModels({
   }
 
   return (
-    <ResponsiveContainer width={width} height={height} className="p-2 resize">
+    <ResponsiveContainer
+      width={width}
+      height={height}
+      className="p-2 border-1 rounded"
+    >
       <BarChart data={data}>
         <XAxis dataKey="name" />
         <YAxis dataKey="predictions" />

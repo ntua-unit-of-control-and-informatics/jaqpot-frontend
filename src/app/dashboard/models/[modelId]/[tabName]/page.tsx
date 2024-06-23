@@ -100,7 +100,7 @@ export default async function Page({
   }
 
   return (
-    <>
+    <div className="p-2 sm:p-0">
       <ModelBreadcrumbs model={model} />
 
       <div className="flex flex-col pl-0">
@@ -139,6 +139,6 @@ export default async function Page({
       </div>
 
       <ModelTabs model={model} />
-    </>
+    </div>
   );
 }

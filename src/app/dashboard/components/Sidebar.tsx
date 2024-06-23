@@ -97,13 +97,19 @@ export default function Sidebar() {
     const shownClass = 'translate-x-0';
     const hiddenClass = '-translate-x-full';
 
-    return isCollapsed ? hiddenClass : shownClass;
+    if (isCollapsed === undefined) {
+      return '-translate-x-full sm:translate-x-0';
+    } else if (isCollapsed) {
+      return hiddenClass;
+    } else if (!isCollapsed) {
+      return shownClass;
+    }
   }
 
   return (
     <>
       <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={() => setIsCollapsed(false)}
         type="button"
         className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
@@ -134,7 +140,9 @@ export default function Sidebar() {
               <Button
                 isIconOnly
                 className={'hidden sm:block bg-transparent text-white'}
-                onClick={() => setIsCollapsed(!isCollapsed)}
+                onClick={() => {
+                  setIsCollapsed(true);
+                }}
               >
                 <ArrowLeftStartOnRectangleIcon className="size-6" />
               </Button>
@@ -201,7 +209,7 @@ export default function Sidebar() {
           </nav>
         </div>
       </aside>
-      {!isCollapsed && <ModalOverlay />}
+      {isCollapsed !== undefined && !isCollapsed && <ModalOverlay />}
     </>
   );
 }
