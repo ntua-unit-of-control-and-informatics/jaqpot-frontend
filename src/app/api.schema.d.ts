@@ -6,10 +6,20 @@
 
 export interface paths {
   "/v1/models": {
-    /** Get paginated models */
-    get: operations["getModels"];
     /** Create a new model */
     post: operations["createModel"];
+  };
+  "/v1/user/models": {
+    /** Get paginated models */
+    get: operations["getModels"];
+  };
+  "/v1/models/search": {
+    /** Search for models */
+    get: operations["searchModels"];
+  };
+  "/v1/user/shared-models": {
+    /** Get paginated shared models */
+    get: operations["getSharedModels"];
   };
   "/v1/models/{id}": {
     /**
@@ -18,12 +28,26 @@ export interface paths {
      */
     get: operations["getModelById"];
   };
+  "/v1/models/legacy/{id}": {
+    /**
+     * Get a legacy model
+     * @description Retrieve a single model by its ID
+     */
+    get: operations["getLegacyModelById"];
+  };
   "/v1/models/{modelId}/predict": {
     /**
      * Predict with Model
      * @description Submit a dataset for prediction using a specific model
      */
     post: operations["predictWithModel"];
+  };
+  "/v1/models/{modelId}/predict/csv": {
+    /**
+     * Predict using CSV with Model
+     * @description Submit a dataset for prediction using a specific model
+     */
+    post: operations["predictWithModelCSV"];
   };
   "/v1/models/{id}/partial": {
     /** Partially update specific fields of a model */
@@ -41,6 +65,10 @@ export interface paths {
     get: operations["getAllOrganizations"];
     /** Create a new organization */
     post: operations["createOrganization"];
+  };
+  "/v1/user/organizations": {
+    /** Get all user organizations */
+    get: operations["getAllOrganizationsByUser"];
   };
   "/v1/organizations/{id}": {
     /** Update an existing organization */
@@ -103,8 +131,6 @@ export interface components {
       independentFeatures: components["schemas"]["Feature"][];
       organizations?: components["schemas"]["Organization"][];
       visibility: components["schemas"]["ModelVisibility"];
-      /** @example 5 */
-      reliability?: number;
       /** @example false */
       pretrained?: boolean;
       /**
@@ -115,6 +141,7 @@ export interface components {
       creator?: components["schemas"]["User"];
       /** @description If the current user can edit the model */
       canEdit?: boolean;
+      tags?: string;
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -160,7 +187,7 @@ export interface components {
       };
       /** @example Feature Name */
       name: string;
-      description: string;
+      description?: string;
       /**
        * @example NUMERICAL
        * @enum {string}
@@ -186,18 +213,38 @@ export interface components {
        */
       updatedAt?: Record<string, never>;
     };
+    /**
+     * @example PREDICTION
+     * @enum {string}
+     */
+    DatasetType: "PREDICTION";
     Dataset: {
       /**
        * Format: int64
        * @example 1
        */
       id?: number;
-      /**
-       * @example PREDICTION
-       * @enum {string}
-       */
-      type: "PREDICTION";
+      type: components["schemas"]["DatasetType"];
       input: components["schemas"]["DataEntry"][];
+      results?: components["schemas"]["DataEntry"][];
+      /** @enum {string} */
+      status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
+      failureReason?: string;
+      created_at?: Record<string, never>;
+      updated_at?: Record<string, never>;
+    };
+    DatasetCSV: {
+      /**
+       * Format: int64
+       * @example 1
+       */
+      id?: number;
+      type: components["schemas"]["DatasetType"];
+      /**
+       * Format: byte
+       * @description A base64 representation in CSV format of the input values.
+       */
+      inputFile: string;
       results?: components["schemas"]["DataEntry"][];
       /** @enum {string} */
       status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
@@ -294,6 +341,24 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** Create a new model */
+  createModel: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Model"];
+      };
+    };
+    responses: {
+      /** @description Model created successfully */
+      201: {
+        content: never;
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+    };
+  };
   /** Get paginated models */
   getModels: {
     parameters: {
@@ -321,17 +386,54 @@ export interface operations {
       };
     };
   };
-  /** Create a new model */
-  createModel: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Model"];
+  /** Search for models */
+  searchModels: {
+    parameters: {
+      query: {
+        query: string;
+        page?: number;
+        size?: number;
       };
     };
     responses: {
-      /** @description Model created successfully */
-      201: {
+      /** @description Paginated list of models */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["Model"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Invalid input */
+      400: {
         content: never;
+      };
+    };
+  };
+  /** Get paginated shared models */
+  getSharedModels: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+    };
+    responses: {
+      /** @description Paginated list of shared models */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["Model"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
       };
       /** @description Invalid input */
       400: {
@@ -364,6 +466,30 @@ export interface operations {
     };
   };
   /**
+   * Get a legacy model
+   * @description Retrieve a single model by its ID
+   */
+  getLegacyModelById: {
+    parameters: {
+      path: {
+        /** @description The ID of the model to retrieve */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Model"];
+        };
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
    * Predict with Model
    * @description Submit a dataset for prediction using a specific model
    */
@@ -377,6 +503,41 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["Dataset"];
+      };
+    };
+    responses: {
+      /** @description Prediction created successfully */
+      201: {
+        content: never;
+      };
+      /** @description Invalid Request */
+      400: {
+        content: never;
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Predict using CSV with Model
+   * @description Submit a dataset for prediction using a specific model
+   */
+  predictWithModelCSV: {
+    parameters: {
+      path: {
+        /** @description The ID of the model to use for prediction */
+        modelId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DatasetCSV"];
       };
     };
     responses: {
@@ -478,6 +639,17 @@ export interface operations {
       /** @description Organization created successfully */
       201: {
         content: never;
+      };
+    };
+  };
+  /** Get all user organizations */
+  getAllOrganizationsByUser: {
+    responses: {
+      /** @description Successful response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Organization"][];
+        };
       };
     };
   };
