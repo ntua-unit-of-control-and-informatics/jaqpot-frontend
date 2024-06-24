@@ -20,7 +20,7 @@ const fetchWithQueryParams = async (
   query: string | null,
   page: number,
 ): Promise<ApiResponse<ModelsResponseDto>> => {
-  if (!query || query.length <= 3) {
+  if (!query) {
     return { success: true, data: {} };
   }
 
@@ -74,10 +74,10 @@ export default function SearchBar() {
   return (
     <div className="flex-1 flex flex-row items-center">
       <Autocomplete
-        aria-label="Search for a model"
+        aria-label="Search models"
         items={apiResponse?.data?.content || []}
         isLoading={isLoading}
-        placeholder="Search for a model"
+        placeholder="Search models"
         labelPlacement="outside"
         selectorIcon={isLoading && <></>}
         className="flex-1 max-w-xl"
@@ -86,11 +86,12 @@ export default function SearchBar() {
         onInputChange={setQuery}
         onSelectionChange={onSelectionChange}
         allowsCustomValue={true}
+        isClearable={false}
         inputProps={{
           classNames: {
             input: 'ml-1',
             inputWrapper:
-              'bg-transparent shadow-none text-gray-400 hover:bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent',
+              'bg-transparent p-0 shadow-none text-gray-400 hover:bg-transparent data-[hover=true]:bg-transparent group-data-[focus=true]:bg-transparent',
           },
         }}
         listboxProps={{
@@ -108,7 +109,14 @@ export default function SearchBar() {
             </Button>
           ),
         }}
-        startContent={<MagnifyingGlassIcon className="size-6 text-gray-400" />}
+        popoverProps={{
+          classNames: {
+            content: 'min-w-72',
+          },
+        }}
+        startContent={
+          <MagnifyingGlassIcon className="min-w-5 size-6 text-gray-400" />
+        }
       >
         {(item) => (
           <AutocompleteItem key={item.id!.toString()}>

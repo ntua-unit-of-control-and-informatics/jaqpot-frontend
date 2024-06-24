@@ -26,7 +26,7 @@ const fetchWithQueryParams = async (
   query: string | null,
   page: number,
 ): Promise<ApiResponse<ModelsResponseDto>> => {
-  if (!query || query.length <= 3) {
+  if (!query) {
     return { success: true, data: {} };
   }
 
