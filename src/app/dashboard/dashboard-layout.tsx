@@ -52,7 +52,7 @@ export default function DashboardLayout({
     <SidebarContext.Provider value={{ isCollapsed, setIsCollapsed }}>
       <Sidebar />
       <div
-        className={`min-h-screen transition-margin-left ${getContentCollapsableStateClassname()}`}
+        className={`transition-margin-left min-h-screen ${getContentCollapsableStateClassname()}`}
       >
         <TopBar />
         <main className="p-2 sm:p-8">{children}</main>
