@@ -9,6 +9,7 @@ import { Input, Textarea } from '@nextui-org/input';
 import { Select, SelectItem } from '@nextui-org/react';
 import { organizationVisibilitySelectValues } from '@/app/types/organization-select.types';
 import { Button } from '@nextui-org/button';
+import { useSWRConfig } from 'swr';
 
 export default function NewOrganization() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function NewOrganization() {
     contactEmail: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useSWRConfig();
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value } = e.target;
@@ -39,6 +41,8 @@ export default function NewOrganization() {
 
       const { success, message, data }: ApiResponse = await res.json();
       if (success) {
+        // notify user organizations to reload user organizations
+        mutate('/api/user/organizations');
         toast.success(
           'Organization created successfully! You will be redirected to the organization’s page shortly.',
         );

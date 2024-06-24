@@ -71,8 +71,7 @@ export default function OrganizationInvitationsTab({
     error,
   } = useSWR(`/api/organizations/${organization.name}/invitations`, fetcher);
 
-  if (error || !apiResponse?.success)
-    return <SWRClientFetchError error={error} />;
+  if (error) return <SWRClientFetchError error={error} />;
 
   const tableRows =
     apiResponse?.data?.map((invitation, index) => {

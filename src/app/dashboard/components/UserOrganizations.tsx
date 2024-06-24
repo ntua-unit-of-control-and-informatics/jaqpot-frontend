@@ -6,9 +6,11 @@ import { ApiResponse } from '@/app/util/response';
 import { DatasetDto, OrganizationDto } from '@/app/api.types';
 import { CustomError } from '@/app/types/CustomError';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spinner } from '@nextui-org/spinner';
 import { BeakerIcon } from '@heroicons/react/24/solid';
+import useSWRMutation from 'swr/mutation';
+import { useSession } from 'next-auth/react';
 
 const fetcher: Fetcher<ApiResponse<OrganizationDto[]>, string> = async (
   url,
@@ -35,15 +37,20 @@ function backgroundColorRotation(index: number) {
 }
 
 export default function UserOrganizations() {
+  const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(true);
   const {
     data: apiResponse,
-    isLoading,
+    trigger,
     error,
-  } = useSWR(`/api/user/organizations`, fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  } = useSWRMutation(`/api/user/organizations`, fetcher);
+
+  useEffect(() => {
+    setIsLoading(true);
+    trigger()
+      .catch((e) => console.warn('could not load user organizations', e))
+      .finally(() => setIsLoading(false));
+  }, [trigger]);
 
   let userOrganizations;
   if (apiResponse?.success) {
