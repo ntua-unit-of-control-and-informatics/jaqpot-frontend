@@ -12,6 +12,9 @@ import { ApiResponse } from '@/app/util/response';
 import { Spinner } from '@nextui-org/spinner';
 import { Radio, RadioGroup } from '@nextui-org/react';
 import UploadCSVForm from '@/app/dashboard/models/[modelId]/components/UploadCSVForm';
+import Alert from '@/app/components/Alert';
+import { isAuthenticated } from '@/app/util/auth';
+import { useSession } from 'next-auth/react';
 
 async function createPrediction(modelId: string, data: any) {
   return await fetch(`/api/models/${modelId}/predict`, {
@@ -35,6 +38,7 @@ interface PredictTabProps {
 }
 
 export default function PredictTab({ model }: PredictTabProps) {
+  const { data: session } = useSession();
   const params = useParams<{ modelId: string }>();
   const [loading, setIsLoading] = useState(false);
   const [datasetId, setDatasetId] = useState<string | undefined>(undefined);
@@ -97,6 +101,13 @@ export default function PredictTab({ model }: PredictTabProps) {
 
   return (
     <div className="container mt-2">
+      {!isAuthenticated(session) && (
+        <Alert
+          type="warning"
+          title="Authentication required!"
+          description="You need to be logged in to make predictions"
+        />
+      )}
       <RadioGroup
         label="Choose Your Prediction Input Method"
         orientation="horizontal"
