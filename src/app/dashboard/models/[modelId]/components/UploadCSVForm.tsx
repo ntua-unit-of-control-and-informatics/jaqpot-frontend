@@ -63,14 +63,6 @@ export default function UploadCSVForm({ onSubmit, model }: UploadCSVFormProps) {
               onChange={handleFileChange}
               required
             />
-
-            {/*<Button*/}
-            {/*  color="success"*/}
-            {/*  className="max-w-fit"*/}
-            {/*  startContent={<ArrowUpTrayIcon className="size-6" />}*/}
-            {/*>*/}
-            {/*  Upload CSV*/}
-            {/*</Button>*/}
           </div>
         </div>
         <div className="mt-10 flex gap-5">
