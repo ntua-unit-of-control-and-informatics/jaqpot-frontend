@@ -1,4 +1,9 @@
-import { BuildingOfficeIcon, PlusIcon } from '@heroicons/react/24/solid';
+import {
+  BuildingOfficeIcon,
+  CircleStackIcon,
+  PlusIcon,
+  QueueListIcon,
+} from '@heroicons/react/24/solid';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Tooltip } from '@nextui-org/tooltip';
 import {
@@ -29,6 +34,16 @@ export default function CreateMenu() {
         </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label="Create new items">
+        <DropdownItem
+          key="new-model"
+          textValue="New Model"
+          onClick={() => router.push('/dashboard/new/model')}
+        >
+          <div className="flex">
+            <CircleStackIcon className="size-6 mr-2" />
+            New Model
+          </div>
+        </DropdownItem>
         <DropdownItem
           key="new-organization"
           textValue="New Organization"
