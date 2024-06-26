@@ -116,7 +116,7 @@ export default async function Page({
           {model.name}
         </div>
         <div className="flex items-center gap-4 py-3">
-          <div className="flex items-center text-sm">
+          <div className="flex items-center text-sm text-gray-400">
             {model.type && (
               <>
                 <BeakerIcon className="mr-2 size-5 text-gray-400" />
@@ -124,7 +124,7 @@ export default async function Page({
               </>
             )}
           </div>
-          <div className="flex items-center text-sm">
+          <div className="flex items-center text-sm text-gray-400">
             {model.creator && (
               <>
                 <UserIcon className="mr-2 size-5 text-gray-400" />
@@ -132,7 +132,7 @@ export default async function Page({
               </>
             )}
           </div>
-          <div className="flex items-center text-sm">
+          <div className="flex items-center text-sm text-gray-400">
             {model.createdAt && (
               <>
                 <CalendarDaysIcon className="mr-2 size-5 text-gray-400" />
