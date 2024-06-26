@@ -325,6 +325,8 @@ export interface components {
       /** @description Error code */
       code?: number;
     };
+    /** @enum {string} */
+    ErrorCode: "1001";
     /** @description Can be any value - string, number, boolean, array or object. */
     AnyValue: unknown;
   };

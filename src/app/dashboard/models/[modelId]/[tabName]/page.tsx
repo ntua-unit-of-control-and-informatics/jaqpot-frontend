@@ -15,6 +15,7 @@ import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import TimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
+import { getErrorMessageFromResponse } from '@/app/util/response';
 
 export async function getLegacyModel(
   modelId: string,
@@ -36,10 +37,13 @@ export async function getLegacyModel(
   );
 
   if (!res.ok) {
+    if (res.status === 404) {
+      return undefined;
+    }
     console.error(
-      `Legacy model with id ${modelId} not found, status returned: ${res.status}`,
+      `Model with id ${modelId} not found, status returned: ${res.status}`,
     );
-    return undefined;
+    throw new Error(await getErrorMessageFromResponse(res));
   }
 
   return res.json();
@@ -60,10 +64,13 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   });
 
   if (!res.ok) {
+    if (res.status === 404) {
+      return undefined;
+    }
     console.error(
       `Model with id ${modelId} not found, status returned: ${res.status}`,
     );
-    return undefined;
+    throw new Error(await getErrorMessageFromResponse(res));
   }
 
   return res.json();
@@ -105,30 +112,30 @@ export default async function Page({
 
       <div className="flex flex-col pl-0">
         {/* Title */}
-        <div className="max-w-3xl text-3xl font-semibold py-3">
+        <div className="max-w-3xl py-3 text-3xl font-semibold">
           {model.name}
         </div>
-        <div className="flex gap-4 items-center py-3">
-          <div className="text-sm flex items-center">
+        <div className="flex items-center gap-4 py-3">
+          <div className="flex items-center text-sm">
             {model.type && (
               <>
-                <BeakerIcon className="size-5 mr-2 text-gray-400" />
+                <BeakerIcon className="mr-2 size-5 text-gray-400" />
                 <span>{model.type}</span>
               </>
             )}
           </div>
-          <div className="text-sm flex items-center">
+          <div className="flex items-center text-sm">
             {model.creator && (
               <>
-                <UserIcon className="size-5 mr-2 text-gray-400" />
+                <UserIcon className="mr-2 size-5 text-gray-400" />
                 <span>{model.creator?.name}</span>
               </>
             )}
           </div>
-          <div className="text-sm flex items-center">
+          <div className="flex items-center text-sm">
             {model.createdAt && (
               <>
-                <CalendarDaysIcon className="size-5 mr-2 text-gray-400" />
+                <CalendarDaysIcon className="mr-2 size-5 text-gray-400" />
                 <JaqpotTimeAgo
                   date={new Date(model.createdAt as unknown as string)}
                 />

@@ -1,11 +1,15 @@
 import toast from 'react-hot-toast';
 import { NextResponse } from 'next/server';
 import { signOut } from '@/auth';
+import { ApiErrorCode, EMAIL_NOT_VERIFIED } from '@/app/api.error';
+import { ErrorCode } from 'intl-messageformat';
 
 export interface ApiResponse<T = any> {
   success: boolean;
   message?: string;
   data: T | null;
+  code?: ApiErrorCode;
+  statusCode?: number;
 }
 
 const defaultUnknownErrorMessage =
@@ -16,6 +20,47 @@ export function errorResponse(
   status: number = 500,
 ): NextResponse<ApiResponse> {
   return NextResponse.json({ success: false, message, data: null }, { status });
+}
+
+export async function getErrorMessageFromResponse(
+  res: Response,
+): Promise<string> {
+  let message;
+  let resBody;
+  try {
+    const resBody = await res.json();
+    switch (resBody.code) {
+      case EMAIL_NOT_VERIFIED:
+        message = 'User email is not verified, please verify your email';
+        break;
+      default:
+        message = undefined;
+    }
+  } catch (e) {
+    console.error('Could not parse json response');
+    return defaultUnknownErrorMessage;
+  }
+
+  if (message) return message;
+
+  return getMessageFromStatusCode(res.status);
+}
+
+function getMessageFromStatusCode(statusCode: number) {
+  switch (statusCode) {
+    case 401:
+      return 'You need to be authenticated to access this endpoint.';
+    case 403:
+      return 'You are not authorized to access this resource.';
+    default:
+      return defaultUnknownErrorMessage;
+  }
+}
+
+async function signoutUserIf401(status: number, code: any) {
+  if (status === 401 && code !== EMAIL_NOT_VERIFIED) {
+    await signOut();
+  }
 }
 
 export async function handleApiResponse(
@@ -29,19 +74,9 @@ export async function handleApiResponse(
     data = await res.text();
   }
 
-  let message;
   if (!res.ok) {
-    switch (res.status) {
-      case 401:
-        message = 'You are not authenticated. Please log in and try again.';
-        await signOut();
-        break;
-      case 403:
-        message = 'You are not authorized to access this resource.';
-        break;
-      default:
-        message = data?.message || defaultUnknownErrorMessage;
-    }
+    await signoutUserIf401(res.status, data?.code);
+    const message = data?.message ?? getMessageFromStatusCode(res.status);
     return errorResponse(message, res.status);
   }
 
