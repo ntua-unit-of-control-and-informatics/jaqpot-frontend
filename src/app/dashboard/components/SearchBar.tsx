@@ -55,6 +55,12 @@ export default function SearchBar() {
     ([url, query, page]) => fetchWithQueryParams(url, query, page),
   );
 
+  useEffect(() => {
+    if (apiResponse?.data?.content?.length === 0) {
+      toast('No results found', { duration: 2000 });
+    }
+  }, [apiResponse]);
+
   function onSelectionChange(modelId: Key | null) {
     if (modelId !== null) {
       router.push(`/dashboard/models/${modelId}`);
@@ -72,7 +78,7 @@ export default function SearchBar() {
   if (error) return;
 
   return (
-    <div className="flex-1 flex flex-row items-center">
+    <div className="flex flex-1 flex-row items-center">
       <Autocomplete
         aria-label="Search models"
         items={apiResponse?.data?.content || []}
@@ -80,7 +86,7 @@ export default function SearchBar() {
         placeholder="Search models"
         labelPlacement="outside"
         selectorIcon={isLoading && <></>}
-        className="flex-1 max-w-xl"
+        className="max-w-xl flex-1"
         disableSelectorIconRotation
         onKeyDown={onKeyDown}
         onInputChange={setQuery}
@@ -115,7 +121,7 @@ export default function SearchBar() {
           },
         }}
         startContent={
-          <MagnifyingGlassIcon className="min-w-5 size-6 text-gray-400" />
+          <MagnifyingGlassIcon className="size-6 min-w-5 text-gray-400" />
         }
       >
         {(item) => (
