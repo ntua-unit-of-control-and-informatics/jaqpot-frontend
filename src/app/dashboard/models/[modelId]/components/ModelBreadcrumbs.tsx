@@ -13,7 +13,7 @@ export default function ModelBreadcrumbs(props: { model: ModelDto }) {
         href={`/dashboard/models/${props.model.id}`}
         isDisabled={true}
       >
-        {props.model.id}
+        {props.model.name}
       </BreadcrumbItem>
     </Breadcrumbs>
   );

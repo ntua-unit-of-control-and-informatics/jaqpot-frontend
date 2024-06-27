@@ -17,6 +17,16 @@ import TimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 import { getErrorMessageFromResponse } from '@/app/util/response';
 
+export async function generateMetadata({
+  params,
+}: {
+  params: ModelPageParams;
+}): Promise<Metadata> {
+  const model = await retrieveModelOrLegacy(params.modelId);
+
+  return generateSharedMetadata(model?.name, model?.description);
+}
+
 export async function getLegacyModel(
   modelId: string,
 ): Promise<ModelDto | undefined> {
@@ -76,35 +86,33 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   return res.json();
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { modelId: string };
-}): Promise<Metadata> {
-  const model = await getModel(params.modelId);
-
-  return generateSharedMetadata(model?.name, model?.description);
+interface ModelPageParams {
+  modelId: string;
 }
 
-export default async function Page({
-  params,
-}: {
-  params: { modelId: string };
-}) {
+async function retrieveModelOrLegacy(modelId: string): Promise<ModelDto> {
   let model;
-  if (isNaN(Number(params.modelId))) {
+  console.log('retrieve', modelId);
+  if (isNaN(Number(modelId))) {
     // legacy id detected
-    model = await getLegacyModel(params.modelId);
+    model = await getLegacyModel(modelId);
     if (!model) {
+      console.log('ohhai');
       notFound();
     }
     redirect(`/dashboard/models/${model.id}/description`);
+  } else {
+    model = await getModel(modelId);
+    if (!model) {
+      console.log('ohhai2');
+      notFound();
+    }
   }
+  return model;
+}
 
-  model = await getModel(params.modelId);
-  if (!model) {
-    notFound();
-  }
+export default async function Page({ params }: { params: ModelPageParams }) {
+  const model = await retrieveModelOrLegacy(params.modelId);
 
   return (
     <div className="p-2 sm:p-0">
