@@ -66,17 +66,17 @@ export default function UserOrganizations() {
     userOrganizations &&
     userOrganizations.length > 0 && (
       <ul className="space-y-2 font-medium">
-        <div className="text-xs p-2 uppercase text-indigo-200 dark:text-white">
+        <div className="p-2 text-xs uppercase text-indigo-200 dark:text-white">
           Your organizations
         </div>
         {userOrganizations.map((organization, index) => (
           <li key={index}>
             <Link
               href={`/dashboard/organizations/${organization.name}`}
-              className="flex items-center p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group"
+              className="group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700"
             >
               <span
-                className={`rounded-lg ${backgroundColorRotation(index)} border-indigo-400 size-6 flex justify-center items-center text-white`}
+                className={`rounded-lg ${backgroundColorRotation(index)} flex size-6 items-center justify-center border-indigo-400 text-sm text-white`}
               >
                 {organization.name.substring(0, 1).toUpperCase()}
               </span>

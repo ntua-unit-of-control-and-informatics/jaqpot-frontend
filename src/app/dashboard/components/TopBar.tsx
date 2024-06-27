@@ -30,13 +30,13 @@ export default function TopBar() {
     useContext<SidebarContextType>(SidebarContext);
 
   return (
-    <div className="w-full px-4 sm:px-8 py-3 border-b border-b-gray-300 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px]">
-      <div className="flex flex-row gap-2 sm:gap-x-6 ">
+    <div className="w-full border-b border-b-gray-300 px-4 py-3 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px] sm:px-8">
+      <div className="flex flex-row gap-2 sm:gap-x-6">
         <div className={`hidden ${isCollapsed ? 'sm:flex' : ''} items-center`}>
           <Tooltip content="Open sidebar">
             <Button
               isIconOnly
-              className="bg-transparent justify-start"
+              className="justify-start bg-transparent"
               onClick={() => setIsCollapsed(!isCollapsed)}
             >
               <ArrowRightStartOnRectangleIcon className="size-6" />
@@ -45,23 +45,23 @@ export default function TopBar() {
         </div>
 
         <SearchBar />
-        <div className="flex gap-0 sm:gap-x-2 items-center">
+        <div className="flex items-center gap-0 sm:gap-x-2">
           <CreateMenu />
-          <Button variant="light" className="p-2 min-w-10">
+          <Button variant="light" className="min-w-10 p-2">
             <BellIcon className="size-6 text-gray-400" />
           </Button>
           <GithubLogo className="hidden sm:block" />
           <Button
             variant="light"
-            className="p-2 min-w-10"
+            className="min-w-10 p-2"
             onClick={() => document.body.classList.toggle('dark')}
           >
-            <MoonIcon className="size-6 text-violet-700 block dark:hidden" />
-            <SunIcon className="size-6 text-yellow-500  hidden dark:block" />
+            <MoonIcon className="block size-6 text-violet-700 dark:hidden" />
+            <SunIcon className="hidden size-6 text-yellow-500 dark:block" />
           </Button>
           {/*DIVIDER*/}
           <div
-            className="bg-gray-900 w-px h-6 bg-opacity-10"
+            className="h-6 w-px bg-gray-900 bg-opacity-10"
             aria-hidden="true"
           ></div>
           <UserAvatar session={session} />

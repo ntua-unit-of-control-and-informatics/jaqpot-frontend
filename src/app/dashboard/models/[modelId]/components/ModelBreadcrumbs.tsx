@@ -12,6 +12,9 @@ export default function ModelBreadcrumbs(props: { model: ModelDto }) {
       <BreadcrumbItem
         href={`/dashboard/models/${props.model.id}`}
         isDisabled={true}
+        classNames={{
+          item: 'whitespace-normal',
+        }}
       >
         {props.model.name}
       </BreadcrumbItem>
