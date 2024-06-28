@@ -1,7 +1,8 @@
 'use client';
 
-import { DatasetDto, ModelDto } from '@/app/api.types';
+import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
 import DynamicForm, {
+  DynamicFormFieldType,
   DynamicFormSchema,
 } from '@/app/dashboard/models/[modelId]/components/DynamicForm';
 import { useParams } from 'next/navigation';
@@ -46,7 +47,7 @@ export default function PredictTab({ model }: PredictTabProps) {
 
   const handleFormSubmit = async (formData: any) => {
     setIsLoading(true);
-    const res = await createPrediction(params.modelId, Object.values(formData));
+    const res = await createPrediction(params.modelId, [formData]);
     const { success, data, message }: ApiResponse<{ datasetId: string }> =
       await res.json();
     if (success) {
@@ -70,17 +71,32 @@ export default function PredictTab({ model }: PredictTabProps) {
     setIsLoading(false);
   };
 
+  function generateFieldTypeFromFeature(
+    independentFeature: FeatureDto,
+  ): DynamicFormFieldType {
+    switch (independentFeature.featureType) {
+      case 'INTEGER':
+      case 'FLOAT':
+        return 'number';
+      case 'CATEGORICAL':
+        return 'select';
+      case 'TEXT':
+      case 'SMILES':
+        return 'text';
+      default:
+        return 'number';
+    }
+  }
+
   function generatePredictionFormSchema(model: ModelDto): DynamicFormSchema[] {
+    console.log(model.independentFeatures);
     return model.independentFeatures.map((independentFeature) => {
       const dynamicFormSchema: DynamicFormSchema = {
         sectionTitle: '',
         fields: [
           {
-            type:
-              independentFeature.featureType === 'NUMERICAL'
-                ? 'text'
-                : 'select',
-            name: independentFeature.name,
+            type: generateFieldTypeFromFeature(independentFeature),
+            name: independentFeature.key,
             label: independentFeature.name,
             required: true,
             placeholder: 'Insert value...',

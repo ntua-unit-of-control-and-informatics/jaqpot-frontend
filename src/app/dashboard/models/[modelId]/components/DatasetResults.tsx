@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  DataEntryDto,
-  DatasetDto,
-  FeatureDto,
-  ModelDto,
-  ModelsResponseDto,
-} from '@/app/api.types';
-import { Spinner } from '@nextui-org/spinner';
-import Alert from '@/app/components/Alert';
+import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
 import {
   Table,
   TableBody,
@@ -18,7 +10,6 @@ import {
   TableRow,
 } from '@nextui-org/table';
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { ApiResponse } from '@/app/util/response';
 import useSWR, { Fetcher } from 'swr';
 import { CustomError } from '@/app/types/CustomError';
@@ -85,41 +76,37 @@ export default function DatasetResults({
   ));
 
   function generateTableRows() {
-    if (!dataset?.results) {
+    if (!dataset?.result) {
       return [];
     }
 
-    return dataset?.results?.map(
-      (result: DataEntryDto, resultsIndex: number) => {
-        const independentFeatureCellValues = model.independentFeatures.map(
-          (feature, independentFeatureIndex) => {
-            const cellValue = dataset.input[resultsIndex].values[
-              independentFeatureIndex
-            ] as string;
-            return cellValue;
-          },
-        );
+    return dataset?.result.map((result: any, resultIndex: number) => {
+      const independentFeatureCellValues = model.independentFeatures.map(
+        (feature, independentFeatureIndex) => {
+          const input = dataset.input[resultIndex] as any;
+          console.log(input[feature.key]);
+          return input[feature.key];
+        },
+      );
 
-        const dependentFeatureCellValues = model.dependentFeatures.map(
-          (feature, index) => {
-            const cellValue = (result.values[resultsIndex] as any)[
-              feature.name
-            ] as string;
-            return cellValue;
-          },
-        );
-        return (
-          <TableRow key={resultsIndex}>
-            {[
-              ...independentFeatureCellValues,
-              ...dependentFeatureCellValues,
-            ].map((value, index) => (
+      const dependentFeatureCellValues = model.dependentFeatures.map(
+        (feature, index) => {
+          console.log(feature.key);
+          console.log(result[feature.key]);
+          console.log(result[feature.key]);
+          return result[feature.key];
+        },
+      );
+      return (
+        <TableRow key={resultIndex}>
+          {[...independentFeatureCellValues, ...dependentFeatureCellValues].map(
+            (value, index) => (
               <TableCell key={index}>{value}</TableCell>
-            ))}
-          </TableRow>
-        );
-      },
-    );
+            ),
+          )}
+        </TableRow>
+      );
+    });
   }
 
   function showDatasetStatus() {
@@ -161,11 +148,11 @@ export default function DatasetResults({
         {showDatasetStatus()}
       </div>
       {!isLoaded && (
-        <div className="w-full flex flex-col gap-2">
+        <div className="flex w-full flex-col gap-2">
           <Skeleton className="h-3 w-3/5 rounded-lg" />
           <Skeleton className="h-3 w-4/5 rounded-lg" />
           <Skeleton className="h-3 w-2/5 rounded-lg" />
-          <Skeleton className="h-3 w-5/5 rounded-lg" />
+          <Skeleton className="w-5/5 h-3 rounded-lg" />
         </div>
       )}
       {isLoaded && dataset?.status === 'SUCCESS' && (
