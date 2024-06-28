@@ -84,16 +84,12 @@ export default function DatasetResults({
       const independentFeatureCellValues = model.independentFeatures.map(
         (feature, independentFeatureIndex) => {
           const input = dataset.input[resultIndex] as any;
-          console.log(input[feature.key]);
           return input[feature.key];
         },
       );
 
       const dependentFeatureCellValues = model.dependentFeatures.map(
         (feature, index) => {
-          console.log(feature.key);
-          console.log(result[feature.key]);
-          console.log(result[feature.key]);
           return result[feature.key];
         },
       );
