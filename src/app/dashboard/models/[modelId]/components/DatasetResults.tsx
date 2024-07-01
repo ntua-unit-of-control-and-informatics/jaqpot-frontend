@@ -72,7 +72,7 @@ export default function DatasetResults({
   const loadingState = isLoading ? 'loading' : 'idle';
 
   const tableHeaders = allFeatures.map((feature, index) => (
-    <TableColumn key={index}>{feature.label}</TableColumn>
+    <TableColumn key={index}>{feature.name}</TableColumn>
   ));
 
   function generateTableRows() {

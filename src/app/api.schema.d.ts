@@ -191,10 +191,10 @@ export interface components {
        */
       key: string;
       /**
-       * @description A label for the feature that will appear on top of the form field
+       * @description A name for the feature that will appear on top of the form field
        * @example A feature name
        */
-      label: string;
+      name: string;
       description?: string;
       /**
        * @example FLOAT

@@ -1,7 +1,7 @@
 import { FeatureDto, ModelDto } from '@/app/api.types';
 
 function generateCSVFromModel(independentFeatures: FeatureDto[]) {
-  return [...independentFeatures].map((feature) => feature.label).join(',');
+  return [...independentFeatures].map((feature) => feature.name).join(',');
 }
 
 export async function POST(request: Request) {

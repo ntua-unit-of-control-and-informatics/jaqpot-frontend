@@ -97,13 +97,13 @@ export default function PredictTab({ model }: PredictTabProps) {
           {
             type: generateFieldTypeFromFeature(independentFeature),
             name: independentFeature.key,
-            label: independentFeature.label,
+            label: independentFeature.name,
             required: true,
             placeholder: 'Insert value...',
             options: independentFeature.possibleValues?.map(
               (possibleValue) => ({
                 label: possibleValue,
-                value: independentFeature.label,
+                value: independentFeature.name,
               }),
             ),
           },
