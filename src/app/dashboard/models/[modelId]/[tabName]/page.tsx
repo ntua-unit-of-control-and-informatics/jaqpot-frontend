@@ -92,19 +92,16 @@ interface ModelPageParams {
 
 async function retrieveModelOrLegacy(modelId: string): Promise<ModelDto> {
   let model;
-  console.log('retrieve', modelId);
   if (isNaN(Number(modelId))) {
     // legacy id detected
     model = await getLegacyModel(modelId);
     if (!model) {
-      console.log('ohhai');
       notFound();
     }
     redirect(`/dashboard/models/${model.id}/description`);
   } else {
     model = await getModel(modelId);
     if (!model) {
-      console.log('ohhai2');
       notFound();
     }
   }

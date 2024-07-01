@@ -20,7 +20,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
 
         <Table aria-label="Independent features table">
           <TableHeader>
-            <TableColumn>Label</TableColumn>
+            <TableColumn>Name</TableColumn>
             <TableColumn>Description</TableColumn>
             <TableColumn>Type</TableColumn>
           </TableHeader>

@@ -89,7 +89,6 @@ export default function PredictTab({ model }: PredictTabProps) {
   }
 
   function generatePredictionFormSchema(model: ModelDto): DynamicFormSchema[] {
-    console.log(model.independentFeatures);
     return model.independentFeatures.map((independentFeature) => {
       const dynamicFormSchema: DynamicFormSchema = {
         sectionTitle: '',
