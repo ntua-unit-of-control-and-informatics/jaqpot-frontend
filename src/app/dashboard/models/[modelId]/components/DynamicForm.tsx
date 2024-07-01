@@ -109,22 +109,25 @@ export interface DynamicFormSchema {
   fields: DynamicFormField[];
 }
 
+export type DynamicFormFieldType =
+  | 'text'
+  | 'number'
+  | 'email'
+  | 'password'
+  | 'select'
+  | 'radio'
+  | 'checkbox'
+  | 'textarea'
+  | 'color'
+  | 'range'
+  | 'date'
+  | 'file'
+  | 'search';
+
 export interface DynamicFormField {
   name: string;
   label: string;
-  type:
-    | 'text'
-    | 'email'
-    | 'password'
-    | 'select'
-    | 'radio'
-    | 'checkbox'
-    | 'textarea'
-    | 'color'
-    | 'range'
-    | 'date'
-    | 'file'
-    | 'search';
+  type: DynamicFormFieldType;
   required: boolean;
   placeholder?: string;
   min?: number;
@@ -183,7 +186,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     }
   };
 
-  const renderField = (field: any) => {
+  const renderField = (field: DynamicFormField) => {
     switch (field.type) {
       case 'select':
         return (
@@ -194,7 +197,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             required={field.required}
           >
             {/*<SelectItem value="">Select...</SelectItem>*/}
-            {field.options.map((option: any, index: number) => (
+            {field.options!.map((option: any, index: number) => (
               // Send keys so the model can decide how to split the values
               <SelectItem key={index} value={option.key}>
                 {option.label}
@@ -205,7 +208,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
       case 'radio':
         return (
           <RadioGroup label="Select...">
-            {field.options.map((option: any, index: number) => (
+            {field.options!.map((option: any, index: number) => (
               <Radio
                 key={index}
                 type="radio"
@@ -241,7 +244,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
           />
         );
       default:
-        // Handle other HTML5 input types like date, email, etc.
+        // Handle other HTML5 input types like number, date, email, etc.
         return (
           <Input
             type={field.type}
@@ -258,7 +261,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-4 gap-6 mb-4">
+        <div className="mb-4 grid grid-cols-4 gap-6">
           {schema.map((section, sectionIndex) => (
             <div key={sectionIndex}>
               <h3>{section.sectionTitle}</h3>

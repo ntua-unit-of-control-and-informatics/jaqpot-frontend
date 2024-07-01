@@ -123,7 +123,7 @@ export interface components {
       /** @example A description of your model */
       description?: string;
       /** @enum {string} */
-      type: "SKLEARN" | "TORCH" | "R";
+      type: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR";
       /** @example 1.0.0 */
       jaqpotpyVersion: string;
       libraries: components["schemas"]["Library"][];
@@ -185,14 +185,22 @@ export interface components {
       meta?: {
         [key: string]: Record<string, never>;
       };
-      /** @example Feature Name */
-      name: string;
+      /**
+       * @description A key that must start with a letter, followed by any combination of letters, digits, hyphens, or underscores. For example, 'abc123', 'abc-test', or 'Abc_test'. It cannot start with a digit.
+       * @example feature-key
+       */
+      key: string;
+      /**
+       * @description A label for the feature that will appear on top of the form field
+       * @example A feature name
+       */
+      label: string;
       description?: string;
       /**
-       * @example NUMERICAL
+       * @example FLOAT
        * @enum {string}
        */
-      featureType: "NUMERICAL" | "CATEGORICAL";
+      featureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "TEXT";
       /**
        * @example DEPENDENT
        * @enum {string}
@@ -225,8 +233,13 @@ export interface components {
        */
       id?: number;
       type: components["schemas"]["DatasetType"];
-      input: components["schemas"]["DataEntry"][];
-      results?: components["schemas"]["DataEntry"][];
+      /**
+       * @example ARRAY
+       * @enum {string}
+       */
+      entryType: "ARRAY";
+      input: unknown[];
+      result?: unknown[];
       /** @enum {string} */
       status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
       failureReason?: string;
@@ -245,27 +258,12 @@ export interface components {
        * @description A base64 representation in CSV format of the input values.
        */
       inputFile: string;
-      results?: components["schemas"]["DataEntry"][];
+      values?: unknown[];
       /** @enum {string} */
       status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
       failureReason?: string;
       created_at?: Record<string, never>;
       updated_at?: Record<string, never>;
-    };
-    DataEntry: {
-      /**
-       * Format: int64
-       * @example 1
-       */
-      id?: number;
-      created_at?: Record<string, never>;
-      updated_at?: Record<string, never>;
-      /**
-       * @example ARRAY
-       * @enum {string}
-       */
-      type: "ARRAY";
-      values: unknown[];
     };
     Organization: {
       /** Format: int64 */
