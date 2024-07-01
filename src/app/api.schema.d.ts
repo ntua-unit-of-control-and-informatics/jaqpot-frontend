@@ -123,7 +123,7 @@ export interface components {
       /** @example A description of your model */
       description?: string;
       /** @enum {string} */
-      type: "SKLEARN" | "TORCH" | "R";
+      type: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR";
       /** @example 1.0.0 */
       jaqpotpyVersion: string;
       libraries: components["schemas"]["Library"][];
@@ -191,10 +191,10 @@ export interface components {
        */
       key: string;
       /**
-       * @description A name for the feature
+       * @description A label for the feature that will appear on top of the form field
        * @example A feature name
        */
-      name: string;
+      label: string;
       description?: string;
       /**
        * @example FLOAT
@@ -237,7 +237,7 @@ export interface components {
        * @example ARRAY
        * @enum {string}
        */
-      entryType?: "ARRAY";
+      entryType: "ARRAY";
       input: unknown[];
       result?: unknown[];
       /** @enum {string} */

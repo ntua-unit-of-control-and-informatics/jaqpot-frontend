@@ -1,15 +1,12 @@
 import { FeatureDto, ModelDto } from '@/app/api.types';
 
-function generateCSVFromModel(
-  independentFeatures: FeatureDto[],
-  dependentFeatures: FeatureDto[],
-) {
-  return [...independentFeatures].map((feature) => feature.name).join(',');
+function generateCSVFromModel(independentFeatures: FeatureDto[]) {
+  return [...independentFeatures].map((feature) => feature.label).join(',');
 }
 
 export async function POST(request: Request) {
   const { independentFeatures, dependentFeatures } = await request.json();
-  const csv = generateCSVFromModel(independentFeatures, dependentFeatures);
+  const csv = generateCSVFromModel(independentFeatures);
 
   const headers = new Headers();
   headers.append('Content-Disposition', 'attachment; filename="sample.csv"');
