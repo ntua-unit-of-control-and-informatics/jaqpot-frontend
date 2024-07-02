@@ -17,7 +17,7 @@ export default function Alert({ type, title, description }: AlertProps) {
     <>
       {type === 'info' && (
         <div
-          className="flex gap-3 p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400"
+          className="mb-4 flex gap-3 rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-600 dark:text-blue-400"
           role="alert"
         >
           <div className="flex-shrink-0">
@@ -30,7 +30,7 @@ export default function Alert({ type, title, description }: AlertProps) {
         </div>
       )}
       {type === 'danger' && (
-        <div className="flex gap-3 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400">
+        <div className="mb-4 flex gap-3 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-600 dark:text-red-400">
           <div className="flex-shrink-0">
             <XCircleIcon className="size-6" />
           </div>
@@ -42,7 +42,7 @@ export default function Alert({ type, title, description }: AlertProps) {
       )}
       {type === 'success' && (
         <div
-          className="flex gap-3 p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          className="mb-4 flex gap-3 rounded-lg bg-green-50 p-4 text-sm text-green-800 dark:bg-gray-600 dark:text-green-400"
           role="alert"
         >
           <div className="flex-shrink-0">
@@ -56,7 +56,7 @@ export default function Alert({ type, title, description }: AlertProps) {
       )}
       {type === 'warning' && (
         <div
-          className="flex gap-3 p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+          className="mb-4 flex gap-3 rounded-lg bg-amber-100 p-4 text-sm text-amber-800 dark:bg-gray-600 dark:text-yellow-300"
           role="alert"
         >
           <div className="flex-shrink-0">
