@@ -55,7 +55,7 @@ export default function UploadCSVForm({ onSubmit, model }: UploadCSVFormProps) {
     <>
       <form onSubmit={handleOnSubmit}>
         <div className="flex gap-5">
-          <div className="flex flex-col gap-2 ">
+          <div className="flex flex-col gap-2">
             <p className="text-tiny">Upload the input CSV</p>
             <input
               type="file"
@@ -72,7 +72,10 @@ export default function UploadCSVForm({ onSubmit, model }: UploadCSVFormProps) {
             </Button>
           </div>
           <div>
-            <Tooltip content="Download a sample CSV with the header columns prefilled for you">
+            <Tooltip
+              closeDelay={0}
+              content="Download a sample CSV with the header columns prefilled for you"
+            >
               <Button
                 color="default"
                 className="max-w-fit"
