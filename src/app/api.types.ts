@@ -12,6 +12,8 @@ export type ModelsResponseDto =
   operations['getModels']['responses']['200']['content']['application/json'];
 export type PartiallyUpdateModelRequestDto =
   operations['partiallyUpdateModel']['requestBody']['content']['application/json'];
+export type PartiallyUpdateFeatureRequestDto =
+  operations['partiallyUpdateModelFeature']['requestBody']['content']['application/json'];
 
 export type OrganizationInvitationsRequestDto =
   operations['createInvitations']['requestBody']['content']['application/json'];

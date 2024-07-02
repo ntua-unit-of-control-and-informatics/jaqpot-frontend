@@ -53,6 +53,13 @@ export interface paths {
     /** Partially update specific fields of a model */
     patch: operations["partiallyUpdateModel"];
   };
+  "/v1/models/{modelId}/features/{featureId}": {
+    /**
+     * Update a feature for a specific model
+     * @description Update the name, description, and feature type of an existing feature within a specific model
+     */
+    patch: operations["partiallyUpdateModelFeature"];
+  };
   "/v1/datasets/{id}": {
     /**
      * Get a Dataset
@@ -196,11 +203,7 @@ export interface components {
        */
       name: string;
       description?: string;
-      /**
-       * @example FLOAT
-       * @enum {string}
-       */
-      featureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "TEXT";
+      featureType: components["schemas"]["FeatureType"];
       /**
        * @example DEPENDENT
        * @enum {string}
@@ -221,6 +224,11 @@ export interface components {
        */
       updatedAt?: Record<string, never>;
     };
+    /**
+     * @example FLOAT
+     * @enum {string}
+     */
+    FeatureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "STRING" | "TEXT";
     /**
      * @example PREDICTION
      * @enum {string}
@@ -588,6 +596,59 @@ export interface operations {
         content: never;
       };
       /** @description Model not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Update a feature for a specific model
+   * @description Update the name, description, and feature type of an existing feature within a specific model
+   */
+  partiallyUpdateModelFeature: {
+    parameters: {
+      path: {
+        /** @description The ID of the model containing the feature */
+        modelId: number;
+        /** @description The ID of the feature to update */
+        featureId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /**
+           * @description A name for the feature that will appear on top of the form field
+           * @example Updated Feature Name
+           */
+          name: string;
+          /** @example An updated description for this feature */
+          description?: string;
+          featureType: components["schemas"]["FeatureType"];
+          possibleValues?: string[];
+        };
+      };
+    };
+    responses: {
+      /** @description Feature updated successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Feature"];
+        };
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+      /** @description Forbidden */
+      403: {
+        content: never;
+      };
+      /** @description Model or feature not found */
       404: {
         content: never;
       };

@@ -154,6 +154,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value, type, checked } = e.target;
+    console.log(name, value);
     setFormData({
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
@@ -196,12 +197,9 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             label="Select..."
             required={field.required}
           >
-            {/*<SelectItem value="">Select...</SelectItem>*/}
-            {field.options!.map((option: any, index: number) => (
+            {field.options!.map((option: DynamicFormOption, index: number) => (
               // Send keys so the model can decide how to split the values
-              <SelectItem key={index} value={option.key}>
-                {option.label}
-              </SelectItem>
+              <SelectItem key={option.label}>{option.label}</SelectItem>
             ))}
           </Select>
         );

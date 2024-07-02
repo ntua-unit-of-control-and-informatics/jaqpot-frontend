@@ -81,6 +81,7 @@ export default function PredictTab({ model }: PredictTabProps) {
       case 'CATEGORICAL':
         return 'select';
       case 'TEXT':
+      case 'STRING':
       case 'SMILES':
         return 'text';
       default:
@@ -102,7 +103,7 @@ export default function PredictTab({ model }: PredictTabProps) {
             options: independentFeature.possibleValues?.map(
               (possibleValue) => ({
                 label: possibleValue,
-                value: independentFeature.name,
+                value: possibleValue,
               }),
             ),
           },
