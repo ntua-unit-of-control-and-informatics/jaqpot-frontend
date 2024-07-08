@@ -28,13 +28,13 @@ function FeatureRowActions(props: {
     <>
       <Tooltip content="View" closeDelay={0}>
         <Button isIconOnly variant="light" onPress={props.onViewPress}>
-          <EyeIcon className="size-6" />
+          <EyeIcon className="size-6 text-gray-400" />
         </Button>
       </Tooltip>
       {props.canEdit && (
         <Tooltip content="Edit" closeDelay={0}>
           <Button isIconOnly variant="light" onPress={props.onEditPress}>
-            <PencilSquareIcon className="size-6" />
+            <PencilSquareIcon className="size-6 text-gray-400" />
           </Button>
         </Tooltip>
       )}
