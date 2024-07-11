@@ -11,7 +11,6 @@ import {
   DropdownTrigger,
 } from '@nextui-org/dropdown';
 import { Button } from '@nextui-org/button';
-import { redirect, useRouter } from 'next/navigation';
 import { User } from '@nextui-org/react';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import React from 'react';
@@ -24,13 +23,7 @@ interface MenuItem {
   onPress?: () => {};
 }
 
-async function logout() {
-  await fetch('/api/auth/logout').then(() => signOut());
-}
-
 export default function UserAvatar({ session }: { session: Session | null }) {
-  const router = useRouter();
-
   const unauthenticatedMenuItems: MenuItem[] = [
     {
       key: 'signin',
