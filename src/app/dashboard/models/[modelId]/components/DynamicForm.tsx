@@ -154,7 +154,6 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value, type, checked } = e.target;
-    console.log(name, value);
     setFormData({
       ...formData,
       [name]: type === 'checkbox' ? checked : value,

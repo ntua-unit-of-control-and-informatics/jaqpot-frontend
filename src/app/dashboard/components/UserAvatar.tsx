@@ -1,11 +1,8 @@
 'use client';
 
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import Image from 'next/image';
 import { Session } from 'next-auth';
-import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { signIn, signOut } from 'next-auth/react';
-import { classNames } from '@/app/util/classname';
 import { isAuthenticated } from '@/app/util/auth';
 import {
   Dropdown,
@@ -14,14 +11,21 @@ import {
   DropdownTrigger,
 } from '@nextui-org/dropdown';
 import { Button } from '@nextui-org/button';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { User } from '@nextui-org/react';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
+import React from 'react';
 
 interface MenuItem {
   key: string;
   label: string;
   href?: string;
+  external?: boolean;
   onPress?: () => {};
+}
+
+async function logout() {
+  await fetch('/api/auth/logout').then(() => signOut());
 }
 
 export default function UserAvatar({ session }: { session: Session | null }) {
@@ -48,8 +52,24 @@ export default function UserAvatar({ session }: { session: Session | null }) {
     },
     {
       key: 'signout',
-      onPress: () => signOut(),
+      onPress: async () => {
+        await signOut();
+        const logoutUrl = new URL(
+          `${process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/logout`,
+        );
+
+        logoutUrl.searchParams.set(
+          'client_id',
+          process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_ID!,
+        );
+        logoutUrl.searchParams.set(
+          'post_logout_redirect_uri',
+          window.location.href,
+        );
+        window.location.href = logoutUrl.href;
+      },
       label: 'Sign out',
+      external: true,
     },
   ];
 
@@ -91,6 +111,11 @@ export default function UserAvatar({ session }: { session: Session | null }) {
             className={item.key === 'logout' ? 'text-danger' : ''}
             href={item.href}
             onPress={item.onPress}
+            endContent={
+              item.external === true && (
+                <ArrowTopRightOnSquareIcon className="size-5" />
+              )
+            }
           >
             {item.label}
           </DropdownItem>
