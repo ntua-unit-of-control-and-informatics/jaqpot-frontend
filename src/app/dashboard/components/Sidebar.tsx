@@ -11,7 +11,7 @@ import {
   TableCellsIcon,
   XCircleIcon,
 } from '@heroicons/react/24/solid';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { ReactElement, useContext, useEffect, useState } from 'react';
 import { Session } from 'next-auth';
 import { usePathname } from 'next/navigation';
@@ -46,7 +46,7 @@ export default function Sidebar() {
     <li key={index}>
       <Link
         href={`/${href}`}
-        className={`flex items-center p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group ${pathname === `/${href}` ? 'bg-indigo-700' : ''}`}
+        className={`group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700 ${pathname === `/${href}` ? 'bg-indigo-700' : ''}`}
       >
         {icon}
 
@@ -84,12 +84,12 @@ export default function Sidebar() {
 
   const ModalOverlay = () => (
     <div
-      className={`flex justify-end items-start w-full p-4 md:hidden fixed top-0 right-0 bottom-0 left-0 bg-black/50 z-30`}
+      className={`fixed bottom-0 left-0 right-0 top-0 z-30 flex w-full items-start justify-end bg-black/50 p-4 md:hidden`}
       onClick={() => {
         setIsCollapsed(true);
       }}
     >
-      <XCircleIcon className="h-10 w-10 text-white cursor-pointer" />
+      <XCircleIcon className="h-10 w-10 cursor-pointer text-white" />
     </div>
   );
 
@@ -111,11 +111,11 @@ export default function Sidebar() {
       <button
         onClick={() => setIsCollapsed(false)}
         type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-gray-200 sm:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
         <span className="sr-only">Open sidebar</span>
         <svg
-          className="w-6 h-6"
+          className="h-6 w-6"
           aria-hidden="true"
           fill="currentColor"
           viewBox="0 0 20 20"
@@ -131,15 +131,15 @@ export default function Sidebar() {
 
       <aside
         id="default-sidebar"
-        className={`fixed flex top-0 left-0 z-40 w-72 h-screen bg-indigo-600 dark:bg-gray-900 transition-transform ${getCollapsableStateClassname()}`}
+        className={`fixed left-0 top-0 z-40 flex h-screen w-72 bg-indigo-600 transition-transform dark:bg-gray-900 ${getCollapsableStateClassname()}`}
         aria-label="Sidebar"
       >
-        <div className="flex flex-col h-full w-full">
-          <div className="flex px-4 py-4 items-center">
+        <div className="flex h-full w-full flex-col">
+          <div className="flex items-center px-4 py-4">
             <Tooltip content="Close sidebar">
               <Button
                 isIconOnly
-                className={'hidden sm:block bg-transparent text-white'}
+                className={'hidden bg-transparent text-white sm:block'}
                 onClick={() => {
                   setIsCollapsed(true);
                 }}
@@ -152,23 +152,23 @@ export default function Sidebar() {
           <div className="px-3 pb-4">
             <Link
               href={`/dashboard`}
-              className={`flex items-center p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 ${pathname === `/dashboard` ? 'bg-indigo-700' : ''} group`}
+              className={`flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700 ${pathname === `/dashboard` ? 'bg-indigo-700' : ''} group`}
             >
               <JLogo />
               <span className="ms-3">Jaqpot</span>
             </Link>
             <Link
               href={`/dashboard/explore`}
-              className={`flex items-center p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group`}
+              className={`group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700`}
             >
               <QueueListIcon className="size-6" />
 
               <span className="ms-3">Explore models</span>
             </Link>
           </div>
-          <nav className="px-3 pt-4 pb-4 overflow-y-auto">
+          <nav className="overflow-y-auto px-3 pb-4 pt-4">
             <ul className="space-y-2 font-medium">
-              <div className="text-xs p-2 uppercase text-indigo-200 dark:text-white">
+              <div className="p-2 text-xs uppercase text-indigo-200 dark:text-white">
                 Navigation
               </div>
               {navElements.map(({ href, name, icon, after }, index) =>
@@ -181,10 +181,10 @@ export default function Sidebar() {
                     await signIn('keycloak');
                   }}
                   type="submit"
-                  className="flex gap-x-3 w-full p-2 text-indigo-200 rounded-lg dark:text-white hover:bg-indigo-700 dark:hover:bg-gray-700 group"
+                  className="group flex w-full gap-x-3 rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700"
                 >
                   <svg
-                    className="flex-shrink-0 w-5 h-5 text-indigo-200 transition duration-75 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
+                    className="h-5 w-5 flex-shrink-0 text-indigo-200 transition duration-75 group-hover:text-white dark:text-gray-400 dark:group-hover:text-white"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -204,7 +204,7 @@ export default function Sidebar() {
             </ul>
           </nav>
 
-          <nav className="px-3 pt-4 pb-4 overflow-y-auto">
+          <nav className="overflow-y-auto px-3 pb-4 pt-4">
             <UserOrganizations />
           </nav>
         </div>

@@ -103,7 +103,6 @@ export default function FeatureEditModal({
 
   const handleChange = (e: { target: { name: string; value: any } }) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData({
       ...formData,
       [name]: value,
