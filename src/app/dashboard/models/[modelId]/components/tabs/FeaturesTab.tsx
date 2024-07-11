@@ -71,7 +71,11 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
             {model.independentFeatures.map((independentFeature, index) => (
               <TableRow key={index}>
                 <TableCell>{independentFeature.name}</TableCell>
-                <TableCell>{independentFeature.description}</TableCell>
+                <TableCell>
+                  <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
+                    {independentFeature.description}
+                  </div>
+                </TableCell>
                 <TableCell>{independentFeature.featureType}</TableCell>
                 <TableCell>
                   <FeatureRowActions

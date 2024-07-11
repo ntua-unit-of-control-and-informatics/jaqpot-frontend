@@ -114,7 +114,11 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
           >
             <TableCell>{item.name}</TableCell>
             <TableCell>{item.type}</TableCell>
-            <TableCell>{item.description}</TableCell>
+            <TableCell>
+              <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
+                {item.description}
+              </div>
+            </TableCell>
             <TableCell>{item.independentFeatures.length}</TableCell>
             <TableCell>{item.dependentFeatures.length}</TableCell>
             <TableCell>{item.visibility}</TableCell>
