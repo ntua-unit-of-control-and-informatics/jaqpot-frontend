@@ -1,4 +1,6 @@
 FROM node:18-alpine AS base
+# Add build argument
+ARG DEPLOYMENT_ENV=production
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -21,6 +23,8 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# This trick will deploy the correct .env file based on the DEPLOYMENT_ENV build argument
+COPY .env.${DEPLOYMENT_ENV} .env.production
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
