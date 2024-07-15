@@ -17,6 +17,7 @@ import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { Skeleton } from '@nextui-org/skeleton';
 import { Link } from '@nextui-org/link';
 import { Chip } from '@nextui-org/chip';
+import { getDatasetStatusNode } from '@/app/util/datasets';
 
 interface PredictionResultProps {
   datasetId: string;
@@ -107,26 +108,6 @@ export default function DatasetResults({
     });
   }
 
-  function showDatasetStatus() {
-    if (!dataset) {
-      return <></>;
-    } else if (dataset?.status === 'SUCCESS') {
-      return (
-        <Chip color="success" variant="flat">
-          Success
-        </Chip>
-      );
-    } else if (dataset?.status === 'FAILURE') {
-      return (
-        <Chip color="danger" variant="flat">
-          Failed
-        </Chip>
-      );
-    } else {
-      return <Chip color="primary">In progress</Chip>;
-    }
-  }
-
   const tableRows = generateTableRows();
 
   return (
@@ -136,14 +117,14 @@ export default function DatasetResults({
       </h2>
       <div>
         <Link
-          href={`/dashboard/models/${model.id}/datasets/${datasetId}`}
+          href={`/dashboard/models/${model.id}/results/${datasetId}`}
           isExternal
           showAnchorIcon
           className="mr-2"
         >
           ID {datasetId}
         </Link>
-        {showDatasetStatus()}
+        {getDatasetStatusNode(dataset)}
       </div>
       {!isLoaded && (
         <div className="flex w-full flex-col gap-2">
