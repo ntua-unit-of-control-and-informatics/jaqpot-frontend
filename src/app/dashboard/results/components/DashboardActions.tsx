@@ -14,8 +14,7 @@ const actionImgClassname = 'size-16 text-gray-400';
 const dashboardActionsList = [
   {
     title: 'Create a model',
-    description:
-      'Learn how to upload and deploy your ML models using our Python SDK',
+    description: 'Learn how to upload and deploy your ML models using our SDKs',
     img: <PencilSquareIcon className={actionImgClassname} />,
     href: '/dashboard/new/model',
   },
