@@ -70,8 +70,8 @@ export default function Sidebar() {
       icon: <CircleStackIcon className={iconClassName} />,
     },
     {
-      href: 'dashboard/datasets',
-      name: 'Your datasets',
+      href: 'dashboard/results',
+      name: 'Your results',
       icon: <TableCellsIcon className={iconClassName} />,
     },
     {
