@@ -17,3 +17,6 @@ export type PartiallyUpdateFeatureRequestDto =
 
 export type OrganizationInvitationsRequestDto =
   operations['createInvitations']['requestBody']['content']['application/json'];
+
+export type DatasetsResponseDto =
+  operations['getDatasets']['responses']['200']['content']['application/json'];

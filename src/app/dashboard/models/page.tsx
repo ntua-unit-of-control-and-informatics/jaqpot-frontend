@@ -13,16 +13,16 @@ export const metadata: Metadata = generateSharedMetadata(
   'Access all your created models and explore models shared within your organizations on the Jaqpot predictive modeling platform. Manage and utilize models seamlessly in one place',
 );
 
-export default function Dashboard() {
+export default function ModelsPage() {
   return (
     <div>
       <ModelsBreadcrumbs />
-      <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight mb-5">
+      <h2 className="mb-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
         Your models
       </h2>
       <ModelsTable modelsEndpoint="/api/user/models" />
 
-      <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight my-5">
+      <h2 className="my-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
         Shared with you
       </h2>
       <ModelsTable modelsEndpoint="/api/user/shared-models" />

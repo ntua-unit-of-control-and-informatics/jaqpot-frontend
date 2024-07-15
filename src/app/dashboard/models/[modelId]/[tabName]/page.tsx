@@ -3,17 +3,14 @@ import { ModelDto } from '@/app/api.types';
 import {
   BeakerIcon,
   UserIcon,
-  CalendarIcon,
   CalendarDaysIcon,
 } from '@heroicons/react/24/solid';
 import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
 import { notFound, redirect } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
 import ModelBreadcrumbs from '@/app/dashboard/models/[modelId]/components/ModelBreadcrumbs';
-import toast from 'react-hot-toast';
 import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
-import TimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 import { getErrorMessageFromResponse } from '@/app/util/response';
 

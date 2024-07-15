@@ -13,7 +13,6 @@ import {
 } from '@heroicons/react/24/solid';
 import { signIn, useSession } from 'next-auth/react';
 import { ReactElement, useContext, useEffect, useState } from 'react';
-import { Session } from 'next-auth';
 import { usePathname } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
 import { Button } from '@nextui-org/button';

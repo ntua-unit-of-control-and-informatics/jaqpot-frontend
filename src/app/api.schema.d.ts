@@ -60,6 +60,13 @@ export interface paths {
      */
     patch: operations["partiallyUpdateModelFeature"];
   };
+  "/v1/user/datasets": {
+    /**
+     * Get Datasets by User ID
+     * @description Retrieve all datasets associated with a specific user ID
+     */
+    get: operations["getDatasets"];
+  };
   "/v1/datasets/{id}": {
     /**
      * Get a Dataset
@@ -251,8 +258,13 @@ export interface components {
       /** @enum {string} */
       status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
       failureReason?: string;
-      created_at?: Record<string, never>;
-      updated_at?: Record<string, never>;
+      userId?: string;
+      /** Format: int64 */
+      modelId?: number;
+      executedAt?: Record<string, never>;
+      executionFinishedAt?: Record<string, never>;
+      createdAt?: Record<string, never>;
+      updatedAt?: Record<string, never>;
     };
     DatasetCSV: {
       /**
@@ -270,8 +282,12 @@ export interface components {
       /** @enum {string} */
       status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
       failureReason?: string;
-      created_at?: Record<string, never>;
-      updated_at?: Record<string, never>;
+      /** Format: int64 */
+      modelId?: number;
+      executedAt?: Record<string, never>;
+      executionFinishedAt?: Record<string, never>;
+      createdAt?: Record<string, never>;
+      updatedAt?: Record<string, never>;
     };
     Organization: {
       /** Format: int64 */
@@ -649,6 +665,36 @@ export interface operations {
         content: never;
       };
       /** @description Model or feature not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get Datasets by User ID
+   * @description Retrieve all datasets associated with a specific user ID
+   */
+  getDatasets: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["Dataset"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description User or datasets not found */
       404: {
         content: never;
       };
