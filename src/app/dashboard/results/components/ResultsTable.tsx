@@ -10,12 +10,7 @@ import {
   TableRow,
 } from '@nextui-org/table';
 import { Pagination } from '@nextui-org/pagination';
-import {
-  DatasetDto,
-  DatasetsResponseDto,
-  ModelDto,
-  ModelsResponseDto,
-} from '@/app/api.types';
+import { DatasetDto, DatasetsResponseDto } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
 import { Spinner } from '@nextui-org/spinner';
 import { useRouter } from 'next/navigation';
@@ -24,6 +19,7 @@ import { CustomError } from '@/app/types/CustomError';
 import { ApiResponse } from '@/app/util/response';
 import { Link } from '@nextui-org/link';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
+import { getDatasetStatusNode } from '@/app/util/datasets';
 
 const fetcher: Fetcher<ApiResponse<DatasetsResponseDto>, string> = async (
   url,
@@ -61,7 +57,7 @@ function useDatasetsPage(page: number) {
   };
 }
 
-export default function DatasetsTable() {
+export default function ResultsTable() {
   const router = useRouter();
   const [page, setPage] = useState(1);
 
@@ -73,7 +69,7 @@ export default function DatasetsTable() {
   if (isLoading) return <Spinner />;
   return (
     <Table
-      aria-label="Datasets table"
+      aria-label="Results table"
       bottomContent={
         data?.totalPages ?? 0 > 0 ? (
           <div className="flex w-full justify-center">
@@ -93,6 +89,7 @@ export default function DatasetsTable() {
       <TableHeader>
         <TableColumn key="id">ID</TableColumn>
         <TableColumn key="model">Model</TableColumn>
+        <TableColumn key="status">Status</TableColumn>
         <TableColumn key="input">Input</TableColumn>
         <TableColumn key="executedAt">Executed at</TableColumn>
       </TableHeader>
@@ -110,7 +107,7 @@ export default function DatasetsTable() {
             <TableCell>
               <Link
                 showAnchorIcon
-                href={`/dashboard/models/${item.modelId}/datasets/${item.id}`}
+                href={`/dashboard/models/${item.modelId}/results/${item.id}`}
               >
                 {item.id}
               </Link>
@@ -120,6 +117,7 @@ export default function DatasetsTable() {
                 {item.modelName}
               </Link>
             </TableCell>
+            <TableCell>{getDatasetStatusNode(item)}</TableCell>
             <TableCell>
               <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
                 {JSON.stringify(item.input)}
