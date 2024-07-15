@@ -261,6 +261,7 @@ export interface components {
       userId?: string;
       /** Format: int64 */
       modelId?: number;
+      modelName?: string;
       executedAt?: Record<string, never>;
       executionFinishedAt?: Record<string, never>;
       createdAt?: Record<string, never>;
@@ -284,6 +285,7 @@ export interface components {
       failureReason?: string;
       /** Format: int64 */
       modelId?: number;
+      modelName?: string;
       executedAt?: Record<string, never>;
       executionFinishedAt?: Record<string, never>;
       createdAt?: Record<string, never>;

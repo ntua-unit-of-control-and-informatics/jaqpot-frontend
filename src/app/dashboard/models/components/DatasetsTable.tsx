@@ -113,8 +113,8 @@ export default function DatasetsTable() {
               </Link>
             </TableCell>
             <TableCell>
-              <Link showAnchorIcon href={`/models/${item.modelId}`}>
-                {item.modelId}
+              <Link showAnchorIcon href={`/dashboard/models/${item.modelId}`}>
+                {item.modelName}
               </Link>
             </TableCell>
             <TableCell>
