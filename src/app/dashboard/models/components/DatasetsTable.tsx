@@ -108,7 +108,10 @@ export default function DatasetsTable() {
             className="cursor-pointer hover:bg-indigo-100"
           >
             <TableCell>
-              <Link showAnchorIcon href={`/datasets/${item.id}`}>
+              <Link
+                showAnchorIcon
+                href={`/dashboard/models/${item.modelId}/datasets/${item.id}`}
+              >
                 {item.id}
               </Link>
             </TableCell>
