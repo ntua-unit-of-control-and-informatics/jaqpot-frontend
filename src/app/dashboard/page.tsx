@@ -42,10 +42,10 @@ export default function Dashboard() {
           {/*  </div>*/}
           {/*</div>*/}
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
               Welcome to Jaqpot!
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="dark:text-400 mt-6 text-lg leading-8">
               Jaqpot is your all-in-one platform for creating, exploring, and
               deploying machine learning models. Whether you{"'"}re a data
               scientist, researcher, or developer, we{"'"}ve got the tools you
@@ -62,9 +62,10 @@ export default function Dashboard() {
                 Getting started
               </Button>
               <Link
+                color="foreground"
                 href="https://jaqpot.org"
                 isExternal
-                className="text-sm font-semibold leading-6 text-gray-900"
+                className="text-sm font-semibold leading-6"
               >
                 Learn more <ArrowLongRightIcon className="ml-1 size-4" />
               </Link>
