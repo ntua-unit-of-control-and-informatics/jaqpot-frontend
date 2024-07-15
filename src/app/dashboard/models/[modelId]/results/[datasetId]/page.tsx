@@ -6,7 +6,7 @@ import { generateSharedMetadata } from '@/app/shared.metadata';
 import ResultBreadcrumbs from '@/app/dashboard/models/[modelId]/results/[datasetId]/components/ResultBreadcrumbs';
 
 export const metadata: Metadata = generateSharedMetadata(
-  'Dataset',
+  'Result',
   'Explore datasets used as inputs for predictive models and view prediction results on the Jaqpot platform. Manage and analyze datasets seamlessly to improve model accuracy',
 );
 
