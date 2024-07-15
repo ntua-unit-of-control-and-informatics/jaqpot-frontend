@@ -1,6 +1,5 @@
 'use client';
 
-import Logo from '@/app/dashboard/components/Logo/Logo';
 import Link from 'next/link';
 
 import {
@@ -153,7 +152,7 @@ export default function Sidebar() {
               href={`/dashboard`}
               className={`flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700 ${pathname === `/dashboard` ? 'bg-indigo-700' : ''} group`}
             >
-              <JLogo />
+              <JLogo className="align-center flex size-6 items-center rounded-full bg-indigo-200 p-0.5" />
               <span className="ms-3">Jaqpot</span>
             </Link>
             <Link

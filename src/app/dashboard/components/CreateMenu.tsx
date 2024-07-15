@@ -14,6 +14,7 @@ import {
 } from '@nextui-org/dropdown';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
+import { Link } from '@nextui-org/link';
 
 export default function CreateMenu() {
   const router = useRouter();
@@ -26,9 +27,9 @@ export default function CreateMenu() {
     >
       <DropdownTrigger>
         <Button variant="light">
-          <PlusIcon className="w-6 h-6 text-gray-400" />
+          <PlusIcon className="h-6 w-6 text-gray-400" />
           <ChevronDownIcon
-            className="w-4 h-4 text-gray-400 ml-1"
+            className="ml-1 h-4 w-4 text-gray-400"
             aria-hidden="true"
           />
         </Button>
@@ -37,20 +38,20 @@ export default function CreateMenu() {
         <DropdownItem
           key="new-model"
           textValue="New Model"
-          onClick={() => router.push('/dashboard/new/model')}
+          href="/dashboard/new/model"
         >
           <div className="flex">
-            <CircleStackIcon className="size-6 mr-2" />
+            <CircleStackIcon className="mr-2 size-6" />
             New Model
           </div>
         </DropdownItem>
         <DropdownItem
           key="new-organization"
           textValue="New Organization"
-          onClick={() => router.push('/dashboard/new/organization')}
+          href="/dashboard/new/organization"
         >
           <div className="flex">
-            <BuildingOfficeIcon className="w-6 h-6 mr-2" />
+            <BuildingOfficeIcon className="mr-2 h-6 w-6" />
             New Organization
           </div>
         </DropdownItem>
