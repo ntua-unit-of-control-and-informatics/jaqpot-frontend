@@ -79,7 +79,12 @@ export default function UserAvatar({ session }: { session: Session | null }) {
             avatarProps={{
               size: 'sm',
               showFallback: true,
-              src: session?.user?.image || undefined,
+              src:
+                session?.user?.image ||
+                `https://api.dicebear.com/9.x/pixel-art/jpg?seed=${session?.user?.name?.replace(
+                  ' ',
+                  '',
+                )}`,
             }}
             name={session?.user?.name}
           />
