@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/solid';
 import React from 'react';
 import DashboardActions from '@/app/dashboard/results/components/DashboardActions';
+import { Divider } from '@nextui-org/divider';
 
 export const metadata: Metadata = generateSharedMetadata('Dashboard', '');
 
@@ -47,15 +48,15 @@ export default function Dashboard() {
             </h1>
             <p className="dark:text-400 mt-6 text-lg leading-8">
               Jaqpot is your all-in-one platform for creating, exploring, and
-              deploying machine learning models. Whether you{"'"}re a data
-              scientist, researcher, or developer, we{"'"}ve got the tools you
-              need to bring your models to life.
+              deploying machine learning models. Whether you{"'"}
+              re a data scientist, researcher, or developer, we{"'"}ve got the
+              tools you need to bring your models to life.
             </p>
+
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Button
                 color="primary"
                 as={Link}
-                showAnchorIcon
                 isExternal
                 href="https://jaqpot.org/docs"
               >
@@ -69,6 +70,29 @@ export default function Dashboard() {
               >
                 Learn more <ArrowLongRightIcon className="ml-1 size-4" />
               </Link>
+            </div>
+
+            <Divider className="my-8" />
+
+            <div className="sm:justify-center">
+              <div className="relative text-tiny leading-6">
+                Developed by the{' '}
+                <Link
+                  href="https://www.chemeng.ntua.gr/labs/control_lab/"
+                  isExternal
+                  className="text-tiny"
+                >
+                  Unit of Process Control and Informatics
+                </Link>{' '}
+                at the{' '}
+                <Link
+                  href="https://www.ntua.gr/en/"
+                  isExternal
+                  className="text-tiny"
+                >
+                  National Technical University of Athens
+                </Link>
+              </div>
             </div>
           </div>
         </div>
