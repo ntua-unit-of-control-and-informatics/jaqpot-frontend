@@ -12,7 +12,7 @@ export default function CustomErrorPage({
   description,
 }: CustomErrorPageProps) {
   return (
-    <div className="flex flex-col items-center justify-center text-center mt-5 p-5">
+    <div className="flex min-h-screen flex-col items-center justify-center p-5 text-center">
       <Image
         src="/sad-mascot.png" // Ensure this image is in your public folder
         alt="Sad Mascot"
@@ -20,8 +20,8 @@ export default function CustomErrorPage({
         height={200}
         className="mx-auto"
       />
-      <h1 className="text-4xl font-bold text-gray-800 mt-5">{title}</h1>
-      <p className="text-gray-600 mt-4 max-w-xl">{description}</p>
+      <h1 className="mt-5 text-4xl font-bold">{title}</h1>
+      <p className="mt-4 max-w-xl">{description}</p>
       <Button as={Link} color="primary" href="/dashboard" className="mt-10">
         Go to the Dashboard
       </Button>
