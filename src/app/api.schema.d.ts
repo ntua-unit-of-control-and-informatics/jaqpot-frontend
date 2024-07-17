@@ -27,6 +27,11 @@ export interface paths {
      * @description Retrieve a single model by its ID
      */
     get: operations["getModelById"];
+    /**
+     * Delete a Model
+     * @description Delete a single model by its ID
+     */
+    delete: operations["deleteModelById"];
   };
   "/v1/models/legacy/{id}": {
     /**
@@ -34,11 +39,6 @@ export interface paths {
      * @description Retrieve a single model by its ID
      */
     get: operations["getLegacyModelById"];
-    /**
-     * Delete a Model
-     * @description Delete a single model by its ID
-     */
-    delete: operations["deleteModelById"];
   };
   "/v1/models/{modelId}/predict": {
     /**
@@ -216,6 +216,11 @@ export interface components {
        * @example A feature name
        */
       name: string;
+      /**
+       * @description A name for the feature that will appear on top of the form field
+       * @example A feature unit
+       */
+      units?: string;
       description?: string;
       featureType: components["schemas"]["FeatureType"];
       /**
@@ -505,6 +510,28 @@ export interface operations {
     };
   };
   /**
+   * Delete a Model
+   * @description Delete a single model by its ID
+   */
+  deleteModelById: {
+    parameters: {
+      path: {
+        /** @description The ID of the model to delete */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description Model deleted successfully */
+      204: {
+        content: never;
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
    * Get a legacy model
    * @description Retrieve a single model by its ID
    */
@@ -521,28 +548,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["Model"];
         };
-      };
-      /** @description Model not found */
-      404: {
-        content: never;
-      };
-    };
-  };
-  /**
-   * Delete a Model
-   * @description Delete a single model by its ID
-   */
-  deleteModelById: {
-    parameters: {
-      path: {
-        /** @description The ID of the model to delete */
-        id: number;
-      };
-    };
-    responses: {
-      /** @description Model deleted successfully */
-      204: {
-        content: never;
       };
       /** @description Model not found */
       404: {
@@ -675,6 +680,11 @@ export interface operations {
            * @example Updated Feature Name
            */
           name: string;
+          /**
+           * @description The units that this feature is using
+           * @example mg/L
+           */
+          units?: string;
           /** @example An updated description for this feature */
           description?: string;
           featureType: components["schemas"]["FeatureType"];

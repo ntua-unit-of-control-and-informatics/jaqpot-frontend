@@ -63,6 +63,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
         <Table aria-label="Independent features table">
           <TableHeader>
             <TableColumn>Name</TableColumn>
+            <TableColumn>Units</TableColumn>
             <TableColumn>Description</TableColumn>
             <TableColumn>Type</TableColumn>
             <TableColumn>Actions</TableColumn>
@@ -71,6 +72,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
             {model.independentFeatures.map((independentFeature, index) => (
               <TableRow key={index}>
                 <TableCell>{independentFeature.name}</TableCell>
+                <TableCell>{independentFeature.units}</TableCell>
                 <TableCell>
                   <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
                     {independentFeature.description}
@@ -102,6 +104,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
         <Table aria-label="Dependent features table">
           <TableHeader>
             <TableColumn>Name</TableColumn>
+            <TableColumn>Units</TableColumn>
             <TableColumn>Description</TableColumn>
             <TableColumn>Type</TableColumn>
             <TableColumn>Actions</TableColumn>
@@ -110,6 +113,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
             {model.dependentFeatures.map((dependentFeature, index) => (
               <TableRow key={index}>
                 <TableCell>{dependentFeature.name}</TableCell>
+                <TableCell>{dependentFeature.units}</TableCell>
                 <TableCell>{dependentFeature.description}</TableCell>
                 <TableCell>{dependentFeature.featureType}</TableCell>
                 <TableCell>
