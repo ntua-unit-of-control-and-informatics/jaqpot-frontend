@@ -26,7 +26,7 @@ import toast from 'react-hot-toast';
 import { router } from 'next/client';
 import { ApiResponse } from '@/app/util/response';
 import { useRouter } from 'next/navigation';
-import ArrayInput from '@/app/dashboard/models/[modelId]/components/ArrayInput';
+import PossibleValueInput from '@/app/dashboard/models/[modelId]/components/PossibleValueInput';
 
 const possibleFeatureTypes: FeatureTypeValue[] = [
   {
@@ -138,8 +138,9 @@ export default function FeatureEditModal({
     <Modal
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      placement="top-center"
       className="p-5"
+      size="3xl"
+      scrollBehavior="inside"
     >
       <ModalContent>
         {(onClose) => (
@@ -208,7 +209,7 @@ export default function FeatureEditModal({
                 </div>
                 {formData.featureType === 'CATEGORICAL' && (
                   <div>
-                    <ArrayInput
+                    <PossibleValueInput
                       name="possibleValues"
                       label={'Possible values'}
                       defaultValue={feature.possibleValues ?? []}

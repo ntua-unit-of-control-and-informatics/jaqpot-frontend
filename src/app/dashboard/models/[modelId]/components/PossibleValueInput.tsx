@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
+import { FeaturePossibleValueDto } from '@/app/api.types';
 
 interface ArrayInputProps {
   name: string;
   label: string;
-  defaultValue: string[];
-  onChange: (e: { target: { name: string; value: string[] } }) => void;
+  defaultValue: FeaturePossibleValueDto[];
+  onChange: (e: {
+    target: { name: string; value: FeaturePossibleValueDto[] };
+  }) => void;
   isDisabled?: boolean;
 }
 
-export default function ArrayInput({
+export default function PossibleValueInput({
   name,
   label,
   defaultValue = [],
   onChange,
   isDisabled = false,
 }: ArrayInputProps) {
-  const [inputs, setInputs] = useState<string[]>(defaultValue);
+  const [inputs, setInputs] = useState<FeaturePossibleValueDto[]>(defaultValue);
 
   useEffect(() => {
     onChange({ target: { name, value: inputs } });
@@ -32,7 +35,7 @@ export default function ArrayInput({
 
   // Add a new input field
   const handleAddInput = () => {
-    setInputs([...inputs, '']);
+    setInputs([...inputs, { key: '', value: '' }]);
   };
 
   // Remove an input field
@@ -42,7 +45,13 @@ export default function ArrayInput({
   };
 
   if (isDisabled) {
-    return <Input isDisabled value={inputs.join(', ')} label={label} />;
+    return (
+      <Input
+        isDisabled
+        value={inputs.map((input) => input.value).join(', ')}
+        label={label}
+      />
+    );
   }
 
   return (
@@ -51,8 +60,14 @@ export default function ArrayInput({
         <div key={index} className="flex flex-row items-center gap-2 pb-3">
           <Input
             type="text"
-            label={`${label} ${index + 1}`}
-            value={input}
+            label={`${label}-key ${index + 1}`}
+            value={input.key}
+            onChange={(event) => handleInputChange(index, event)}
+          />
+          <Input
+            type="text"
+            label={`${label}-value ${index + 1}`}
+            value={input.value}
             onChange={(event) => handleInputChange(index, event)}
           />
           <Button type="button" onClick={() => handleRemoveInput(index)}>

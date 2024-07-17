@@ -137,7 +137,7 @@ export interface DynamicFormField {
 }
 
 export interface DynamicFormOption {
-  label: string;
+  key: string;
   value: string;
 }
 
@@ -198,7 +198,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
           >
             {field.options!.map((option: DynamicFormOption, index: number) => (
               // Send keys so the model can decide how to split the values
-              <SelectItem key={option.label}>{option.label}</SelectItem>
+              <SelectItem key={option.key}>{option.value}</SelectItem>
             ))}
           </Select>
         );

@@ -34,6 +34,11 @@ export interface paths {
      * @description Retrieve a single model by its ID
      */
     get: operations["getLegacyModelById"];
+    /**
+     * Delete a Model
+     * @description Delete a single model by its ID
+     */
+    delete: operations["deleteModelById"];
   };
   "/v1/models/{modelId}/predict": {
     /**
@@ -137,7 +142,7 @@ export interface components {
       /** @example A description of your model */
       description?: string;
       /** @enum {string} */
-      type: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR";
+      type: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX";
       /** @example 1.0.0 */
       jaqpotpyVersion: string;
       libraries: components["schemas"]["Library"][];
@@ -155,6 +160,8 @@ export interface components {
       creator?: components["schemas"]["User"];
       /** @description If the current user can edit the model */
       canEdit?: boolean;
+      /** @description If the current user can delete the model */
+      canDelete?: boolean;
       tags?: string;
       /**
        * Format: date-time
@@ -218,7 +225,7 @@ export interface components {
       featureDependency?: "DEPENDENT" | "INDEPENDENT";
       /** @example true */
       visible?: boolean;
-      possibleValues?: string[];
+      possibleValues?: components["schemas"]["FeaturePossibleValue"][];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -230,6 +237,12 @@ export interface components {
        * @example 2023-01-01T12:00:00Z
        */
       updatedAt?: Record<string, never>;
+    };
+    FeaturePossibleValue: {
+      /** @example value */
+      key: string;
+      /** @example value */
+      value: string;
     };
     /**
      * @example FLOAT
@@ -516,6 +529,28 @@ export interface operations {
     };
   };
   /**
+   * Delete a Model
+   * @description Delete a single model by its ID
+   */
+  deleteModelById: {
+    parameters: {
+      path: {
+        /** @description The ID of the model to delete */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description Model deleted successfully */
+      204: {
+        content: never;
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
    * Predict with Model
    * @description Submit a dataset for prediction using a specific model
    */
@@ -643,7 +678,7 @@ export interface operations {
           /** @example An updated description for this feature */
           description?: string;
           featureType: components["schemas"]["FeatureType"];
-          possibleValues?: string[];
+          possibleValues?: components["schemas"]["FeaturePossibleValue"][];
         };
       };
     };

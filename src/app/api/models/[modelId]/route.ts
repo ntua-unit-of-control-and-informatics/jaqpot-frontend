@@ -31,3 +31,29 @@ export async function GET(
 
   return handleApiResponse(res);
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { modelId: string } },
+) {
+  const session = await auth();
+  if (!isAuthenticated(session)) {
+    return errorResponse(
+      'You need to be authenticated to access this endpoint',
+      401,
+    );
+  }
+
+  const res = await fetch(
+    `${process.env.API_URL}/v1/models/${params.modelId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${session!.token}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+
+  return res;
+}

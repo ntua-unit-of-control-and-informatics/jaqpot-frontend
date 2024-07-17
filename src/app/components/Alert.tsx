@@ -10,14 +10,20 @@ interface AlertProps {
   type: 'info' | 'danger' | 'success' | 'warning';
   title: string;
   description: string;
+  className?: string;
 }
 
-export default function Alert({ type, title, description }: AlertProps) {
+export default function Alert({
+  type,
+  title,
+  description,
+  className,
+}: AlertProps) {
   return (
     <>
       {type === 'info' && (
         <div
-          className="mb-4 flex gap-3 rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-600 dark:text-blue-400"
+          className={`mb-4 flex gap-3 rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-600 dark:text-blue-400 ${className}`}
           role="alert"
         >
           <div className="flex-shrink-0">
@@ -30,7 +36,9 @@ export default function Alert({ type, title, description }: AlertProps) {
         </div>
       )}
       {type === 'danger' && (
-        <div className="mb-4 flex gap-3 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-600 dark:text-red-400">
+        <div
+          className={`mb-4 flex gap-3 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-600 dark:text-red-400 ${className}`}
+        >
           <div className="flex-shrink-0">
             <XCircleIcon className="size-6" />
           </div>
@@ -42,7 +50,7 @@ export default function Alert({ type, title, description }: AlertProps) {
       )}
       {type === 'success' && (
         <div
-          className="mb-4 flex gap-3 rounded-lg bg-green-50 p-4 text-sm text-green-800 dark:bg-gray-600 dark:text-green-400"
+          className={`mb-4 flex gap-3 rounded-lg bg-green-50 p-4 text-sm text-green-800 dark:bg-gray-600 dark:text-green-400 ${className}`}
           role="alert"
         >
           <div className="flex-shrink-0">
@@ -56,7 +64,7 @@ export default function Alert({ type, title, description }: AlertProps) {
       )}
       {type === 'warning' && (
         <div
-          className="mb-4 flex gap-3 rounded-lg bg-amber-100 p-4 text-sm text-amber-800 dark:bg-gray-600 dark:text-yellow-300"
+          className={`mb-4 flex gap-3 rounded-lg bg-amber-100 p-4 text-sm text-amber-800 dark:bg-gray-600 dark:text-yellow-300 ${className}`}
           role="alert"
         >
           <div className="flex-shrink-0">
