@@ -34,6 +34,11 @@ export interface paths {
      * @description Retrieve a single model by its ID
      */
     get: operations["getLegacyModelById"];
+    /**
+     * Delete a Model
+     * @description Delete a single model by its ID
+     */
+    delete: operations["deleteModelById"];
   };
   "/v1/models/{modelId}/predict": {
     /**
@@ -155,6 +160,8 @@ export interface components {
       creator?: components["schemas"]["User"];
       /** @description If the current user can edit the model */
       canEdit?: boolean;
+      /** @description If the current user can delete the model */
+      canDelete?: boolean;
       tags?: string;
       /**
        * Format: date-time
@@ -514,6 +521,28 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["Model"];
         };
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Delete a Model
+   * @description Delete a single model by its ID
+   */
+  deleteModelById: {
+    parameters: {
+      path: {
+        /** @description The ID of the model to delete */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description Model deleted successfully */
+      204: {
+        content: never;
       };
       /** @description Model not found */
       404: {
