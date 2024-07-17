@@ -2,6 +2,7 @@
 
 import Markdown from 'react-markdown';
 import { ReactNode } from 'react';
+import { Link } from '@nextui-org/link';
 
 export default function MarkdownRenderer({
   children,
@@ -11,17 +12,24 @@ export default function MarkdownRenderer({
   return (
     <Markdown
       components={{
+        a(props: any) {
+          return (
+            <Link href={props.href} isExternal>
+              {props.children}
+            </Link>
+          );
+        },
         p({ children }) {
           return <p className="mb-2 last:mb-0">{children}</p>;
         },
         h1({ children }) {
-          return <h1 className="text-bold text-2xl mb-4">{children}</h1>;
+          return <h1 className="text-bold mb-4 text-3xl">{children}</h1>;
         },
         h2({ children }) {
-          return <h2 className="text-bold text-xl mb-3">{children}</h2>;
+          return <h2 className="text-bold mb-3 text-2xl">{children}</h2>;
         },
         h3({ children }) {
-          return <h3 className="text-bold text-lg mb-2">{children}</h3>;
+          return <h3 className="text-bold mb-2 text-xl">{children}</h3>;
         },
         ol({ children }) {
           return <ol className="list-inside list-decimal">{children}</ol>;
