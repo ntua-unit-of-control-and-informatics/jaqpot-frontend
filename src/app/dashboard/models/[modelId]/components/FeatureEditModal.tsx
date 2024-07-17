@@ -97,6 +97,7 @@ export default function FeatureEditModal({
   >({
     key: feature.key,
     name: feature.name,
+    units: feature.units,
     description: feature.description ?? '',
     featureType: feature.featureType,
   });
@@ -177,6 +178,16 @@ export default function FeatureEditModal({
                     onChange={handleChange}
                     isDisabled={!isEdit}
                     isRequired
+                  ></Input>
+                </div>
+                <div>
+                  <Input
+                    label="Units"
+                    name="units"
+                    placeholder="Enter the feature units"
+                    value={formData.units}
+                    onChange={handleChange}
+                    isDisabled={!isEdit}
                   ></Input>
                 </div>
                 <div>
