@@ -2,6 +2,8 @@ import { components, operations } from './api.schema.d';
 
 export type ModelDto = components['schemas']['Model'];
 export type FeatureDto = components['schemas']['Feature'];
+export type FeaturePossibleValueDto =
+  components['schemas']['FeaturePossibleValue'];
 export type DatasetDto = components['schemas']['Dataset'];
 export type DatasetCSVDto = components['schemas']['DatasetCSV'];
 export type OrganizationDto = components['schemas']['Organization'];
