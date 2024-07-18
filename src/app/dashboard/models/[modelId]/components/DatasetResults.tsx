@@ -88,6 +88,13 @@ export default function DatasetResults({
           if (!input || !input[feature.key]) {
             return 'N/A';
           }
+          if (feature.featureType === 'CATEGORICAL') {
+            return (
+              feature.possibleValues?.find(
+                (possibleValue) => possibleValue.key === input[feature.key],
+              )?.value ?? input[feature.key]
+            );
+          }
           return input[feature.key];
         });
 
