@@ -12,7 +12,7 @@ export default function CustomErrorPage({
   description,
 }: CustomErrorPageProps) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-5 text-center">
+    <div className="flex min-h-screen flex-col items-center p-5 text-center">
       <Image
         src="/sad-mascot.png" // Ensure this image is in your public folder
         alt="Sad Mascot"
