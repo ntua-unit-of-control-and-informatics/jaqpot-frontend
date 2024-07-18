@@ -1,4 +1,4 @@
-[![Node.js CI](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/node.js.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/node.js.yml) [![Publish Docker image](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/publish.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/publish.yml)
+[![Build CI](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend/actions/workflows/build.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend/actions/workflows/build.yml) [![Publish Docker image](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/publish.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/publish.yml)
 
 # Jaqpot Frontend V2
 
