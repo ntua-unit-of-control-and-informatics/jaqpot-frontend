@@ -35,12 +35,13 @@ export default function UserAvatar({ session }: { session: Session | null }) {
   const authenticatedMenuItems: MenuItem[] = [
     {
       key: 'account',
-      href: '/account',
+      href: `${process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_ISSUER}/account`,
       label: 'Account',
+      external: true,
     },
     {
       key: 'settings',
-      href: '/settings',
+      href: '/dashboard/settings',
       label: 'Settings',
     },
     {
