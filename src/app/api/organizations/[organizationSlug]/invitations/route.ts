@@ -9,7 +9,7 @@ import { isAuthenticated } from '@/app/util/auth';
 
 export async function GET(
   request: Request,
-  { params }: { params: { orgName: string } },
+  { params }: { params: { organizationSlug: string } },
 ): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
@@ -20,7 +20,7 @@ export async function GET(
   }
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${params.orgName}/invitations`,
+    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/invitations`,
     {
       headers: {
         Authorization: `Bearer ${session!.token}`,
@@ -34,7 +34,7 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { orgName: string } },
+  { params }: { params: { organizationSlug: string } },
 ): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
@@ -47,7 +47,7 @@ export async function POST(
   const invitationsRequestDto = await request.json();
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${params.orgName}/invitations`,
+    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/invitations`,
     {
       method: 'POST',
       headers: {

@@ -17,6 +17,6 @@ export const organizationVisibilitySelectValues: OrganizationVisibilityValue[] =
       key: 'PRIVATE',
       label: 'Private',
       description:
-        'Only you and the organization member can see this organization',
+        'Only you and the organization members can view this organization',
     },
   ];
