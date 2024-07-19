@@ -42,10 +42,10 @@ export default function NewOrganization() {
       const { success, message, data }: ApiResponse = await res.json();
       if (success) {
         // notify user organizations to reload user organizations
-        mutate('/api/user/organizations');
         toast.success(
           'Organization created successfully! You will be redirected to the organization’s page shortly.',
         );
+        await mutate('/api/user/organizations');
         router.push(`/dashboard/organizations/${data.organizationName}`);
       } else {
         toast.error(`Organization could not be created: ${message}`);
@@ -59,13 +59,13 @@ export default function NewOrganization() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="mx-auto max-w-3xl">
       <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
         Create Organization
       </h2>
 
       <form onSubmit={handleSubmit} className="mt-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <Input
             type="text"
             name="name"

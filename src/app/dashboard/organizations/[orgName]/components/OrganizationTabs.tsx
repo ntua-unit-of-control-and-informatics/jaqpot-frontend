@@ -4,6 +4,7 @@ import { Tab, Tabs } from '@nextui-org/tabs';
 import { OrganizationDto } from '@/app/api.types';
 import OrganizationEditTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationEditTab';
 import OrganizationInvitationsTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationInvitationsTab';
+import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
 
 interface OrganizationTabsProps {
   organization: OrganizationDto;
@@ -27,7 +28,7 @@ export default function OrganizationTabs({
       }}
     >
       <Tab key="description" title="Description">
-        {organization.description}
+        <MarkdownRenderer>{organization.description}</MarkdownRenderer>
       </Tab>
       {organization.canEdit && (
         <Tab key="invitations" title="Invitations">

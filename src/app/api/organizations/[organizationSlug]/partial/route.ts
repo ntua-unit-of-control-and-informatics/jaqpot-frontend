@@ -1,17 +1,15 @@
 import { auth } from '@/auth';
-import { DatasetDto } from '@/app/api.types';
 import {
   ApiResponse,
   errorResponse,
   handleApiResponse,
 } from '@/app/util/response';
-import { redirect } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
 import { NextResponse } from 'next/server';
 
-export async function PUT(
+export async function PATCH(
   request: Request,
-  { params }: { params: { orgName: string; invitationId: string } },
+  { params }: { params: { organizationSlug: string } },
 ): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
@@ -21,17 +19,16 @@ export async function PUT(
     );
   }
 
-  const organizationInvitationDto = await request.json();
-
+  const data = await request.json();
   const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${params.orgName}/invitations/${params.invitationId}`,
+    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/partial`,
     {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         Authorization: `Bearer ${session!.token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(organizationInvitationDto),
+      body: JSON.stringify(data),
     },
   );
 
