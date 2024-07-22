@@ -4,6 +4,7 @@ import {
   BeakerIcon,
   UserIcon,
   CalendarDaysIcon,
+  BuildingOfficeIcon,
 } from '@heroicons/react/24/solid';
 import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
 import { notFound, redirect } from 'next/navigation';
@@ -13,6 +14,9 @@ import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 import { getErrorMessageFromResponse } from '@/app/util/response';
+import { Link } from '@nextui-org/link';
+import React from 'react';
+import { Tooltip } from '@nextui-org/tooltip';
 
 export async function generateMetadata({
   params,
@@ -143,6 +147,26 @@ export default async function Page({ params }: { params: ModelPageParams }) {
                 />
               </>
             )}
+          </div>
+          <div className="flex items-center text-sm text-gray-400">
+            {model.associatedOrganization &&
+              model.associatedOrganization.visibility === 'PUBLIC' && (
+                <>
+                  <Tooltip
+                    content="This model was developed under the auspices of this project/organization."
+                    closeDelay={0}
+                  >
+                    <BuildingOfficeIcon className="mr-2 size-5" />
+                  </Tooltip>
+                  <Link
+                    color="foreground"
+                    href={`/dashboard/organizations/${model.associatedOrganization.name}`}
+                    className="font-medium"
+                  >
+                    @{model.associatedOrganization.name}
+                  </Link>
+                </>
+              )}
           </div>
         </div>
       </div>
