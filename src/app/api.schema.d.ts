@@ -80,8 +80,8 @@ export interface paths {
     get: operations["getDatasetById"];
   };
   "/v1/organizations": {
-    /** Get all organizations */
-    get: operations["getAllOrganizations"];
+    /** Get all organizations for a specific user */
+    get: operations["getAllOrganizationsForUser"];
     /** Create a new organization */
     post: operations["createOrganization"];
   };
@@ -89,9 +89,9 @@ export interface paths {
     /** Get all user organizations */
     get: operations["getAllOrganizationsByUser"];
   };
-  "/v1/organizations/{id}": {
-    /** Update an existing organization */
-    put: operations["updateOrganization"];
+  "/v1/organizations/{id}/partial": {
+    /** Partially update an existing organization */
+    patch: operations["partialUpdateOrganization"];
   };
   "/v1/organizations/{name}": {
     /** Get organization by name */
@@ -108,6 +108,13 @@ export interface paths {
      * @description This endpoint allows an organization admin to create new invitations for users.
      */
     post: operations["createInvitations"];
+  };
+  "/v1/organizations/{orgName}/associated-models": {
+    /**
+     * Get all models associated with an organization
+     * @description This endpoint allows users to retrieve all models associated with a specific organization.
+     */
+    get: operations["getAllAssociatedModels"];
   };
   "/v1/organizations/{name}/invitations/{uuid}": {
     /**
@@ -162,6 +169,7 @@ export interface components {
       canEdit?: boolean;
       /** @description If the current user can delete the model */
       canDelete?: boolean;
+      associatedOrganization?: components["schemas"]["Organization"];
       tags?: string;
       /**
        * Format: date-time
@@ -315,16 +323,14 @@ export interface components {
       /** @example my-awesome-org */
       name: string;
       creatorId?: string;
+      visibility: components["schemas"]["OrganizationVisibility"];
       /** @example An awesome organization for managing models. */
       description?: string;
       userIds?: string[];
-      models?: components["schemas"]["Model"][];
       /** @example contact@my-awesome-org.com */
       contactEmail: string;
       /** @example +1234567890 */
       contactPhone?: string;
-      /** @enum {string} */
-      visibility: "PUBLIC" | "PRIVATE";
       /** @example http://www.my-awesome-org.com */
       website?: string;
       /** @example 123 Organization St., City, Country */
@@ -334,6 +340,8 @@ export interface components {
       created_at?: Record<string, never>;
       updated_at?: Record<string, never>;
     };
+    /** @enum {string} */
+    OrganizationVisibility: "PUBLIC" | "PRIVATE";
     OrganizationInvitation: {
       /**
        * Format: uuid
@@ -639,6 +647,8 @@ export interface operations {
           description?: string;
           visibility: components["schemas"]["ModelVisibility"];
           organizationIds?: number[];
+          /** Format: int64 */
+          associatedOrganizationId?: number;
         };
       };
     };
@@ -771,8 +781,8 @@ export interface operations {
       };
     };
   };
-  /** Get all organizations */
-  getAllOrganizations: {
+  /** Get all organizations for a specific user */
+  getAllOrganizationsForUser: {
     responses: {
       /** @description Successful response */
       200: {
@@ -807,8 +817,8 @@ export interface operations {
       };
     };
   };
-  /** Update an existing organization */
-  updateOrganization: {
+  /** Partially update an existing organization */
+  partialUpdateOrganization: {
     parameters: {
       path: {
         id: number;
@@ -816,7 +826,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Organization"];
+        "application/json": {
+          name: string;
+          description?: string;
+          /** Format: email */
+          contactEmail: string;
+          visibility: components["schemas"]["OrganizationVisibility"];
+        };
       };
     };
     responses: {
@@ -932,6 +948,54 @@ export interface operations {
       /** @description Too many requests, rate limit exceeded */
       429: {
         content: never;
+      };
+    };
+  };
+  /**
+   * Get all models associated with an organization
+   * @description This endpoint allows users to retrieve all models associated with a specific organization.
+   */
+  getAllAssociatedModels: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+      path: {
+        /** @description Name of the organization */
+        orgName: string;
+      };
+    };
+    responses: {
+      /** @description Models retrieved successfully */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["Model"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Bad request, invalid input */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Unauthorized, only authenticated users can access this endpoint */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Organization not found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
       };
     };
   };

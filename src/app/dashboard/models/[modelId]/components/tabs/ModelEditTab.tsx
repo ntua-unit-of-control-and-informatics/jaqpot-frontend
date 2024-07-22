@@ -86,6 +86,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
     visibility: model.visibility,
     description: model.description ?? '',
     organizationIds,
+    associatedOrganizationId: model.associatedOrganization?.id,
   });
 
   const [organizations, setOrganizations] = useState<Set<string>>(
@@ -217,6 +218,23 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
                 className="max-w-xs"
                 // @ts-ignore
                 onSelectionChange={handleOrganizationsChange}
+              >
+                {allOrganizations.map((org) => (
+                  <SelectItem key={org.id!.toString()}>{org.name}</SelectItem>
+                ))}
+              </Select>
+            </div>
+          )}
+
+          {allOrganizations && (
+            <div>
+              <Select
+                selectedKeys={formData.associatedOrganizationId?.toString()}
+                name="associatedOrganizationId"
+                label="Associated Organization"
+                description="This field is optional and it shows the organization or project within which the model was developed. You will see this information on the model's detail page, with the organization's name being clickable. By clicking on the name, you can visit the organization's page to learn more about it and see other models associated with the same organization."
+                className="max-w-xl"
+                onChange={handleChange}
               >
                 {allOrganizations.map((org) => (
                   <SelectItem key={org.id!.toString()}>{org.name}</SelectItem>
