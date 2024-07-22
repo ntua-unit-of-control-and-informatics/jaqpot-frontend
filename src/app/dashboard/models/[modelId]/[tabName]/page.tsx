@@ -149,23 +149,24 @@ export default async function Page({ params }: { params: ModelPageParams }) {
             )}
           </div>
           <div className="flex items-center text-sm text-gray-400">
-            {model.associatedOrganization && (
-              <>
-                <Tooltip
-                  content="This model was developed under the auspices of this project/organization."
-                  closeDelay={0}
-                >
-                  <BuildingOfficeIcon className="mr-2 size-5" />
-                </Tooltip>
-                <Link
-                  color="foreground"
-                  href={`/dashboard/organizations/${model.associatedOrganization.name}`}
-                  className="font-medium"
-                >
-                  @{model.associatedOrganization.name}
-                </Link>
-              </>
-            )}
+            {model.associatedOrganization &&
+              model.associatedOrganization.visibility === 'PUBLIC' && (
+                <>
+                  <Tooltip
+                    content="This model was developed under the auspices of this project/organization."
+                    closeDelay={0}
+                  >
+                    <BuildingOfficeIcon className="mr-2 size-5" />
+                  </Tooltip>
+                  <Link
+                    color="foreground"
+                    href={`/dashboard/organizations/${model.associatedOrganization.name}`}
+                    className="font-medium"
+                  >
+                    @{model.associatedOrganization.name}
+                  </Link>
+                </>
+              )}
           </div>
         </div>
       </div>
