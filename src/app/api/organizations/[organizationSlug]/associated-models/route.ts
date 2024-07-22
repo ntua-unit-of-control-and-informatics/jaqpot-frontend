@@ -11,19 +11,17 @@ export async function GET(
   request: Request,
   { params }: { params: { organizationSlug: string } },
 ): Promise<NextResponse<ApiResponse>> {
+  const authorizationHeader: Record<string, string> = {};
   const session = await auth();
-  if (!isAuthenticated(session)) {
-    return errorResponse(
-      'You need to be authenticated to access this endpoint',
-      401,
-    );
+  if (isAuthenticated(session)) {
+    authorizationHeader['Authorization'] = `Bearer ${session!.token}`;
   }
 
   const res = await fetch(
     `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/associated-models`,
     {
       headers: {
-        Authorization: `Bearer ${session!.token}`,
+        ...authorizationHeader,
         'Content-Type': 'application/json',
       },
     },
