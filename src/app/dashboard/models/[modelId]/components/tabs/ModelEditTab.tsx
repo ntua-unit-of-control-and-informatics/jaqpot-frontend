@@ -67,7 +67,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
   ];
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: allOrganizations, error } = useSWR(
+  const { data: allOrganizationsForUser, error } = useSWR(
     `/api/organizations`,
     orgFetcher,
   );
@@ -208,7 +208,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
             </Select>
           </div>
 
-          {formData.visibility === 'ORG_SHARED' && allOrganizations && (
+          {formData.visibility === 'ORG_SHARED' && allOrganizationsForUser && (
             <div>
               <Select
                 defaultSelectedKeys={organizations}
@@ -219,14 +219,14 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
                 // @ts-ignore
                 onSelectionChange={handleOrganizationsChange}
               >
-                {allOrganizations.map((org) => (
+                {allOrganizationsForUser.map((org) => (
                   <SelectItem key={org.id!.toString()}>{org.name}</SelectItem>
                 ))}
               </Select>
             </div>
           )}
 
-          {allOrganizations && (
+          {allOrganizationsForUser && (
             <div>
               <Select
                 selectedKeys={formData.associatedOrganizationId?.toString()}
@@ -236,7 +236,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
                 className="max-w-xl"
                 onChange={handleChange}
               >
-                {allOrganizations.map((org) => (
+                {allOrganizationsForUser.map((org) => (
                   <SelectItem key={org.id!.toString()}>{org.name}</SelectItem>
                 ))}
               </Select>
