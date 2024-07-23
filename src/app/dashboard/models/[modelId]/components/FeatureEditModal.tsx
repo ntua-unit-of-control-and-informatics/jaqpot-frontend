@@ -222,7 +222,7 @@ export default function FeatureEditModal({
                   <div>
                     <PossibleValueInput
                       name="possibleValues"
-                      label={'Possible values'}
+                      label="Possible values"
                       defaultValue={feature.possibleValues ?? []}
                       onChange={handleChange}
                       isDisabled={!isEdit}

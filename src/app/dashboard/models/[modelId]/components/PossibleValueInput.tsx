@@ -29,7 +29,10 @@ export default function PossibleValueInput({
   // Handle change in input fields
   const handleInputChange = (index: number, event: React.ChangeEvent<any>) => {
     const newInputs = [...inputs];
-    newInputs[index] = event.target.value;
+    newInputs[index] = {
+      ...newInputs[index],
+      [event.target.name]: event.target.value,
+    };
     setInputs(newInputs);
   };
 
@@ -60,13 +63,15 @@ export default function PossibleValueInput({
         <div key={index} className="flex flex-row items-center gap-2 pb-3">
           <Input
             type="text"
-            label={`${label}-key ${index + 1}`}
+            label={`${label} ${index + 1} key`}
+            name="key"
             value={input.key}
             onChange={(event) => handleInputChange(index, event)}
           />
           <Input
             type="text"
-            label={`${label}-value ${index + 1}`}
+            label={`${label} ${index + 1} value`}
+            name="value"
             value={input.value}
             onChange={(event) => handleInputChange(index, event)}
           />
