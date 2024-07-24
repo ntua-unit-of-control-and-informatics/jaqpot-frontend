@@ -1,4 +1,4 @@
-import { FeatureDto, ModelDto } from '@/app/api.types';
+import { FeatureDto } from '@/app/api.types';
 
 function generateCSVFromModel(independentFeatures: FeatureDto[]) {
   return [...independentFeatures].map((feature) => feature.name).join(',');

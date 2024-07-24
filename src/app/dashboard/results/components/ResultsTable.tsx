@@ -19,7 +19,7 @@ import { CustomError } from '@/app/types/CustomError';
 import { ApiResponse } from '@/app/util/response';
 import { Link } from '@nextui-org/link';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
-import { getDatasetStatusNode } from '@/app/util/datasets';
+import { getDatasetStatusNode } from '@/app/util/dataset';
 import { SortDescriptor } from '@react-types/shared/src/collections';
 import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
 

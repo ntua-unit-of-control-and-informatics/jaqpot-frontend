@@ -19,6 +19,7 @@ import { CustomError } from '@/app/types/CustomError';
 import { ApiResponse } from '@/app/util/response';
 import { SortDescriptor } from '@react-types/shared/src/collections';
 import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
+import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 
 const fetcher: Fetcher<ApiResponse<ModelsResponseDto>, string> = async (
   url,
@@ -125,6 +126,9 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
         <TableColumn key="visibility" allowsSorting>
           Visibility
         </TableColumn>
+        <TableColumn key="createdAt" allowsSorting>
+          Created at
+        </TableColumn>
       </TableHeader>
       <TableBody
         items={data?.content ?? []}
@@ -148,6 +152,11 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
             <TableCell>{item.independentFeatures.length}</TableCell>
             <TableCell>{item.dependentFeatures.length}</TableCell>
             <TableCell>{item.visibility}</TableCell>
+            <TableCell>
+              <JaqpotTimeAgo
+                date={new Date(item.createdAt as unknown as string)}
+              />
+            </TableCell>
           </TableRow>
         )}
       </TableBody>
