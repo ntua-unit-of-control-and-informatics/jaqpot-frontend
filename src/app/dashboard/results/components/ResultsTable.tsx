@@ -20,6 +20,8 @@ import { ApiResponse } from '@/app/util/response';
 import { Link } from '@nextui-org/link';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
 import { getDatasetStatusNode } from '@/app/util/datasets';
+import { SortDescriptor } from '@react-types/shared/src/collections';
+import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
 
 const fetcher: Fetcher<ApiResponse<DatasetsResponseDto>, string> = async (
   url,
@@ -38,12 +40,14 @@ const fetcher: Fetcher<ApiResponse<DatasetsResponseDto>, string> = async (
   return res.json();
 };
 
-function useDatasetsPage(page: number) {
+function useDatasetsPage(page: number, sort: string[]) {
+  const queryParams = new URLSearchParams({ page: page.toString() });
+  sort.forEach((s) => queryParams.append('sort', s));
   const {
     data: apiResponse,
     error,
     isLoading,
-  } = useSWR(`/api/user/datasets?page=${page}`, fetcher);
+  } = useSWR(`/api/user/datasets?${queryParams}`, fetcher);
 
   let data;
   if (apiResponse?.success) {
@@ -60,8 +64,17 @@ function useDatasetsPage(page: number) {
 export default function ResultsTable() {
   const router = useRouter();
   const [page, setPage] = useState(1);
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>();
+  const [sort, setSort] = useState<string[]>([]);
 
-  const { data, isLoading, error } = useDatasetsPage(page - 1);
+  const { data, isLoading, error } = useDatasetsPage(page - 1, sort);
+
+  async function onSortChange({ column, direction }: SortDescriptor) {
+    setSortDescriptor({ column, direction });
+    setSort([
+      `${column}${SORT_DELIMITER}${convertSortDirection(direction ?? '')}`,
+    ]);
+  }
 
   const loadingState = isLoading ? 'loading' : 'idle';
 
@@ -70,6 +83,8 @@ export default function ResultsTable() {
   return (
     <Table
       aria-label="Results table"
+      sortDescriptor={sortDescriptor}
+      onSortChange={onSortChange}
       bottomContent={
         data?.totalPages ?? 0 > 0 ? (
           <div className="flex w-full justify-center">
@@ -87,11 +102,19 @@ export default function ResultsTable() {
       }
     >
       <TableHeader>
-        <TableColumn key="id">ID</TableColumn>
-        <TableColumn key="model">Model</TableColumn>
-        <TableColumn key="status">Status</TableColumn>
+        <TableColumn key="id" allowsSorting>
+          ID
+        </TableColumn>
+        <TableColumn key="model" allowsSorting>
+          Model
+        </TableColumn>
+        <TableColumn key="status" allowsSorting>
+          Status
+        </TableColumn>
         <TableColumn key="input">Input</TableColumn>
-        <TableColumn key="executedAt">Executed at</TableColumn>
+        <TableColumn key="executedAt" allowsSorting>
+          Executed at
+        </TableColumn>
       </TableHeader>
       <TableBody
         items={data?.content ?? []}

@@ -6,6 +6,7 @@ import {
   handleApiResponse,
 } from '@/app/util/response';
 import { isAuthenticated } from '@/app/util/auth';
+import { generatePaginationAndSortingSearchParams } from '@/app/util/sort';
 
 const PAGE_SIZE = '10';
 
@@ -18,19 +19,18 @@ export async function GET(
     authorizationHeader['Authorization'] = `Bearer ${session!.token}`;
   }
 
-  const searchParams = request.nextUrl.searchParams;
-  const page = searchParams.get('page') || '0';
-  const size = PAGE_SIZE;
-  const hasQuery = searchParams.has('query');
+  const hasQuery = request.nextUrl.searchParams.has('query');
   if (!hasQuery) {
     return errorResponse(
       'You need to provide a search query to search for models',
     );
   }
-  const query = searchParams.get('query')!;
+  const query = request.nextUrl.searchParams.get('query')!;
+  const searchParams = generatePaginationAndSortingSearchParams(request);
+  searchParams.append('query', query);
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/models/search?${new URLSearchParams({ page, size, query })}`,
+    `${process.env.API_URL}/v1/models/search?${searchParams}`,
     {
       headers: {
         ...authorizationHeader,
