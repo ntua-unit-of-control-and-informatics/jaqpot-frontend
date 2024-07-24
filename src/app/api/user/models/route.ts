@@ -20,7 +20,6 @@ export async function GET(
   }
 
   const searchParams = generatePaginationAndSortingSearchParams(request);
-  console.log('ohhai', searchParams.toString());
 
   const res = await fetch(
     `${process.env.API_URL}/v1/user/models?${searchParams.toString()}`,

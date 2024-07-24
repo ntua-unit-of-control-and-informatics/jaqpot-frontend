@@ -17,7 +17,12 @@ import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { Skeleton } from '@nextui-org/skeleton';
 import { Link } from '@nextui-org/link';
 import { Chip } from '@nextui-org/chip';
-import { getDatasetStatusNode } from '@/app/util/datasets';
+import {
+  getDatasetStatusNode,
+  generateResultTableRow,
+} from '@/app/util/dataset';
+import { Button } from '@nextui-org/button';
+import { ArrowDownTrayIcon } from '@heroicons/react/24/solid';
 
 interface PredictionResultProps {
   datasetId: string;
@@ -64,6 +69,31 @@ export default function DatasetResults({
     }
   }, [dataset]);
 
+  function downloadResultsCSV(model: ModelDto) {
+    fetch(`/api/datasets/export`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        independentFeatures: model.independentFeatures,
+        dependentFeatures: model.dependentFeatures,
+        dataset,
+      }),
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `result-${dataset!.id}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      })
+      .catch((error) => console.error('Error:', error));
+  }
+
   if (error) return <SWRClientFetchError error={error} />;
 
   const isLoaded =
@@ -82,34 +112,18 @@ export default function DatasetResults({
     }
 
     return dataset?.result.map((result: any, resultIndex: number) => {
-      const independentFeatureCellValues: string[] =
-        model.independentFeatures.map((feature, independentFeatureIndex) => {
-          const input = dataset.input[resultIndex] as any;
-          if (!input || !input[feature.key]) {
-            return 'N/A';
-          }
-          if (feature.featureType === 'CATEGORICAL') {
-            return (
-              feature.possibleValues?.find(
-                (possibleValue) => possibleValue.key === input[feature.key],
-              )?.value ?? input[feature.key]
-            );
-          }
-          return input[feature.key];
-        });
-
-      const dependentFeatureCellValues = model.dependentFeatures.map(
-        (feature, index) => {
-          return result[feature.key];
-        },
+      const resultTableData = generateResultTableRow(
+        model.independentFeatures,
+        model.dependentFeatures,
+        dataset,
+        resultIndex,
+        result,
       );
       return (
         <TableRow key={resultIndex}>
-          {[...independentFeatureCellValues, ...dependentFeatureCellValues].map(
-            (value, index) => (
-              <TableCell key={index}>{value}</TableCell>
-            ),
-          )}
+          {resultTableData.map((value, index) => (
+            <TableCell key={index}>{value}</TableCell>
+          ))}
         </TableRow>
       );
     });
@@ -142,10 +156,22 @@ export default function DatasetResults({
         </div>
       )}
       {isLoaded && dataset?.status === 'SUCCESS' && (
-        <Table aria-label="Prediction table">
-          <TableHeader>{tableHeaders}</TableHeader>
-          <TableBody loadingState={loadingState}>{tableRows}</TableBody>
-        </Table>
+        <>
+          <div>
+            <Button
+              color="primary"
+              startContent={<ArrowDownTrayIcon className="size-6" />}
+              className="mb-2"
+              onPress={() => downloadResultsCSV(model)}
+            >
+              Export CSV
+            </Button>
+          </div>
+          <Table aria-label="Prediction table" className="mb-6">
+            <TableHeader>{tableHeaders}</TableHeader>
+            <TableBody loadingState={loadingState}>{tableRows}</TableBody>
+          </Table>
+        </>
       )}
     </div>
   );
