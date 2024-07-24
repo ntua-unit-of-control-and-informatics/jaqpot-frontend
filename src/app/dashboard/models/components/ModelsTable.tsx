@@ -17,6 +17,8 @@ import { useRouter } from 'next/navigation';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { CustomError } from '@/app/types/CustomError';
 import { ApiResponse } from '@/app/util/response';
+import { SortDescriptor } from '@react-types/shared/src/collections';
+import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
 
 const fetcher: Fetcher<ApiResponse<ModelsResponseDto>, string> = async (
   url,
@@ -35,12 +37,15 @@ const fetcher: Fetcher<ApiResponse<ModelsResponseDto>, string> = async (
   return res.json();
 };
 
-function useModelsPage(page: number, modelsEndpoint: string) {
+function useModelsPage(page: number, sort: string[], modelsEndpoint: string) {
+  const queryParams = new URLSearchParams({ page: page.toString() });
+  sort.forEach((s) => queryParams.append('sort', s));
+
   const {
     data: apiResponse,
     error,
     isLoading,
-  } = useSWR(`${modelsEndpoint}?page=${page}`, fetcher);
+  } = useSWR(`${modelsEndpoint}?${queryParams.toString()}`, fetcher);
 
   let data;
   if (apiResponse?.success) {
@@ -61,16 +66,31 @@ interface ModelsTableProps {
 export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
   const router = useRouter();
   const [page, setPage] = useState(1);
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>();
+  const [sort, setSort] = useState<string[]>([]);
 
-  const { data, isLoading, error } = useModelsPage(page - 1, modelsEndpoint);
+  const { data, isLoading, error } = useModelsPage(
+    page - 1,
+    sort,
+    modelsEndpoint,
+  );
 
   const loadingState = isLoading ? 'loading' : 'idle';
+
+  async function onSortChange({ column, direction }: SortDescriptor) {
+    setSortDescriptor({ column, direction });
+    setSort([
+      `${column}${SORT_DELIMITER}${convertSortDirection(direction ?? '')}`,
+    ]);
+  }
 
   if (error) return <SWRClientFetchError error={error} />;
   if (isLoading) return <Spinner />;
   return (
     <Table
       aria-label="Models table"
+      sortDescriptor={sortDescriptor}
+      onSortChange={onSortChange}
       bottomContent={
         data?.totalPages ?? 0 > 0 ? (
           <div className="flex w-full justify-center">
@@ -88,8 +108,12 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
       }
     >
       <TableHeader>
-        <TableColumn key="name">Name</TableColumn>
-        <TableColumn key="type">Type</TableColumn>
+        <TableColumn key="name" allowsSorting>
+          Name
+        </TableColumn>
+        <TableColumn key="type" allowsSorting>
+          Type
+        </TableColumn>
         <TableColumn key="description">Description</TableColumn>
         <TableColumn key="independentLength">
           Independent Features length
@@ -98,7 +122,9 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
           Dependent Features length
         </TableColumn>
 
-        <TableColumn key="visibility">Visibility</TableColumn>
+        <TableColumn key="visibility" allowsSorting>
+          Visibility
+        </TableColumn>
       </TableHeader>
       <TableBody
         items={data?.content ?? []}

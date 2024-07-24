@@ -417,6 +417,7 @@ export interface operations {
       query?: {
         page?: number;
         size?: number;
+        sort?: string[];
       };
     };
     responses: {
@@ -445,6 +446,7 @@ export interface operations {
         query: string;
         page?: number;
         size?: number;
+        sort?: string[];
       };
     };
     responses: {
@@ -472,6 +474,7 @@ export interface operations {
       query?: {
         page?: number;
         size?: number;
+        sort?: string[];
       };
     };
     responses: {
@@ -736,6 +739,7 @@ export interface operations {
       query?: {
         page?: number;
         size?: number;
+        sort?: string[];
       };
     };
     responses: {
@@ -960,6 +964,7 @@ export interface operations {
       query?: {
         page?: number;
         size?: number;
+        sort?: string[];
       };
       path: {
         /** @description Name of the organization */

@@ -6,8 +6,7 @@ import {
   handleApiResponse,
 } from '@/app/util/response';
 import { isAuthenticated } from '@/app/util/auth';
-
-const PAGE_SIZE = '10';
+import { generatePaginationAndSortingSearchParams } from '@/app/util/sort';
 
 export async function GET(
   request: NextRequest,
@@ -20,12 +19,11 @@ export async function GET(
     );
   }
 
-  const searchParams = request.nextUrl.searchParams;
-  const page = searchParams.get('page') || '0';
-  const size = PAGE_SIZE;
+  const searchParams = generatePaginationAndSortingSearchParams(request);
+  console.log('ohhai', searchParams.toString());
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/user/models?${new URLSearchParams({ page, size })}`,
+    `${process.env.API_URL}/v1/user/models?${searchParams.toString()}`,
     {
       headers: {
         Authorization: `Bearer ${session!.token}`,
