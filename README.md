@@ -1,8 +1,8 @@
-[![Build CI](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend/actions/workflows/build.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend/actions/workflows/build.yml) [![Publish Docker image](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/publish.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2/actions/workflows/publish.yml)
+[![Build CI](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend/actions/workflows/build.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend/actions/workflows/build.yml) [![Publish Docker image](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend/actions/workflows/publish.yml/badge.svg)](https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend/actions/workflows/publish.yml)
 
-# Jaqpot Frontend V2
+# Jaqpot Frontend
 
-This repository contains the source code for Jaqpot Frontend V2, a modern web application built using Next.js. It leverages NextAuth for robust authentication mechanisms, providing a secure and efficient way to manage user sessions and access control. The app is designed to interface with the Jaqpot API, facilitating advanced model management and prediction functionalities.
+This repository contains the source code for Jaqpot Frontend, a modern web application built using Next.js. It leverages NextAuth for robust authentication mechanisms, providing a secure and efficient way to manage user sessions and access control. The app is designed to interface with the Jaqpot API, facilitating advanced model management and prediction functionalities.
 
 ## Features
 
@@ -21,8 +21,8 @@ Before you begin, ensure you have the following installed:
 Clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend-v2.git
-cd jaqpot-frontend-v2
+git clone https://github.com/ntua-unit-of-control-and-informatics/jaqpot-frontend.git
+cd jaqpot-frontend
 npm install  # or yarn install
 ```
 
