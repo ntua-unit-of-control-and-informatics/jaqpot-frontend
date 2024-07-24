@@ -1,7 +1,8 @@
 'use client';
 
 import { formatDistance } from 'date-fns';
+import { getUserFriendlyDate } from '@/app/util/date';
 
 export default function JaqpotTimeAgo({ date }: { date: Date }) {
-  return <div>{formatDistance(date, new Date(), { addSuffix: true })}</div>;
+  return <div>{getUserFriendlyDate(date)}</div>;
 }
