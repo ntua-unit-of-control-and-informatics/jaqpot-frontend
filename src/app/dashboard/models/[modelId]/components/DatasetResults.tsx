@@ -132,7 +132,7 @@ export default function DatasetResults({
   const tableRows = generateTableRows();
 
   return (
-    <div className="mt-5 flex flex-col gap-4">
+    <div className="mb-20 mt-5 flex flex-col gap-4">
       <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
         Result
       </h2>
