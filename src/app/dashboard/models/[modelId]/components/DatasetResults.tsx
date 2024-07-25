@@ -22,7 +22,8 @@ import {
   generateResultTableRow,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
-import { ArrowDownTrayIcon } from '@heroicons/react/24/solid';
+import { ArrowDownTrayIcon, BugAntIcon } from '@heroicons/react/24/solid';
+import { Accordion, AccordionItem } from '@nextui-org/accordion';
 
 interface PredictionResultProps {
   datasetId: string;
@@ -133,6 +134,26 @@ export default function DatasetResults({
 
   return (
     <div className="mb-20 mt-5 flex flex-col gap-4">
+      <div className="max-w-xl">
+        {dataset?.status === 'FAILURE' && model.canEdit && (
+          <Accordion>
+            <AccordionItem
+              key="1"
+              aria-label="Accordion 1"
+              subtitle="You can only see this if you are a nerd"
+              title="Data for nerds"
+              startContent={<BugAntIcon className="size-6" />}
+            >
+              <p className="text-sm">
+                legacy prediction service: {model.legacyPredictionService}
+              </p>
+              <p className="text-sm">
+                Failure reason: {dataset?.failureReason}
+              </p>
+            </AccordionItem>
+          </Accordion>
+        )}
+      </div>
       <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
         Result
       </h2>
