@@ -1,14 +1,8 @@
 'use client';
 
-import {
-  DatasetDto,
-  OrganizationDto,
-  OrganizationInvitationDto,
-  PartiallyUpdateModelRequestDto,
-} from '@/app/api.types';
-import React, { useState } from 'react';
-import { organizationVisibilitySelectValues } from '@/app/types/organization-select.types';
-import { PlusIcon } from '@heroicons/react/24/solid';
+import { OrganizationDto, OrganizationInvitationDto } from '@/app/api.types';
+import React from 'react';
+import { ArrowPathIcon, EyeIcon, PlusIcon } from '@heroicons/react/24/solid';
 import InviteUsersButton from '@/app/dashboard/organizations/[orgName]/components/tabs/InviteUsersButton';
 import {
   Table,
@@ -23,6 +17,10 @@ import useSWR, { Fetcher } from 'swr';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { ApiResponse } from '@/app/util/response';
 import { CustomError } from '@/app/types/CustomError';
+import { getUserFriendlyDate } from '@/app/util/date';
+import { Button } from '@nextui-org/button';
+import { Tooltip } from '@nextui-org/tooltip';
+import toast from 'react-hot-toast';
 
 interface OrganizationInvitationsTabProps {
   organization: OrganizationDto;
@@ -40,6 +38,10 @@ const columns = [
   {
     key: 'expirationDate',
     label: 'Expiration date',
+  },
+  {
+    key: 'actions',
+    label: 'Actions',
   },
 ];
 
@@ -76,12 +78,28 @@ export default function OrganizationInvitationsTab({
     apiResponse?.data?.map((invitation, index) => {
       return {
         ...invitation,
-        expirationDate: new Date(
-          invitation.expirationDate as unknown as string,
-        ).toLocaleDateString(),
+        expirationDate: getUserFriendlyDate(
+          new Date(invitation.expirationDate as unknown as string),
+        ),
         key: index,
       };
     }) ?? [];
+
+  async function resendEmail(item: any) {
+    const res = await fetch(
+      `/api/organizations/${organization.id}/invitations/${item.id}/resend`,
+      {
+        method: 'POST',
+      },
+    );
+
+    const { success, data, message }: ApiResponse = await res.json();
+    if (success) {
+      toast.success(`Invitation email resent successfully`);
+    } else {
+      toast.error(`Error resending invitation email:  ${message}`);
+    }
+  }
 
   return (
     <div>
@@ -95,9 +113,25 @@ export default function OrganizationInvitationsTab({
         <TableBody items={tableRows} emptyContent={'No rows to display.'}>
           {(item) => (
             <TableRow key={item.key}>
-              {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-              )}
+              {(columnKey) => {
+                if (columnKey === 'actions') {
+                  return (
+                    <TableCell>
+                      <Tooltip content="Resend email" closeDelay={0}>
+                        <Button
+                          isIconOnly
+                          variant="light"
+                          onPress={() => resendEmail(item)}
+                        >
+                          <ArrowPathIcon className="size-6 text-gray-400" />
+                        </Button>
+                      </Tooltip>
+                    </TableCell>
+                  );
+                } else {
+                  return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
+                }
+              }}
             </TableRow>
           )}
         </TableBody>
