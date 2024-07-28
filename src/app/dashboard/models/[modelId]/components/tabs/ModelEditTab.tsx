@@ -253,7 +253,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
         </Button>
       </form>
 
-      {model.canDelete && (
+      {model.isAdmin && (
         <>
           <Alert
             type="danger"

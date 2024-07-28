@@ -109,6 +109,13 @@ export interface paths {
      */
     post: operations["createInvitations"];
   };
+  "/v1/organizations/{orgId}/invitations/{id}/resend": {
+    /**
+     * Resend an invitation email
+     * @description This endpoint allows an organization admin to resend an invitation email if it has not expired. Only organization admins can access this endpoint.
+     */
+    post: operations["resendInvitation"];
+  };
   "/v1/organizations/{orgName}/associated-models": {
     /**
      * Get all models associated with an organization
@@ -167,10 +174,10 @@ export interface components {
       creator?: components["schemas"]["User"];
       /** @description If the current user can edit the model */
       canEdit?: boolean;
-      /** @description If the current user can delete the model */
-      canDelete?: boolean;
+      isAdmin?: boolean;
       associatedOrganization?: components["schemas"]["Organization"];
       tags?: string;
+      legacyPredictionService?: string;
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -446,7 +453,6 @@ export interface operations {
         query: string;
         page?: number;
         size?: number;
-        sort?: string[];
       };
     };
     responses: {
@@ -952,6 +958,50 @@ export interface operations {
       /** @description Too many requests, rate limit exceeded */
       429: {
         content: never;
+      };
+    };
+  };
+  /**
+   * Resend an invitation email
+   * @description This endpoint allows an organization admin to resend an invitation email if it has not expired. Only organization admins can access this endpoint.
+   */
+  resendInvitation: {
+    parameters: {
+      path: {
+        /** @description ID of the organization */
+        orgId: number;
+        /** @description ID of the invitation */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description Invitation resent successfully */
+      200: {
+        content: never;
+      };
+      /** @description Bad request, invalid input */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Unauthorized, only organization admins can access this endpoint */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Organization or invitation not found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** @description Gone, the invitation has expired */
+      410: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
       };
     };
   };
