@@ -174,8 +174,7 @@ export interface components {
       creator?: components["schemas"]["User"];
       /** @description If the current user can edit the model */
       canEdit?: boolean;
-      /** @description If the current user can delete the model */
-      canDelete?: boolean;
+      isAdmin?: boolean;
       associatedOrganization?: components["schemas"]["Organization"];
       tags?: string;
       legacyPredictionService?: string;

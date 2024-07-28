@@ -182,7 +182,7 @@ export default function DatasetResults({
             <Button
               color="primary"
               startContent={<ArrowDownTrayIcon className="size-6" />}
-              className="mb-2"
+              className="my-2"
               onPress={() => downloadResultsCSV(model)}
             >
               Export CSV
