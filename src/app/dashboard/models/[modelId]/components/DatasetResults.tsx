@@ -135,7 +135,7 @@ export default function DatasetResults({
   return (
     <div className="mb-20 mt-5 flex flex-col gap-4">
       <div className="max-w-xl">
-        {dataset?.status === 'FAILURE' && model.canEdit && (
+        {dataset?.status === 'FAILURE' && model.isAdmin && (
           <Accordion>
             <AccordionItem
               key="1"
