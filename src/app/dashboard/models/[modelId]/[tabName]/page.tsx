@@ -23,7 +23,12 @@ export async function generateMetadata({
 }: {
   params: ModelPageParams;
 }): Promise<Metadata> {
-  const model = await retrieveModelOrLegacy(params.modelId);
+  let model;
+  try {
+    model = await retrieveModelOrLegacy(params.modelId);
+  } catch (e) {
+    return generateSharedMetadata();
+  }
 
   return generateSharedMetadata(model?.name, model?.description);
 }
@@ -51,7 +56,7 @@ export async function getLegacyModel(
     if (res.status === 404) {
       return undefined;
     }
-    console.error(
+    console.warn(
       `Model with id ${modelId} not found, status returned: ${res.status}`,
     );
     throw new Error(await getErrorMessageFromResponse(res));
@@ -78,7 +83,7 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
     if (res.status === 404) {
       return undefined;
     }
-    console.error(
+    console.warn(
       `Model with id ${modelId} not found, status returned: ${res.status}`,
     );
     throw new Error(await getErrorMessageFromResponse(res));
