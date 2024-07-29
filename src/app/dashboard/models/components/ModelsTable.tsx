@@ -19,7 +19,7 @@ import { CustomError } from '@/app/types/CustomError';
 import { ApiResponse } from '@/app/util/response';
 import { SortDescriptor } from '@react-types/shared/src/collections';
 import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
-import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
+import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
 
 const fetcher: Fetcher<ApiResponse<ModelsResponseDto>, string> = async (
   url,
