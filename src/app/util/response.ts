@@ -26,10 +26,9 @@ export async function getErrorMessageFromResponse(
   res: Response,
 ): Promise<string> {
   let message;
-  let resBody;
   try {
-    const resBody = await res.json();
-    switch (resBody.code) {
+    const data = await parseResponse(res);
+    switch (data.code) {
       case EMAIL_NOT_VERIFIED:
         message = 'User email is not verified, please verify your email';
         break;
@@ -37,8 +36,7 @@ export async function getErrorMessageFromResponse(
         message = undefined;
     }
   } catch (e) {
-    console.error('Could not parse json response');
-    return defaultUnknownErrorMessage;
+    console.warn('Could not parse response', e);
   }
 
   if (message) return message;
@@ -57,9 +55,7 @@ function getMessageFromStatusCode(statusCode: number) {
   }
 }
 
-export async function handleApiResponse(
-  res: Response,
-): Promise<NextResponse<ApiResponse>> {
+async function parseResponse(res: Response) {
   const contentType = res.headers.get('Content-Type') || '';
   let data;
   if (contentType.includes('application/json')) {
@@ -67,6 +63,13 @@ export async function handleApiResponse(
   } else if (contentType.includes('text/')) {
     data = await res.text();
   }
+  return data;
+}
+
+export async function handleApiResponse(
+  res: Response,
+): Promise<NextResponse<ApiResponse>> {
+  const data = await parseResponse(res);
 
   if (!res.ok) {
     const message = data?.message ?? getMessageFromStatusCode(res.status);
