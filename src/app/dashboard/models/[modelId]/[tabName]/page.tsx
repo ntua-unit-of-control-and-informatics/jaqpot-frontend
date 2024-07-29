@@ -12,7 +12,7 @@ import { isAuthenticated } from '@/app/util/auth';
 import ModelBreadcrumbs from '@/app/dashboard/models/[modelId]/components/ModelBreadcrumbs';
 import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
-import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/TimeAgo';
+import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
 import { getErrorMessageFromResponse } from '@/app/util/response';
 import { Link } from '@nextui-org/link';
 import React from 'react';

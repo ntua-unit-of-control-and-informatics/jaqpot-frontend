@@ -57,12 +57,6 @@ function getMessageFromStatusCode(statusCode: number) {
   }
 }
 
-async function signoutUserIf401(status: number, code: any) {
-  if (status === 401 && code !== EMAIL_NOT_VERIFIED) {
-    await signOut();
-  }
-}
-
 export async function handleApiResponse(
   res: Response,
 ): Promise<NextResponse<ApiResponse>> {
@@ -75,7 +69,6 @@ export async function handleApiResponse(
   }
 
   if (!res.ok) {
-    await signoutUserIf401(res.status, data?.code);
     const message = data?.message ?? getMessageFromStatusCode(res.status);
     return errorResponse(message, res.status);
   }
