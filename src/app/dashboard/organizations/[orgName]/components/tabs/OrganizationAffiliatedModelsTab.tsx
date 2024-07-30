@@ -2,13 +2,13 @@ import { OrganizationDto } from '@/app/api.types';
 import ModelsTable from '@/app/dashboard/models/components/ModelsTable';
 import React from 'react';
 
-interface OrganizationAssociatedModelsTabProps {
+interface OrganizationAffiliatedModelsTabProps {
   organization: OrganizationDto;
 }
 
-export default function OrganizationAssociatedModelsTab({
+export default function OrganizationAffiliatedModelsTab({
   organization,
-}: OrganizationAssociatedModelsTabProps) {
+}: OrganizationAffiliatedModelsTabProps) {
   return (
     <div>
       <p className="mb-4 text-sm">

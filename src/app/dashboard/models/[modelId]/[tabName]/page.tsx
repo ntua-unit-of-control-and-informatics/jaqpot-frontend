@@ -154,33 +154,34 @@ export default async function Page({ params }: { params: ModelPageParams }) {
             )}
           </div>
           <div className="flex items-center text-sm text-gray-400">
-            {model.affiliatedOrganizations && (
-              <>
-                <Tooltip
-                  content="This model was developed under the auspices of these projects/organizations."
-                  closeDelay={0}
-                >
-                  <BuildingOfficeIcon className="mr-2 size-5" />
-                </Tooltip>
-                {model.affiliatedOrganizations.map((org, index) => (
-                  <>
-                    <Link
-                      key={org.id}
-                      color="foreground"
-                      href={`/dashboard/organizations/${org.name}`}
-                      className="font-medium"
-                    >
-                      @{org.name}
-                    </Link>
-                    <span className="mr-0.5 font-medium">
-                      {index < model.affiliatedOrganizations!.length - 1
-                        ? ', '
-                        : ''}
-                    </span>
-                  </>
-                ))}
-              </>
-            )}
+            {model.affiliatedOrganizations &&
+              model.affiliatedOrganizations.length > 0 && (
+                <>
+                  <Tooltip
+                    content="This model was developed under the auspices of these projects/organizations."
+                    closeDelay={0}
+                  >
+                    <BuildingOfficeIcon className="mr-1 size-5" />
+                  </Tooltip>
+                  {model.affiliatedOrganizations.map((org, index) => (
+                    <>
+                      <Link
+                        key={org.id}
+                        color="foreground"
+                        href={`/dashboard/organizations/${org.name}`}
+                        className="font-medium"
+                      >
+                        @{org.name}
+                      </Link>
+                      <span className="mr-0.5 font-medium">
+                        {index < model.affiliatedOrganizations!.length - 1
+                          ? ', '
+                          : ''}
+                      </span>
+                    </>
+                  ))}
+                </>
+              )}
           </div>
         </div>
       </div>

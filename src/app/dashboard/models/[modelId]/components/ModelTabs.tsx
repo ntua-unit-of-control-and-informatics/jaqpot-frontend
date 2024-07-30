@@ -7,7 +7,7 @@ import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/Featur
 import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/PredictTab';
 import ModelEditTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelEditTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
-import ModelAffiliateTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelAffiliateTab';
+import ModelAdminTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelAdminTab';
 
 interface ModelTabsProps {
   model: ModelDto;
@@ -59,12 +59,8 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         </Tab>
       )}
       {model.isAdmin && (
-        <Tab
-          key="affiliate"
-          title="Affiliate"
-          href={`${pathnameWithoutTab}/affiliate`}
-        >
-          <ModelAffiliateTab model={model} />
+        <Tab key="admin" title="Admin" href={`${pathnameWithoutTab}/admin`}>
+          <ModelAdminTab model={model} />
         </Tab>
       )}
       <Tab

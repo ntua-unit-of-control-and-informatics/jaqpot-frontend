@@ -44,7 +44,7 @@ const orgFetcher: Fetcher<OrganizationDto[], string> = async (url) => {
   return data;
 };
 
-export default function ModelAffiliateTab({ model }: FeaturesTabProps) {
+export default function ModelAdminTab({ model }: FeaturesTabProps) {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -104,6 +104,16 @@ export default function ModelAffiliateTab({ model }: FeaturesTabProps) {
     }
   };
 
+  async function deleteModel() {
+    const res = await fetch(`/api/models/${model.id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      alert('Model was not deleted successfully');
+    } else {
+      alert('Model was deleted successfully!');
+      router.push('/dashboard/models');
+    }
+  }
+
   return (
     <div>
       <Alert
@@ -118,20 +128,13 @@ export default function ModelAffiliateTab({ model }: FeaturesTabProps) {
           </h2>
 
           <p>
-            Link this model to an organization you&apos;re associated with.
-            After this is approved by the organization owners, this will:
+            Link this model to an organization you&apos;re affiliated with.
+            {/*After this is approved by the organization owners, this will:*/}
           </p>
           <ul className="list-inside list-disc">
             <li>Display the organization on your model&apos;s page</li>
-            <li>
-              List your model on the organization&apos;s page (pending approval)
-            </li>
+            <li>List your model on the organization&apos;s page</li>
           </ul>
-          <p className="text-tiny text-gray-600">
-            Note: As the creator of this model, only you have access to this
-            tab. No one else can affiliate your model with an
-            organization/project.
-          </p>
 
           {allOrganizations && (
             <div>
@@ -162,6 +165,27 @@ export default function ModelAffiliateTab({ model }: FeaturesTabProps) {
           Save changes
         </Button>
       </form>
+
+      {model.isAdmin && (
+        <>
+          <Alert
+            type="danger"
+            title={'Danger Zone!'}
+            description={'This is a dangerous action. Proceed with caution!'}
+            className="mt-5"
+          />
+          <Button
+            color="danger"
+            onPress={() => {
+              if (confirm('Are you sure you want to delete this model?')) {
+                deleteModel();
+              }
+            }}
+          >
+            Delete model
+          </Button>
+        </>
+      )}
     </div>
   );
 }

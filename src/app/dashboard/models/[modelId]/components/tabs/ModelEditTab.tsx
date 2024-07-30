@@ -138,16 +138,6 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
     }
   };
 
-  async function deleteModel() {
-    const res = await fetch(`/api/models/${model.id}`, { method: 'DELETE' });
-    if (!res.ok) {
-      alert('Model was not deleted successfully');
-    } else {
-      alert('Model was deleted successfully!');
-      router.push('/dashboard/models');
-    }
-  }
-
   return (
     <div className="max-w-3xl">
       <form onSubmit={handleSubmit}>
@@ -237,27 +227,6 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
           Save changes
         </Button>
       </form>
-
-      {model.isAdmin && (
-        <>
-          <Alert
-            type="danger"
-            title={'Danger Zone!'}
-            description={'This is a dangerous action. Proceed with caution!'}
-            className="mt-5"
-          />
-          <Button
-            color="danger"
-            onPress={() => {
-              if (confirm('Are you sure you want to delete this model?')) {
-                deleteModel();
-              }
-            }}
-          >
-            Delete model
-          </Button>
-        </>
-      )}
     </div>
   );
 }
