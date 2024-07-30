@@ -16,7 +16,7 @@ export default function OrganizationAssociatedModelsTab({
         project/organization.
       </p>
       <ModelsTable
-        modelsEndpoint={`/api/organizations/${organization.name}/associated-models`}
+        modelsEndpoint={`/api/organizations/${organization.name}/affiliated-models`}
       />
     </div>
   );

@@ -43,6 +43,14 @@ const orgFetcher: Fetcher<OrganizationDto[], string> = async (url) => {
   return data;
 };
 
+export type PartiallyUpdateModelRequestDtoWithStringIds = Omit<
+  PartiallyUpdateModelRequestDto,
+  'sharedWithOrganizationIds' | 'affiliatedOrganizationIds'
+> & {
+  sharedWithOrganizationIds: string[];
+  affiliatedOrganizationIds: string[];
+};
+
 export default function ModelEditTab({ model }: FeaturesTabProps) {
   const router = useRouter();
 
@@ -72,40 +80,31 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
     orgFetcher,
   );
 
-  type PartialModelUpdate = Omit<
-    PartiallyUpdateModelRequestDto,
-    'organizationIds'
-  > & {
-    organizationIds: string[];
-  };
+  const sharedWithOrganizationIds =
+    model.sharedWithOrganizations?.map((org) => org.id!.toString()) ?? [];
+  const affiliatedOrganizationIds =
+    model.affiliatedOrganizations?.map((org) => org.id!.toString()) ?? [];
 
-  const organizationIds =
-    model.organizations?.map((org) => org.id!.toString()) || [];
-  const [formData, setFormData] = useState<PartialModelUpdate>({
-    name: model.name,
-    visibility: model.visibility,
-    description: model.description ?? '',
-    organizationIds,
-    associatedOrganizationId: model.associatedOrganization?.id,
-  });
-
-  const [organizations, setOrganizations] = useState<Set<string>>(
-    new Set(organizationIds),
-  );
-
-  const handleVisibilityChange = (keys: Set<number>) => {
-    const first = keys.keys().next().value;
-    setFormData({
-      ...formData,
-      visibility: first,
+  const [formData, setFormData] =
+    useState<PartiallyUpdateModelRequestDtoWithStringIds>({
+      name: model.name,
+      visibility: model.visibility,
+      description: model.description ?? '',
+      sharedWithOrganizationIds,
+      affiliatedOrganizationIds,
     });
-  };
 
-  const handleOrganizationsChange = (organizationIds: Set<string>) => {
-    setOrganizations(organizationIds);
+  const [sharedWithOrganizations, setSharedWithOrganizations] = useState<
+    Set<string>
+  >(new Set(sharedWithOrganizationIds.map((id) => id.toString())));
+
+  const handleSharedWithOrganizationsChange = (
+    organizationIds: Set<string>,
+  ) => {
+    setSharedWithOrganizations(organizationIds);
     setFormData({
       ...formData,
-      organizationIds: Array.from(organizationIds.keys()),
+      sharedWithOrganizationIds: Array.from(organizationIds.keys()),
     });
   };
 
@@ -150,13 +149,16 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
   }
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="max-w-3xl">
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4">
+          <h2 className="mt-10 scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+            Edit your model
+          </h2>
           <div className="mb-4">
             <p className="text-tiny text-gray-600">
               Note: As the creator of this model, only you have access to this
-              edit tab. No one else can make changes to your model.
+              tab. No one else can make changes to your model.
             </p>
           </div>
           <div>
@@ -194,10 +196,10 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
             <Select
               defaultSelectedKeys={[formData.visibility]}
               selectedKeys={[formData.visibility]}
+              name="visibility"
               label="Visibility"
               className="max-w-xs"
-              // @ts-ignore
-              onSelectionChange={handleVisibilityChange}
+              onChange={handleChange}
               isRequired
             >
               {possibleVisibilityValues.map((val) => (
@@ -211,30 +213,13 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
           {formData.visibility === 'ORG_SHARED' && allOrganizationsForUser && (
             <div>
               <Select
-                defaultSelectedKeys={organizations}
-                selectedKeys={organizations}
+                defaultSelectedKeys={sharedWithOrganizations}
+                selectedKeys={sharedWithOrganizations}
                 selectionMode="multiple"
                 label="Organizations to share with"
                 className="max-w-xs"
                 // @ts-ignore
-                onSelectionChange={handleOrganizationsChange}
-              >
-                {allOrganizationsForUser.map((org) => (
-                  <SelectItem key={org.id!.toString()}>{org.name}</SelectItem>
-                ))}
-              </Select>
-            </div>
-          )}
-
-          {allOrganizationsForUser && (
-            <div>
-              <Select
-                selectedKeys={formData.associatedOrganizationId?.toString()}
-                name="associatedOrganizationId"
-                label="Associated Organization"
-                description="This field is optional and it shows the organization or project within which the model was developed. You will see this information on the model's detail page, with the organization's name being clickable. By clicking on the name, you can visit the organization's page to learn more about it and see other models associated with the same organization."
-                className="max-w-xl"
-                onChange={handleChange}
+                onSelectionChange={handleSharedWithOrganizationsChange}
               >
                 {allOrganizationsForUser.map((org) => (
                   <SelectItem key={org.id!.toString()}>{org.name}</SelectItem>

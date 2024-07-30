@@ -5,6 +5,13 @@
 
 
 export interface paths {
+  "/v1/auth/validate": {
+    /**
+     * Validate JWT
+     * @description Validate a JWT token
+     */
+    get: operations["validateJWT"];
+  };
   "/v1/models": {
     /** Create a new model */
     post: operations["createModel"];
@@ -116,12 +123,12 @@ export interface paths {
      */
     post: operations["resendInvitation"];
   };
-  "/v1/organizations/{orgName}/associated-models": {
+  "/v1/organizations/{orgName}/affiliated-models": {
     /**
-     * Get all models associated with an organization
-     * @description This endpoint allows users to retrieve all models associated with a specific organization.
+     * Get all models affiliated with an organization
+     * @description This endpoint allows users to retrieve all models affiliated with a specific organization.
      */
-    get: operations["getAllAssociatedModels"];
+    get: operations["getAllAffiliatedModels"];
   };
   "/v1/organizations/{name}/invitations/{uuid}": {
     /**
@@ -162,7 +169,7 @@ export interface components {
       libraries: components["schemas"]["Library"][];
       dependentFeatures: components["schemas"]["Feature"][];
       independentFeatures: components["schemas"]["Feature"][];
-      organizations?: components["schemas"]["Organization"][];
+      sharedWithOrganizations?: components["schemas"]["Organization"][];
       visibility: components["schemas"]["ModelVisibility"];
       /** @example false */
       pretrained?: boolean;
@@ -175,7 +182,7 @@ export interface components {
       /** @description If the current user can edit the model */
       canEdit?: boolean;
       isAdmin?: boolean;
-      associatedOrganization?: components["schemas"]["Organization"];
+      affiliatedOrganizations?: components["schemas"]["Organization"][];
       tags?: string;
       legacyPredictionService?: string;
       /**
@@ -400,6 +407,22 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /**
+   * Validate JWT
+   * @description Validate a JWT token
+   */
+  validateJWT: {
+    responses: {
+      /** @description JWT is valid */
+      200: {
+        content: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+    };
+  };
   /** Create a new model */
   createModel: {
     requestBody: {
@@ -655,9 +678,8 @@ export interface operations {
           name: string;
           description?: string;
           visibility: components["schemas"]["ModelVisibility"];
-          organizationIds?: number[];
-          /** Format: int64 */
-          associatedOrganizationId?: number;
+          sharedWithOrganizationIds?: number[];
+          affiliatedOrganizationIds?: number[];
         };
       };
     };
@@ -1006,10 +1028,10 @@ export interface operations {
     };
   };
   /**
-   * Get all models associated with an organization
-   * @description This endpoint allows users to retrieve all models associated with a specific organization.
+   * Get all models affiliated with an organization
+   * @description This endpoint allows users to retrieve all models affiliated with a specific organization.
    */
-  getAllAssociatedModels: {
+  getAllAffiliatedModels: {
     parameters: {
       query?: {
         page?: number;
