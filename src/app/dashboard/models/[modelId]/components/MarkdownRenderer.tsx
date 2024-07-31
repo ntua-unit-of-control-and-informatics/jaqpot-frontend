@@ -1,8 +1,8 @@
 'use client';
 
 import Markdown from 'react-markdown';
-import { ReactNode } from 'react';
 import { Link } from '@nextui-org/link';
+import remarkGfm from 'remark-gfm';
 
 export default function MarkdownRenderer({
   children,
@@ -11,6 +11,7 @@ export default function MarkdownRenderer({
 }>) {
   return (
     <Markdown
+      remarkPlugins={[remarkGfm]}
       components={{
         a(props: any) {
           return (
@@ -46,6 +47,9 @@ export default function MarkdownRenderer({
               {children}
             </blockquote>
           );
+        },
+        table({ children }) {
+          return <table className="table-auto">{children}</table>;
         },
       }}
     >
