@@ -75,11 +75,13 @@ export default function UserOrganizations() {
               href={`/dashboard/organizations/${organization.name}`}
               className="group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700"
             >
-              <span
+              <div
                 className={`rounded-lg ${backgroundColorRotation(index)} flex size-6 items-center justify-center border-indigo-400 text-sm text-white`}
               >
-                {organization.name.substring(0, 1).toUpperCase()}
-              </span>
+                <div className="size-3.5 text-center font-extrabold">
+                  {organization.name.substring(0, 1).toUpperCase()}
+                </div>
+              </div>
               <span className="ms-3">{organization.name}</span>
             </Link>
           </li>
