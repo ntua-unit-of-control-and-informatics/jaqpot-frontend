@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@nextui-org/table';
 import { Pagination } from '@nextui-org/pagination';
-import { ModelDto, ModelsResponseDto } from '@/app/api.types';
+import { ModelDto, ModelsResponseDto, ModelSummaryDto } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
 import { Spinner } from '@nextui-org/spinner';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -112,7 +112,7 @@ export default function SearchModelsTable() {
   return (
     <>
       <form
-        className="flex flex-row gap-5 items-center  mb-10"
+        className="mb-10 flex flex-row items-center gap-5"
         onSubmit={handleSubmit}
       >
         <Input
@@ -173,7 +173,7 @@ export default function SearchModelsTable() {
           loadingState={loadingState}
           emptyContent={'No rows to display.'}
         >
-          {(item: ModelDto) => (
+          {(item: ModelSummaryDto) => (
             <TableRow
               key={item?.id}
               className="cursor-pointer hover:bg-indigo-100"
@@ -182,8 +182,8 @@ export default function SearchModelsTable() {
               <TableCell>{item.name}</TableCell>
               <TableCell>{item.type}</TableCell>
               <TableCell>{item.description}</TableCell>
-              <TableCell>{item.independentFeatures.length}</TableCell>
-              <TableCell>{item.dependentFeatures.length}</TableCell>
+              <TableCell>{item.independentFeaturesLength}</TableCell>
+              <TableCell>{item.dependentFeaturesLength}</TableCell>
               <TableCell>{item.visibility}</TableCell>
             </TableRow>
           )}

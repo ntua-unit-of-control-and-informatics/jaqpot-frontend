@@ -107,6 +107,7 @@ export default function ModelsTable({
     {
       key: 'name',
       label: 'Name',
+      allowsSorting: true,
     },
     {
       key: 'type',
