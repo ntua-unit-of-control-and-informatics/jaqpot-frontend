@@ -162,8 +162,7 @@ export interface components {
       name: string;
       /** @example A description of your model */
       description?: string;
-      /** @enum {string} */
-      type: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX";
+      type: components["schemas"]["ModelType"];
       /** @example 1.0.0 */
       jaqpotpyVersion: string;
       libraries: components["schemas"]["Library"][];
@@ -197,6 +196,45 @@ export interface components {
        */
       updatedAt?: Record<string, never>;
     };
+    ModelSummary: {
+      /**
+       * Format: int64
+       * @example 0
+       */
+      id: number;
+      /** @example My Model */
+      name: string;
+      visibility: components["schemas"]["ModelVisibility"];
+      /** @example A description of your model */
+      description?: string;
+      creator?: components["schemas"]["User"];
+      type: components["schemas"]["ModelType"];
+      dependentFeaturesLength?: number;
+      independentFeaturesLength?: number;
+      sharedWithOrganizations?: components["schemas"]["OrganizationSummary"][];
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was created.
+       * @example 2023-01-01T12:00:00Z
+       */
+      createdAt: Record<string, never>;
+      /**
+       * @description The date and time when the feature was last updated.
+       * @example 2023-01-01T12:00:00Z
+       */
+      updatedAt?: Record<string, never>;
+    };
+    OrganizationSummary: {
+      /**
+       * Format: int64
+       * @example 0
+       */
+      id: number;
+      /** @example My Organization */
+      name: string;
+    };
+    /** @enum {string} */
+    ModelType: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX";
     /** @enum {string} */
     ModelVisibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
     Library: {
@@ -455,7 +493,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            content?: components["schemas"]["Model"][];
+            content?: components["schemas"]["ModelSummary"][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -483,7 +521,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            content?: components["schemas"]["Model"][];
+            content?: components["schemas"]["ModelSummary"][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -504,6 +542,7 @@ export interface operations {
         page?: number;
         size?: number;
         sort?: string[];
+        organizationId?: number;
       };
     };
     responses: {
@@ -511,7 +550,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            content?: components["schemas"]["Model"][];
+            content?: components["schemas"]["ModelSummary"][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -1048,7 +1087,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            content?: components["schemas"]["Model"][];
+            content?: components["schemas"]["ModelSummary"][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;

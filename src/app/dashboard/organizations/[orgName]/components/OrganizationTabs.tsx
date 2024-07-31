@@ -31,7 +31,7 @@ export default function OrganizationTabs({
       <Tab key="description" title="Description">
         <MarkdownRenderer>{organization.description}</MarkdownRenderer>
       </Tab>
-      <Tab key="models" title="Models">
+      <Tab key="models" title="Featured models">
         <OrganizationAffiliatedModelsTab organization={organization} />
       </Tab>
       {organization.canEdit && (

@@ -23,7 +23,7 @@ export default function ModelsPage() {
       <ModelsTable modelsEndpoint="/api/user/models" />
 
       <h2 className="my-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
-        Shared with you
+        Shared with you via your organizations
       </h2>
       <ModelsTable modelsEndpoint="/api/user/shared-models" />
     </div>

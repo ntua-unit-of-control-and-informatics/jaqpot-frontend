@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@nextui-org/table';
 import { Pagination } from '@nextui-org/pagination';
-import { ModelDto, ModelsResponseDto } from '@/app/api.types';
+import { ModelDto, ModelsResponseDto, ModelSummaryDto } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
 import { Spinner } from '@nextui-org/spinner';
 import { useRouter } from 'next/navigation';
@@ -122,7 +122,6 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
         <TableColumn key="dependentLength">
           Dependent Features length
         </TableColumn>
-
         <TableColumn key="visibility" allowsSorting>
           Visibility
         </TableColumn>
@@ -136,7 +135,7 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
         loadingState={loadingState}
         emptyContent={'No rows to display.'}
       >
-        {(item: ModelDto) => (
+        {(item: ModelSummaryDto) => (
           <TableRow
             key={item?.id}
             className="cursor-pointer hover:bg-indigo-100"
@@ -149,8 +148,8 @@ export default function ModelsTable({ modelsEndpoint }: ModelsTableProps) {
                 {item.description}
               </div>
             </TableCell>
-            <TableCell>{item.independentFeatures.length}</TableCell>
-            <TableCell>{item.dependentFeatures.length}</TableCell>
+            <TableCell>{item.independentFeaturesLength}</TableCell>
+            <TableCell>{item.dependentFeaturesLength}</TableCell>
             <TableCell>{item.visibility}</TableCell>
             <TableCell>
               <JaqpotTimeAgo
