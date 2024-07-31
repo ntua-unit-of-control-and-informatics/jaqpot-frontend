@@ -57,7 +57,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
 
   return (
     <div className="grid grid-cols-1 sm:divide-x sm:divide-dashed lg:grid-cols-2">
-      <div className="p-4">
+      <div className="pr-4">
         <h2 className="mb-4 font-semibold">Independent Features</h2>
 
         <Table aria-label="Independent features table">
@@ -71,12 +71,20 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
           <TableBody>
             {model.independentFeatures.map((independentFeature, index) => (
               <TableRow key={index}>
-                <TableCell>{independentFeature.name}</TableCell>
+                <TableCell>
+                  <Tooltip content={independentFeature.name}>
+                    <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
+                      {independentFeature.name}
+                    </div>
+                  </Tooltip>
+                </TableCell>
                 <TableCell>{independentFeature.units}</TableCell>
                 <TableCell>
-                  <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
-                    {independentFeature.description}
-                  </div>
+                  <Tooltip content={independentFeature.description}>
+                    <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
+                      {independentFeature.description}
+                    </div>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>{independentFeature.featureType}</TableCell>
                 <TableCell>
@@ -99,7 +107,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
           </TableBody>
         </Table>
       </div>
-      <div className="p-4">
+      <div className="pl-4">
         <h2 className="mb-4 font-semibold">Dependent Features</h2>
         <Table aria-label="Dependent features table">
           <TableHeader>
