@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import {
   ApiResponse,
   errorResponse,
@@ -6,9 +6,10 @@ import {
 } from '@/app/util/response';
 import { auth } from '@/auth';
 import { isAuthenticated } from '@/app/util/auth';
+import { generatePaginationAndSortingSearchParams } from '@/app/util/sort';
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { organizationSlug: string } },
 ): Promise<NextResponse<ApiResponse>> {
   const authorizationHeader: Record<string, string> = {};
@@ -17,8 +18,10 @@ export async function GET(
     authorizationHeader['Authorization'] = `Bearer ${session!.token}`;
   }
 
+  const searchParams = generatePaginationAndSortingSearchParams(request);
+
   const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/affiliated-models`,
+    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/affiliated-models?${searchParams}`,
     {
       headers: {
         ...authorizationHeader,
