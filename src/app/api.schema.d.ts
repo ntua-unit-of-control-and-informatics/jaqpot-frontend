@@ -5,6 +5,13 @@
 
 
 export interface paths {
+  "/v1/auth/validate": {
+    /**
+     * Validate JWT
+     * @description Validate a JWT token
+     */
+    get: operations["validateJWT"];
+  };
   "/v1/models": {
     /** Create a new model */
     post: operations["createModel"];
@@ -116,12 +123,12 @@ export interface paths {
      */
     post: operations["resendInvitation"];
   };
-  "/v1/organizations/{orgName}/associated-models": {
+  "/v1/organizations/{orgName}/affiliated-models": {
     /**
-     * Get all models associated with an organization
-     * @description This endpoint allows users to retrieve all models associated with a specific organization.
+     * Get all models affiliated with an organization
+     * @description This endpoint allows users to retrieve all models affiliated with a specific organization.
      */
-    get: operations["getAllAssociatedModels"];
+    get: operations["getAllAffiliatedModels"];
   };
   "/v1/organizations/{name}/invitations/{uuid}": {
     /**
@@ -155,14 +162,13 @@ export interface components {
       name: string;
       /** @example A description of your model */
       description?: string;
-      /** @enum {string} */
-      type: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX";
+      type: components["schemas"]["ModelType"];
       /** @example 1.0.0 */
       jaqpotpyVersion: string;
       libraries: components["schemas"]["Library"][];
       dependentFeatures: components["schemas"]["Feature"][];
       independentFeatures: components["schemas"]["Feature"][];
-      organizations?: components["schemas"]["Organization"][];
+      sharedWithOrganizations?: components["schemas"]["Organization"][];
       visibility: components["schemas"]["ModelVisibility"];
       /** @example false */
       pretrained?: boolean;
@@ -175,7 +181,7 @@ export interface components {
       /** @description If the current user can edit the model */
       canEdit?: boolean;
       isAdmin?: boolean;
-      associatedOrganization?: components["schemas"]["Organization"];
+      affiliatedOrganizations?: components["schemas"]["Organization"][];
       tags?: string;
       legacyPredictionService?: string;
       /**
@@ -190,6 +196,45 @@ export interface components {
        */
       updatedAt?: Record<string, never>;
     };
+    ModelSummary: {
+      /**
+       * Format: int64
+       * @example 0
+       */
+      id: number;
+      /** @example My Model */
+      name: string;
+      visibility: components["schemas"]["ModelVisibility"];
+      /** @example A description of your model */
+      description?: string;
+      creator?: components["schemas"]["User"];
+      type: components["schemas"]["ModelType"];
+      dependentFeaturesLength?: number;
+      independentFeaturesLength?: number;
+      sharedWithOrganizations: components["schemas"]["OrganizationSummary"][];
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was created.
+       * @example 2023-01-01T12:00:00Z
+       */
+      createdAt: Record<string, never>;
+      /**
+       * @description The date and time when the feature was last updated.
+       * @example 2023-01-01T12:00:00Z
+       */
+      updatedAt?: Record<string, never>;
+    };
+    OrganizationSummary: {
+      /**
+       * Format: int64
+       * @example 0
+       */
+      id: number;
+      /** @example My Organization */
+      name: string;
+    };
+    /** @enum {string} */
+    ModelType: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX";
     /** @enum {string} */
     ModelVisibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
     Library: {
@@ -400,6 +445,22 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /**
+   * Validate JWT
+   * @description Validate a JWT token
+   */
+  validateJWT: {
+    responses: {
+      /** @description JWT is valid */
+      200: {
+        content: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+    };
+  };
   /** Create a new model */
   createModel: {
     requestBody: {
@@ -432,7 +493,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            content?: components["schemas"]["Model"][];
+            content?: components["schemas"]["ModelSummary"][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -460,7 +521,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            content?: components["schemas"]["Model"][];
+            content?: components["schemas"]["ModelSummary"][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -481,6 +542,7 @@ export interface operations {
         page?: number;
         size?: number;
         sort?: string[];
+        organizationId?: number;
       };
     };
     responses: {
@@ -488,7 +550,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            content?: components["schemas"]["Model"][];
+            content?: components["schemas"]["ModelSummary"][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -655,9 +717,8 @@ export interface operations {
           name: string;
           description?: string;
           visibility: components["schemas"]["ModelVisibility"];
-          organizationIds?: number[];
-          /** Format: int64 */
-          associatedOrganizationId?: number;
+          sharedWithOrganizationIds?: number[];
+          affiliatedOrganizationIds?: number[];
         };
       };
     };
@@ -1006,10 +1067,10 @@ export interface operations {
     };
   };
   /**
-   * Get all models associated with an organization
-   * @description This endpoint allows users to retrieve all models associated with a specific organization.
+   * Get all models affiliated with an organization
+   * @description This endpoint allows users to retrieve all models affiliated with a specific organization.
    */
-  getAllAssociatedModels: {
+  getAllAffiliatedModels: {
     parameters: {
       query?: {
         page?: number;
@@ -1026,7 +1087,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            content?: components["schemas"]["Model"][];
+            content?: components["schemas"]["ModelSummary"][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;

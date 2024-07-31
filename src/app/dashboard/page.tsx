@@ -114,22 +114,22 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid min-h-screen grid-cols-1 gap-x-10 md:grid-cols-2">
-        <div>
-          <h2 className="my-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
-            Model predictions per day
-          </h2>
+      {/*<div className="grid min-h-screen grid-cols-1 gap-x-10 md:grid-cols-2">*/}
+      {/*  <div>*/}
+      {/*    <h2 className="my-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">*/}
+      {/*      Model predictions per day*/}
+      {/*    </h2>*/}
 
-          <DashboardStats width={'100%'} height={400} />
-        </div>
-        <div>
-          <h2 className="my-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
-            Most popular models last 7 days
-          </h2>
+      {/*    <DashboardStats width={'100%'} height={400} />*/}
+      {/*  </div>*/}
+      {/*  <div>*/}
+      {/*    <h2 className="my-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">*/}
+      {/*      Most popular models last 7 days*/}
+      {/*    </h2>*/}
 
-          <DashboardMostPopularModels width={'100%'} height={400} />
-        </div>
-      </div>
+      {/*    <DashboardMostPopularModels width={'100%'} height={400} />*/}
+      {/*  </div>*/}
+      {/*</div>*/}
     </div>
   );
 }

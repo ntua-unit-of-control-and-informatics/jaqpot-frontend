@@ -18,7 +18,7 @@ export async function GET(
   }
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/associated-models`,
+    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/affiliated-models`,
     {
       headers: {
         ...authorizationHeader,

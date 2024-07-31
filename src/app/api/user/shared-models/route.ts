@@ -22,6 +22,12 @@ export async function GET(
   }
 
   const searchParams = generatePaginationAndSortingSearchParams(request);
+  if (request.nextUrl.searchParams.has('organizationId')) {
+    searchParams.append(
+      'organizationId',
+      request.nextUrl.searchParams.get('organizationId')!,
+    );
+  }
 
   const res = await fetch(
     `${process.env.API_URL}/v1/user/shared-models?${searchParams.toString()}`,
