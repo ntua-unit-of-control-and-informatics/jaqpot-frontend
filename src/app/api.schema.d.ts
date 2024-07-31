@@ -211,7 +211,7 @@ export interface components {
       type: components["schemas"]["ModelType"];
       dependentFeaturesLength?: number;
       independentFeaturesLength?: number;
-      sharedWithOrganizations?: components["schemas"]["OrganizationSummary"][];
+      sharedWithOrganizations: components["schemas"]["OrganizationSummary"][];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
