@@ -26,6 +26,7 @@ import { SortDescriptor } from '@react-types/shared/src/collections';
 import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
 import { getKeyValue, Select, SelectItem } from '@nextui-org/react';
+import Link from 'next/link';
 
 const fetcher: Fetcher<ApiResponse<ModelsResponseDto>, string> = async (
   url,
@@ -228,7 +229,8 @@ export default function ModelsTable({
             <TableRow
               key={item?.id}
               className="cursor-pointer hover:bg-indigo-100"
-              onClick={() => router.push(`/dashboard/models/${item.id}`)}
+              as={Link}
+              href={`/dashboard/models/${item.id}`}
             >
               {(columnKey) => (
                 <TableCell>{getKeyValue(item, columnKey)}</TableCell>
