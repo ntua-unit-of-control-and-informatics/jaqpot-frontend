@@ -78,7 +78,7 @@ export default function UserOrganizations() {
               <div
                 className={`rounded-lg ${backgroundColorRotation(index)} flex size-6 items-center justify-center border-indigo-400 text-sm text-white`}
               >
-                <div className="size-3.5 text-center font-extrabold">
+                <div className="p-3 text-center font-bold">
                   {organization.name.substring(0, 1).toUpperCase()}
                 </div>
               </div>
