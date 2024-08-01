@@ -58,11 +58,13 @@ export async function getLegacyModel(
   if (!res.ok) {
     if (res.status === 404) {
       return undefined;
+    } else if (res.status === 401 || res.status === 403) {
+      redirect('/dashboard/unauthorized');
     }
     log.warn(
-      `Model with id ${modelId} not found, status returned: ${res.status}`,
+      `Legacy model with id ${modelId} not found, status returned: ${res.status}`,
     );
-    throw new Error(await getErrorMessageFromResponse(res));
+    return undefined;
   }
 
   return res.json();
@@ -85,11 +87,13 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   if (!res.ok) {
     if (res.status === 404) {
       return undefined;
+    } else if (res.status === 401 || res.status === 403) {
+      redirect('/dashboard/unauthorized');
     }
     log.warn(
       `Model with id ${modelId} not found, status returned: ${res.status}`,
     );
-    throw new Error(await getErrorMessageFromResponse(res));
+    return undefined;
   }
 
   return res.json();
