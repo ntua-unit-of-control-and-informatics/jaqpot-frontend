@@ -28,7 +28,7 @@ export async function getErrorMessageFromResponse(
   let message;
   try {
     const data = await parseResponse(res);
-    switch (data.code) {
+    switch (data?.code) {
       case EMAIL_NOT_VERIFIED:
         message = 'User email is not verified, please verify your email';
         break;
@@ -55,7 +55,7 @@ function getMessageFromStatusCode(statusCode: number) {
   }
 }
 
-async function parseResponse(res: Response) {
+async function parseResponse(res: Response): Promise<any | undefined> {
   const contentType = res.headers.get('Content-Type') || '';
   let data;
   if (contentType.includes('application/json')) {
