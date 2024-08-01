@@ -1,4 +1,11 @@
 import CustomErrorPage from '@/app/components/CustomErrorPage';
+import { Metadata } from 'next';
+import { generateSharedMetadata } from '@/app/shared.metadata';
+
+export const metadata: Metadata = generateSharedMetadata(
+  'Unauthorized',
+  'You need to be logged in or have the right permissions to access this page',
+);
 
 export default function Unauthorized() {
   return (
