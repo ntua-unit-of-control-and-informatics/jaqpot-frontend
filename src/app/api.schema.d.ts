@@ -184,6 +184,7 @@ export interface components {
       affiliatedOrganizations?: components["schemas"]["Organization"][];
       tags?: string;
       legacyPredictionService?: string;
+      extraConfig?: components["schemas"]["ModelExtraConfig"];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -235,6 +236,12 @@ export interface components {
     };
     /** @enum {string} */
     ModelType: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX";
+    /** @description A JSON object containing extra configuration for the model */
+    ModelExtraConfig: {
+      torchConfig?: {
+        [key: string]: Record<string, never>;
+      };
+    };
     /** @enum {string} */
     ModelVisibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
     Library: {
@@ -717,6 +724,7 @@ export interface operations {
           name: string;
           description?: string;
           visibility: components["schemas"]["ModelVisibility"];
+          tags?: string;
           sharedWithOrganizationIds?: number[];
           affiliatedOrganizationIds?: number[];
         };
