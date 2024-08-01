@@ -3,6 +3,9 @@ import { NextResponse } from 'next/server';
 import { signOut } from '@/auth';
 import { ApiErrorCode, EMAIL_NOT_VERIFIED } from '@/app/api.error';
 import { ErrorCode } from 'intl-messageformat';
+import { logger } from '@/logger';
+
+const log = logger.child({ module: 'responseError' });
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -36,7 +39,7 @@ export async function getErrorMessageFromResponse(
         message = undefined;
     }
   } catch (e) {
-    console.warn('Could not parse response', e);
+    log.warn('Could not parse response', e);
   }
 
   if (message) return message;

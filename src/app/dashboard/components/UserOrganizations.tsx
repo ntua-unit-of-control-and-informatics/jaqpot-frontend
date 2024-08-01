@@ -5,12 +5,13 @@ import useSWR, { Fetcher } from 'swr';
 import { ApiResponse } from '@/app/util/response';
 import { DatasetDto, OrganizationDto } from '@/app/api.types';
 import { CustomError } from '@/app/types/CustomError';
-import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import React, { useEffect, useState } from 'react';
 import { Spinner } from '@nextui-org/spinner';
-import { BeakerIcon } from '@heroicons/react/24/solid';
 import useSWRMutation from 'swr/mutation';
 import { useSession } from 'next-auth/react';
+import { logger } from '@/logger';
+
+const log = logger.child({ module: 'userOrganizations' });
 
 const fetcher: Fetcher<ApiResponse<OrganizationDto[]>, string> = async (
   url,
@@ -22,7 +23,7 @@ const fetcher: Fetcher<ApiResponse<OrganizationDto[]>, string> = async (
   if (!res.ok) {
     const message = (await res.json()).message;
     const status = res.status;
-    console.error(message);
+    log.error(message);
     // Attach extra info to the error object.
     throw new CustomError(message, status);
   }
@@ -48,7 +49,7 @@ export default function UserOrganizations() {
   useEffect(() => {
     setIsLoading(true);
     trigger()
-      .catch((e) => console.warn('could not load user organizations', e))
+      .catch((e) => log.warn('could not load user organizations', e))
       .finally(() => setIsLoading(false));
   }, [trigger]);
 

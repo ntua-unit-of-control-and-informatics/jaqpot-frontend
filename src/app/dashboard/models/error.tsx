@@ -2,6 +2,9 @@
 
 import { useEffect } from 'react';
 import CustomErrorPage from '@/app/components/CustomErrorPage';
+import { logger } from '@/logger';
+
+const log = logger.child({ module: 'error' });
 
 export default function Error({
   error,
@@ -12,7 +15,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error(error);
+    log.error(error);
   }, [error]);
 
   return (
