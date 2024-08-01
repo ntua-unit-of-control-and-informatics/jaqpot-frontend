@@ -35,19 +35,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }
       }
 
-      return token;
+      // return token;
 
-      // TODO check if refresh token works
-      // // Return previous token if the access token has not expired yet
-      // if (
-      //   !token.accessTokenExpires ||
-      //   Date.now() < (token.accessTokenExpires as number)
-      // ) {
-      //   return token;
-      // }
-      //
-      // // Access token has expired, try to update it
-      // return refreshAccessToken(token);
+      // Return previous token if the access token has not expired yet
+      if (
+        !token.accessTokenExpires ||
+        Date.now() < (token.accessTokenExpires as number)
+      ) {
+        return token;
+      }
+
+      // Access token has expired, try to update it
+      return refreshAccessToken(token);
     },
     session: async ({ session, token, user }) => {
       // Next Auth shenanigans :(
@@ -88,6 +87,8 @@ async function refreshAccessToken(token: any) {
     if (!response.ok) {
       throw refreshedTokens;
     }
+
+    console.log('got refreshed tokens', refreshedTokens);
 
     return {
       ...token,
