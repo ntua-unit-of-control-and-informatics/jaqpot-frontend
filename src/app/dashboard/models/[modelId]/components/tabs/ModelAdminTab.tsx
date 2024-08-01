@@ -64,6 +64,7 @@ export default function ModelAdminTab({ model }: FeaturesTabProps) {
       name: model.name,
       visibility: model.visibility,
       description: model.description ?? '',
+      tags: model.tags ?? '',
       sharedWithOrganizationIds,
       affiliatedOrganizationIds,
     });

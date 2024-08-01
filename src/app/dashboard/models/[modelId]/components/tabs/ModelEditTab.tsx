@@ -90,6 +90,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
       name: model.name,
       visibility: model.visibility,
       description: model.description ?? '',
+      tags: model.tags ?? '',
       sharedWithOrganizationIds,
       affiliatedOrganizationIds,
     });
@@ -217,6 +218,18 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
               </Select>
             </div>
           )}
+
+          <div>
+            <Textarea
+              label="Tags"
+              name="tags"
+              description="Adding tags to your model will help others find it more easily through the search."
+              placeholder="Enter a space separated list of tags"
+              value={formData.tags}
+              maxLength={1000}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <Button
           isLoading={isLoading}
