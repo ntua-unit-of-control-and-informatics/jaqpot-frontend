@@ -4,6 +4,9 @@ import React, { ChangeEvent, useState } from 'react';
 import { ModelDto } from '@/app/api.types';
 import { Input } from '@nextui-org/input';
 import { Tooltip } from '@nextui-org/tooltip';
+import { logger } from '@/logger';
+
+const log = logger.child({ module: 'uploadCSVForm' });
 
 interface UploadCSVFormProps {
   onSubmit: (formData: any) => Promise<void>;
@@ -31,7 +34,7 @@ function downloadSampleFile(model: ModelDto) {
       a.click();
       a.remove();
     })
-    .catch((error) => console.error('Error:', error));
+    .catch((error) => log.error('Error:', error));
 }
 
 export default function UploadCSVForm({ onSubmit, model }: UploadCSVFormProps) {

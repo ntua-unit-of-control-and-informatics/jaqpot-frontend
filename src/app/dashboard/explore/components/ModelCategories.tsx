@@ -51,28 +51,23 @@ const list = [
 export default function ModelCategories() {
   return (
     <>
-      <h1 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight mb-5">
+      <h1 className="mb-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
         Sample page
       </h1>
-      <div className="max-w-3xl mx-auto gap-4 grid grid-cols-2 sm:grid-cols-4">
+      <div className="mx-auto grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
         {list.map((item, index) => (
-          <Card
-            shadow="sm"
-            key={index}
-            isPressable
-            onPress={() => console.log('item pressed')}
-          >
+          <Card shadow="sm" key={index} isPressable onPress={() => {}}>
             <CardBody className="overflow-visible p-0">
               <Image
                 shadow="sm"
                 radius="lg"
                 width="100%"
                 alt={item.title}
-                className="w-full object-cover h-[140px]"
+                className="h-[140px] w-full object-cover"
                 src={item.img}
               />
             </CardBody>
-            <CardFooter className="text-small justify-between">
+            <CardFooter className="justify-between text-small">
               <b>{item.title}</b>
             </CardFooter>
           </Card>

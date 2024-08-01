@@ -17,6 +17,9 @@ import { getErrorMessageFromResponse } from '@/app/util/response';
 import { Link } from '@nextui-org/link';
 import React from 'react';
 import { Tooltip } from '@nextui-org/tooltip';
+import { logger } from '@/logger';
+
+const log = logger.child({ module: 'modelPage' });
 
 export async function generateMetadata({
   params,
@@ -55,11 +58,13 @@ export async function getLegacyModel(
   if (!res.ok) {
     if (res.status === 404) {
       return undefined;
+    } else if (res.status === 401 || res.status === 403) {
+      redirect('/dashboard/unauthorized');
     }
-    console.warn(
-      `Model with id ${modelId} not found, status returned: ${res.status}`,
+    log.warn(
+      `Legacy model with id ${modelId} not found, status returned: ${res.status}`,
     );
-    throw new Error(await getErrorMessageFromResponse(res));
+    return undefined;
   }
 
   return res.json();
@@ -82,11 +87,13 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   if (!res.ok) {
     if (res.status === 404) {
       return undefined;
+    } else if (res.status === 401 || res.status === 403) {
+      redirect('/dashboard/unauthorized');
     }
-    console.warn(
+    log.warn(
       `Model with id ${modelId} not found, status returned: ${res.status}`,
     );
-    throw new Error(await getErrorMessageFromResponse(res));
+    return undefined;
   }
 
   return res.json();

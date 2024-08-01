@@ -24,6 +24,9 @@ import {
 import { Button } from '@nextui-org/button';
 import { ArrowDownTrayIcon, BugAntIcon } from '@heroicons/react/24/solid';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import { logger } from '@/logger';
+
+const log = logger.child({ module: 'dataset' });
 
 interface PredictionResultProps {
   datasetId: string;
@@ -92,7 +95,7 @@ export default function DatasetResults({
         a.click();
         a.remove();
       })
-      .catch((error) => console.error('Error:', error));
+      .catch((error) => log.error('Error:', error));
   }
 
   if (error) return <SWRClientFetchError error={error} />;

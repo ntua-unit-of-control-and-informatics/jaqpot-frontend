@@ -3,6 +3,9 @@ import { NextResponse } from 'next/server';
 import { signOut } from '@/auth';
 import { ApiErrorCode, EMAIL_NOT_VERIFIED } from '@/app/api.error';
 import { ErrorCode } from 'intl-messageformat';
+import { logger } from '@/logger';
+
+const log = logger.child({ module: 'responseError' });
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -28,7 +31,7 @@ export async function getErrorMessageFromResponse(
   let message;
   try {
     const data = await parseResponse(res);
-    switch (data.code) {
+    switch (data?.code) {
       case EMAIL_NOT_VERIFIED:
         message = 'User email is not verified, please verify your email';
         break;
@@ -36,7 +39,7 @@ export async function getErrorMessageFromResponse(
         message = undefined;
     }
   } catch (e) {
-    console.warn('Could not parse response', e);
+    log.warn('Could not parse response', e);
   }
 
   if (message) return message;
@@ -55,7 +58,7 @@ function getMessageFromStatusCode(statusCode: number) {
   }
 }
 
-async function parseResponse(res: Response) {
+async function parseResponse(res: Response): Promise<any | undefined> {
   const contentType = res.headers.get('Content-Type') || '';
   let data;
   if (contentType.includes('application/json')) {

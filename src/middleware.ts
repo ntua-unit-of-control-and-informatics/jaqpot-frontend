@@ -15,7 +15,7 @@ export async function middleware(req: NextRequest) {
   // Call our authentication function to check the req
   if (!isAuthenticated(session)) {
     const url = req.nextUrl.clone();
-    url.pathname = '/unauthenticated';
+    url.pathname = '/dashboard/unauthorized';
     return NextResponse.rewrite(url);
   }
 }

@@ -4,6 +4,9 @@ import KeycloakProvider from 'next-auth/providers/keycloak';
 import { DefaultJWT } from '@auth/core/jwt';
 import { jwtDecode } from 'jwt-decode';
 import Keycloak from 'next-auth/providers/keycloak';
+import { logger } from '@/logger';
+
+const log = logger.child({ module: 'error' });
 
 declare module 'next-auth' {
   // Extend user to reveal access_token
@@ -87,8 +90,6 @@ async function refreshAccessToken(token: any) {
     if (!response.ok) {
       throw refreshedTokens;
     }
-
-    console.log('got refreshed tokens', refreshedTokens);
 
     return {
       ...token,
