@@ -4,10 +4,8 @@ import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
 import { Switch } from '@nextui-org/switch';
 import React, { useContext } from 'react';
 import { useSession } from 'next-auth/react';
-import {
-  UserSettingsContext,
-  UserSettingsContextType,
-} from '@/app/dashboard/dashboard-layout';
+import {} from '@/app/dashboard/dashboard-layout';
+import { UserSettingsContext } from '@/app/dashboard/contexts';
 
 export default function UserSettings() {
   const { data: session } = useSession();

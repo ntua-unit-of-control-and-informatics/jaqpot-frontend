@@ -5,12 +5,8 @@ import UserAvatar from '@/app/dashboard/components/UserAvatar';
 import { Session } from 'next-auth';
 import SearchBar from '@/app/dashboard/components/SearchBar';
 import {
-  ArrowLeftStartOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
-  ArrowsPointingInIcon,
-  ArrowsPointingOutIcon,
   MoonIcon,
-  PlusIcon,
   SunIcon,
 } from '@heroicons/react/24/solid';
 import React, { useContext } from 'react';
@@ -21,10 +17,9 @@ import GithubLogo from '@/app/dashboard/components/GithubLogo';
 import {
   SidebarContext,
   SidebarContextType,
-  UserSettingsContext,
 } from '@/app/dashboard/dashboard-layout';
 import { Tooltip } from '@nextui-org/tooltip';
-import useUserSettings from '@/app/hooks/useUserSettings';
+import { UserSettingsContext } from '@/app/dashboard/contexts';
 
 export default function TopBar() {
   const { data: session } = useSession();
@@ -60,7 +55,7 @@ export default function TopBar() {
             onClick={() =>
               setUserSettings({
                 ...userSettings,
-                darkMode: !userSettings.darkMode,
+                darkMode: !userSettings?.darkMode,
               })
             }
           >

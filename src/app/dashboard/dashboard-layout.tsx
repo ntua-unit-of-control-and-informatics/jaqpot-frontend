@@ -12,9 +12,12 @@ import {
 } from 'react';
 import TopBar from '@/app/dashboard/components/TopBar';
 import { SessionProvider, useSession } from 'next-auth/react';
-import useUserSettings, { UserSettingsType } from '@/app/hooks/useUserSettings';
 import { getItemFromLocalStorage } from '@/app/util/local-storage';
 import { Session } from 'next-auth';
+import {
+  UserSettingsContext,
+  UserSettingsType,
+} from '@/app/dashboard/contexts';
 
 type SidebarCollapseStatus = boolean | undefined;
 
@@ -26,18 +29,6 @@ export type SidebarContextType = {
 export const SidebarContext = createContext<SidebarContextType>({
   isCollapsed: false,
   setIsCollapsed: () => {},
-});
-
-export type UserSettingsContextType = {
-  userSettings: UserSettingsType | undefined;
-  setUserSettings: Dispatch<SetStateAction<UserSettingsType | undefined>>;
-};
-
-export const UserSettingsContext = createContext<UserSettingsContextType>({
-  userSettings: {
-    darkMode: false,
-  },
-  setUserSettings: () => {},
 });
 
 function generateUserSettingsKey(session: Session | null) {
