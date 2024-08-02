@@ -11,7 +11,13 @@ import {
   useState,
 } from 'react';
 import TopBar from '@/app/dashboard/components/TopBar';
-import { SessionProvider } from 'next-auth/react';
+import { SessionProvider, useSession } from 'next-auth/react';
+import { getItemFromLocalStorage } from '@/app/util/local-storage';
+import { Session } from 'next-auth';
+import {
+  UserSettingsContext,
+  UserSettingsType,
+} from '@/app/dashboard/contexts';
 
 type SidebarCollapseStatus = boolean | undefined;
 
@@ -25,12 +31,38 @@ export const SidebarContext = createContext<SidebarContextType>({
   setIsCollapsed: () => {},
 });
 
+function generateUserSettingsKey(session: Session | null) {
+  return `jaqpot-user-settings-${session?.user?.id ?? ''}`;
+}
+
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const { data: session } = useSession();
   const [isCollapsed, setIsCollapsed] = useState<SidebarCollapseStatus>();
+  const [userSettings, setUserSettings] = useState<
+    UserSettingsType | undefined
+  >();
+
+  useEffect(() => {
+    if (!userSettings) {
+      setUserSettings(
+        getItemFromLocalStorage(generateUserSettingsKey(session)),
+      );
+      return;
+    }
+    if (userSettings.darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+    localStorage.setItem(
+      generateUserSettingsKey(session),
+      JSON.stringify(userSettings),
+    );
+  }, [userSettings]);
 
   // useEffect(() => {
   //   const isMobileSize = global.window && global.window.innerWidth < 768;
@@ -54,8 +86,10 @@ export default function DashboardLayout({
       <div
         className={`transition-margin-left min-h-screen ${getContentCollapsableStateClassname()}`}
       >
-        <TopBar />
-        <main className="p-2 sm:p-8">{children}</main>
+        <UserSettingsContext.Provider value={{ userSettings, setUserSettings }}>
+          <TopBar />
+          <main className="p-2 sm:p-8">{children}</main>
+        </UserSettingsContext.Provider>
       </div>
     </SidebarContext.Provider>
   );

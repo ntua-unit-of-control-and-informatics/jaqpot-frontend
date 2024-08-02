@@ -23,12 +23,12 @@ const fetcher: Fetcher<ApiResponse<OrganizationDto[]>, string> = async (
   if (!res.ok) {
     const message = (await res.json()).message;
     const status = res.status;
-    log.error(message);
-    // Attach extra info to the error object.
-    throw new CustomError(message, status);
+    if (status >= 500) {
+      log.error(message);
+    }
+  } else {
+    return res.json();
   }
-
-  return res.json();
 };
 
 const backgroundColors = ['bg-emerald-400', 'bg-amber-400', 'bg-fuchsia-400'];
@@ -48,9 +48,7 @@ export default function UserOrganizations() {
 
   useEffect(() => {
     setIsLoading(true);
-    trigger()
-      .catch((e) => log.warn('could not load user organizations', e))
-      .finally(() => setIsLoading(false));
+    trigger().finally(() => setIsLoading(false));
   }, [trigger]);
 
   let userOrganizations;

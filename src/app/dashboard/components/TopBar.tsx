@@ -5,12 +5,8 @@ import UserAvatar from '@/app/dashboard/components/UserAvatar';
 import { Session } from 'next-auth';
 import SearchBar from '@/app/dashboard/components/SearchBar';
 import {
-  ArrowLeftStartOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
-  ArrowsPointingInIcon,
-  ArrowsPointingOutIcon,
   MoonIcon,
-  PlusIcon,
   SunIcon,
 } from '@heroicons/react/24/solid';
 import React, { useContext } from 'react';
@@ -23,11 +19,13 @@ import {
   SidebarContextType,
 } from '@/app/dashboard/dashboard-layout';
 import { Tooltip } from '@nextui-org/tooltip';
+import { UserSettingsContext } from '@/app/dashboard/contexts';
 
 export default function TopBar() {
   const { data: session } = useSession();
   const { isCollapsed, setIsCollapsed } =
     useContext<SidebarContextType>(SidebarContext);
+  const { userSettings, setUserSettings } = useContext(UserSettingsContext);
 
   return (
     <div className="w-full border-b border-b-gray-300 px-4 py-3 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px] sm:px-8">
@@ -54,7 +52,12 @@ export default function TopBar() {
           <Button
             variant="light"
             className="min-w-10 p-2"
-            onClick={() => document.body.classList.toggle('dark')}
+            onClick={() =>
+              setUserSettings({
+                ...userSettings,
+                darkMode: !userSettings?.darkMode,
+              })
+            }
           >
             <MoonIcon className="block size-6 text-violet-700 dark:hidden" />
             <SunIcon className="hidden size-6 text-yellow-500 dark:block" />
