@@ -4,7 +4,7 @@ const log = logger.child({ module: 'localStorageUtil' });
 
 export const getItemFromLocalStorage = (key: string): any | undefined => {
   let currentValue;
-  if (!localStorage) {
+  if (typeof window === 'undefined') {
     return undefined;
   }
   try {

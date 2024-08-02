@@ -18,6 +18,7 @@ export default function UserSettings() {
     <div>
       <Switch
         defaultSelected={userSettings?.darkMode}
+        isSelected={userSettings?.darkMode ?? false}
         onValueChange={(isSelected) => {
           setUserSettings({
             ...userSettings,

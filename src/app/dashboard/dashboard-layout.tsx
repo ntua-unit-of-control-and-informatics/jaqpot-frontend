@@ -53,10 +53,13 @@ export default function DashboardLayout({
   const [isCollapsed, setIsCollapsed] = useState<SidebarCollapseStatus>();
   const [userSettings, setUserSettings] = useState<
     UserSettingsType | undefined
-  >(getItemFromLocalStorage(generateUserSettingsKey(session)));
+  >();
 
   useEffect(() => {
     if (!userSettings) {
+      setUserSettings(
+        getItemFromLocalStorage(generateUserSettingsKey(session)),
+      );
       return;
     }
     if (userSettings.darkMode) {
