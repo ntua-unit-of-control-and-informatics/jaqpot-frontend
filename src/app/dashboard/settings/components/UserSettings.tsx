@@ -3,7 +3,6 @@
 import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
 import { Switch } from '@nextui-org/switch';
 import React, { useContext } from 'react';
-import useUserSettings from '@/app/hooks/useUserSettings';
 import { useSession } from 'next-auth/react';
 import {
   UserSettingsContext,
