@@ -14,16 +14,14 @@ export default function UserSettings() {
   const { data: session } = useSession();
   const { userSettings, setUserSettings } = useContext(UserSettingsContext);
 
-  console.log(userSettings);
-
   return (
     <div>
       <Switch
-        defaultSelected={userSettings.darkMode}
+        defaultSelected={userSettings?.darkMode}
         onValueChange={(isSelected) => {
           setUserSettings({
             ...userSettings,
-            darkMode: !userSettings.darkMode,
+            darkMode: !userSettings?.darkMode,
           });
         }}
         size="lg"

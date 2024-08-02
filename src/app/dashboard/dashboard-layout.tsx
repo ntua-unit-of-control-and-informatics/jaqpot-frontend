@@ -29,8 +29,8 @@ export const SidebarContext = createContext<SidebarContextType>({
 });
 
 export type UserSettingsContextType = {
-  userSettings: UserSettingsType;
-  setUserSettings: Dispatch<SetStateAction<UserSettingsType>>;
+  userSettings: UserSettingsType | undefined;
+  setUserSettings: Dispatch<SetStateAction<UserSettingsType | undefined>>;
 };
 
 export const UserSettingsContext = createContext<UserSettingsContextType>({
@@ -49,16 +49,16 @@ export default function DashboardLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const [isCollapsed, setIsCollapsed] = useState<SidebarCollapseStatus>();
   const { data: session } = useSession();
-  const [userSettings, setUserSettings] = useState<UserSettingsType>(() => {
-    return getItemFromLocalStorage(generateUserSettingsKey(session), {
-      darkMode: false,
-    });
-  });
+  const [isCollapsed, setIsCollapsed] = useState<SidebarCollapseStatus>();
+  const [userSettings, setUserSettings] = useState<
+    UserSettingsType | undefined
+  >(getItemFromLocalStorage(generateUserSettingsKey(session)));
 
   useEffect(() => {
-    console.log('User settings changed!', userSettings);
+    if (!userSettings) {
+      return;
+    }
     if (userSettings.darkMode) {
       document.body.classList.add('dark');
     } else {

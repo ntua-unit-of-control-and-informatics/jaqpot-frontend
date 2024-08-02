@@ -23,9 +23,7 @@ const fetcher: Fetcher<ApiResponse<OrganizationDto[]>, string> = async (
   if (!res.ok) {
     const message = (await res.json()).message;
     const status = res.status;
-    log.error(message);
-    // Attach extra info to the error object.
-    throw new CustomError(message, status);
+    log.warn(message);
   }
 
   return res.json();
