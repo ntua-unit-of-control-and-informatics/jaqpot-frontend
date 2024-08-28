@@ -388,6 +388,8 @@ export interface components {
       address?: string;
       /** @description If the current user can edit the organization */
       canEdit?: boolean;
+      /** @description If the current user is the creator of the organization */
+      isCreator?: boolean;
       created_at?: Record<string, never>;
       updated_at?: Record<string, never>;
     };
