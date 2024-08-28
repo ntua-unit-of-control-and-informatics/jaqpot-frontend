@@ -45,10 +45,9 @@ const orgFetcher: Fetcher<OrganizationDto[], string> = async (url) => {
 
 export type PartiallyUpdateModelRequestDtoWithStringIds = Omit<
   PartiallyUpdateModelRequestDto,
-  'sharedWithOrganizationIds' | 'affiliatedOrganizationIds'
+  'sharedWithOrganizationIds'
 > & {
   sharedWithOrganizationIds: string[];
-  affiliatedOrganizationIds: string[];
 };
 
 export default function ModelEditTab({ model }: FeaturesTabProps) {
@@ -82,8 +81,6 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
 
   const sharedWithOrganizationIds =
     model.sharedWithOrganizations?.map((org) => org.id!.toString()) ?? [];
-  const affiliatedOrganizationIds =
-    model.affiliatedOrganizations?.map((org) => org.id!.toString()) ?? [];
 
   const [formData, setFormData] =
     useState<PartiallyUpdateModelRequestDtoWithStringIds>({
@@ -92,7 +89,6 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
       description: model.description ?? '',
       tags: model.tags ?? '',
       sharedWithOrganizationIds,
-      affiliatedOrganizationIds,
     });
 
   const [sharedWithOrganizations, setSharedWithOrganizations] = useState<
