@@ -123,13 +123,6 @@ export interface paths {
      */
     post: operations["resendInvitation"];
   };
-  "/v1/organizations/{orgName}/affiliated-models": {
-    /**
-     * Get all models affiliated with an organization
-     * @description This endpoint allows users to retrieve all models affiliated with a specific organization.
-     */
-    get: operations["getAllAffiliatedModels"];
-  };
   "/v1/organizations/{name}/invitations/{uuid}": {
     /**
      * Get the status of an invitation
@@ -181,7 +174,6 @@ export interface components {
       /** @description If the current user can edit the model */
       canEdit?: boolean;
       isAdmin?: boolean;
-      affiliatedOrganizations?: components["schemas"]["Organization"][];
       tags?: string;
       legacyPredictionService?: string;
       extraConfig?: components["schemas"]["ModelExtraConfig"];
@@ -726,7 +718,6 @@ export interface operations {
           visibility: components["schemas"]["ModelVisibility"];
           tags?: string;
           sharedWithOrganizationIds?: number[];
-          affiliatedOrganizationIds?: number[];
         };
       };
     };
@@ -1068,55 +1059,6 @@ export interface operations {
       };
       /** @description Gone, the invitation has expired */
       410: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponse"];
-        };
-      };
-    };
-  };
-  /**
-   * Get all models affiliated with an organization
-   * @description This endpoint allows users to retrieve all models affiliated with a specific organization.
-   */
-  getAllAffiliatedModels: {
-    parameters: {
-      query?: {
-        page?: number;
-        size?: number;
-        sort?: string[];
-      };
-      path: {
-        /** @description Name of the organization */
-        orgName: string;
-      };
-    };
-    responses: {
-      /** @description Models retrieved successfully */
-      200: {
-        content: {
-          "application/json": {
-            content?: components["schemas"]["ModelSummary"][];
-            totalElements?: number;
-            totalPages?: number;
-            pageSize?: number;
-            pageNumber?: number;
-          };
-        };
-      };
-      /** @description Bad request, invalid input */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponse"];
-        };
-      };
-      /** @description Unauthorized, only authenticated users can access this endpoint */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponse"];
-        };
-      };
-      /** @description Organization not found */
-      404: {
         content: {
           "application/json": components["schemas"]["ErrorResponse"];
         };

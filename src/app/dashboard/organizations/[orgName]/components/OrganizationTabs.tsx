@@ -5,7 +5,6 @@ import { OrganizationDto } from '@/app/api.types';
 import OrganizationEditTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationEditTab';
 import OrganizationInvitationsTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationInvitationsTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
-import OrganizationAffiliatedModelsTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationAffiliatedModelsTab';
 
 interface OrganizationTabsProps {
   organization: OrganizationDto;
@@ -30,9 +29,6 @@ export default function OrganizationTabs({
     >
       <Tab key="description" title="Description">
         <MarkdownRenderer>{organization.description}</MarkdownRenderer>
-      </Tab>
-      <Tab key="models" title="Featured models">
-        <OrganizationAffiliatedModelsTab organization={organization} />
       </Tab>
       {organization.canEdit && (
         <Tab key="invitations" title="Invitations">
