@@ -58,34 +58,65 @@ export default function UserOrganizations() {
     return;
   }
 
+  const userOwnedOrganizations =
+    userOrganizations?.filter((org) => org.isCreator) ?? [];
+  const userMemberOrganizations =
+    userOrganizations?.filter((org) => !org.isCreator) ?? [];
+
   if (error) return;
   if (isLoading) return <Spinner />;
 
   return (
-    userOrganizations &&
-    userOrganizations.length > 0 && (
-      <ul className="space-y-2 font-medium">
-        <div className="p-2 text-xs uppercase text-indigo-200 dark:text-white">
-          Your organizations
-        </div>
-        {userOrganizations.map((organization, index) => (
-          <li key={index}>
-            <Link
-              href={`/dashboard/organizations/${organization.name}`}
-              className="group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700"
-            >
-              <div
-                className={`rounded-lg ${backgroundColorRotation(index)} flex size-6 items-center justify-center border-indigo-400 text-sm text-white`}
+    <ul className="space-y-2 font-medium">
+      {userOwnedOrganizations.length > 0 && (
+        <>
+          <div className="p-2 text-xs uppercase text-indigo-200 dark:text-white">
+            Your organizations
+          </div>
+          {userOwnedOrganizations.map((organization, index) => (
+            <li key={index}>
+              <Link
+                href={`/dashboard/organizations/${organization.name}`}
+                className="group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700"
               >
-                <div className="p-3 text-center font-bold">
-                  {organization.name.substring(0, 1).toUpperCase()}
+                <div
+                  className={`rounded-lg ${backgroundColorRotation(index)} flex size-6 items-center justify-center border-indigo-400 text-sm text-white`}
+                >
+                  <div className="p-3 text-center font-bold">
+                    {organization.name.substring(0, 1).toUpperCase()}
+                  </div>
                 </div>
-              </div>
-              <span className="ms-3">{organization.name}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    )
+
+                <span className="ms-3">{organization.name}</span>
+              </Link>
+            </li>
+          ))}
+        </>
+      )}
+      {userMemberOrganizations.length > 0 && (
+        <>
+          <div className="p-2 text-xs uppercase text-indigo-200 dark:text-white">
+            Your memberships
+          </div>
+          {userMemberOrganizations.map((organization, index) => (
+            <li key={index}>
+              <Link
+                href={`/dashboard/organizations/${organization.name}`}
+                className="group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700"
+              >
+                <div
+                  className={`rounded-lg ${backgroundColorRotation(index)} flex size-6 items-center justify-center border-indigo-400 text-sm text-white`}
+                >
+                  <div className="p-3 text-center font-bold">
+                    {organization.name.substring(0, 1).toUpperCase()}
+                  </div>
+                </div>
+                <span className="ms-3">{organization.name}</span>
+              </Link>
+            </li>
+          ))}
+        </>
+      )}
+    </ul>
   );
 }
