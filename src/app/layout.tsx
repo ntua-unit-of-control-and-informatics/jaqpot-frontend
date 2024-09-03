@@ -5,6 +5,7 @@ import GoogleAnalytics from '@/app/components/GoogleAnalytics';
 import { useRouter } from 'next/navigation';
 import { Providers } from '@/app/providers';
 import { openGraphImage } from '@/app/shared.metadata';
+import CookiesConsent from '@/app/components/CookieConsent';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-white dark:bg-slate-800 dark:text-slate-400`}
       >
+        <CookiesConsent />
         <Providers>{children}</Providers>
       </body>
     </html>
