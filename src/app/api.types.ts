@@ -10,6 +10,7 @@ export type DatasetCSVDto = components['schemas']['DatasetCSV'];
 export type OrganizationDto = components['schemas']['Organization'];
 export type OrganizationInvitationDto =
   components['schemas']['OrganizationInvitation'];
+export type OrganizationUserDto = components['schemas']['OrganizationUser'];
 
 export type ModelsResponseDto =
   operations['getModels']['responses']['200']['content']['application/json'];

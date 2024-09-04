@@ -144,10 +144,12 @@ export default async function Page({ params }: { params: ModelPageParams }) {
           </div>
           <div className="flex items-center text-sm text-gray-400">
             {model.creator && (
-              <>
-                <UserIcon className="mr-2 size-5 text-gray-400" />
-                <span>{model.creator?.name}</span>
-              </>
+              <Tooltip content={'Creator'} closeDelay={0}>
+                <div className="flex">
+                  <UserIcon className="mr-2 size-5 text-gray-400" />
+                  <span>{model.creator?.username}</span>
+                </div>
+              </Tooltip>
             )}
           </div>
           <div className="flex items-center text-sm text-gray-400">

@@ -82,7 +82,7 @@ export default function UserAvatar({ session }: { session: Session | null }) {
               showFallback: true,
               src:
                 session?.user?.image ||
-                `https://api.dicebear.com/9.x/bottts/jpg?seed=${session?.user?.name?.replace(
+                `https://api.dicebear.com/9.x/bottts/jpg?seed=${session?.user?.email?.replace(
                   ' ',
                   '',
                 )}`,

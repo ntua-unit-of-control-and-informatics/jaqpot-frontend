@@ -233,6 +233,24 @@ export interface components {
       torchConfig?: {
         [key: string]: Record<string, never>;
       };
+      preprocessors?: components["schemas"]["Preprocessor"][];
+      featurizers?: components["schemas"]["Featurizer"][];
+    };
+    /** @description A preprocessor for the model */
+    Preprocessor: {
+      /** @example StandardScaler */
+      name: string;
+      config: {
+        [key: string]: Record<string, never>;
+      };
+    };
+    /** @description A featurizer for the model */
+    Featurizer: {
+      /** @example RDKitFeaturizer */
+      name: string;
+      config: {
+        [key: string]: Record<string, never>;
+      };
     };
     /** @enum {string} */
     ModelVisibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
@@ -373,11 +391,11 @@ export interface components {
       id?: number;
       /** @example my-awesome-org */
       name: string;
-      creatorId?: string;
+      creator?: components["schemas"]["User"];
       visibility: components["schemas"]["OrganizationVisibility"];
       /** @example An awesome organization for managing models. */
       description?: string;
-      userIds?: string[];
+      organizationMembers?: components["schemas"]["OrganizationUser"][];
       /** @example contact@my-awesome-org.com */
       contactEmail: string;
       /** @example +1234567890 */
@@ -393,6 +411,17 @@ export interface components {
       created_at?: Record<string, never>;
       updated_at?: Record<string, never>;
     };
+    OrganizationUser: {
+      /** Format: int64 */
+      id?: number;
+      userId: string;
+      username: string;
+      /** Format: email */
+      email: string;
+      associationType: components["schemas"]["OrganizationUserAssociationType"];
+    };
+    /** @enum {string} */
+    OrganizationUserAssociationType: "ADMIN" | "MEMBER";
     /** @enum {string} */
     OrganizationVisibility: "PUBLIC" | "PRIVATE";
     OrganizationInvitation: {
@@ -419,7 +448,8 @@ export interface components {
     /** User */
     User: {
       id: string;
-      name?: string;
+      username?: string;
+      email?: string;
       emailVerified?: boolean;
     };
     ErrorResponse: {

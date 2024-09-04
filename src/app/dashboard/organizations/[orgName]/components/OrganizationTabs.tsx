@@ -3,8 +3,10 @@
 import { Tab, Tabs } from '@nextui-org/tabs';
 import { OrganizationDto } from '@/app/api.types';
 import OrganizationEditTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationEditTab';
-import OrganizationInvitationsTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationInvitationsTab';
+import OrganizationPeopleTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationPeopleTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
+import { PencilSquareIcon, UsersIcon } from '@heroicons/react/24/solid';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 interface OrganizationTabsProps {
   organization: OrganizationDto;
@@ -27,16 +29,38 @@ export default function OrganizationTabs({
           'rounded-none border-none box-shadow-none group-data-[selected=true]:text-indigo-600',
       }}
     >
-      <Tab key="description" title="Description">
+      <Tab
+        key="description"
+        title={
+          <div className="flex items-center space-x-1">
+            <InformationCircleIcon className="size-5" />
+            <span>Description</span>
+          </div>
+        }
+      >
         <MarkdownRenderer>{organization.description}</MarkdownRenderer>
       </Tab>
+      <Tab
+        key="members"
+        title={
+          <div className="flex items-center space-x-1">
+            <UsersIcon className="size-5" />
+            <span>People</span>
+          </div>
+        }
+      >
+        <OrganizationPeopleTab organization={organization} />
+      </Tab>
       {organization.canEdit && (
-        <Tab key="invitations" title="Invitations">
-          <OrganizationInvitationsTab organization={organization} />
-        </Tab>
-      )}
-      {organization.canEdit && (
-        <Tab key="edit" title="Edit">
+        <Tab
+          key="edit"
+          title={
+            <div className="flex items-center space-x-1">
+              <PencilSquareIcon className="size-5" />
+              <span>Edit</span>
+            </div>
+          }
+        >
           <OrganizationEditTab organization={organization} />
         </Tab>
       )}
