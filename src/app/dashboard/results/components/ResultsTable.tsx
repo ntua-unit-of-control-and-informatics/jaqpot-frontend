@@ -129,6 +129,7 @@ export default function ResultsTable() {
           >
             <TableCell>
               <Link
+                isExternal
                 showAnchorIcon
                 href={`/dashboard/models/${item.modelId}/results/${item.id}`}
               >
@@ -136,7 +137,11 @@ export default function ResultsTable() {
               </Link>
             </TableCell>
             <TableCell>
-              <Link showAnchorIcon href={`/dashboard/models/${item.modelId}`}>
+              <Link
+                isExternal
+                showAnchorIcon
+                href={`/dashboard/models/${item.modelId}`}
+              >
                 {item.modelName}
               </Link>
             </TableCell>
