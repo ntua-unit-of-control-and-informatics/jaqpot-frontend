@@ -391,7 +391,7 @@ export interface components {
       id?: number;
       /** @example my-awesome-org */
       name: string;
-      creatorId?: string;
+      creator?: components["schemas"]["User"];
       visibility: components["schemas"]["OrganizationVisibility"];
       /** @example An awesome organization for managing models. */
       description?: string;
