@@ -3,8 +3,13 @@
 import { Tab, Tabs } from '@nextui-org/tabs';
 import { OrganizationDto } from '@/app/api.types';
 import OrganizationEditTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationEditTab';
-import OrganizationInvitationsTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationInvitationsTab';
+import OrganizationPeopleTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationPeopleTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
+import {
+  DocumentTextIcon,
+  PencilSquareIcon,
+  UsersIcon,
+} from '@heroicons/react/24/solid';
 
 interface OrganizationTabsProps {
   organization: OrganizationDto;
@@ -27,16 +32,38 @@ export default function OrganizationTabs({
           'rounded-none border-none box-shadow-none group-data-[selected=true]:text-indigo-600',
       }}
     >
-      <Tab key="description" title="Description">
+      <Tab
+        key="description"
+        title={
+          <div className="flex items-center space-x-2">
+            <DocumentTextIcon className="size-6" />
+            <span>Description</span>
+          </div>
+        }
+      >
         <MarkdownRenderer>{organization.description}</MarkdownRenderer>
       </Tab>
+      <Tab
+        key="members"
+        title={
+          <div className="flex items-center space-x-2">
+            <UsersIcon className="size-6" />
+            <span>People</span>
+          </div>
+        }
+      >
+        <OrganizationPeopleTab organization={organization} />
+      </Tab>
       {organization.canEdit && (
-        <Tab key="invitations" title="Invitations">
-          <OrganizationInvitationsTab organization={organization} />
-        </Tab>
-      )}
-      {organization.canEdit && (
-        <Tab key="edit" title="Edit">
+        <Tab
+          key="edit"
+          title={
+            <div className="flex items-center space-x-2">
+              <PencilSquareIcon className="size-6" />
+              <span>Edit</span>
+            </div>
+          }
+        >
           <OrganizationEditTab organization={organization} />
         </Tab>
       )}

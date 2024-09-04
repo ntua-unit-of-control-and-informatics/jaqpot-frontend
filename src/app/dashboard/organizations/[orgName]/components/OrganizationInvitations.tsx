@@ -22,7 +22,7 @@ import { Button } from '@nextui-org/button';
 import { Tooltip } from '@nextui-org/tooltip';
 import toast from 'react-hot-toast';
 
-interface OrganizationInvitationsTabProps {
+interface OrganizationInvitationsProps {
   organization: OrganizationDto;
 }
 
@@ -63,9 +63,9 @@ const fetcher: Fetcher<
   return res.json();
 };
 
-export default function OrganizationInvitationsTab({
+export default function OrganizationInvitations({
   organization,
-}: OrganizationInvitationsTabProps) {
+}: OrganizationInvitationsProps) {
   const {
     data: apiResponse,
     isLoading,
@@ -102,7 +102,7 @@ export default function OrganizationInvitationsTab({
   }
 
   return (
-    <div>
+    <div className="my-3">
       <InviteUsersButton />
       <Table aria-label="Invitations table" className="mt-4">
         <TableHeader columns={columns}>
