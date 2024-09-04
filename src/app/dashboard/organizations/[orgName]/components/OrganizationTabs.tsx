@@ -32,8 +32,8 @@ export default function OrganizationTabs({
       <Tab
         key="description"
         title={
-          <div className="flex items-center space-x-2">
-            <InformationCircleIcon className="size-6" />
+          <div className="flex items-center space-x-1">
+            <InformationCircleIcon className="size-5" />
             <span>Description</span>
           </div>
         }
@@ -43,8 +43,8 @@ export default function OrganizationTabs({
       <Tab
         key="members"
         title={
-          <div className="flex items-center space-x-2">
-            <UsersIcon className="size-6" />
+          <div className="flex items-center space-x-1">
+            <UsersIcon className="size-5" />
             <span>People</span>
           </div>
         }
@@ -55,8 +55,8 @@ export default function OrganizationTabs({
         <Tab
           key="edit"
           title={
-            <div className="flex items-center space-x-2">
-              <PencilSquareIcon className="size-6" />
+            <div className="flex items-center space-x-1">
+              <PencilSquareIcon className="size-5" />
               <span>Edit</span>
             </div>
           }

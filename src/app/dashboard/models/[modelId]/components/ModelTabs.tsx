@@ -43,13 +43,13 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       }}
       selectedKey={params.tabName}
       defaultSelectedKey="description"
-      className="mt-5"
+      className="mt-2.5"
     >
       <Tab
         key="description"
         title={
-          <div className="flex items-center space-x-2">
-            <InformationCircleIcon className="size-6" />
+          <div className="flex items-center space-x-1">
+            <InformationCircleIcon className="size-5" />
             <span>Description</span>
           </div>
         }
@@ -60,8 +60,8 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       <Tab
         key="features"
         title={
-          <div className="flex items-center space-x-2">
-            <AdjustmentsVerticalIcon className="size-6" />
+          <div className="flex items-center space-x-1">
+            <AdjustmentsVerticalIcon className="size-5" />
             <span>Features</span>
           </div>
         }
@@ -72,8 +72,8 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       <Tab
         key="predict"
         title={
-          <div className="flex items-center space-x-2">
-            <RocketLaunchIcon className="size-6" />
+          <div className="flex items-center space-x-1">
+            <RocketLaunchIcon className="size-5" />
             <span>Predict</span>
           </div>
         }
@@ -85,8 +85,8 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         <Tab
           key="edit"
           title={
-            <div className="flex items-center space-x-2">
-              <PencilSquareIcon className="size-6" />
+            <div className="flex items-center space-x-1">
+              <PencilSquareIcon className="size-5" />
               <span>Edit</span>
             </div>
           }
@@ -99,8 +99,8 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         <Tab
           key="admin"
           title={
-            <div className="flex items-center space-x-2">
-              <ShieldCheckIcon className="size-6" />
+            <div className="flex items-center space-x-1">
+              <ShieldCheckIcon className="size-5" />
               <span>Admin</span>
             </div>
           }
@@ -112,8 +112,8 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       <Tab
         key="discussion"
         title={
-          <div className="flex items-center space-x-2">
-            <ChatBubbleLeftRightIcon className="size-6" />
+          <div className="flex items-center space-x-1">
+            <ChatBubbleLeftRightIcon className="size-5" />
             <span>Discussion</span>
           </div>
         }
