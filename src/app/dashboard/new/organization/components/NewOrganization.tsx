@@ -16,7 +16,6 @@ export default function NewOrganization() {
   const [formData, setFormData] = useState<OrganizationDto>({
     name: '',
     visibility: 'PUBLIC',
-    userIds: [],
     contactEmail: '',
   });
   const [isLoading, setIsLoading] = useState(false);
