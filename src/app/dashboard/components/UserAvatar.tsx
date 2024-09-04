@@ -67,8 +67,6 @@ export default function UserAvatar({ session }: { session: Session | null }) {
     },
   ];
 
-  console.log(session?.user);
-
   return (
     <Dropdown
       backdrop="blur"
