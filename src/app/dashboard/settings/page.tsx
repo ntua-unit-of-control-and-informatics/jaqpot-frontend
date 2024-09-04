@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <div>
       <SettingsBreadcrumbs />
-      <h2 className="mb-10 scroll-m-20 border-b pb-2 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+      <h2 className="mb-10 scroll-m-20 border-b pb-2 text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
         Settings
       </h2>
       <UserSettings />

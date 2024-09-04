@@ -60,7 +60,7 @@ export default function NewOrganization() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+      <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
         Create Organization
       </h2>
 

@@ -15,7 +15,7 @@ export default function Page() {
     <Tabs aria-label="Options">
       <Tab key="jaqpotpy" title="Python SDK">
         <div className="flex flex-col items-start gap-5 p-4">
-          <h1 className="mb-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+          <h1 className="mb-5 text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
             Create new model
           </h1>
           <p>

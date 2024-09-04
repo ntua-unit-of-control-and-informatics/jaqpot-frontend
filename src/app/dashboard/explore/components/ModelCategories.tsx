@@ -51,7 +51,7 @@ const list = [
 export default function ModelCategories() {
   return (
     <>
-      <h1 className="mb-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+      <h1 className="mb-5 text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
         Sample page
       </h1>
       <div className="mx-auto grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">

@@ -84,15 +84,15 @@ export default function OrganizationInvitation({
         </div>
       )}
       {invitation.status !== 'ACCEPTED' && invitation.status !== 'REJECTED' && (
-        <div className="max-w-3xl mx-auto flex flex-col gap-4 mt-4">
-          <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+        <div className="mx-auto mt-4 flex max-w-3xl flex-col gap-4">
+          <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
             You have been invited to join the organization: {organization.name}
           </h2>
-          <div className="max-w-3xl mx-auto flex flex-col justify-center mb-4">
-            <h1 className="text-xl font-bold mb-4">
+          <div className="mx-auto mb-4 flex max-w-3xl flex-col justify-center">
+            <h1 className="mb-4 text-xl font-bold">
               Do you wish to accept the invitation to this organization?
             </h1>
-            <div className="flex justify-center space-x-4 mt-6">
+            <div className="mt-6 flex justify-center space-x-4">
               <Button
                 color="success"
                 onClick={() => handleSubmit('ACCEPTED')}

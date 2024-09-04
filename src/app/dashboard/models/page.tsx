@@ -46,7 +46,7 @@ export default async function ModelsPage() {
     <div>
       <ModelsBreadcrumbs />
       <div className="mb-5 flex items-center">
-        <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+        <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
           Your models{' '}
         </h2>
         <Tooltip content="Models created by you" closeDelay={0}>
@@ -57,7 +57,7 @@ export default async function ModelsPage() {
       <ModelsTable modelsEndpoint="/api/user/models" />
 
       <div className="my-5 flex items-center">
-        <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+        <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
           Shared via your associated organizations
         </h2>
         <Tooltip

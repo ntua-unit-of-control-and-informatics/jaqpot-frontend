@@ -157,7 +157,7 @@ export default function DatasetResults({
           </Accordion>
         )}
       </div>
-      <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+      <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
         Result
       </h2>
       <div>
