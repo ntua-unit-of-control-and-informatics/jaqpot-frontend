@@ -100,7 +100,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
           title={
             <div className="flex items-center space-x-2">
               <ShieldCheckIcon className="size-6" />
-              <span>Edit</span>
+              <span>Admin</span>
             </div>
           }
           href={`${pathnameWithoutTab}/admin`}
