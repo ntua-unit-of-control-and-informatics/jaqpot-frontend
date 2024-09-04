@@ -43,7 +43,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       }}
       selectedKey={params.tabName}
       defaultSelectedKey="description"
-      className="mt-3"
+      className="mt-5"
     >
       <Tab
         key="description"
