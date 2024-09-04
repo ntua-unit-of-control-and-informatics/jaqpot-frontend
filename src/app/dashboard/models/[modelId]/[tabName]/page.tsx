@@ -146,7 +146,7 @@ export default async function Page({ params }: { params: ModelPageParams }) {
             {model.creator && (
               <>
                 <UserIcon className="mr-2 size-5 text-gray-400" />
-                <span>{model.creator?.name}</span>
+                <span>{model.creator?.username}</span>
               </>
             )}
           </div>

@@ -5,11 +5,8 @@ import { OrganizationDto } from '@/app/api.types';
 import OrganizationEditTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationEditTab';
 import OrganizationPeopleTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationPeopleTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
-import {
-  DocumentTextIcon,
-  PencilSquareIcon,
-  UsersIcon,
-} from '@heroicons/react/24/solid';
+import { PencilSquareIcon, UsersIcon } from '@heroicons/react/24/solid';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 interface OrganizationTabsProps {
   organization: OrganizationDto;
@@ -36,7 +33,7 @@ export default function OrganizationTabs({
         key="description"
         title={
           <div className="flex items-center space-x-2">
-            <DocumentTextIcon className="size-6" />
+            <InformationCircleIcon className="size-6" />
             <span>Description</span>
           </div>
         }

@@ -8,6 +8,14 @@ import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/Predict
 import ModelEditTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelEditTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
 import ModelAdminTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelAdminTab';
+import {
+  AdjustmentsVerticalIcon,
+  ChatBubbleLeftRightIcon,
+  PencilSquareIcon,
+  RocketLaunchIcon,
+  ShieldCheckIcon,
+} from '@heroicons/react/24/solid';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 interface ModelTabsProps {
   model: ModelDto;
@@ -38,34 +46,76 @@ export default function ModelTabs({ model }: ModelTabsProps) {
     >
       <Tab
         key="description"
-        title="Description"
+        title={
+          <div className="flex items-center space-x-2">
+            <InformationCircleIcon className="size-6" />
+            <span>Description</span>
+          </div>
+        }
         href={`${pathnameWithoutTab}/description`}
       >
         <MarkdownRenderer>{model.description}</MarkdownRenderer>
       </Tab>
       <Tab
         key="features"
-        title="Features"
+        title={
+          <div className="flex items-center space-x-2">
+            <AdjustmentsVerticalIcon className="size-6" />
+            <span>Features</span>
+          </div>
+        }
         href={`${pathnameWithoutTab}/features`}
       >
         <FeaturesTab model={model} />
       </Tab>
-      <Tab key="predict" title="Predict" href={`${pathnameWithoutTab}/predict`}>
+      <Tab
+        key="predict"
+        title={
+          <div className="flex items-center space-x-2">
+            <RocketLaunchIcon className="size-6" />
+            <span>Predict</span>
+          </div>
+        }
+        href={`${pathnameWithoutTab}/predict`}
+      >
         <PredictTab model={model} />
       </Tab>
       {model.canEdit && (
-        <Tab key="edit" title="Edit" href={`${pathnameWithoutTab}/edit`}>
+        <Tab
+          key="edit"
+          title={
+            <div className="flex items-center space-x-2">
+              <PencilSquareIcon className="size-6" />
+              <span>Edit</span>
+            </div>
+          }
+          href={`${pathnameWithoutTab}/edit`}
+        >
           <ModelEditTab model={model} />
         </Tab>
       )}
       {model.isAdmin && (
-        <Tab key="admin" title="Admin" href={`${pathnameWithoutTab}/admin`}>
+        <Tab
+          key="admin"
+          title={
+            <div className="flex items-center space-x-2">
+              <ShieldCheckIcon className="size-6" />
+              <span>Edit</span>
+            </div>
+          }
+          href={`${pathnameWithoutTab}/admin`}
+        >
           <ModelAdminTab model={model} />
         </Tab>
       )}
       <Tab
         key="discussion"
-        title="Discussion"
+        title={
+          <div className="flex items-center space-x-2">
+            <ChatBubbleLeftRightIcon className="size-6" />
+            <span>Discussion</span>
+          </div>
+        }
         href={`${pathnameWithoutTab}/discussion`}
       >
         Not implemented yet
