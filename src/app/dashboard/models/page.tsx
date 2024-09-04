@@ -6,6 +6,8 @@ import ModelsBreadcrumbs from '@/app/dashboard/models/components/ModelsBreadcrum
 import { auth } from '@/auth';
 import { isAuthenticated } from '@/app/util/auth';
 import { errorResponse, handleApiResponse } from '@/app/util/response';
+import { InformationCircleIcon } from '@heroicons/react/24/solid';
+import { Tooltip } from '@nextui-org/tooltip';
 
 export const metadata: Metadata = generateSharedMetadata(
   'Your models',
@@ -43,14 +45,28 @@ export default async function ModelsPage() {
   return (
     <div>
       <ModelsBreadcrumbs />
-      <h2 className="mb-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
-        Your models
-      </h2>
+      <div className="mb-5 flex items-center">
+        <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+          Your models{' '}
+        </h2>
+        <Tooltip content="Models created by you" closeDelay={0}>
+          <InformationCircleIcon className="ml-1 size-5 text-indigo-600" />
+        </Tooltip>
+      </div>
+
       <ModelsTable modelsEndpoint="/api/user/models" />
 
-      <h2 className="my-5 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
-        Shared via your associated organizations
-      </h2>
+      <div className="my-5 flex items-center">
+        <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+          Shared via your associated organizations
+        </h2>
+        <Tooltip
+          content="These models are privately shared with the organizations you are a member of. Only members of the specified organizations can access these models."
+          closeDelay={0}
+        >
+          <InformationCircleIcon className="ml-1 size-5 text-indigo-600" />
+        </Tooltip>
+      </div>
       <ModelsTable
         modelsEndpoint="/api/user/shared-models"
         showSharedOrganizations={true}
