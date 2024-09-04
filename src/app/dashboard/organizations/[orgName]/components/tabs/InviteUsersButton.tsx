@@ -68,6 +68,9 @@ export default function InviteUsersButton() {
                 Invite users
               </ModalHeader>
               <ModalBody className="p-4">
+                <p className="text-tiny text-gray-600">
+                  (Up to 10 users at a time)
+                </p>
                 <ReactMultiEmail
                   placeholder="Insert user emails"
                   emails={emails}
