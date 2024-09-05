@@ -7,6 +7,7 @@ import OrganizationPeopleTab from '@/app/dashboard/organizations/[orgName]/compo
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
 import { PencilSquareIcon, UsersIcon } from '@heroicons/react/24/solid';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { useParams, usePathname } from 'next/navigation';
 
 interface OrganizationTabsProps {
   organization: OrganizationDto;
@@ -15,6 +16,10 @@ interface OrganizationTabsProps {
 export default function OrganizationTabs({
   organization,
 }: OrganizationTabsProps) {
+  const pathname = usePathname();
+  const params = useParams<{ orgTabName: string }>();
+  const pathnameWithoutTab = pathname.substring(0, pathname.lastIndexOf('/'));
+
   return (
     <Tabs
       aria-label="Tabs"
@@ -28,6 +33,7 @@ export default function OrganizationTabs({
         tabContent:
           'rounded-none border-none box-shadow-none group-data-[selected=true]:text-indigo-600',
       }}
+      selectedKey={params.orgTabName}
     >
       <Tab
         key="description"
@@ -37,17 +43,19 @@ export default function OrganizationTabs({
             <span>Description</span>
           </div>
         }
+        href={`${pathnameWithoutTab}/description`}
       >
         <MarkdownRenderer>{organization.description}</MarkdownRenderer>
       </Tab>
       <Tab
-        key="members"
+        key="people"
         title={
           <div className="flex items-center space-x-1">
             <UsersIcon className="size-5" />
             <span>People</span>
           </div>
         }
+        href={`${pathnameWithoutTab}/people`}
       >
         <OrganizationPeopleTab organization={organization} />
       </Tab>
@@ -60,6 +68,7 @@ export default function OrganizationTabs({
               <span>Edit</span>
             </div>
           }
+          href={`${pathnameWithoutTab}/edit`}
         >
           <OrganizationEditTab organization={organization} />
         </Tab>

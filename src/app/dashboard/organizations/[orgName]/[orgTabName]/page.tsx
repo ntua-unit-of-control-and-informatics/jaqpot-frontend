@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import React from 'react';
 import { BuildingOfficeIcon, UserIcon } from '@heroicons/react/24/solid';
 import { isAuthenticated } from '@/app/util/auth';
@@ -25,5 +25,31 @@ export default async function Page({
 }: {
   params: { orgName: string };
 }) {
-  redirect(`/dashboard/organizations/${params.orgName}/description`);
+  const organization = await getOrganizationByName(params.orgName);
+  if (!organization) {
+    notFound();
+  }
+
+  return (
+    <div className="min-h-screen">
+      <OrganizationBreadcrumbs organization={organization} />
+      <div className="rounded-lg">
+        <div className="flex items-center py-3 text-3xl font-semibold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
+          <BuildingOfficeIcon className="mr-2 size-8" />
+          {organization.name}
+        </div>
+        <div className="flex items-center gap-4 py-3">
+          <Tooltip content={'Creator'} closeDelay={0}>
+            <div className="flex items-center text-sm text-gray-400">
+              <>
+                <UserIcon className="mr-2 size-5 text-gray-400" />
+                <span>{organization.creator?.username}</span>
+              </>
+            </div>
+          </Tooltip>
+        </div>
+        <OrganizationTabs organization={organization} />
+      </div>
+    </div>
+  );
 }
