@@ -52,7 +52,7 @@ export default function OrganizationMembers({
 }: OrganizationMembersProps) {
   return (
     <div className="my-3">
-      <Table aria-label="Invitations table" className="mt-4">
+      <Table aria-label="Members table" className="mt-4">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
