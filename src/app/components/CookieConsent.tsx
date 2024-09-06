@@ -1,19 +1,20 @@
 'use client';
 
-import { hasCookie, setCookie } from 'cookies-next';
 import { useEffect, useState } from 'react';
 import { Link } from '@nextui-org/link';
+
+const LOCAL_STORAGE_KEY = 'jaqpotCookieConsent';
 
 export default function CookiesConsent() {
   const [showConsent, setShowConsent] = useState(false);
 
   useEffect(() => {
-    setShowConsent(!hasCookie('localConsent'));
+    setShowConsent(!localStorage.getItem(LOCAL_STORAGE_KEY));
   }, []);
 
   const acceptCookie = () => {
     setShowConsent(false);
-    setCookie('localConsent', 'true', {});
+    localStorage.setItem(LOCAL_STORAGE_KEY, 'true');
   };
 
   if (!showConsent) {
