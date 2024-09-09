@@ -181,7 +181,9 @@ export default function SearchModelsTable() {
             >
               <TableCell>{item.name}</TableCell>
               <TableCell>{item.type}</TableCell>
-              <TableCell>{item.description}</TableCell>
+              <TableCell>
+                <div className="line-clamp-2">{item.description}</div>
+              </TableCell>
               <TableCell>{item.independentFeaturesLength}</TableCell>
               <TableCell>{item.dependentFeaturesLength}</TableCell>
               <TableCell>{item.visibility}</TableCell>

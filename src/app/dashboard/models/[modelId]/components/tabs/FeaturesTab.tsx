@@ -73,7 +73,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
               <TableRow key={index}>
                 <TableCell>
                   <Tooltip content={independentFeature.name}>
-                    <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <div className="line-clamp-2">
                       {independentFeature.name}
                     </div>
                   </Tooltip>
@@ -81,7 +81,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
                 <TableCell>{independentFeature.units}</TableCell>
                 <TableCell>
                   <Tooltip content={independentFeature.description}>
-                    <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <div className="line-clamp-2">
                       {independentFeature.description}
                     </div>
                   </Tooltip>

@@ -147,9 +147,7 @@ export default function ResultsTable() {
             </TableCell>
             <TableCell>{getDatasetStatusNode(item)}</TableCell>
             <TableCell>
-              <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
-                {JSON.stringify(item.input)}
-              </div>
+              <div className="line-clamp-2">{JSON.stringify(item.input)}</div>
             </TableCell>
             <TableCell>
               {item.executedAt && (
