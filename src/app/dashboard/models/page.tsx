@@ -50,7 +50,7 @@ export default async function ModelsPage() {
           Your models{' '}
         </h2>
         <Tooltip content="Models created by you" closeDelay={0}>
-          <InformationCircleIcon className="ml-1 size-5 text-indigo-600" />
+          <InformationCircleIcon className="ml-1 size-5 text-gray-400" />
         </Tooltip>
       </div>
 
@@ -64,7 +64,7 @@ export default async function ModelsPage() {
           content="These models are privately shared with the organizations you are a member of. Only members of the specified organizations can access these models."
           closeDelay={0}
         >
-          <InformationCircleIcon className="ml-1 size-5 text-indigo-600" />
+          <InformationCircleIcon className="ml-1 size-5 text-gray-400" />
         </Tooltip>
       </div>
       <ModelsTable
