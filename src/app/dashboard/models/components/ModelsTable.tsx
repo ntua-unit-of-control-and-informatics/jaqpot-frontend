@@ -136,11 +136,7 @@ export default function ModelsTable({
   const rows = data?.content?.map((model: ModelSummaryDto) => {
     return {
       ...model,
-      description: (
-        <div className="max-h-28 max-w-52 overflow-hidden text-ellipsis whitespace-nowrap">
-          {model.description}
-        </div>
-      ),
+      description: <div className="line-clamp-2">{model.description}</div>,
       createdAt: <JaqpotTimeAgo date={model.createdAt as any} />,
       sharedWithOrganizations: model.sharedWithOrganizations
         .filter((org) => userOrganizationIds.includes(org.id))
