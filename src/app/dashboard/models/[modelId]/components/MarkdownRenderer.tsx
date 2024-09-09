@@ -24,13 +24,25 @@ export default function MarkdownRenderer({
           return <p className="mb-2 last:mb-0">{children}</p>;
         },
         h1({ children }) {
-          return <h1 className="text-bold mb-4 text-3xl">{children}</h1>;
+          return (
+            <h1 className="mb-4 text-3xl font-bold sm:tracking-tight">
+              {children}
+            </h1>
+          );
         },
         h2({ children }) {
-          return <h2 className="text-bold mb-3 text-2xl">{children}</h2>;
+          return (
+            <h2 className="mb-3 text-2xl font-bold sm:tracking-tight">
+              {children}
+            </h2>
+          );
         },
         h3({ children }) {
-          return <h3 className="text-bold mb-2 text-xl">{children}</h3>;
+          return (
+            <h3 className="mb-2 text-xl font-bold sm:tracking-tight">
+              {children}
+            </h3>
+          );
         },
         ol({ children }) {
           return <ol className="list-inside list-decimal">{children}</ol>;
