@@ -5,9 +5,14 @@ import { OrganizationDto } from '@/app/api.types';
 import OrganizationEditTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationEditTab';
 import OrganizationPeopleTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationPeopleTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
-import { PencilSquareIcon, UsersIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowsRightLeftIcon,
+  PencilSquareIcon,
+  UsersIcon,
+} from '@heroicons/react/24/solid';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { useParams, usePathname } from 'next/navigation';
+import OrganizationSharedTab from '@/app/dashboard/organizations/[orgName]/components/tabs/OrganizationSharedTab';
 
 interface OrganizationTabsProps {
   organization: OrganizationDto;
@@ -59,6 +64,20 @@ export default function OrganizationTabs({
       >
         <OrganizationPeopleTab organization={organization} />
       </Tab>
+      {(organization.canEdit || organization.isMember) && (
+        <Tab
+          key="shared"
+          title={
+            <div className="flex items-center space-x-1">
+              <ArrowsRightLeftIcon className="size-5" />
+              <span>Shared</span>
+            </div>
+          }
+          href={`${pathnameWithoutTab}/shared`}
+        >
+          <OrganizationSharedTab organization={organization} />
+        </Tab>
+      )}
       {organization.canEdit && (
         <Tab
           key="edit"

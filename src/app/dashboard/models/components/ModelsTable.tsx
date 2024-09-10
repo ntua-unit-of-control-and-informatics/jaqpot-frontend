@@ -28,6 +28,18 @@ import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTim
 import { getKeyValue, Select, SelectItem } from '@nextui-org/react';
 import Link from 'next/link';
 
+type ExtraQueryParamKeys = 'organizationId';
+type ExtraQueryParams = {
+  [key in ExtraQueryParamKeys]?: string;
+};
+
+interface ModelsTableProps {
+  modelsEndpoint: string;
+  showSharedOrganizations?: boolean;
+  userOrganizations?: OrganizationDto[];
+  extraQueryParams?: ExtraQueryParams;
+}
+
 const fetcher: Fetcher<ApiResponse<ModelsResponseDto>, string> = async (
   url,
 ) => {
@@ -50,6 +62,7 @@ function useModelsPage(
   sort: string[],
   modelsEndpoint: string,
   filterByOrganization?: string,
+  extraQueryParams?: ExtraQueryParams,
 ) {
   const queryParams = new URLSearchParams({ page: page.toString() });
   sort.forEach((s) => queryParams.append('sort', s));
@@ -60,6 +73,12 @@ function useModelsPage(
     filterByOrganization !== 'all'
   ) {
     queryParams.append('organizationId', filterByOrganization);
+  }
+
+  if (extraQueryParams) {
+    Object.entries(extraQueryParams).forEach(([key, value]) => {
+      queryParams.append(key, value);
+    });
   }
 
   const {
@@ -80,16 +99,11 @@ function useModelsPage(
   };
 }
 
-interface ModelsTableProps {
-  modelsEndpoint: string;
-  showSharedOrganizations?: boolean;
-  userOrganizations?: OrganizationDto[];
-}
-
 export default function ModelsTable({
   modelsEndpoint,
   showSharedOrganizations = false,
   userOrganizations = [],
+  extraQueryParams,
 }: ModelsTableProps) {
   const router = useRouter();
   const [page, setPage] = useState(1);
@@ -102,6 +116,7 @@ export default function ModelsTable({
     sort,
     modelsEndpoint,
     filterByOrganization,
+    extraQueryParams,
   );
 
   const columns = [
