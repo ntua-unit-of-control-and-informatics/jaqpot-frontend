@@ -59,9 +59,9 @@ export default function UserOrganizations() {
   }
 
   const userOwnedOrganizations =
-    userOrganizations?.filter((org) => org.isCreator) ?? [];
+    userOrganizations?.filter((org) => org.canEdit) ?? [];
   const userMemberOrganizations =
-    userOrganizations?.filter((org) => !org.isCreator) ?? [];
+    userOrganizations?.filter((org) => !org.canEdit) ?? [];
 
   if (error) return;
   if (isLoading) return <Spinner />;
