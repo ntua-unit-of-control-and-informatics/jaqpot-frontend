@@ -163,8 +163,7 @@ export interface components {
       independentFeatures: components["schemas"]["Feature"][];
       sharedWithOrganizations?: components["schemas"]["Organization"][];
       visibility: components["schemas"]["ModelVisibility"];
-      /** @example false */
-      pretrained?: boolean;
+      task: components["schemas"]["ModelTask"];
       /**
        * Format: byte
        * @description A base64 representation of the actual model.
@@ -254,6 +253,8 @@ export interface components {
     };
     /** @enum {string} */
     ModelVisibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
+    /** @enum {string} */
+    ModelTask: "REGRESSION" | "CLASSIFICATION" | "BINARY_CLASSIFICATION" | "MULTICLASS_CLASSIFICATION";
     Library: {
       /** Format: int64 */
       id?: number;
@@ -748,6 +749,7 @@ export interface operations {
           name: string;
           description?: string;
           visibility: components["schemas"]["ModelVisibility"];
+          task: components["schemas"]["ModelTask"];
           tags?: string;
           sharedWithOrganizationIds?: number[];
         };
