@@ -22,14 +22,8 @@ import {
   TableCell,
   getKeyValue,
 } from '@nextui-org/react';
-import useSWR, { Fetcher } from 'swr';
-import SWRClientFetchError from '@/app/components/SWRClientFetchError';
-import { ApiResponse } from '@/app/util/response';
-import { CustomError } from '@/app/types/CustomError';
-import { getUserFriendlyDate } from '@/app/util/date';
 import { Button } from '@nextui-org/button';
 import { Tooltip } from '@nextui-org/tooltip';
-import toast from 'react-hot-toast';
 import Image from 'next/image';
 
 interface OrganizationMembersProps {
@@ -89,11 +83,12 @@ export default function OrganizationMembers({
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Image
-                          src={`https://api.dicebear.com/9.x/bottts/jpg?seed=${item.email.replace(
+                          src={`https://api.dicebear.com/9.x/bottts/svg?seed=${item.email.replace(
                             ' ',
                             '',
                           )}`}
                           alt="user avatar"
+                          unoptimized
                           width={32}
                           height={32}
                         />
