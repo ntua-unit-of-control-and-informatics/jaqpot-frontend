@@ -20,6 +20,7 @@ import {
 } from '@/app/dashboard/dashboard-layout';
 import { Tooltip } from '@nextui-org/tooltip';
 import { UserSettingsContext } from '@/app/dashboard/contexts';
+import NotificationsMenu from '@/app/dashboard/components/NotificationsMenu';
 
 export default function TopBar() {
   const { data: session } = useSession();
@@ -29,7 +30,7 @@ export default function TopBar() {
 
   return (
     <div className="w-full border-b border-b-gray-300 px-4 py-3 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px] sm:px-8">
-      <div className="flex flex-row gap-2 sm:gap-x-6">
+      <div className="flex flex-row gap-x-4 sm:gap-x-6">
         <div className={`hidden ${isCollapsed ? 'sm:flex' : ''} items-center`}>
           <Tooltip content="Open sidebar">
             <Button
@@ -43,11 +44,9 @@ export default function TopBar() {
         </div>
 
         <SearchBar />
-        <div className="flex items-center gap-0 sm:gap-x-2">
+        <div className="flex items-center gap-x-2">
           <CreateMenu />
-          <Button variant="light" className="min-w-10 p-2">
-            <BellIcon className="size-6 text-gray-400" />
-          </Button>
+          <NotificationsMenu />
           <GithubLogo className="hidden sm:block" />
           <Button
             variant="light"
