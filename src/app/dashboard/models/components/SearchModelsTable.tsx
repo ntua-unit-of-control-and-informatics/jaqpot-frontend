@@ -10,8 +10,8 @@ import {
   TableRow,
 } from '@nextui-org/table';
 import { Pagination } from '@nextui-org/pagination';
-import { ModelDto, ModelsResponseDto, ModelSummaryDto } from '@/app/api.types';
-import useSWR, { Fetcher } from 'swr';
+import { ModelsResponseDto, ModelSummaryDto } from '@/app/api.types';
+import useSWR from 'swr';
 import { Spinner } from '@nextui-org/spinner';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
@@ -19,7 +19,6 @@ import { CustomError } from '@/app/types/CustomError';
 import { ApiResponse } from '@/app/util/response';
 import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
-import useSWRMutation from 'swr/mutation';
 
 const fetchWithQueryParams = async (
   url: string,
@@ -179,7 +178,9 @@ export default function SearchModelsTable() {
               className="cursor-pointer hover:bg-indigo-100"
               onClick={() => router.push(`/dashboard/models/${item.id}`)}
             >
-              <TableCell>{item.name}</TableCell>
+              <TableCell>
+                <div className="min-w-80">{item.name}</div>
+              </TableCell>
               <TableCell>{item.type}</TableCell>
               <TableCell>
                 <div className="line-clamp-2">{item.description}</div>
