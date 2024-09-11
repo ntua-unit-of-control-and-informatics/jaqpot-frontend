@@ -151,7 +151,7 @@ export default function ModelsTable({
   const rows = data?.content?.map((model: ModelSummaryDto) => {
     return {
       ...model,
-      name: <div className="min-w-80">{model.name}</div>,
+      name: <div className="sm:min-w-80">{model.name}</div>,
       description: <div className="line-clamp-3">{model.description}</div>,
       createdAt: <JaqpotTimeAgo date={model.createdAt as any} />,
       sharedWithOrganizations: model.sharedWithOrganizations

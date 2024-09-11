@@ -179,7 +179,7 @@ export default function SearchModelsTable() {
               onClick={() => router.push(`/dashboard/models/${item.id}`)}
             >
               <TableCell>
-                <div className="min-w-80">{item.name}</div>
+                <div className="sm:min-w-80">{item.name}</div>
               </TableCell>
               <TableCell>{item.type}</TableCell>
               <TableCell>
