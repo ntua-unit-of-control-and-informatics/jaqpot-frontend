@@ -12,6 +12,7 @@ export default function MarkdownRenderer({
   return (
     <Markdown
       remarkPlugins={[remarkGfm]}
+      className="max-w-full whitespace-normal"
       components={{
         a(props: any) {
           return (
@@ -61,7 +62,38 @@ export default function MarkdownRenderer({
           );
         },
         table({ children }) {
-          return <table className="table-auto">{children}</table>;
+          return (
+            <table className="table table-auto border-collapse divide-y divide-gray-200 text-sm dark:divide-neutral-700">
+              {children}
+            </table>
+          );
+        },
+        thead({ children }) {
+          return <thead className="table-header-group">{children}</thead>;
+        },
+        th({ children }) {
+          return (
+            <th className="px-6 py-3 text-start text-xs font-medium uppercase text-gray-500 dark:text-neutral-500">
+              {children}
+            </th>
+          );
+        },
+        tbody({ children }) {
+          return (
+            <tbody className="table-row-group divide-y divide-gray-200 dark:divide-neutral-700">
+              {children}
+            </tbody>
+          );
+        },
+        tr({ children }) {
+          return <tr className="table-row">{children}</tr>;
+        },
+        td({ children }) {
+          return (
+            <td className="table-cell px-6 py-4 text-sm font-medium text-gray-800 dark:text-neutral-200">
+              {children}
+            </td>
+          );
         },
       }}
     >
