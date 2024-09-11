@@ -12,11 +12,11 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Jaqpot',
   description:
-    "The Jaqpot project's frontend app serves as the interactive gateway for users to engage with our predictive modeling platform. Users can upload models and obtain predictions seamlessly.",
+    "The Jaqpot project's app serves as the interactive gateway for users to engage with our predictive modeling platform. Users can upload models and obtain predictions seamlessly.",
   openGraph: {
     title: 'Jaqpot',
     description:
-      "The Jaqpot project's frontend app serves as the interactive gateway for users to engage with our predictive modeling platform. Users can upload models and obtain predictions seamlessly.",
+      "The Jaqpot project's app serves as the interactive gateway for users to engage with our predictive modeling platform. Users can upload models and obtain predictions seamlessly.",
     ...openGraphImage,
   },
 };
