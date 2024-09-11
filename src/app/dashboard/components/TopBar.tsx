@@ -51,7 +51,7 @@ export default function TopBar() {
           <GithubLogo className="hidden sm:block" />
           <Button
             variant="light"
-            className="min-w-10 p-2"
+            className="hidden min-w-10 p-2 sm:block"
             onClick={() =>
               setUserSettings({
                 ...userSettings,
