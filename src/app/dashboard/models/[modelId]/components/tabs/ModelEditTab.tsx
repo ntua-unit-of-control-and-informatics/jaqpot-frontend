@@ -53,6 +53,31 @@ export type PartiallyUpdateModelRequestDtoWithStringIds = Omit<
 export default function ModelEditTab({ model }: FeaturesTabProps) {
   const router = useRouter();
 
+  const possibleModelTaskValues = [
+    {
+      key: 'REGRESSION',
+      label: 'Regression',
+      description: 'Predict a continuous value.',
+    },
+    {
+      key: 'CLASSIFICATION',
+      label: 'Classification',
+      description: 'Predict a discrete value.',
+    },
+    {
+      key: 'BINARY_CLASSIFICATION',
+      label: 'Binary Classification',
+      description:
+        'Predict one of two possible classes using deep learning models, typically used with Torch.',
+    },
+    {
+      key: 'MULTICLASS_CLASSIFICATION',
+      label: 'Multiclass Classification',
+      description:
+        'Predict one of multiple classes using deep learning models, optimized for use with Torch.',
+    },
+  ];
+
   const possibleVisibilityValues: VisibilityValue[] = [
     {
       key: 'PUBLIC',
@@ -87,6 +112,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
       name: model.name,
       visibility: model.visibility,
       description: model.description ?? '',
+      task: model.task,
       tags: model.tags ?? '',
       sharedWithOrganizationIds,
     });
@@ -178,6 +204,23 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
               value={formData.description}
               onChange={handleChange}
             />
+          </div>
+          <div>
+            <Select
+              defaultSelectedKeys={[formData.task]}
+              selectedKeys={[formData.task]}
+              name="task"
+              label="Model task"
+              className="max-w-xs"
+              onChange={handleChange}
+              isRequired
+            >
+              {possibleModelTaskValues.map((val) => (
+                <SelectItem key={val.key} description={val.description}>
+                  {val.label}
+                </SelectItem>
+              ))}
+            </Select>
           </div>
           <div>
             <Select
