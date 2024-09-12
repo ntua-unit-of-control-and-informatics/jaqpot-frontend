@@ -5,6 +5,7 @@ import { Radio, RadioGroup, Select, SelectItem } from '@nextui-org/react';
 import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 import { Checkbox } from '@nextui-org/checkbox';
+import SmilesInput from '@/app/dashboard/models/[modelId]/components/SmilesInput';
 
 // const jsonExample: DynamicFormSchema[] = [
 //   {
@@ -111,6 +112,7 @@ export interface DynamicFormSchema {
 
 export type DynamicFormFieldType =
   | 'text'
+  | 'smiles'
   | 'number'
   | 'email'
   | 'password'
@@ -235,6 +237,15 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             rows={3}
             name={field.name}
             placeholder={field.placeholder}
+            onChange={handleChange}
+            required={field.required}
+            value={(formData[field.name] || '') as string}
+          />
+        );
+      case 'smiles':
+        return (
+          <SmilesInput
+            name={field.name}
             onChange={handleChange}
             required={field.required}
             value={(formData[field.name] || '') as string}

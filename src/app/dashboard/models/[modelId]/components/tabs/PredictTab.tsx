@@ -82,8 +82,9 @@ export default function PredictTab({ model }: PredictTabProps) {
         return 'select';
       case 'TEXT':
       case 'STRING':
-      case 'SMILES':
         return 'text';
+      case 'SMILES':
+        return 'smiles';
       default:
         return 'number';
     }
