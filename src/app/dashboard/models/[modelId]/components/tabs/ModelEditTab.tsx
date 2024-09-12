@@ -60,11 +60,6 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
       description: 'Predict a continuous value.',
     },
     {
-      key: 'CLASSIFICATION',
-      label: 'Classification',
-      description: 'Predict a discrete value.',
-    },
-    {
       key: 'BINARY_CLASSIFICATION',
       label: 'Binary Classification',
       description:
