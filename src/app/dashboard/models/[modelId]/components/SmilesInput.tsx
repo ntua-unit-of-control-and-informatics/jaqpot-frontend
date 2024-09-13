@@ -53,6 +53,7 @@ export default function SmilesInput({
         onOpenChange={onOpenChange}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
+        size={'xl'}
       >
         <ModalContent>
           {(onClose) => (
@@ -61,11 +62,7 @@ export default function SmilesInput({
                 Modal Title
               </ModalHeader>
               <ModalBody>
-                <SmilesDrawer
-                  height={400}
-                  width={400}
-                  onChange={handleOnChange}
-                />
+                <SmilesDrawer />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
