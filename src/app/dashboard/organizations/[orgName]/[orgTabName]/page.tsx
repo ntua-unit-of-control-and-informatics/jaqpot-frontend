@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import React from 'react';
-import { BuildingOfficeIcon, UserIcon } from '@heroicons/react/24/solid';
+import { UserIcon } from '@heroicons/react/24/solid';
+import { BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import { isAuthenticated } from '@/app/util/auth';
 import OrganizationTabs from '@/app/dashboard/organizations/[orgName]/components/OrganizationTabs';
 import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
