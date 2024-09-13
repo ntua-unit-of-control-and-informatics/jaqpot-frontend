@@ -1,9 +1,11 @@
 import {
+  ArrowTopRightOnSquareIcon,
+  BugAntIcon,
   BuildingOfficeIcon,
   CircleStackIcon,
   PlusIcon,
-  QueueListIcon,
-} from '@heroicons/react/24/solid';
+  LightBulbIcon,
+} from '@heroicons/react/24/outline';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Tooltip } from '@nextui-org/tooltip';
 import {
@@ -54,6 +56,30 @@ export default function CreateMenu() {
             <div className="flex">
               <BuildingOfficeIcon className="mr-2 h-6 w-6" />
               New Organization
+            </div>
+          </DropdownItem>
+          <DropdownItem
+            key="new-issue"
+            textValue="Report a bug"
+            href="https://github.com/ntua-unit-of-control-and-informatics/jaqpotpy/issues/new?assignees=&labels=&projects=&template=bug_report.md&title="
+            target="_blank"
+          >
+            <div className="flex items-center">
+              <BugAntIcon className="mr-2 h-6 w-6" />
+              Report a bug
+              <ArrowTopRightOnSquareIcon className={`ml-2 h-4 w-4`} />
+            </div>
+          </DropdownItem>
+          <DropdownItem
+            key="new-feature"
+            textValue="Request a feature"
+            href="https://github.com/ntua-unit-of-control-and-informatics/jaqpotpy/issues/new?assignees=&labels=&projects=&template=feature_request.md&title="
+            target="_blank"
+          >
+            <div className="flex items-center">
+              <LightBulbIcon className="mr-2 h-6 w-6" />
+              Request a feature
+              <ArrowTopRightOnSquareIcon className={`ml-2 h-4 w-4`} />
             </div>
           </DropdownItem>
         </DropdownMenu>
