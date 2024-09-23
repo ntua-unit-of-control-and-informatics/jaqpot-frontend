@@ -149,7 +149,7 @@ export default function PredictTab({ model }: PredictTabProps) {
             label: 'text-sm',
           }}
         >
-          Upload a CSV file
+          Upload a CSV file (max 10 rows)
         </Radio>
       </RadioGroup>
 

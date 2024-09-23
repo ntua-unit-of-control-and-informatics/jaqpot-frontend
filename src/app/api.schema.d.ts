@@ -254,7 +254,7 @@ export interface components {
     /** @enum {string} */
     ModelVisibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
     /** @enum {string} */
-    ModelTask: "REGRESSION" | "CLASSIFICATION" | "BINARY_CLASSIFICATION" | "MULTICLASS_CLASSIFICATION";
+    ModelTask: "REGRESSION" | "BINARY_CLASSIFICATION" | "MULTICLASS_CLASSIFICATION";
     Library: {
       /** Format: int64 */
       id?: number;
