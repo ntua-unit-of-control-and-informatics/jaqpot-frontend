@@ -2,6 +2,8 @@ import { Chip } from '@nextui-org/chip';
 import React from 'react';
 import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
 
+export const JAQPOT_INTERNAL_ID_KEY = 'jaqpotInternalId';
+
 export function getDatasetStatusNode(dataset: DatasetDto | null | undefined) {
   if (!dataset) {
     return <></>;
@@ -28,13 +30,23 @@ export function generateResultTableRow(
   dataset: DatasetDto,
   resultIndex: number,
   result: any,
+  jaqpotInternalId?: string,
 ): string[] {
   const independentFeatureCellValues: string[] = independentFeatures.map(
     (feature, independentFeatureIndex) => {
-      const input = dataset.input[resultIndex] as any;
-      if (!input || !input[feature.key]) {
+      let input = dataset.input.find(
+        (inputRow) =>
+          jaqpotInternalId !== undefined &&
+          (inputRow as any)[JAQPOT_INTERNAL_ID_KEY] === jaqpotInternalId,
+      ) as any;
+      if (!input) {
+        input = dataset.input[resultIndex];
+      }
+
+      if (!input) {
         return 'N/A';
       }
+
       if (feature.featureType === 'CATEGORICAL') {
         return (
           feature.possibleValues?.find(
@@ -42,6 +54,7 @@ export function generateResultTableRow(
           )?.value ?? input[feature.key]
         );
       }
+
       return input[feature.key];
     },
   );

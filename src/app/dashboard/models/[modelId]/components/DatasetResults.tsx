@@ -20,6 +20,7 @@ import { Chip } from '@nextui-org/chip';
 import {
   getDatasetStatusNode,
   generateResultTableRow,
+  JAQPOT_INTERNAL_ID_KEY,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
 import { ArrowDownTrayIcon, BugAntIcon } from '@heroicons/react/24/solid';
@@ -122,6 +123,7 @@ export default function DatasetResults({
         dataset,
         resultIndex,
         result,
+        result[JAQPOT_INTERNAL_ID_KEY],
       );
       return (
         <TableRow key={resultIndex}>
