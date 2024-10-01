@@ -5,6 +5,7 @@ import { Radio, RadioGroup, Select, SelectItem } from '@nextui-org/react';
 import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 import { Checkbox } from '@nextui-org/checkbox';
+import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
 
 // const jsonExample: DynamicFormSchema[] = [
 //   {
@@ -153,7 +154,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<any>) => {
-    const { name, value, type, checked } = e.target;
+    const { value, type, name, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
@@ -190,17 +191,23 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     switch (field.type) {
       case 'select':
         return (
-          <Select
+          <Autocomplete
             name={field.name}
-            onChange={handleChange}
+            onSelectionChange={(key) =>
+              handleChange({
+                target: { value: key, type: field.type, name: field.name },
+              } as any)
+            }
             label="Select..."
-            required={field.required}
+            isRequired={field.required}
           >
             {field.options!.map((option: DynamicFormOption, index: number) => (
               // Send keys so the model can decide how to split the values
-              <SelectItem key={option.key}>{option.value}</SelectItem>
+              <AutocompleteItem key={option.key}>
+                {option.value}
+              </AutocompleteItem>
             ))}
-          </Select>
+          </Autocomplete>
         );
       case 'radio':
         return (
@@ -225,7 +232,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             type="checkbox"
             name={field.name}
             onChange={handleChange}
-            required={field.required}
+            isRequired={field.required}
             checked={formData[field.name] as boolean | undefined}
           />
         );
@@ -236,7 +243,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             name={field.name}
             placeholder={field.placeholder}
             onChange={handleChange}
-            required={field.required}
+            isRequired={field.required}
             value={(formData[field.name] || '') as string}
           />
         );
@@ -248,7 +255,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             name={field.name}
             placeholder={field.placeholder}
             onChange={handleChange}
-            required={field.required}
+            isRequired={field.required}
             value={(formData[field.name] || '') as string}
           />
         );
