@@ -40,6 +40,11 @@ export default function UserAvatar({ session }: { session: Session | null }) {
       external: true,
     },
     {
+      key: 'apikeys',
+      href: '/dashboard/api-keys',
+      label: 'API keys',
+    },
+    {
       key: 'settings',
       href: '/dashboard/settings',
       label: 'Settings',

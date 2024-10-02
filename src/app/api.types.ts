@@ -24,3 +24,7 @@ export type OrganizationInvitationsRequestDto =
 
 export type DatasetsResponseDto =
   operations['getDatasets']['responses']['200']['content']['application/json'];
+
+export type ApiKeyDto = components['schemas']['ApiKey'];
+export type ApiKeyResponseDto =
+  operations['createApiKey']['responses']['201']['content']['application/json'];

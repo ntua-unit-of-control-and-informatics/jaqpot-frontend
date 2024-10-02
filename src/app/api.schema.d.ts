@@ -3,137 +3,189 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/v1/auth/validate": {
+  '/v1/auth/validate': {
     /**
      * Validate JWT
      * @description Validate a JWT token
      */
-    get: operations["validateJWT"];
+    get: operations['validateJWT'];
   };
-  "/v1/models": {
+  '/v1/models': {
     /** Create a new model */
-    post: operations["createModel"];
+    post: operations['createModel'];
   };
-  "/v1/user/models": {
+  '/v1/user/models': {
     /** Get paginated models */
-    get: operations["getModels"];
+    get: operations['getModels'];
   };
-  "/v1/models/search": {
+  '/v1/models/search': {
     /** Search for models */
-    get: operations["searchModels"];
+    get: operations['searchModels'];
   };
-  "/v1/user/shared-models": {
+  '/v1/user/shared-models': {
     /** Get paginated shared models */
-    get: operations["getSharedModels"];
+    get: operations['getSharedModels'];
   };
-  "/v1/models/{id}": {
+  '/v1/models/{id}': {
     /**
      * Get a Model
      * @description Retrieve a single model by its ID
      */
-    get: operations["getModelById"];
+    get: operations['getModelById'];
     /**
      * Delete a Model
      * @description Delete a single model by its ID
      */
-    delete: operations["deleteModelById"];
+    delete: operations['deleteModelById'];
   };
-  "/v1/models/legacy/{id}": {
+  '/v1/models/legacy/{id}': {
     /**
      * Get a legacy model
      * @description Retrieve a single model by its ID
      */
-    get: operations["getLegacyModelById"];
+    get: operations['getLegacyModelById'];
   };
-  "/v1/models/{modelId}/predict": {
+  '/v1/models/{modelId}/predict': {
     /**
      * Predict with Model
      * @description Submit a dataset for prediction using a specific model
      */
-    post: operations["predictWithModel"];
+    post: operations['predictWithModel'];
   };
-  "/v1/models/{modelId}/predict/csv": {
+  '/v1/models/{modelId}/predict/csv': {
     /**
      * Predict using CSV with Model
      * @description Submit a dataset for prediction using a specific model
      */
-    post: operations["predictWithModelCSV"];
+    post: operations['predictWithModelCSV'];
   };
-  "/v1/models/{id}/partial": {
+  '/v1/models/{id}/partial': {
     /** Partially update specific fields of a model */
-    patch: operations["partiallyUpdateModel"];
+    patch: operations['partiallyUpdateModel'];
   };
-  "/v1/models/{modelId}/features/{featureId}": {
+  '/v1/models/{modelId}/features/{featureId}': {
     /**
      * Update a feature for a specific model
      * @description Update the name, description, and feature type of an existing feature within a specific model
      */
-    patch: operations["partiallyUpdateModelFeature"];
+    patch: operations['partiallyUpdateModelFeature'];
   };
-  "/v1/user/datasets": {
+  '/v1/user/datasets': {
     /**
      * Get Datasets by User ID
      * @description Retrieve all datasets associated with a specific user ID
      */
-    get: operations["getDatasets"];
+    get: operations['getDatasets'];
   };
-  "/v1/datasets/{id}": {
+  '/v1/datasets/{id}': {
     /**
      * Get a Dataset
      * @description Retrieve a single dataset by its ID
      */
-    get: operations["getDatasetById"];
+    get: operations['getDatasetById'];
   };
-  "/v1/organizations": {
+  '/v1/organizations': {
     /** Get all organizations for a specific user */
-    get: operations["getAllOrganizationsForUser"];
+    get: operations['getAllOrganizationsForUser'];
     /** Create a new organization */
-    post: operations["createOrganization"];
+    post: operations['createOrganization'];
   };
-  "/v1/user/organizations": {
+  '/v1/user/organizations': {
     /** Get all user organizations */
-    get: operations["getAllOrganizationsByUser"];
+    get: operations['getAllOrganizationsByUser'];
   };
-  "/v1/organizations/{id}/partial": {
+  '/v1/organizations/{id}/partial': {
     /** Partially update an existing organization */
-    patch: operations["partialUpdateOrganization"];
+    patch: operations['partialUpdateOrganization'];
   };
-  "/v1/organizations/{name}": {
+  '/v1/organizations/{name}': {
     /** Get organization by name */
-    get: operations["getOrganizationByName"];
+    get: operations['getOrganizationByName'];
   };
-  "/v1/organizations/{orgName}/invitations": {
+  '/v1/organizations/{orgName}/invitations': {
     /**
      * Get all invitations for an organization
      * @description This endpoint allows an organization admin to get all invitations for their organization.
      */
-    get: operations["getAllInvitations"];
+    get: operations['getAllInvitations'];
     /**
      * Create new invitations for an organization
      * @description This endpoint allows an organization admin to create new invitations for users.
      */
-    post: operations["createInvitations"];
+    post: operations['createInvitations'];
   };
-  "/v1/organizations/{orgId}/invitations/{id}/resend": {
+  '/v1/organizations/{orgId}/invitations/{id}/resend': {
     /**
      * Resend an invitation email
      * @description This endpoint allows an organization admin to resend an invitation email if it has not expired. Only organization admins can access this endpoint.
      */
-    post: operations["resendInvitation"];
+    post: operations['resendInvitation'];
   };
-  "/v1/organizations/{name}/invitations/{uuid}": {
+  '/v1/organizations/{name}/invitations/{uuid}': {
     /**
      * Get the status of an invitation
      * @description This endpoint allows a user to check the status of an invitation.
      */
-    get: operations["getInvitation"];
+    get: operations['getInvitation'];
     /**
      * Update the status of an invitation
      * @description This endpoint allows a user to update the status of an invitation.
      */
-    put: operations["updateInvitation"];
+    put: operations['updateInvitation'];
+  };
+  '/v1/leads': {
+    /**
+     * Get All Leads
+     * @description Retrieve all leads
+     */
+    get: operations['getAllLeads'];
+    /**
+     * Create a Lead
+     * @description Create a new lead
+     */
+    post: operations['createLead'];
+  };
+  '/v1/leads/{id}': {
+    /**
+     * Get a Lead by ID
+     * @description Retrieve a single lead by its ID
+     */
+    get: operations['getLeadById'];
+    /**
+     * Update a Lead by ID
+     * @description Update the details of an existing lead
+     */
+    put: operations['updateLeadById'];
+    /**
+     * Delete a Lead by ID
+     * @description Delete a single lead by its ID
+     */
+    delete: operations['deleteLeadById'];
+  };
+  '/v1/user/api-keys': {
+    /**
+     * Get All API Keys for the User
+     * @description Retrieve all API keys associated with the authenticated user.
+     */
+    get: operations['getAllApiKeysForUser'];
+    /**
+     * Create an API Key for the User
+     * @description Generate and return an API key for programmatic access. This API key is associated with the user and can be used for authenticating future requests.
+     */
+    post: operations['createApiKey'];
+  };
+  '/v1/user/api-keys/{key}': {
+    /**
+     * Delete an API Key
+     * @description Delete a specific API key associated with the authenticated user. Only the user or an admin can delete keys.
+     */
+    delete: operations['deleteApiKey'];
+    /**
+     * Update API Key
+     * @description Update an API key's metadata, such as its note or status (enable/disable).
+     */
+    patch: operations['updateApiKey'];
   };
 }
 
@@ -155,27 +207,27 @@ export interface components {
       name: string;
       /** @example A description of your model */
       description?: string;
-      type: components["schemas"]["ModelType"];
+      type: components['schemas']['ModelType'];
       /** @example 1.0.0 */
       jaqpotpyVersion: string;
-      libraries: components["schemas"]["Library"][];
-      dependentFeatures: components["schemas"]["Feature"][];
-      independentFeatures: components["schemas"]["Feature"][];
-      sharedWithOrganizations?: components["schemas"]["Organization"][];
-      visibility: components["schemas"]["ModelVisibility"];
-      task: components["schemas"]["ModelTask"];
+      libraries: components['schemas']['Library'][];
+      dependentFeatures: components['schemas']['Feature'][];
+      independentFeatures: components['schemas']['Feature'][];
+      sharedWithOrganizations?: components['schemas']['Organization'][];
+      visibility: components['schemas']['ModelVisibility'];
+      task: components['schemas']['ModelTask'];
       /**
        * Format: byte
        * @description A base64 representation of the actual model.
        */
       actualModel: string;
-      creator?: components["schemas"]["User"];
+      creator?: components['schemas']['User'];
       /** @description If the current user can edit the model */
       canEdit?: boolean;
       isAdmin?: boolean;
       tags?: string;
       legacyPredictionService?: string;
-      extraConfig?: components["schemas"]["ModelExtraConfig"];
+      extraConfig?: components['schemas']['ModelExtraConfig'];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -196,14 +248,14 @@ export interface components {
       id: number;
       /** @example My Model */
       name: string;
-      visibility: components["schemas"]["ModelVisibility"];
+      visibility: components['schemas']['ModelVisibility'];
       /** @example A description of your model */
       description?: string;
-      creator?: components["schemas"]["User"];
-      type: components["schemas"]["ModelType"];
+      creator?: components['schemas']['User'];
+      type: components['schemas']['ModelType'];
       dependentFeaturesLength?: number;
       independentFeaturesLength?: number;
-      sharedWithOrganizations: components["schemas"]["OrganizationSummary"][];
+      sharedWithOrganizations: components['schemas']['OrganizationSummary'][];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -226,35 +278,47 @@ export interface components {
       name: string;
     };
     /** @enum {string} */
-    ModelType: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX";
+    ModelType:
+      | 'SKLEARN'
+      | 'TORCH_ONNX'
+      | 'TORCHSCRIPT'
+      | 'R_BNLEARN_DISCRETE'
+      | 'R_CARET'
+      | 'R_GBM'
+      | 'R_NAIVE_BAYES'
+      | 'R_PBPK'
+      | 'R_RF'
+      | 'R_RPART'
+      | 'R_SVM'
+      | 'R_TREE_CLASS'
+      | 'R_TREE_REGR'
+      | 'QSAR_TOOLBOX_CALCULATOR'
+      | 'QSAR_TOOLBOX_QSAR_MODEL'
+      | 'QSAR_TOOLBOX_PROFILER';
     /** @description A JSON object containing extra configuration for the model */
     ModelExtraConfig: {
       torchConfig?: {
         [key: string]: Record<string, never>;
       };
-      preprocessors?: components["schemas"]["Preprocessor"][];
-      featurizers?: components["schemas"]["Featurizer"][];
+      preprocessors?: components['schemas']['Transformer'][];
+      featurizers?: components['schemas']['Transformer'][];
+      doa?: components['schemas']['Transformer'][];
     };
     /** @description A preprocessor for the model */
-    Preprocessor: {
+    Transformer: {
       /** @example StandardScaler */
       name: string;
       config: {
-        [key: string]: Record<string, never>;
-      };
-    };
-    /** @description A featurizer for the model */
-    Featurizer: {
-      /** @example RDKitFeaturizer */
-      name: string;
-      config: {
-        [key: string]: Record<string, never>;
+        [key: string]: components['schemas']['AnyValue'];
       };
     };
     /** @enum {string} */
-    ModelVisibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
+    ModelVisibility: 'PUBLIC' | 'ORG_SHARED' | 'PRIVATE';
     /** @enum {string} */
-    ModelTask: "REGRESSION" | "BINARY_CLASSIFICATION" | "MULTICLASS_CLASSIFICATION";
+    ModelTask:
+      | 'REGRESSION'
+      | 'BINARY_CLASSIFICATION'
+      | 'MULTICLASS_CLASSIFICATION';
     Library: {
       /** Format: int64 */
       id?: number;
@@ -300,15 +364,15 @@ export interface components {
        */
       units?: string;
       description?: string;
-      featureType: components["schemas"]["FeatureType"];
+      featureType: components['schemas']['FeatureType'];
       /**
        * @example DEPENDENT
        * @enum {string}
        */
-      featureDependency?: "DEPENDENT" | "INDEPENDENT";
+      featureDependency?: 'DEPENDENT' | 'INDEPENDENT';
       /** @example true */
       visible?: boolean;
-      possibleValues?: components["schemas"]["FeaturePossibleValue"][];
+      possibleValues?: components['schemas']['FeaturePossibleValue'][];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -331,28 +395,34 @@ export interface components {
      * @example FLOAT
      * @enum {string}
      */
-    FeatureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "STRING" | "TEXT";
+    FeatureType:
+      | 'INTEGER'
+      | 'FLOAT'
+      | 'CATEGORICAL'
+      | 'SMILES'
+      | 'STRING'
+      | 'TEXT';
     /**
      * @example PREDICTION
      * @enum {string}
      */
-    DatasetType: "PREDICTION";
+    DatasetType: 'PREDICTION';
     Dataset: {
       /**
        * Format: int64
        * @example 1
        */
       id?: number;
-      type: components["schemas"]["DatasetType"];
+      type: components['schemas']['DatasetType'];
       /**
        * @example ARRAY
        * @enum {string}
        */
-      entryType: "ARRAY";
+      entryType: 'ARRAY';
       input: unknown[];
       result?: unknown[];
       /** @enum {string} */
-      status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
+      status?: 'CREATED' | 'EXECUTING' | 'FAILURE' | 'SUCCESS';
       failureReason?: string;
       userId?: string;
       /** Format: int64 */
@@ -369,7 +439,7 @@ export interface components {
        * @example 1
        */
       id?: number;
-      type: components["schemas"]["DatasetType"];
+      type: components['schemas']['DatasetType'];
       /**
        * Format: byte
        * @description A base64 representation in CSV format of the input values.
@@ -377,7 +447,7 @@ export interface components {
       inputFile: string;
       values?: unknown[];
       /** @enum {string} */
-      status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
+      status?: 'CREATED' | 'EXECUTING' | 'FAILURE' | 'SUCCESS';
       failureReason?: string;
       /** Format: int64 */
       modelId?: number;
@@ -392,11 +462,11 @@ export interface components {
       id?: number;
       /** @example my-awesome-org */
       name: string;
-      creator?: components["schemas"]["User"];
-      visibility: components["schemas"]["OrganizationVisibility"];
+      creator?: components['schemas']['User'];
+      visibility: components['schemas']['OrganizationVisibility'];
       /** @example An awesome organization for managing models. */
       description?: string;
-      organizationMembers?: components["schemas"]["OrganizationUser"][];
+      organizationMembers?: components['schemas']['OrganizationUser'][];
       /** @example contact@my-awesome-org.com */
       contactEmail: string;
       /** @example +1234567890 */
@@ -419,12 +489,12 @@ export interface components {
       username: string;
       /** Format: email */
       email: string;
-      associationType: components["schemas"]["OrganizationUserAssociationType"];
+      associationType: components['schemas']['OrganizationUserAssociationType'];
     };
     /** @enum {string} */
-    OrganizationUserAssociationType: "ADMIN" | "MEMBER";
+    OrganizationUserAssociationType: 'ADMIN' | 'MEMBER';
     /** @enum {string} */
-    OrganizationVisibility: "PUBLIC" | "PRIVATE";
+    OrganizationVisibility: 'PUBLIC' | 'PRIVATE';
     OrganizationInvitation: {
       /**
        * Format: uuid
@@ -442,16 +512,61 @@ export interface components {
        * @description Status of the invitation
        * @enum {string}
        */
-      status: "PENDING" | "REJECTED" | "ACCEPTED";
+      status: 'PENDING' | 'REJECTED' | 'ACCEPTED';
       /** @description Expiration date of the invitation */
       expirationDate: Record<string, never>;
+    };
+    Lead: {
+      /** Format: int64 */
+      id?: number;
+      email?: string;
+      name?: string;
+      /** @enum {string} */
+      status?: 'PENDING' | 'APPROVED' | 'DENIED';
     };
     /** User */
     User: {
       id: string;
       username?: string;
+      firstName?: string;
+      lastName?: string;
       email?: string;
       emailVerified?: boolean;
+    };
+    ApiKey: {
+      /**
+       * @description The generated API key
+       * @example jq_abcd1234efgh5678ijkl
+       */
+      clientKey: string;
+      /** @description A note for the API key */
+      note?: string;
+      /**
+       * @description The ID of the user associated with the API key
+       * @example 12345
+       */
+      userId?: string;
+      /**
+       * Format: date-time
+       * @description The expiration time of the API key (if any)
+       * @example 2024-12-31T23:59:59Z
+       */
+      expiresAt?: string | null;
+      /** @enum {string} */
+      expirationTime: 'THREE_MONTHS' | 'SIX_MONTHS';
+      /**
+       * Format: date-time
+       * @description The last time the API key was used
+       * @example 2024-09-23T12:00:00Z
+       */
+      lastUsed?: string | null;
+      /**
+       * @description The IP address from which the API key was last used
+       * @example 192.168.1.1
+       */
+      lastUsedIp?: string | null;
+      /** @description Whether the API key is active or disabled */
+      enabled: boolean;
     };
     ErrorResponse: {
       /** @description Error message */
@@ -460,7 +575,7 @@ export interface components {
       code?: number;
     };
     /** @enum {string} */
-    ErrorCode: "1001";
+    ErrorCode: '1001';
     /** @description Can be any value - string, number, boolean, array or object. */
     AnyValue: unknown;
   };
@@ -476,7 +591,6 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
-
   /**
    * Validate JWT
    * @description Validate a JWT token
@@ -497,7 +611,7 @@ export interface operations {
   createModel: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Model"];
+        'application/json': components['schemas']['Model'];
       };
     };
     responses: {
@@ -524,8 +638,8 @@ export interface operations {
       /** @description Paginated list of models */
       200: {
         content: {
-          "application/json": {
-            content?: components["schemas"]["ModelSummary"][];
+          'application/json': {
+            content?: components['schemas']['ModelSummary'][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -552,8 +666,8 @@ export interface operations {
       /** @description Paginated list of models */
       200: {
         content: {
-          "application/json": {
-            content?: components["schemas"]["ModelSummary"][];
+          'application/json': {
+            content?: components['schemas']['ModelSummary'][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -581,8 +695,8 @@ export interface operations {
       /** @description Paginated list of shared models */
       200: {
         content: {
-          "application/json": {
-            content?: components["schemas"]["ModelSummary"][];
+          'application/json': {
+            content?: components['schemas']['ModelSummary'][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -611,7 +725,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Model"];
+          'application/json': components['schemas']['Model'];
         };
       };
       /** @description Model not found */
@@ -657,7 +771,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Model"];
+          'application/json': components['schemas']['Model'];
         };
       };
       /** @description Model not found */
@@ -679,7 +793,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Dataset"];
+        'application/json': components['schemas']['Dataset'];
       };
     };
     responses: {
@@ -714,7 +828,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["DatasetCSV"];
+        'application/json': components['schemas']['DatasetCSV'];
       };
     };
     responses: {
@@ -745,11 +859,11 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": {
+        'application/json': {
           name: string;
           description?: string;
-          visibility: components["schemas"]["ModelVisibility"];
-          task: components["schemas"]["ModelTask"];
+          visibility: components['schemas']['ModelVisibility'];
+          task: components['schemas']['ModelTask'];
           tags?: string;
           sharedWithOrganizationIds?: number[];
         };
@@ -759,7 +873,7 @@ export interface operations {
       /** @description Model fields updated successfully */
       200: {
         content: {
-          "application/json": components["schemas"]["Model"];
+          'application/json': components['schemas']['Model'];
         };
       };
       /** @description Invalid input */
@@ -787,7 +901,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": {
+        'application/json': {
           /**
            * @description A name for the feature that will appear on top of the form field
            * @example Updated Feature Name
@@ -800,8 +914,8 @@ export interface operations {
           units?: string;
           /** @example An updated description for this feature */
           description?: string;
-          featureType: components["schemas"]["FeatureType"];
-          possibleValues?: components["schemas"]["FeaturePossibleValue"][];
+          featureType: components['schemas']['FeatureType'];
+          possibleValues?: components['schemas']['FeaturePossibleValue'][];
         };
       };
     };
@@ -809,7 +923,7 @@ export interface operations {
       /** @description Feature updated successfully */
       200: {
         content: {
-          "application/json": components["schemas"]["Feature"];
+          'application/json': components['schemas']['Feature'];
         };
       };
       /** @description Invalid input */
@@ -846,8 +960,8 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": {
-            content?: components["schemas"]["Dataset"][];
+          'application/json': {
+            content?: components['schemas']['Dataset'][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
@@ -876,7 +990,7 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Dataset"];
+          'application/json': components['schemas']['Dataset'];
         };
       };
       /** @description Model not found */
@@ -891,7 +1005,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          "application/json": components["schemas"]["Organization"][];
+          'application/json': components['schemas']['Organization'][];
         };
       };
     };
@@ -900,7 +1014,7 @@ export interface operations {
   createOrganization: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["Organization"];
+        'application/json': components['schemas']['Organization'];
       };
     };
     responses: {
@@ -916,7 +1030,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          "application/json": components["schemas"]["Organization"][];
+          'application/json': components['schemas']['Organization'][];
         };
       };
     };
@@ -930,12 +1044,12 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": {
+        'application/json': {
           name: string;
           description?: string;
           /** Format: email */
           contactEmail: string;
-          visibility: components["schemas"]["OrganizationVisibility"];
+          visibility: components['schemas']['OrganizationVisibility'];
         };
       };
     };
@@ -943,7 +1057,7 @@ export interface operations {
       /** @description Organization updated successfully */
       200: {
         content: {
-          "application/json": components["schemas"]["Organization"];
+          'application/json': components['schemas']['Organization'];
         };
       };
       /** @description Organization not found */
@@ -963,7 +1077,7 @@ export interface operations {
       /** @description Successful response */
       200: {
         content: {
-          "application/json": components["schemas"]["Organization"];
+          'application/json': components['schemas']['Organization'];
         };
       };
       /** @description Organization not found */
@@ -987,25 +1101,25 @@ export interface operations {
       /** @description Invitations retrieved successfully */
       200: {
         content: {
-          "application/json": components["schemas"]["OrganizationInvitation"][];
+          'application/json': components['schemas']['OrganizationInvitation'][];
         };
       };
       /** @description Bad request, invalid input */
       400: {
         content: {
-          "application/json": components["schemas"]["ErrorResponse"];
+          'application/json': components['schemas']['ErrorResponse'];
         };
       };
       /** @description Unauthorized, only admins can access this endpoint */
       401: {
         content: {
-          "application/json": components["schemas"]["ErrorResponse"];
+          'application/json': components['schemas']['ErrorResponse'];
         };
       };
       /** @description Organization not found */
       404: {
         content: {
-          "application/json": components["schemas"]["ErrorResponse"];
+          'application/json': components['schemas']['ErrorResponse'];
         };
       };
     };
@@ -1024,7 +1138,7 @@ export interface operations {
     /** @description Invitation request payload */
     requestBody: {
       content: {
-        "application/json": {
+        'application/json': {
           /**
            * @description List of email addresses to invite
            * @example [
@@ -1076,25 +1190,25 @@ export interface operations {
       /** @description Bad request, invalid input */
       400: {
         content: {
-          "application/json": components["schemas"]["ErrorResponse"];
+          'application/json': components['schemas']['ErrorResponse'];
         };
       };
       /** @description Unauthorized, only organization admins can access this endpoint */
       401: {
         content: {
-          "application/json": components["schemas"]["ErrorResponse"];
+          'application/json': components['schemas']['ErrorResponse'];
         };
       };
       /** @description Organization or invitation not found */
       404: {
         content: {
-          "application/json": components["schemas"]["ErrorResponse"];
+          'application/json': components['schemas']['ErrorResponse'];
         };
       };
       /** @description Gone, the invitation has expired */
       410: {
         content: {
-          "application/json": components["schemas"]["ErrorResponse"];
+          'application/json': components['schemas']['ErrorResponse'];
         };
       };
     };
@@ -1116,7 +1230,7 @@ export interface operations {
       /** @description Invitation status retrieved successfully */
       200: {
         content: {
-          "application/json": components["schemas"]["OrganizationInvitation"];
+          'application/json': components['schemas']['OrganizationInvitation'];
         };
       };
       /** @description Bad request, invalid input */
@@ -1145,14 +1259,14 @@ export interface operations {
     /** @description Invitation status update payload */
     requestBody: {
       content: {
-        "application/json": components["schemas"]["OrganizationInvitation"];
+        'application/json': components['schemas']['OrganizationInvitation'];
       };
     };
     responses: {
       /** @description Invitation status updated successfully */
       200: {
         content: {
-          "application/json": components["schemas"]["OrganizationInvitation"];
+          'application/json': components['schemas']['OrganizationInvitation'];
         };
       };
       /** @description Bad request, invalid input */
@@ -1160,6 +1274,264 @@ export interface operations {
         content: never;
       };
       /** @description Invitation not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get All Leads
+   * @description Retrieve all leads
+   */
+  getAllLeads: {
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['Lead'][];
+        };
+      };
+    };
+  };
+  /**
+   * Create a Lead
+   * @description Create a new lead
+   */
+  createLead: {
+    responses: {
+      /** @description Lead created successfully */
+      201: {
+        content: never;
+      };
+      /** @description Invalid request data */
+      400: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get a Lead by ID
+   * @description Retrieve a single lead by its ID
+   */
+  getLeadById: {
+    parameters: {
+      path: {
+        /** @description The ID of the lead to retrieve */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          'application/json': components['schemas']['Lead'];
+        };
+      };
+      /** @description Lead not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Update a Lead by ID
+   * @description Update the details of an existing lead
+   */
+  updateLeadById: {
+    parameters: {
+      path: {
+        /** @description The ID of the lead to update */
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['Lead'];
+      };
+    };
+    responses: {
+      /** @description Lead updated successfully */
+      200: {
+        content: never;
+      };
+      /** @description Invalid request data */
+      400: {
+        content: never;
+      };
+      /** @description Lead not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Delete a Lead by ID
+   * @description Delete a single lead by its ID
+   */
+  deleteLeadById: {
+    parameters: {
+      path: {
+        /** @description The ID of the lead to delete */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description Lead deleted successfully */
+      204: {
+        content: never;
+      };
+      /** @description Lead not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get All API Keys for the User
+   * @description Retrieve all API keys associated with the authenticated user.
+   */
+  getAllApiKeysForUser: {
+    responses: {
+      /** @description Successful Response with the user's API keys */
+      200: {
+        content: {
+          'application/json': {
+            /** @description The API key */
+            clientKey?: string;
+            /** @description Description of the API key */
+            note?: string;
+            /**
+             * Format: date-time
+             * @description Creation timestamp of the API key
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @description Expiration timestamp of the API key (optional)
+             */
+            expiresAt?: string;
+            /** @description Whether the API key is active or disabled */
+            enabled?: boolean;
+          }[];
+        };
+      };
+      /** @description Unauthorized request, the user must be authenticated */
+      401: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Create an API Key for the User
+   * @description Generate and return an API key for programmatic access. This API key is associated with the user and can be used for authenticating future requests.
+   */
+  createApiKey: {
+    /** @description Payload to create a new API key */
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ApiKey'];
+      };
+    };
+    responses: {
+      /** @description API Key created successfully */
+      201: {
+        content: {
+          'application/json': {
+            /**
+             * @description The generated API key
+             * @example jq_abcd1234efgh5678ijkl
+             */
+            clientKey?: string;
+            /** @description The generated API secret */
+            clientSecret?: string;
+          };
+        };
+      };
+      /** @description Invalid input, such as a missing user ID */
+      400: {
+        content: never;
+      };
+      /** @description Unauthorized request, the user must be authenticated */
+      401: {
+        content: never;
+      };
+      /** @description User not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Delete an API Key
+   * @description Delete a specific API key associated with the authenticated user. Only the user or an admin can delete keys.
+   */
+  deleteApiKey: {
+    parameters: {
+      path: {
+        /** @description The API key to delete */
+        key: string;
+      };
+    };
+    responses: {
+      /** @description API key deleted successfully */
+      204: {
+        content: never;
+      };
+      /** @description Unauthorized request, the user must be authenticated */
+      401: {
+        content: never;
+      };
+      /** @description API key not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Update API Key
+   * @description Update an API key's metadata, such as its note or status (enable/disable).
+   */
+  updateApiKey: {
+    parameters: {
+      path: {
+        /** @description The API key to update */
+        key: string;
+      };
+    };
+    /** @description Payload to update API key metadata */
+    requestBody: {
+      content: {
+        'application/json': {
+          /** @description Updated description for the API key */
+          note?: string;
+          /** @description Set to `false` to disable the API key */
+          enabled?: boolean;
+        };
+      };
+    };
+    responses: {
+      /** @description API key updated successfully */
+      200: {
+        content: {
+          'application/json': {
+            /** @description The updated API key */
+            key?: string;
+            /** @description The updated description of the API key */
+            note?: string;
+            /** @description Whether the API key is active or disabled */
+            enabled?: boolean;
+          };
+        };
+      };
+      /** @description Invalid request, such as malformed input */
+      400: {
+        content: never;
+      };
+      /** @description Unauthorized request, the user must be authenticated */
+      401: {
+        content: never;
+      };
+      /** @description API key not found */
       404: {
         content: never;
       };
