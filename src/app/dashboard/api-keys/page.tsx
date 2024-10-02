@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { logger } from '@/logger';
 import React from 'react';
 import ApiKeys from '@/app/dashboard/api-keys/components/ApiKeys';
+import { isAuthenticated } from '@/app/util/auth';
 
 const log = logger.child({ module: 'modelPage' });
 
@@ -30,6 +31,11 @@ async function getApiKeys(): Promise<ApiKeyDto[] | undefined> {
 }
 
 export default async function Page() {
+  const session = await auth();
+  if (!isAuthenticated(session)) {
+    return <div>You need to be logged in to access this page</div>;
+  }
+
   const apiKeys = await getApiKeys();
   if (!apiKeys) {
     return <div>No API keys found</div>;
