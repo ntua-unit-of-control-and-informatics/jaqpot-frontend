@@ -7,7 +7,7 @@ import ApiKeys from '@/app/dashboard/api-keys/components/ApiKeys';
 
 const log = logger.child({ module: 'modelPage' });
 
-export async function getApiKeys(): Promise<ApiKeyDto[] | undefined> {
+async function getApiKeys(): Promise<ApiKeyDto[] | undefined> {
   const session = await auth();
 
   const res = await fetch(`${process.env.API_URL}/v1/user/api-keys`, {
