@@ -69,6 +69,13 @@ async function parseResponse(res: Response): Promise<any | undefined> {
   return data;
 }
 
+function getStatus(res: Response) {
+  if (res.status === 204) {
+    return 200;
+  }
+  return res.status;
+}
+
 export async function handleApiResponse(
   res: Response,
 ): Promise<NextResponse<ApiResponse>> {
@@ -79,5 +86,5 @@ export async function handleApiResponse(
     return errorResponse(message, res.status);
   }
 
-  return NextResponse.json({ success: true, data }, { status: res.status });
+  return NextResponse.json({ success: true, data }, { status: getStatus(res) });
 }

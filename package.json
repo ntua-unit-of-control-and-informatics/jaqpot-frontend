@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
-    "generate:schema": "npx openapi-typescript ../jaqpot-api-v2/src/main/resources/openapi.yaml -o ./src/app/api.schema.d.ts"
+    "generate:schema": "npx openapi-typescript ../jaqpot-api/src/main/resources/openapi.yaml -o ./src/app/api.schema.d.ts"
   },
   "engines": {
     "node": ">=18.17.0"
