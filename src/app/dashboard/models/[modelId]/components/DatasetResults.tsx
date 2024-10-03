@@ -195,7 +195,12 @@ export default function DatasetResults({
           </div>
           <Table aria-label="Prediction table" className="mb-6">
             <TableHeader>{tableHeaders}</TableHeader>
-            <TableBody loadingState={loadingState}>{tableRows}</TableBody>
+            <TableBody
+              loadingState={loadingState}
+              emptyContent={'No results to display.'}
+            >
+              {tableRows}
+            </TableBody>
           </Table>
         </>
       )}
