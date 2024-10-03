@@ -18,6 +18,9 @@ import { Link } from '@nextui-org/link';
 import React from 'react';
 import { Tooltip } from '@nextui-org/tooltip';
 import { logger } from '@/logger';
+import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
+import LikeButton from '@/app/dashboard/models/[modelId]/components/LikeButton';
 
 const log = logger.child({ module: 'modelPage' });
 
@@ -130,8 +133,13 @@ export default async function Page({ params }: { params: ModelPageParams }) {
 
       <div className="flex flex-col pl-0">
         {/* Title */}
-        <div className="max-w-3xl py-3 text-3xl font-semibold">
-          {model.name}
+        <div className="flex gap-3">
+          <div className="flex items-center">
+            <LikeButton />
+          </div>
+          <div className="max-w-3xl py-3 text-3xl font-semibold">
+            {model.name}
+          </div>
         </div>
         <div className="flex items-center gap-4 py-3">
           <div className="flex items-center text-sm text-gray-400">
