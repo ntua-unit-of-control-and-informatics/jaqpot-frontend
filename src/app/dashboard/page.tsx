@@ -13,7 +13,7 @@ import DashboardActions from '@/app/dashboard/results/components/DashboardAction
 import { Divider } from '@nextui-org/divider';
 
 export const metadata: Metadata = generateSharedMetadata(
-  'Dashboard: manage your machine learning models and predictions',
+  'Dashboard: Manage your machine learning models and predictions',
   '',
 );
 
