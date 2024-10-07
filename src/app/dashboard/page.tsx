@@ -1,7 +1,5 @@
 import { Metadata } from 'next';
 import { generateSharedMetadata, openGraphImage } from '@/app/shared.metadata';
-import DashboardStats from '@/app/dashboard/components/charts/DashboardStats';
-import DashboardMostPopularModels from '@/app/dashboard/components/charts/DashboardMostPopularModels';
 import { Link } from '@nextui-org/link';
 import { Button } from '@nextui-org/button';
 import {
@@ -14,7 +12,10 @@ import React from 'react';
 import DashboardActions from '@/app/dashboard/results/components/DashboardActions';
 import { Divider } from '@nextui-org/divider';
 
-export const metadata: Metadata = generateSharedMetadata('Dashboard', '');
+export const metadata: Metadata = generateSharedMetadata(
+  'Dashboard: manage your machine learning models and predictions',
+  '',
+);
 
 export default function Dashboard() {
   return (
