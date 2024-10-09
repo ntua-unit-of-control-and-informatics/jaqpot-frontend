@@ -48,8 +48,8 @@ export default function Dashboard() {
               Welcome to Jaqpot!
             </h1>
             <p className="dark:text-400 mt-6 text-lg leading-8">
-              Jaqpot is your all-in-one platform for creating, exploring, and
-              deploying machine learning models. Whether you{"'"}
+              Jaqpot is your all-in-one, open-source platform for creating,
+              exploring, and deploying machine learning models. Whether you{"'"}
               re a data scientist, researcher, or developer, we{"'"}ve got the
               tools you need to bring your models to life.
             </p>
