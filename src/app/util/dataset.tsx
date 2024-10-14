@@ -3,6 +3,7 @@ import React from 'react';
 import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
 
 export const JAQPOT_INTERNAL_ID_KEY = 'jaqpotInternalId';
+export const JAQPOT_INTERNAL_METADATA_KEY = 'jaqpotInternalMetadata';
 
 export function getDatasetStatusNode(dataset: DatasetDto | null | undefined) {
   if (!dataset) {
@@ -24,12 +25,21 @@ export function getDatasetStatusNode(dataset: DatasetDto | null | undefined) {
   }
 }
 
+function parseProbabilities(Probabilities: object) {
+  return Object.entries(Probabilities)
+    .map(([key, value]) => {
+      return `${key}: ${value}`;
+    })
+    .join(', ');
+}
+
 export function generateResultTableRow(
   independentFeatures: FeatureDto[],
   dependentFeatures: FeatureDto[],
   dataset: DatasetDto,
   resultIndex: number,
   result: any,
+  hasProbabilities: boolean,
   jaqpotInternalId?: string,
 ): string[] {
   const independentFeatureCellValues: string[] = independentFeatures.map(
@@ -62,5 +72,19 @@ export function generateResultTableRow(
   const dependentFeatureCellValues = dependentFeatures.map((feature, index) => {
     return result[feature.key];
   });
-  return [...independentFeatureCellValues, ...dependentFeatureCellValues];
+
+  const probabilities = [];
+  if (hasProbabilities) {
+    probabilities.push(
+      parseProbabilities(
+        (result as any)[JAQPOT_INTERNAL_METADATA_KEY].Probabilities,
+      ),
+    );
+  }
+
+  return [
+    ...independentFeatureCellValues,
+    ...dependentFeatureCellValues,
+    ...probabilities,
+  ];
 }
