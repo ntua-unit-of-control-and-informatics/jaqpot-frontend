@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ApiResponse } from '@/app/util/response';
 import useSWR, { Fetcher } from 'swr';
 import { CustomError } from '@/app/types/CustomError';
@@ -21,6 +21,7 @@ import {
   getDatasetStatusNode,
   generateResultTableRow,
   JAQPOT_INTERNAL_ID_KEY,
+  JAQPOT_INTERNAL_METADATA_KEY,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
 import { ArrowDownTrayIcon, BugAntIcon } from '@heroicons/react/24/solid';
@@ -99,6 +100,17 @@ export default function DatasetResults({
       .catch((error) => log.error('Error:', error));
   }
 
+  const hasProbabilities = useMemo(() => {
+    return (
+      dataset?.result?.some((resultRow) => {
+        const jaqpotInternalMetadata = (resultRow as any)[
+          JAQPOT_INTERNAL_METADATA_KEY
+        ];
+        return !!jaqpotInternalMetadata?.Probabilities;
+      }) ?? false
+    );
+  }, [dataset]);
+
   if (error) return <SWRClientFetchError error={error} />;
 
   const isLoaded =
@@ -110,6 +122,12 @@ export default function DatasetResults({
   const tableHeaders = allFeatures.map((feature, index) => (
     <TableColumn key={index}>{feature.name}</TableColumn>
   ));
+
+  if (hasProbabilities) {
+    tableHeaders.push(
+      <TableColumn key="probabilities">Probabilities</TableColumn>,
+    );
+  }
 
   function generateTableRows() {
     if (!dataset?.result) {
@@ -123,6 +141,7 @@ export default function DatasetResults({
         dataset,
         resultIndex,
         result,
+        hasProbabilities,
         result[JAQPOT_INTERNAL_ID_KEY],
       );
       return (

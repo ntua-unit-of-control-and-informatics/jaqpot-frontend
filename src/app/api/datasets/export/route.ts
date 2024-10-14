@@ -20,6 +20,7 @@ function generateCSVFromData(
         dataset,
         resultIndex,
         result,
+        false,
       ).join(',');
     }) ?? [];
 
