@@ -33,7 +33,7 @@ export default function Dashboard() {
             className="relative left-[calc(20%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
           />
         </div>
-        <div className="mx-auto max-w-2xl py-2 sm:py-6">
+        <div className="mx-auto max-w-3xl py-2 sm:py-6">
           {/*<div className="hidden sm:mb-8 sm:flex sm:justify-center">*/}
           {/*  <div className="relative rounded-full px-3 py-1 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">*/}
           {/*    Announcing our next round of funding.{' '}*/}
@@ -48,8 +48,8 @@ export default function Dashboard() {
               Welcome to Jaqpot!
             </h1>
             <p className="dark:text-400 mt-6 text-lg leading-8">
-              Jaqpot is your all-in-one platform for creating, exploring, and
-              deploying machine learning models. Whether you{"'"}
+              Jaqpot is your all-in-one, open-source platform for creating,
+              exploring, and deploying machine learning models. Whether you{"'"}
               re a data scientist, researcher, or developer, we{"'"}ve got the
               tools you need to bring your models to life.
             </p>

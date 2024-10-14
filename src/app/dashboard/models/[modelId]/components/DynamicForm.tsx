@@ -192,13 +192,14 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
       case 'select':
         return (
           <Autocomplete
+            labelPlacement="outside"
             name={field.name}
+            label={`Select ${field.label}`}
             onSelectionChange={(key) =>
               handleChange({
                 target: { value: key, type: field.type, name: field.name },
               } as any)
             }
-            label="Select..."
             isRequired={field.required}
           >
             {field.options!.map((option: DynamicFormOption, index: number) => (
@@ -211,7 +212,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
         );
       case 'radio':
         return (
-          <RadioGroup label="Select...">
+          <RadioGroup label={field.label}>
             {field.options!.map((option: any, index: number) => (
               <Radio
                 key={index}
@@ -234,13 +235,17 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             onChange={handleChange}
             isRequired={field.required}
             checked={formData[field.name] as boolean | undefined}
-          />
+          >
+            {field.label}
+          </Checkbox>
         );
       case 'textarea':
         return (
           <Textarea
+            labelPlacement="outside"
             rows={3}
             name={field.name}
+            label={field.label}
             placeholder={field.placeholder}
             onChange={handleChange}
             isRequired={field.required}
@@ -251,8 +256,10 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
         // Handle other HTML5 input types like number, date, email, etc.
         return (
           <Input
+            labelPlacement="outside"
             type={field.type}
             name={field.name}
+            label={field.label}
             placeholder={field.placeholder}
             onChange={handleChange}
             isRequired={field.required}
@@ -265,7 +272,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4 grid grid-cols-2 gap-6 sm:grid-cols-4">
+        <div className="my-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
           {schema.map((section, sectionIndex) => (
             <div key={sectionIndex}>
               <h3>{section.sectionTitle}</h3>
@@ -273,9 +280,6 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
                 section.fields.map((field, fieldIndex) => (
                   <div key={fieldIndex}>
                     <div className="mb-3">
-                      <div className="mb-5">
-                        <label className="break-words">{field.label}</label>
-                      </div>
                       {renderField(field)}
                       {formErrors[field.name] && (
                         <div className="text-danger">
