@@ -2,8 +2,9 @@ import { Chip } from '@nextui-org/chip';
 import React from 'react';
 import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
 
-export const JAQPOT_INTERNAL_ID_KEY = 'jaqpotInternalId';
-export const JAQPOT_INTERNAL_METADATA_KEY = 'jaqpotInternalMetadata';
+export const JAQPOT_METADATA_KEY = 'jaqpotMetadata';
+export const JAQPOT_ROW_ID_KEY = 'jaqpotRowId';
+export const JAQPOT_ROW_LABEL_KEY = 'jaqpotRowLabel';
 
 export function getDatasetStatusNode(dataset: DatasetDto | null | undefined) {
   if (!dataset) {
@@ -30,7 +31,7 @@ function parseProbabilities(Probabilities: object) {
     .map(([key, value]) => {
       return `${key}: ${value}`;
     })
-    .join(', ');
+    .join(' ');
 }
 
 export function generateResultTableRow(
@@ -39,15 +40,17 @@ export function generateResultTableRow(
   dataset: DatasetDto,
   resultIndex: number,
   result: any,
-  hasProbabilities: boolean,
-  jaqpotInternalId?: string,
 ): string[] {
+  const hasProbabilities = result[JAQPOT_METADATA_KEY]?.probabilities;
+  const jaqpotRowId = result[JAQPOT_METADATA_KEY]?.[JAQPOT_ROW_ID_KEY];
+  const jaqpotRowLabel = result[JAQPOT_METADATA_KEY]?.[JAQPOT_ROW_LABEL_KEY];
+
   const independentFeatureCellValues: string[] = independentFeatures.map(
     (feature, independentFeatureIndex) => {
       let input = dataset.input.find(
         (inputRow) =>
-          jaqpotInternalId !== undefined &&
-          (inputRow as any)[JAQPOT_INTERNAL_ID_KEY] === jaqpotInternalId,
+          jaqpotRowId !== undefined &&
+          (inputRow as any)[JAQPOT_ROW_ID_KEY] === jaqpotRowId,
       ) as any;
       if (!input) {
         input = dataset.input[resultIndex];
@@ -73,18 +76,16 @@ export function generateResultTableRow(
     return result[feature.key];
   });
 
-  const probabilities = [];
-  if (hasProbabilities) {
-    probabilities.push(
-      parseProbabilities(
-        (result as any)[JAQPOT_INTERNAL_METADATA_KEY].Probabilities,
-      ),
-    );
-  }
+  const probabilities = hasProbabilities
+    ? [parseProbabilities(result[JAQPOT_METADATA_KEY].probabilities)]
+    : [];
+
+  const jaqpotRowLabelCellValue = jaqpotRowLabel ? [jaqpotRowLabel] : [];
 
   return [
     ...independentFeatureCellValues,
     ...dependentFeatureCellValues,
     ...probabilities,
+    ...jaqpotRowLabelCellValue,
   ];
 }
