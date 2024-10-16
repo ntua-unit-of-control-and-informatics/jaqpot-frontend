@@ -47,7 +47,7 @@ function generateCSVFromData(
         result,
       )
         .map((row) => {
-          if (row.includes(',')) {
+          if (row.toString().includes(',')) {
             return `"${row}"`;
           }
           return row;
