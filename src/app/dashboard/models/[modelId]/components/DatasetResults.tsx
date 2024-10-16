@@ -20,8 +20,9 @@ import { Chip } from '@nextui-org/chip';
 import {
   getDatasetStatusNode,
   generateResultTableRow,
-  JAQPOT_INTERNAL_ID_KEY,
-  JAQPOT_INTERNAL_METADATA_KEY,
+  JAQPOT_ROW_ID_KEY,
+  JAQPOT_METADATA_KEY,
+  JAQPOT_ROW_LABEL_KEY,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
 import { ArrowDownTrayIcon, BugAntIcon } from '@heroicons/react/24/solid';
@@ -103,10 +104,8 @@ export default function DatasetResults({
   const hasProbabilities = useMemo(() => {
     return (
       dataset?.result?.some((resultRow) => {
-        const jaqpotInternalMetadata = (resultRow as any)[
-          JAQPOT_INTERNAL_METADATA_KEY
-        ];
-        return !!jaqpotInternalMetadata?.Probabilities;
+        const jaqpotInternalMetadata = (resultRow as any)[JAQPOT_METADATA_KEY];
+        return !!jaqpotInternalMetadata?.probabilities;
       }) ?? false
     );
   }, [dataset]);
@@ -129,6 +128,16 @@ export default function DatasetResults({
     );
   }
 
+  if (
+    dataset?.input.find(
+      (inputRow) => (inputRow as any)[JAQPOT_ROW_LABEL_KEY] !== undefined,
+    )
+  ) {
+    tableHeaders.push(
+      <TableColumn key="jaqpotRowLabel">Jaqpot Row Label</TableColumn>,
+    );
+  }
+
   function generateTableRows() {
     if (!dataset?.result) {
       return [];
@@ -141,8 +150,6 @@ export default function DatasetResults({
         dataset,
         resultIndex,
         result,
-        hasProbabilities,
-        result[JAQPOT_INTERNAL_ID_KEY],
       );
       return (
         <TableRow key={resultIndex}>
