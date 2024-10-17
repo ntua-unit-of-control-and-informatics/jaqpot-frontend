@@ -18,6 +18,7 @@ import { Link } from '@nextui-org/link';
 import React from 'react';
 import { Tooltip } from '@nextui-org/tooltip';
 import { logger } from '@/logger';
+import CustomErrorPage from '@/app/components/CustomErrorPage';
 
 const log = logger.child({ module: 'modelPage' });
 
@@ -134,7 +135,17 @@ async function retrieveModelOrLegacy(modelId: string): Promise<ModelDto> {
 }
 
 export default async function Page({ params }: { params: ModelPageParams }) {
-  const model = await retrieveModelOrLegacy(params.modelId);
+  let model;
+  try {
+    model = await retrieveModelOrLegacy(params.modelId);
+  } catch (e) {
+    return (
+      <CustomErrorPage
+        title="Something's wrong here 🚧"
+        description={(e as any)?.message}
+      />
+    );
+  }
 
   return (
     <div className="p-2 sm:p-0">
