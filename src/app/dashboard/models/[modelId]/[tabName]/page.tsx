@@ -56,10 +56,16 @@ export async function getLegacyModel(
   );
 
   if (!res.ok) {
-    if (res.status === 404) {
+    if (res.status === 401 || res.status === 404) {
       return undefined;
-    } else if (res.status === 401 || res.status === 403) {
-      redirect('/dashboard/unauthorized');
+    } else if (res.status === 401) {
+      throw new Error(
+        'You are not logged in. Please log in to access this page.',
+      );
+    } else if (res.status === 403) {
+      throw new Error(
+        'You do not have permission to access this page. Please contact an administrator for assistance.',
+      );
     }
     log.warn(
       `Legacy model with id ${modelId} not found, status returned: ${res.status}`,
@@ -87,8 +93,14 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   if (!res.ok) {
     if (res.status === 404) {
       return undefined;
-    } else if (res.status === 401 || res.status === 403) {
-      redirect('/dashboard/unauthorized');
+    } else if (res.status === 401) {
+      throw new Error(
+        'You are not logged in. Please log in to access this page.',
+      );
+    } else if (res.status === 403) {
+      throw new Error(
+        'You do not have permission to access this page. Please contact an administrator for assistance.',
+      );
     }
     log.warn(
       `Model with id ${modelId} not found, status returned: ${res.status}`,
