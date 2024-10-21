@@ -19,6 +19,7 @@ import React from 'react';
 import { Tooltip } from '@nextui-org/tooltip';
 import { logger } from '@/logger';
 import CustomErrorPage from '@/app/components/CustomErrorPage';
+import { isRedirectError } from 'next/dist/client/components/redirect';
 
 const log = logger.child({ module: 'modelPage' });
 
@@ -138,7 +139,9 @@ export default async function Page({ params }: { params: ModelPageParams }) {
   let model;
   try {
     model = await retrieveModelOrLegacy(params.modelId);
-  } catch (e) {
+  } catch (e: any) {
+    if (e?.message === 'NEXT_REDIRECT') throw e;
+
     return (
       <CustomErrorPage
         title="Something's wrong here 🚧"
