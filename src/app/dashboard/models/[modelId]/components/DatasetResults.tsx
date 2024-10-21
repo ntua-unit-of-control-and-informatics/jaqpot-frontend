@@ -16,11 +16,9 @@ import { CustomError } from '@/app/types/CustomError';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { Skeleton } from '@nextui-org/skeleton';
 import { Link } from '@nextui-org/link';
-import { Chip } from '@nextui-org/chip';
 import {
   getDatasetStatusNode,
   generateResultTableRow,
-  JAQPOT_ROW_ID_KEY,
   JAQPOT_METADATA_KEY,
   JAQPOT_ROW_LABEL_KEY,
 } from '@/app/util/dataset';
@@ -28,6 +26,8 @@ import { Button } from '@nextui-org/button';
 import { ArrowDownTrayIcon, BugAntIcon } from '@heroicons/react/24/solid';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { logger } from '@/logger';
+import { Tab, Tabs } from '@nextui-org/tabs';
+import DoaCards from '@/app/dashboard/models/[modelId]/components/DoaCards';
 
 const log = logger.child({ module: 'dataset' });
 
@@ -164,72 +164,82 @@ export default function DatasetResults({
   const tableRows = generateTableRows();
 
   return (
-    <div className="mb-20 mt-5 flex flex-col gap-4">
-      <div className="max-w-xl">
-        {dataset?.status === 'FAILURE' && model.isAdmin && (
-          <Accordion>
-            <AccordionItem
-              key="1"
-              aria-label="Accordion 1"
-              subtitle="You can only see this if you are a nerd"
-              title="Data for nerds"
-              startContent={<BugAntIcon className="size-6" />}
-            >
-              <p className="text-sm">
-                legacy prediction service: {model.legacyPredictionService}
-              </p>
-              <p className="text-sm">
-                Failure reason: {dataset?.failureReason}
-              </p>
-            </AccordionItem>
-          </Accordion>
-        )}
-      </div>
-      <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
-        Result
-      </h2>
-      <div>
-        <Link
-          href={`/dashboard/models/${model.id}/results/${datasetId}`}
-          isExternal
-          showAnchorIcon
-          className="mr-2"
-        >
-          ID {datasetId}
-        </Link>
-        {getDatasetStatusNode(dataset)}
-      </div>
-      {!isLoaded && (
-        <div className="flex w-full flex-col gap-2">
-          <Skeleton className="h-3 w-3/5 rounded-lg" />
-          <Skeleton className="h-3 w-4/5 rounded-lg" />
-          <Skeleton className="h-3 w-2/5 rounded-lg" />
-          <Skeleton className="w-5/5 h-3 rounded-lg" />
-        </div>
-      )}
-      {isLoaded && dataset?.status === 'SUCCESS' && (
-        <>
+    <Tabs className="mb-2 mt-10">
+      <Tab key={'result'} title="Result">
+        <div className="flex flex-col gap-4">
+          {dataset?.status === 'FAILURE' && model.isAdmin && (
+            <div className="max-w-xl">
+              <Accordion>
+                <AccordionItem
+                  key="1"
+                  aria-label="Accordion 1"
+                  subtitle="You can only see this if you are a nerd"
+                  title="Data for nerds"
+                  startContent={<BugAntIcon className="size-6" />}
+                >
+                  <p className="text-sm">
+                    legacy prediction service: {model.legacyPredictionService}
+                  </p>
+                  <p className="text-sm">
+                    Failure reason: {dataset?.failureReason}
+                  </p>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          )}
           <div>
-            <Button
-              color="primary"
-              startContent={<ArrowDownTrayIcon className="size-6" />}
-              className="my-2"
-              onPress={() => downloadResultsCSV(model)}
+            <Link
+              href={`/dashboard/models/${model.id}/results/${datasetId}`}
+              isExternal
+              showAnchorIcon
+              className="mr-2"
             >
-              Export CSV
-            </Button>
+              ID {datasetId}
+            </Link>
+            {getDatasetStatusNode(dataset)}
           </div>
-          <Table aria-label="Prediction table" className="mb-6">
-            <TableHeader>{tableHeaders}</TableHeader>
-            <TableBody
-              loadingState={loadingState}
-              emptyContent={'No results to display.'}
-            >
-              {tableRows}
-            </TableBody>
-          </Table>
-        </>
-      )}
-    </div>
+          {!isLoaded && (
+            <div className="flex w-full flex-col gap-2">
+              <Skeleton className="h-3 w-3/5 rounded-lg" />
+              <Skeleton className="h-3 w-4/5 rounded-lg" />
+              <Skeleton className="h-3 w-2/5 rounded-lg" />
+              <Skeleton className="w-5/5 h-3 rounded-lg" />
+            </div>
+          )}
+          {isLoaded && dataset?.status === 'SUCCESS' && (
+            <>
+              <div>
+                <Button
+                  color="primary"
+                  startContent={<ArrowDownTrayIcon className="size-6" />}
+                  className="my-2"
+                  onPress={() => downloadResultsCSV(model)}
+                >
+                  Export CSV
+                </Button>
+              </div>
+              <Table aria-label="Prediction table" className="mb-6">
+                <TableHeader>{tableHeaders}</TableHeader>
+                <TableBody
+                  loadingState={loadingState}
+                  emptyContent={'No results to display.'}
+                >
+                  {tableRows}
+                </TableBody>
+              </Table>
+            </>
+          )}
+        </div>
+      </Tab>
+      <Tab
+        key={'doa'}
+        title="Domain of Applicability"
+        disabled={dataset?.status !== 'SUCCESS'}
+      >
+        {dataset?.result?.flatMap((result: any, resultIndex: number) => {
+          return <DoaCards result={result} />;
+        })}
+      </Tab>
+    </Tabs>
   );
 }

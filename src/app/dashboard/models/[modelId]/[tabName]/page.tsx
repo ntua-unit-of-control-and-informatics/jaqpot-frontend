@@ -64,9 +64,7 @@ export async function getLegacyModel(
         'You are not logged in. Please log in to access this page.',
       );
     } else if (res.status === 403) {
-      throw new Error(
-        'You do not have permission to access this page. Please contact an administrator for assistance.',
-      );
+      throw new Error('You do not have permission to access this page.');
     }
     log.warn(
       `Legacy model with id ${modelId} not found, status returned: ${res.status}`,
@@ -99,9 +97,7 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
         'You are not logged in. Please log in to access this page.',
       );
     } else if (res.status === 403) {
-      throw new Error(
-        'You do not have permission to access this page. Please contact an administrator for assistance.',
-      );
+      throw new Error('You do not have permission to access this page.');
     }
     log.warn(
       `Model with id ${modelId} not found, status returned: ${res.status}`,
