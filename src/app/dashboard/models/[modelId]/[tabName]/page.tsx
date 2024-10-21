@@ -4,7 +4,6 @@ import {
   BeakerIcon,
   UserIcon,
   CalendarDaysIcon,
-  BuildingOfficeIcon,
 } from '@heroicons/react/24/solid';
 import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
 import { notFound, redirect } from 'next/navigation';
@@ -13,13 +12,10 @@ import ModelBreadcrumbs from '@/app/dashboard/models/[modelId]/components/ModelB
 import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
-import { getErrorMessageFromResponse } from '@/app/util/response';
-import { Link } from '@nextui-org/link';
 import React from 'react';
 import { Tooltip } from '@nextui-org/tooltip';
 import { logger } from '@/logger';
 import CustomErrorPage from '@/app/components/CustomErrorPage';
-import { isRedirectError } from 'next/dist/client/components/redirect';
 
 const log = logger.child({ module: 'modelPage' });
 
