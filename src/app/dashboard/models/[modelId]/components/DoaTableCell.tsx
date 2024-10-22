@@ -10,7 +10,7 @@ export default function DoaTableCell(props: {
   onPress: () => void;
 }) {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center">
       {props.value}{' '}
       <Button isIconOnly size={'sm'} variant="light" onPress={props.onPress}>
         <InformationCircleIcon className="size-4 text-gray-400" />
