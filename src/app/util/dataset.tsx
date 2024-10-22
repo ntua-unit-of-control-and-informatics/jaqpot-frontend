@@ -11,7 +11,7 @@ export function getDatasetStatusNode(dataset: DatasetDto | null | undefined) {
     return <></>;
   } else if (dataset?.status === 'SUCCESS') {
     return (
-      <Chip color="success" variant="flat">
+      <Chip color="success" variant="flat" data-testid={'success'}>
         Success
       </Chip>
     );
