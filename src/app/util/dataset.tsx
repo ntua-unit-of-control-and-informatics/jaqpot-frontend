@@ -116,7 +116,7 @@ export function generateResultTableData(
   return { headers, rows };
 }
 
-export function generateResultTableRow(
+function generateResultTableRow(
   independentFeatures: FeatureDto[],
   dependentFeatures: FeatureDto[],
   dataset: DatasetDto,
