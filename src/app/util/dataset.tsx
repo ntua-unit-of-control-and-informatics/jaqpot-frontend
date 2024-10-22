@@ -1,5 +1,5 @@
 import { Chip } from '@nextui-org/chip';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
 
 export const JAQPOT_METADATA_KEY = 'jaqpotMetadata';
@@ -11,7 +11,7 @@ export function getDatasetStatusNode(dataset: DatasetDto | null | undefined) {
     return <></>;
   } else if (dataset?.status === 'SUCCESS') {
     return (
-      <Chip color="success" variant="flat">
+      <Chip color="success" variant="flat" data-testid={'success'}>
         Success
       </Chip>
     );
@@ -34,58 +34,150 @@ function parseProbabilities(Probabilities: object) {
     .join(' ');
 }
 
-export function generateResultTableRow(
+export interface ResultTableHeader {
+  key: string;
+  label: string;
+}
+
+type BaseResultTableRow = {
+  key: string;
+  probabilities?: string;
+  doa?: string;
+};
+
+export type ResultTableRow = BaseResultTableRow & Record<string, string>;
+
+interface ResultTableData {
+  headers: ResultTableHeader[];
+  rows: ResultTableRow[];
+}
+
+export function generateResultTableData(
+  independentFeatures: FeatureDto[],
+  dependentFeatures: FeatureDto[],
+  dataset?: DatasetDto | null,
+  options?: {
+    hideIndependentFeatures?: boolean;
+  },
+): ResultTableData {
+  if (!dataset) {
+    return { headers: [], rows: [] };
+  }
+
+  let hasProbabilities = false;
+  let hasDoa = false;
+  let hasJaqpotRowLabel = false;
+  dataset.result?.forEach((resultRow: any) => {
+    if (resultRow[JAQPOT_METADATA_KEY]?.probabilities) {
+      hasProbabilities = true;
+    }
+    if (resultRow[JAQPOT_METADATA_KEY]?.doa) {
+      hasDoa = true;
+    }
+    if (resultRow[JAQPOT_METADATA_KEY]?.[JAQPOT_ROW_LABEL_KEY]) {
+      hasJaqpotRowLabel = true;
+    }
+  });
+
+  const headers: ResultTableHeader[] = [
+    ...independentFeatures.map((feature) => ({
+      label: feature.name,
+      key: feature.key,
+    })),
+    ...dependentFeatures.map((feature) => ({
+      label: feature.name,
+      key: feature.key,
+    })),
+    ...(hasProbabilities
+      ? [{ label: 'Probabilities', key: 'probabilities' }]
+      : []),
+    ...(hasDoa ? [{ label: 'Applicability Domain', key: 'doa' }] : []),
+    ...(hasJaqpotRowLabel
+      ? [{ label: 'Jaqpot Row label', key: JAQPOT_ROW_LABEL_KEY }]
+      : []),
+  ];
+
+  if (options?.hideIndependentFeatures) {
+    headers.splice(0, independentFeatures.length);
+  }
+
+  const rows =
+    dataset.result?.map((result, index) =>
+      generateResultTableRow(
+        independentFeatures,
+        dependentFeatures,
+        dataset,
+        index,
+        result,
+        options?.hideIndependentFeatures,
+      ),
+    ) ?? [];
+
+  return { headers, rows };
+}
+
+function generateResultTableRow(
   independentFeatures: FeatureDto[],
   dependentFeatures: FeatureDto[],
   dataset: DatasetDto,
   resultIndex: number,
   result: any,
-): string[] {
+  hideIndependentFeatures: boolean = false,
+): ResultTableRow {
+  const resultTableRow = {
+    key: resultIndex.toString(),
+  } as ResultTableRow;
   const hasProbabilities = result[JAQPOT_METADATA_KEY]?.probabilities;
+  const hasDoa = result[JAQPOT_METADATA_KEY]?.doa;
   const jaqpotRowId = result[JAQPOT_METADATA_KEY]?.[JAQPOT_ROW_ID_KEY];
   const jaqpotRowLabel = result[JAQPOT_METADATA_KEY]?.[JAQPOT_ROW_LABEL_KEY];
 
-  const independentFeatureCellValues: string[] = independentFeatures.map(
-    (feature, independentFeatureIndex) => {
-      let input = dataset.input.find(
-        (inputRow) =>
-          jaqpotRowId !== undefined &&
-          (inputRow as any)[JAQPOT_ROW_ID_KEY] === jaqpotRowId,
-      ) as any;
-      if (!input) {
-        input = dataset.input[resultIndex];
-      }
+  independentFeatures.forEach((feature, independentFeatureIndex) => {
+    let value;
+    let input = dataset.input.find(
+      (inputRow) =>
+        jaqpotRowId !== undefined &&
+        (inputRow as any)[JAQPOT_ROW_ID_KEY] === jaqpotRowId,
+    ) as any;
+    if (!input) {
+      input = dataset.input[resultIndex];
+    }
 
-      if (!input) {
-        return 'N/A';
-      }
+    if (!input) {
+      value = 'N/A';
+    }
 
-      if (feature.featureType === 'CATEGORICAL') {
-        return (
-          feature.possibleValues?.find(
-            (possibleValue) => possibleValue.key === input[feature.key],
-          )?.value ?? input[feature.key]
-        );
-      }
+    if (feature.featureType === 'CATEGORICAL') {
+      value =
+        feature.possibleValues?.find(
+          (possibleValue) => possibleValue.key === input[feature.key],
+        )?.value ?? input[feature.key];
+    }
 
-      return input[feature.key];
-    },
-  );
-
-  const dependentFeatureCellValues = dependentFeatures.map((feature, index) => {
-    return result[feature.key];
+    value = input[feature.key];
+    resultTableRow[feature.key] = value;
   });
 
-  const probabilities = hasProbabilities
-    ? [parseProbabilities(result[JAQPOT_METADATA_KEY].probabilities)]
-    : [];
+  dependentFeatures.forEach((feature, index) => {
+    resultTableRow[feature.key] = result[feature.key];
+  });
 
-  const jaqpotRowLabelCellValue = jaqpotRowLabel ? [jaqpotRowLabel] : [];
+  if (hasProbabilities) {
+    resultTableRow.probabilities = parseProbabilities(
+      result[JAQPOT_METADATA_KEY].probabilities,
+    );
+  }
 
-  return [
-    ...independentFeatureCellValues,
-    ...dependentFeatureCellValues,
-    ...probabilities,
-    ...jaqpotRowLabelCellValue,
-  ];
+  if (hasDoa) {
+    resultTableRow.doa = result[JAQPOT_METADATA_KEY].doa.majorityVoting
+      ? 'In Domain'
+      : 'Out of Domain';
+    resultTableRow.doaDetails = result[JAQPOT_METADATA_KEY].doa;
+  }
+
+  if (jaqpotRowLabel) {
+    resultTableRow[JAQPOT_ROW_LABEL_KEY] = jaqpotRowLabel;
+  }
+
+  return resultTableRow;
 }

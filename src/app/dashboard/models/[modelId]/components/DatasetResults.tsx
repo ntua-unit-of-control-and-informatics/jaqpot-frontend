@@ -9,25 +9,31 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ApiResponse } from '@/app/util/response';
 import useSWR, { Fetcher } from 'swr';
 import { CustomError } from '@/app/types/CustomError';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { Skeleton } from '@nextui-org/skeleton';
 import { Link } from '@nextui-org/link';
-import { Chip } from '@nextui-org/chip';
 import {
   getDatasetStatusNode,
-  generateResultTableRow,
-  JAQPOT_ROW_ID_KEY,
-  JAQPOT_METADATA_KEY,
-  JAQPOT_ROW_LABEL_KEY,
+  generateResultTableData,
+  ResultTableRow,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
-import { ArrowDownTrayIcon, BugAntIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowDownTrayIcon,
+  BugAntIcon,
+  EyeIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/24/solid';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { logger } from '@/logger';
+import { getKeyValue, useDisclosure } from '@nextui-org/react';
+import DoaTableCell from '@/app/dashboard/models/[modelId]/components/DoaTableCell';
+import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
+import DoaModal from '@/app/dashboard/models/[modelId]/components/DoaModal';
 
 const log = logger.child({ module: 'dataset' });
 
@@ -66,6 +72,18 @@ export default function DatasetResults({
     isLoading,
     error,
   } = useSWR(`/api/datasets/${datasetId}`, fetcher, { refreshInterval });
+  const {
+    isOpen: isDoaModalOpen,
+    onOpen: onDoaModalOpen,
+    onOpenChange: onDoaModalChange,
+  } = useDisclosure();
+  const [selectedRow, setSelectedRow] = useState<any | undefined>();
+
+  useEffect(() => {
+    if (!isDoaModalOpen) {
+      setSelectedRow(undefined);
+    }
+  }, [isDoaModalOpen]);
 
   const dataset = apiResponse?.data;
   useEffect(() => {
@@ -101,15 +119,6 @@ export default function DatasetResults({
       .catch((error) => log.error('Error:', error));
   }
 
-  const hasProbabilities = useMemo(() => {
-    return (
-      dataset?.result?.some((resultRow) => {
-        const jaqpotInternalMetadata = (resultRow as any)[JAQPOT_METADATA_KEY];
-        return !!jaqpotInternalMetadata?.probabilities;
-      }) ?? false
-    );
-  }, [dataset]);
-
   if (error) return <SWRClientFetchError error={error} />;
 
   const isLoaded =
@@ -118,55 +127,18 @@ export default function DatasetResults({
     dataset?.status !== 'EXECUTING';
   const loadingState = isLoading ? 'loading' : 'idle';
 
-  const tableHeaders = allFeatures.map((feature, index) => (
-    <TableColumn key={index}>{feature.name}</TableColumn>
-  ));
-
-  if (hasProbabilities) {
-    tableHeaders.push(
-      <TableColumn key="probabilities">Probabilities</TableColumn>,
-    );
-  }
-
-  if (
-    dataset?.input.find(
-      (inputRow) => (inputRow as any)[JAQPOT_ROW_LABEL_KEY] !== undefined,
-    )
-  ) {
-    tableHeaders.push(
-      <TableColumn key="jaqpotRowLabel">Jaqpot Row Label</TableColumn>,
-    );
-  }
-
-  function generateTableRows() {
-    if (!dataset?.result) {
-      return [];
-    }
-
-    return dataset?.result.map((result: any, resultIndex: number) => {
-      const resultTableData = generateResultTableRow(
-        model.independentFeatures,
-        model.dependentFeatures,
-        dataset,
-        resultIndex,
-        result,
-      );
-      return (
-        <TableRow key={resultIndex}>
-          {resultTableData.map((value, index) => (
-            <TableCell key={index}>{value}</TableCell>
-          ))}
-        </TableRow>
-      );
-    });
-  }
-
-  const tableRows = generateTableRows();
+  const resultTableData = generateResultTableData(
+    model.independentFeatures,
+    model.dependentFeatures,
+    dataset,
+  );
+  const tableHeaders = resultTableData.headers;
+  const tableRows = resultTableData.rows;
 
   return (
     <div className="mb-20 mt-5 flex flex-col gap-4">
-      <div className="max-w-xl">
-        {dataset?.status === 'FAILURE' && model.isAdmin && (
+      {dataset?.status === 'FAILURE' && model.isAdmin && (
+        <div className="max-w-xl">
           <Accordion>
             <AccordionItem
               key="1"
@@ -183,8 +155,8 @@ export default function DatasetResults({
               </p>
             </AccordionItem>
           </Accordion>
-        )}
-      </div>
+        </div>
+      )}
       <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
         Result
       </h2>
@@ -220,15 +192,50 @@ export default function DatasetResults({
             </Button>
           </div>
           <Table aria-label="Prediction table" className="mb-6">
-            <TableHeader>{tableHeaders}</TableHeader>
+            <TableHeader columns={tableHeaders}>
+              {(column) => (
+                <TableColumn key={column.key}>{column.label}</TableColumn>
+              )}
+            </TableHeader>
+
             <TableBody
+              items={tableRows}
               loadingState={loadingState}
               emptyContent={'No results to display.'}
             >
-              {tableRows}
+              {(item) => (
+                <TableRow key={item.key}>
+                  {(columnKey) => {
+                    if (columnKey === 'doa') {
+                      return (
+                        <TableCell>
+                          <DoaTableCell
+                            value={getKeyValue(item, columnKey)}
+                            onPress={() => {
+                              setSelectedRow(item);
+                              onDoaModalOpen();
+                            }}
+                          />
+                        </TableCell>
+                      );
+                    }
+                    return (
+                      <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                    );
+                  }}
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </>
+      )}
+
+      {selectedRow && (
+        <DoaModal
+          doaDetails={selectedRow.doaDetails}
+          isOpen={isDoaModalOpen}
+          onOpenChange={onDoaModalChange}
+        />
       )}
     </div>
   );

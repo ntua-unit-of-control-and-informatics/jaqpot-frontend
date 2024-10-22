@@ -1,60 +1,42 @@
 import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
 import {
-  generateResultTableRow,
+  generateResultTableData,
   JAQPOT_METADATA_KEY,
   JAQPOT_ROW_ID_KEY,
   JAQPOT_ROW_LABEL_KEY,
 } from '@/app/util/dataset';
 import { useMemo } from 'react';
+import { getKeyValue } from '@nextui-org/react';
 
 function generateCSVFromData(
   independentFeatures: FeatureDto[],
   dependentFeatures: FeatureDto[],
   dataset: DatasetDto,
 ) {
-  let headerRow = [...independentFeatures, ...dependentFeatures]
-    .map((feature) => {
-      return feature.name;
-    })
-    .join(',');
+  const { headers, rows } = generateResultTableData(
+    independentFeatures,
+    dependentFeatures,
+    dataset,
+  );
 
-  const hasProbabilities =
-    dataset?.result?.some((resultRow) => {
-      const jaqpotMetadata = (resultRow as any)[JAQPOT_METADATA_KEY];
-      return !!jaqpotMetadata?.probabilities;
-    }) ?? false;
+  const headerRow = headers.map((header) => header.label).join(',');
 
-  if (hasProbabilities) {
-    headerRow += ',Probabilities';
-  }
-
-  const hasJaqpotRowLabel = dataset?.result?.some((resultRow) => {
-    const jaqpotMetadata = (resultRow as any)[JAQPOT_METADATA_KEY];
-    return !!jaqpotMetadata?.[JAQPOT_ROW_LABEL_KEY];
+  const rowsIn2DArray = rows.map((row) => {
+    return headers.map((header) => {
+      if (header.key === JAQPOT_METADATA_KEY) {
+        return JSON.stringify(getKeyValue(row, header.key));
+      }
+      return row[header.key];
+    });
   });
-
-  if (hasJaqpotRowLabel) {
-    headerRow += ',Jaqpot Row Label';
-  }
-
-  const resultRows =
-    dataset.result?.map((result: any, resultIndex: number) => {
-      return generateResultTableRow(
-        independentFeatures,
-        dependentFeatures,
-        dataset,
-        resultIndex,
-        result,
-      )
-        .map((row) => {
-          if (row.toString().includes(',')) {
-            return `"${row}"`;
-          }
-          return row;
-        })
-        .join(',');
-    }) ?? [];
-
+  const resultRows = rowsIn2DArray
+    .map((row) => row.join(','))
+    .map((row) => {
+      if (row.toString().includes(',')) {
+        return `"${row}"`;
+      }
+      return row;
+    });
   return [headerRow, ...resultRows].join('\n');
 }
 
