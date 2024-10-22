@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface CustomErrorPageProps {
   title: string;
@@ -13,6 +14,7 @@ export default function CustomErrorPage({
   title,
   description,
 }: CustomErrorPageProps) {
+  const router = useRouter();
   return (
     <div className="flex min-h-screen flex-col items-center p-5 text-center">
       <Image
@@ -34,8 +36,8 @@ export default function CustomErrorPage({
         >
           Try again
         </Button>
-        <Button as={Link} color="primary" href="/dashboard">
-          Go to the Dashboard
+        <Button color="primary" onPress={() => router.back()}>
+          Go back
         </Button>
       </div>
     </div>

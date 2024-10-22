@@ -164,7 +164,7 @@ export default function Sidebar() {
               <span className="ms-3">Explore models</span>
             </Link>
           </div>
-          <nav className="overflow-y-auto px-3 pb-4 pt-4">
+          <nav className="px-3 pb-4 pt-4">
             <ul className="space-y-2 font-medium">
               <div className="p-2 text-xs uppercase text-indigo-200 dark:text-white">
                 Navigation
