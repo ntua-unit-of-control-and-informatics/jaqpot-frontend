@@ -5,21 +5,21 @@ import { Divider } from '@nextui-org/divider';
 import React from 'react';
 
 interface DoaCardsProps {
-  result: any;
+  doaDetails: any;
 }
 
-export default function DoaCards({ result }: DoaCardsProps) {
+export default function DoaCards({ doaDetails }: DoaCardsProps) {
   return (
     <>
-      {result[JAQPOT_METADATA_KEY]?.doa?.majorityVoting?.toString() && (
+      {doaDetails?.majorityVoting?.toString() && (
         <div className="mb-4">
           {' '}
           <strong>Majority voting: </strong>
-          {result[JAQPOT_METADATA_KEY]?.doa?.majorityVoting.toString()}
+          {doaDetails.majorityVoting.toString()}
         </div>
       )}
       <div className="flex flex-wrap gap-4">
-        {Object.entries(result[JAQPOT_METADATA_KEY].doa).map(([key, value]) => {
+        {Object.entries(doaDetails).map(([key, value]) => {
           if (key === 'majorityVoting') return null;
           return (
             <Card key={key} className="max-w-[400px] flex-grow">

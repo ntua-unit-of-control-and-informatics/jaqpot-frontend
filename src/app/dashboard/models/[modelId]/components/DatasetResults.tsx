@@ -18,15 +18,22 @@ import { Skeleton } from '@nextui-org/skeleton';
 import { Link } from '@nextui-org/link';
 import {
   getDatasetStatusNode,
-  generateResultTableRow,
-  JAQPOT_METADATA_KEY,
-  JAQPOT_ROW_LABEL_KEY,
   generateResultTableData,
+  ResultTableRow,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
-import { ArrowDownTrayIcon, BugAntIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowDownTrayIcon,
+  BugAntIcon,
+  EyeIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/24/solid';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { logger } from '@/logger';
+import { getKeyValue, useDisclosure } from '@nextui-org/react';
+import DoaTableCell from '@/app/dashboard/models/[modelId]/components/DoaTableCell';
+import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
+import DoaModal from '@/app/dashboard/models/[modelId]/components/DoaModal';
 
 const log = logger.child({ module: 'dataset' });
 
@@ -65,6 +72,18 @@ export default function DatasetResults({
     isLoading,
     error,
   } = useSWR(`/api/datasets/${datasetId}`, fetcher, { refreshInterval });
+  const {
+    isOpen: isDoaModalOpen,
+    onOpen: onDoaModalOpen,
+    onOpenChange: onDoaModalChange,
+  } = useDisclosure();
+  const [selectedRow, setSelectedRow] = useState<any | undefined>();
+
+  useEffect(() => {
+    if (!isDoaModalOpen) {
+      setSelectedRow(undefined);
+    }
+  }, [isDoaModalOpen]);
 
   const dataset = apiResponse?.data;
   useEffect(() => {
@@ -174,7 +193,9 @@ export default function DatasetResults({
           </div>
           <Table aria-label="Prediction table" className="mb-6">
             <TableHeader columns={tableHeaders}>
-              {(column) => <TableColumn key={column}>{column}</TableColumn>}
+              {(column) => (
+                <TableColumn key={column.key}>{column.label}</TableColumn>
+              )}
             </TableHeader>
 
             <TableBody
@@ -182,18 +203,39 @@ export default function DatasetResults({
               loadingState={loadingState}
               emptyContent={'No results to display.'}
             >
-              <TableRow key={item.key}>
-                {(item) => (
-                  <TableRow key={item.key}>
-                    {(columnKey) => (
+              {(item) => (
+                <TableRow key={item.key}>
+                  {(columnKey) => {
+                    if (columnKey === 'doa') {
+                      return (
+                        <TableCell>
+                          <DoaTableCell
+                            value={getKeyValue(item, columnKey)}
+                            onPress={() => {
+                              setSelectedRow(item);
+                              onDoaModalOpen();
+                            }}
+                          />
+                        </TableCell>
+                      );
+                    }
+                    return (
                       <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-                    )}
-                  </TableRow>
-                )}
-              </TableRow>
+                    );
+                  }}
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </>
+      )}
+
+      {selectedRow && (
+        <DoaModal
+          doaDetails={selectedRow.doaDetails}
+          isOpen={isDoaModalOpen}
+          onOpenChange={onDoaModalChange}
+        />
       )}
     </div>
   );

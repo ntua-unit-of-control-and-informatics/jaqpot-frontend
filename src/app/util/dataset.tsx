@@ -34,9 +34,22 @@ function parseProbabilities(Probabilities: object) {
     .join(' ');
 }
 
+export interface ResultTableHeader {
+  key: string;
+  label: string;
+}
+
+type BaseResultTableRow = {
+  key: string;
+  probabilities?: string;
+  doa?: string;
+};
+
+export type ResultTableRow = BaseResultTableRow & Record<string, string>;
+
 interface ResultTableData {
-  headers: string[];
-  rows: object[];
+  headers: ResultTableHeader[];
+  rows: ResultTableRow[];
 }
 
 export function generateResultTableData(
@@ -51,22 +64,37 @@ export function generateResultTableData(
     return { headers: [], rows: [] };
   }
 
-  const hasProbabilities = dataset.result?.find(
-    (resultRow: any) => resultRow[JAQPOT_METADATA_KEY]?.probabilities,
-  );
-  const hasDoa = dataset.result?.find(
-    (resultRow: any) => resultRow[JAQPOT_METADATA_KEY]?.doa,
-  );
-  const hasJaqpotRowLabel = dataset.result?.find(
-    (resultRow: any) => resultRow[JAQPOT_METADATA_KEY]?.[JAQPOT_ROW_LABEL_KEY],
-  );
+  let hasProbabilities = false;
+  let hasDoa = false;
+  let hasJaqpotRowLabel = false;
+  dataset.result?.forEach((resultRow: any) => {
+    if (resultRow[JAQPOT_METADATA_KEY]?.probabilities) {
+      hasProbabilities = true;
+    }
+    if (resultRow[JAQPOT_METADATA_KEY]?.doa) {
+      hasDoa = true;
+    }
+    if (resultRow[JAQPOT_METADATA_KEY]?.[JAQPOT_ROW_LABEL_KEY]) {
+      hasJaqpotRowLabel = true;
+    }
+  });
 
-  const headers = [
-    ...independentFeatures.map((feature) => feature.name),
-    ...dependentFeatures.map((feature) => feature.name),
-    ...(hasProbabilities ? ['Probabilities'] : []),
-    ...(hasDoa ? ['Applicability Domain'] : []),
-    ...(hasJaqpotRowLabel ? ['Jaqpot Row Label'] : []),
+  const headers: ResultTableHeader[] = [
+    ...independentFeatures.map((feature) => ({
+      label: feature.name,
+      key: feature.key,
+    })),
+    ...dependentFeatures.map((feature) => ({
+      label: feature.name,
+      key: feature.key,
+    })),
+    ...(hasProbabilities
+      ? [{ label: 'Probabilities', key: 'probabilities' }]
+      : []),
+    ...(hasDoa ? [{ label: 'Applicability Domain', key: 'doa' }] : []),
+    ...(hasJaqpotRowLabel
+      ? [{ label: 'Jaqpot Row label', key: JAQPOT_ROW_LABEL_KEY }]
+      : []),
   ];
 
   if (options?.hideIndependentFeatures) {
@@ -95,56 +123,61 @@ export function generateResultTableRow(
   resultIndex: number,
   result: any,
   hideIndependentFeatures: boolean = false,
-): string[] {
+): ResultTableRow {
+  const resultTableRow = {
+    key: resultIndex.toString(),
+  } as ResultTableRow;
   const hasProbabilities = result[JAQPOT_METADATA_KEY]?.probabilities;
   const hasDoa = result[JAQPOT_METADATA_KEY]?.doa;
   const jaqpotRowId = result[JAQPOT_METADATA_KEY]?.[JAQPOT_ROW_ID_KEY];
   const jaqpotRowLabel = result[JAQPOT_METADATA_KEY]?.[JAQPOT_ROW_LABEL_KEY];
 
-  const independentFeatureCellValues: string[] = independentFeatures.map(
-    (feature, independentFeatureIndex) => {
-      let input = dataset.input.find(
-        (inputRow) =>
-          jaqpotRowId !== undefined &&
-          (inputRow as any)[JAQPOT_ROW_ID_KEY] === jaqpotRowId,
-      ) as any;
-      if (!input) {
-        input = dataset.input[resultIndex];
-      }
+  independentFeatures.forEach((feature, independentFeatureIndex) => {
+    let value;
+    let input = dataset.input.find(
+      (inputRow) =>
+        jaqpotRowId !== undefined &&
+        (inputRow as any)[JAQPOT_ROW_ID_KEY] === jaqpotRowId,
+    ) as any;
+    if (!input) {
+      input = dataset.input[resultIndex];
+    }
 
-      if (!input) {
-        return 'N/A';
-      }
+    if (!input) {
+      value = 'N/A';
+    }
 
-      if (feature.featureType === 'CATEGORICAL') {
-        return (
-          feature.possibleValues?.find(
-            (possibleValue) => possibleValue.key === input[feature.key],
-          )?.value ?? input[feature.key]
-        );
-      }
+    if (feature.featureType === 'CATEGORICAL') {
+      value =
+        feature.possibleValues?.find(
+          (possibleValue) => possibleValue.key === input[feature.key],
+        )?.value ?? input[feature.key];
+    }
 
-      return input[feature.key];
-    },
-  );
-
-  const dependentFeatureCellValues = dependentFeatures.map((feature, index) => {
-    return result[feature.key];
+    value = input[feature.key];
+    resultTableRow[feature.key] = value;
   });
 
-  const probabilities = hasProbabilities
-    ? [parseProbabilities(result[JAQPOT_METADATA_KEY].probabilities)]
-    : [];
+  dependentFeatures.forEach((feature, index) => {
+    resultTableRow[feature.key] = result[feature.key];
+  });
 
-  const doa = hasDoa ? ['InDomain'] : [];
+  if (hasProbabilities) {
+    resultTableRow.probabilities = parseProbabilities(
+      result[JAQPOT_METADATA_KEY].probabilities,
+    );
+  }
 
-  const jaqpotRowLabelCellValue = jaqpotRowLabel ? [jaqpotRowLabel] : [];
+  if (hasDoa) {
+    resultTableRow.doa = result[JAQPOT_METADATA_KEY].doa.majorityVoting
+      ? 'In Domain'
+      : 'Out of Domain';
+    resultTableRow.doaDetails = result[JAQPOT_METADATA_KEY].doa;
+  }
 
-  return [
-    ...independentFeatureCellValues,
-    ...dependentFeatureCellValues,
-    ...probabilities,
-    ...doa,
-    ...jaqpotRowLabelCellValue,
-  ];
+  if (jaqpotRowLabel) {
+    resultTableRow[JAQPOT_ROW_LABEL_KEY] = jaqpotRowLabel;
+  }
+
+  return resultTableRow;
 }
