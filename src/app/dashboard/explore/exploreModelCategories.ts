@@ -102,7 +102,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
           id: 1731,
           name: 'TiO2 IV rat PBK model',
           imageUrl:
-            'https://raw.githubusercontent.com/periklis91/images/master/tio2_iv_pbk_new.jpg',
+            'https://raw.githubusercontent.com/periklis91/images/master/tio2_iv_pbk_new.png',
           description:
             'A PBK model for describing the biodistribution of TiO2 nanoparticles in rats after IV injection',
         },
@@ -246,7 +246,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
           id: 1731,
           name: 'TiO2 IV rat PBK model',
           imageUrl:
-            'https://raw.githubusercontent.com/periklis91/images/master/tio2_iv_pbk_new.jpg',
+            'https://raw.githubusercontent.com/periklis91/images/master/tio2_iv_pbk_new.png',
           description:
             'PBK model for describing the biodistribution of TiO2 nanoparticles in rats after IV injection',
         },
@@ -254,7 +254,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
           id: 1731,
           name: 'PFOA IV rat PBK model',
           imageUrl:
-            'https://raw.githubusercontent.com/periklis91/images/master/tio2_iv_pbk_new.jpg',
+            'https://raw.githubusercontent.com/periklis91/images/master/Tsiros_PFOA_2024.png',
           description:
             'PBK model for describing the biodistribution of TiO2 nanoparticles in rats after IV injection',
         },
