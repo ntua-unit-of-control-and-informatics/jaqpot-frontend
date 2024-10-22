@@ -44,7 +44,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
           id: 1730,
           name: 'Extended PFOA male rat PBK',
           imageUrl:
-            'https://raw.githubusercontent.com/periklis91/images/master/Tsiros_PFOA_2024.jpg',
+            'https://raw.githubusercontent.com/periklis91/images/master/Tsiros_PFOA_2024.png',
           description:
             'This PBK model describes the biodistribution of PFOA in male rats after IV or oral administration (presented in Tsiros et al., 2024) ',
         },
