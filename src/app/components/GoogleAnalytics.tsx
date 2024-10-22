@@ -11,12 +11,14 @@ const GoogleAnalytics = () => {
 
       <Script id="" strategy="lazyOnload">
         {`
+            if (window.localStorage.getItem('ga_debug_mode') !== 'true') {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
               page_path: window.location.pathname,
               });
+            }
           `}
       </Script>
     </>
