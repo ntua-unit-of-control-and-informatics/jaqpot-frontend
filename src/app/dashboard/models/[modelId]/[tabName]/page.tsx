@@ -132,7 +132,9 @@ export default async function Page({ params }: { params: ModelPageParams }) {
   try {
     model = await retrieveModelOrLegacy(params.modelId);
   } catch (e: any) {
-    if (e?.message === 'NEXT_REDIRECT') throw e;
+    if (e?.message === 'NEXT_REDIRECT' || e?.digest === 'NEXT_NOT_FOUND') {
+      throw e;
+    }
 
     return (
       <CustomErrorPage
