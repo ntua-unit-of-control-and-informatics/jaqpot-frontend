@@ -84,7 +84,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
         {
           name: 'CHIASMA',
           description:
-            'CHIASMA is an EU projet that aims at devising and demonstrating New Approach Methodologies (NAMs) for supporting human and environmental safety evaluation in a regulatory context. For more information vistit https://chiasma-project.eu/',
+            'CHIASMA is an EU project that aims at devising and demonstrating New Approach Methodologies (NAMs) for supporting human and environmental safety evaluation in a regulatory context. For more information vistit https://chiasma-project.eu/',
           imageUrl:
             'https://raw.githubusercontent.com/periklis91/images/master/CHIASMA.jpg',
         },
@@ -290,7 +290,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
     {
       name: 'CHIASMA',
       description:
-        'CHIASMA is an EU projet that aims at devising and demonstrating New Approach Methodologies (NAMs) for supporting human and environmental safety evaluation in a regulatory context. For more information vistit https://chiasma-project.eu/',
+        'CHIASMA is an EU project that aims at devising and demonstrating New Approach Methodologies (NAMs) for supporting human and environmental safety evaluation in a regulatory context. For more information vistit https://chiasma-project.eu/',
       imageUrl:
         'https://raw.githubusercontent.com/periklis91/images/master/CHIASMA.jpg',
     },
