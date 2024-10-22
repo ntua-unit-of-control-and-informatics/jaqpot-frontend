@@ -145,16 +145,14 @@ function generateResultTableRow(
 
     if (!input) {
       value = 'N/A';
-    }
-
-    if (feature.featureType === 'CATEGORICAL') {
+    } else if (feature.featureType === 'CATEGORICAL') {
       value =
         feature.possibleValues?.find(
           (possibleValue) => possibleValue.key === input[feature.key],
         )?.value ?? input[feature.key];
+    } else {
+      value = input[feature.key];
     }
-
-    value = input[feature.key];
     resultTableRow[feature.key] = value;
   });
 
