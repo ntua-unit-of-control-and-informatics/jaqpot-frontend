@@ -86,7 +86,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
           description:
             'CHIASMA is an EU project that aims at devising and demonstrating New Approach Methodologies (NAMs) for supporting human and environmental safety evaluation in a regulatory context. For more information vistit https://chiasma-project.eu/',
           imageUrl:
-            'https://raw.githubusercontent.com/periklis91/images/master/CHIASMA.jpg',
+            'https://raw.githubusercontent.com/periklis91/images/master/CHIASMA.png',
         },
       ],
       categories: [],
@@ -292,7 +292,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
       description:
         'CHIASMA is an EU project that aims at devising and demonstrating New Approach Methodologies (NAMs) for supporting human and environmental safety evaluation in a regulatory context. For more information vistit https://chiasma-project.eu/',
       imageUrl:
-        'https://raw.githubusercontent.com/periklis91/images/master/CHIASMA.jpg',
+        'https://raw.githubusercontent.com/periklis91/images/master/CHIASMA.png',
     },
 
     {
@@ -300,7 +300,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
       description:
         'INSIGHT is an EU project that aims at model integration for the development and assessment of high impact chemicals and materials. For more information vistit https://insight-project.org/',
       imageUrl:
-        'https://raw.githubusercontent.com/periklis91/images/master/INSIGHT.jpg',
+        'https://raw.githubusercontent.com/periklis91/images/master/INSIGHT.png',
     },
   ],
 };
