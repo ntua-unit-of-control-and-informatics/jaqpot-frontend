@@ -29,14 +29,17 @@ function generateCSVFromData(
       return row[header.key];
     });
   });
-  const resultRows = rowsIn2DArray
-    .map((row) => row.join(','))
-    .map((row) => {
-      if (row.toString().includes(',')) {
-        return `"${row}"`;
+  const resultRows = rowsIn2DArray.map((rowValues) => {
+    const escapedRowValues = rowValues.map((value) => {
+      if (value.toString().includes(',')) {
+        return `"${value}"`;
       }
-      return row;
+      return value;
     });
+
+    return escapedRowValues.join(',');
+  });
+
   return [headerRow, ...resultRows].join('\n');
 }
 
