@@ -35,6 +35,7 @@ import { getKeyValue, useDisclosure } from '@nextui-org/react';
 import DoaTableCell from '@/app/dashboard/models/[modelId]/components/DoaTableCell';
 import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
 import DoaModal from '@/app/dashboard/models/[modelId]/components/DoaModal';
+import ValidationChart from '@/app/dashboard/models/[modelId]/components/ValidationChart';
 
 const log = logger.child({ module: 'dataset' });
 
@@ -81,8 +82,17 @@ export default function ValidateModelResults({
         Validation Results
       </h2>
 
+      {!isLoaded && (
+        <div className="flex w-full flex-col gap-2">
+          <Skeleton className="h-3 w-3/5 rounded-lg" />
+          <Skeleton className="h-3 w-4/5 rounded-lg" />
+          <Skeleton className="h-3 w-2/5 rounded-lg" />
+          <Skeleton className="w-5/5 h-3 rounded-lg" />
+        </div>
+      )}
+
       {isLoaded && dataset?.status === 'SUCCESS' && (
-        <>{JSON.stringify(dataset.result)}</>
+        <ValidationChart model={model} dataset={dataset} />
       )}
     </div>
   );

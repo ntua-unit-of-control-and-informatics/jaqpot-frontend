@@ -20,7 +20,10 @@ export async function createPrediction(modelId: string, data: any) {
   });
 }
 
-async function createPredictionWithCSV(modelId: string, formData: FormData) {
+export async function createPredictionWithCSV(
+  modelId: string,
+  formData: FormData,
+) {
   return await fetch(`/api/models/${modelId}/predict/csv`, {
     method: 'POST',
     body: formData,
