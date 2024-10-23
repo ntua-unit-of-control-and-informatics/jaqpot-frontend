@@ -17,6 +17,7 @@ import Alert from '@/app/components/Alert';
 import { isAuthenticated } from '@/app/util/auth';
 import { useSession } from 'next-auth/react';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import ValidateModel from '@/app/dashboard/models/[modelId]/components/ValidateModel';
 
 interface ModelEvaluateTabProps {
   model: ModelDto;
@@ -42,7 +43,7 @@ export default function ModelEvaluateTab({ model }: ModelEvaluateTabProps) {
         subtitle={<span>Press to expand</span>}
         title="Validate model"
       >
-        {defaultContent}
+        <ValidateModel model={model} />
       </AccordionItem>
     </Accordion>
   );

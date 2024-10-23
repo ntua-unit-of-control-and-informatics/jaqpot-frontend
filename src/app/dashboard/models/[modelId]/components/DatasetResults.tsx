@@ -20,6 +20,7 @@ import {
   getDatasetStatusNode,
   generateResultTableData,
   ResultTableRow,
+  datasetFetcher,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
 import {
@@ -42,21 +43,6 @@ interface PredictionResultProps {
   model: ModelDto;
 }
 
-const fetcher: Fetcher<ApiResponse<DatasetDto>, string> = async (url) => {
-  const res = await fetch(url);
-
-  // If the status code is not in the range 200-299,
-  // we still try to parse and throw it.
-  if (!res.ok) {
-    const message = (await res.json()).message;
-    const status = res.status;
-    // Attach extra info to the error object.
-    throw new CustomError(message, status);
-  }
-
-  return res.json();
-};
-
 export default function DatasetResults({
   datasetId,
   model,
@@ -71,7 +57,8 @@ export default function DatasetResults({
     data: apiResponse,
     isLoading,
     error,
-  } = useSWR(`/api/datasets/${datasetId}`, fetcher, { refreshInterval });
+  } = useSWR(`/api/datasets/${datasetId}`, datasetFetcher, { refreshInterval });
+
   const {
     isOpen: isDoaModalOpen,
     onOpen: onDoaModalOpen,

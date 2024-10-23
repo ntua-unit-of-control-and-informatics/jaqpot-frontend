@@ -11,6 +11,7 @@ import { Radio, RadioGroup } from '@nextui-org/react';
 import UploadCSVForm from '@/app/dashboard/models/[modelId]/components/UploadCSVForm';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
+import { components } from '@/app/api.schema';
 
 function generateFieldTypeFromFeature(
   independentFeature: FeatureDto,
@@ -30,43 +31,76 @@ function generateFieldTypeFromFeature(
   }
 }
 
-function generatePredictionFormSchema(model: ModelDto): DynamicFormSchema[] {
-  return model.independentFeatures.map((independentFeature) => {
-    const dynamicFormSchema: DynamicFormSchema = {
-      sectionTitle: '',
-      fields: [
-        {
-          type: generateFieldTypeFromFeature(independentFeature),
-          name: independentFeature.key,
-          label: independentFeature.name,
-          required: true,
-          placeholder: 'Insert value...',
-          options: independentFeature.possibleValues?.map((possibleValue) => ({
-            key: possibleValue.key,
-            value: possibleValue.value,
-          })),
-        },
-      ],
-    };
-    return dynamicFormSchema;
-  });
+function generateDynamicFormFieldFromFeature(independentFeature: {
+  id?: number;
+  meta?: { [p: string]: Record<string, never> };
+  key: string;
+  name: string;
+  units?: string;
+  description?: string;
+  featureType: components['schemas']['FeatureType'];
+  featureDependency?: 'DEPENDENT' | 'INDEPENDENT';
+  visible?: boolean;
+  possibleValues?: components['schemas']['FeaturePossibleValue'][];
+  createdAt?: Record<string, never>;
+  updatedAt?: Record<string, never>;
+}) {
+  return {
+    sectionTitle: '',
+    fields: [
+      {
+        type: generateFieldTypeFromFeature(independentFeature),
+        name: independentFeature.key,
+        label: independentFeature.name,
+        required: true,
+        placeholder: 'Insert value...',
+        options: independentFeature.possibleValues?.map((possibleValue) => ({
+          key: possibleValue.key,
+          value: possibleValue.value,
+        })),
+      },
+    ],
+  };
+}
+
+function generatePredictionFormSchema(
+  model: ModelDto,
+  includeIndependentFeatures: boolean | undefined,
+): DynamicFormSchema[] {
+  const independentFeaturesFormSchema = model.independentFeatures.map(
+    (independentFeature) =>
+      generateDynamicFormFieldFromFeature(independentFeature),
+  );
+  let dependentFeaturesFormSchema: DynamicFormSchema[] = [];
+  if (includeIndependentFeatures) {
+    dependentFeaturesFormSchema = model.dependentFeatures.map(
+      (dependentFeature) =>
+        generateDynamicFormFieldFromFeature(dependentFeature),
+    );
+  }
+  return [...independentFeaturesFormSchema, ...dependentFeaturesFormSchema];
 }
 
 interface ModelPredictionFormProps {
   model: ModelDto;
   onFormSubmit: (formData: any) => Promise<void>;
   onCSVFormSubmit: (formData: FormData) => Promise<void>;
+  includeIndependentFeatures?: boolean;
 }
 
 export default function ModelPredictionForm({
   model,
   onFormSubmit,
   onCSVFormSubmit,
+  includeIndependentFeatures = false,
 }: ModelPredictionFormProps) {
   const { data: session } = useSession();
   const [predictionUploadType, setPredictionUploadType] = useState('form');
 
-  const predictionFormSchema = generatePredictionFormSchema(model);
+  const predictionFormSchema = generatePredictionFormSchema(
+    model,
+    includeIndependentFeatures,
+  );
 
   return (
     <>

@@ -10,7 +10,7 @@ import { Spinner } from '@nextui-org/spinner';
 import { useSession } from 'next-auth/react';
 import ModelPredictionForm from '@/app/dashboard/models/[modelId]/components/ModelPredictionForm';
 
-async function createPrediction(modelId: string, data: any) {
+export async function createPrediction(modelId: string, data: any) {
   return await fetch(`/api/models/${modelId}/predict`, {
     method: 'POST',
     headers: {
