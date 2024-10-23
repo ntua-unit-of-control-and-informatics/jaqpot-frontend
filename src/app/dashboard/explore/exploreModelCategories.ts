@@ -22,6 +22,18 @@ export interface ExplorePageOrganization {
   models?: ExplorePageModel[];
 }
 
+const CHIASMA_ORGANIZATION = {
+  name: 'CHIASMA',
+  description: 'EU Horizon project (grant agreement No. 101137613.)',
+  imageUrl:
+    'https://raw.githubusercontent.com/periklis91/images/master/CHIASMA.png',
+};
+const SCENARIOS_ORGANIZATION = {
+  name: 'SCENARIOS',
+  description: 'EU Horizon project (grant agreement No. 101037509)',
+  imageUrl:
+    'https://raw.githubusercontent.com/periklis91/images/master/SCENARIOS.jpg',
+};
 export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
   name: 'Explore models',
   description: 'Explore models hosted in the Jaqpot platform',
@@ -73,22 +85,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
             ' This PBK model developed by Kim et al., 2019 for describing the biodistribution of PFDA in rats after oral or iv exposure (application from Bernstein et al., 2021) ',
         },
       ],
-      organizations: [
-        {
-          name: 'SCENARIOS',
-          description:
-            'The goal of the SCENARIOS EU project is to close the knowledge gap and achieve breakthrough in the toxicology, detection and remediation of PFAS. For more information vistit https://scenarios-project.eu/',
-          imageUrl:
-            'https://raw.githubusercontent.com/periklis91/images/master/SCENARIOS.jpg',
-        },
-        {
-          name: 'CHIASMA',
-          description:
-            'CHIASMA is an EU project that aims at devising and demonstrating New Approach Methodologies (NAMs) for supporting human and environmental safety evaluation in a regulatory context. For more information vistit https://chiasma-project.eu/',
-          imageUrl:
-            'https://raw.githubusercontent.com/periklis91/images/master/CHIASMA.png',
-        },
-      ],
+      organizations: [SCENARIOS_ORGANIZATION, CHIASMA_ORGANIZATION],
       categories: [],
     },
     {
@@ -273,32 +270,18 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
   organizations: [
     {
       name: 'PINK',
-      description:
-        'THe PINK EU project aims at providing integrated computational approaches for the introduction of safe-and-sustainable-by-design chemicals and materials into the market. For more information vistit https://pink-project.eu/',
+      description: 'EU Horizon project (grant agreement No. 101137809)',
       imageUrl:
         'https://raw.githubusercontent.com/periklis91/images/master/PINK.jpg',
     },
 
-    {
-      name: 'SCENARIOS',
-      description:
-        'The goal of the SCENARIOS EU project is to close the knowledge gap and achieve breakthrough in the toxicology, detection and remediation of PFAS. For more information vistit https://scenarios-project.eu/',
-      imageUrl:
-        'https://raw.githubusercontent.com/periklis91/images/master/SCENARIOS.jpg',
-    },
+    SCENARIOS_ORGANIZATION,
 
-    {
-      name: 'CHIASMA',
-      description:
-        'CHIASMA is an EU project that aims at devising and demonstrating New Approach Methodologies (NAMs) for supporting human and environmental safety evaluation in a regulatory context. For more information vistit https://chiasma-project.eu/',
-      imageUrl:
-        'https://raw.githubusercontent.com/periklis91/images/master/CHIASMA.png',
-    },
+    CHIASMA_ORGANIZATION,
 
     {
       name: 'INSIGHT',
-      description:
-        'INSIGHT is an EU project that aims at model integration for the development and assessment of high impact chemicals and materials. For more information vistit https://insight-project.org/',
+      description: 'EU Horizon project (grant agreement No. 101137742)',
       imageUrl:
         'https://raw.githubusercontent.com/periklis91/images/master/INSIGHT.png',
     },
