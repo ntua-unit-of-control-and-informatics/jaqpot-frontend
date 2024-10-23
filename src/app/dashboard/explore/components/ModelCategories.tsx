@@ -71,8 +71,8 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
                 isBlurred
               >
                 <CardHeader className="absolute top-0 z-10 flex-col !items-start bg-white/50 backdrop-blur-sm dark:bg-black/50">
-                  <p className="text-tiny font-bold uppercase">{item.name}</p>
-                  <h4 className="line-clamp-2 text-large font-medium">
+                  <p className="text-base font-bold uppercase">{item.name}</p>
+                  <h4 className="line-clamp-2 text-sm font-medium">
                     {item.description}
                   </h4>
                 </CardHeader>
@@ -104,8 +104,8 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
                 className={'min-h-[250px] min-w-[250px]'}
               >
                 <CardHeader className="absolute top-0 z-10 flex-col !items-start bg-white/50 backdrop-blur-sm dark:bg-black/50">
-                  <p className="text-tiny font-bold uppercase">{item.name}</p>
-                  <h4 className="line-clamp-2 text-large font-medium">
+                  <p className="text-base font-bold uppercase">{item.name}</p>
+                  <h4 className="line-clamp-2 text-sm font-medium">
                     {item.description}
                   </h4>
                 </CardHeader>
@@ -137,8 +137,8 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
                   className={'min-h-[250px] min-w-[250px]'}
                 >
                   <CardHeader className="absolute top-0 z-10 flex-col !items-start bg-white/50 backdrop-blur-sm dark:bg-black/50">
-                    <p className="text-tiny font-bold uppercase">{item.name}</p>
-                    <h4 className="line-clamp-2 text-large font-medium">
+                    <p className="text-base font-bold uppercase">{item.name}</p>
+                    <h4 className="line-clamp-3 text-sm font-medium">
                       {item.description}
                     </h4>
                   </CardHeader>
