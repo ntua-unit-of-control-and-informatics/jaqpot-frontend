@@ -65,7 +65,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
             'This PBK model predicts the biodistribution of PFOS in Rainbow trout after both oral and dietary exposure (Vidal et al., 2020) ',
         },
         {
-          id: 3,
+          id: 1554,
           name: 'PFDA rat PBK',
           imageUrl:
             'https://raw.githubusercontent.com/periklis91/images/master/PFDA.png',
