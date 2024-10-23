@@ -10,6 +10,7 @@ import {
   ExplorePageModel,
   ExplorePageOrganization,
 } from '@/app/dashboard/explore/exploreModelCategories';
+import { Link } from '@nextui-org/link';
 
 function traverse(
   categoriesFromPath: string[],
@@ -47,23 +48,11 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
 
   const currentCategory = traverse(categories) || EXPLORE_PAGE_CATEGORIES;
 
-  const handleCategoryClick = (item: ExplorePageCategory) => {
-    router.push(`${pathname}/${item.name}`);
-  };
-
-  const handleModelClick = (item: ExplorePageModel) => {
-    router.push(`/dashboard/models/${item.id}/description`);
-  };
-
-  const handleOrganizationClick = (item: ExplorePageOrganization) => {
-    router.push(`/dashboard/organizations/${item.name}/description`);
-  };
-
   return (
     <>
       <PageHeading title={currentCategory.name} className={'my-3'} />
 
-      <p className="text-gray-600">{currentCategory.description}</p>
+      <p>{currentCategory.description}</p>
 
       {currentCategory.categories.length > 0 && (
         <div className="mt-5">
@@ -76,7 +65,8 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
                 shadow="sm"
                 key={index}
                 isPressable
-                onPress={() => handleCategoryClick(item)}
+                as={Link}
+                href={`${pathname}/${item.name}`}
                 className={'min-h-[250px] min-w-[250px]'}
                 isBlurred
               >
@@ -102,13 +92,15 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
           <h2 className="mb-5 text-xl font-bold underline underline-offset-8">
             Models
           </h2>
+
           <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
             {currentCategory.models?.map((item, index) => (
               <Card
                 shadow="sm"
                 key={index}
+                as={Link}
                 isPressable
-                onPress={() => handleModelClick(item)}
+                href={`/dashboard/models/${item.id}/description`}
                 className={'min-h-[250px] min-w-[250px]'}
               >
                 <CardHeader className="absolute top-0 z-10 flex-col !items-start bg-white/50 backdrop-blur-sm dark:bg-black/50">
@@ -140,7 +132,8 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
                   shadow="sm"
                   key={index}
                   isPressable
-                  onPress={() => handleOrganizationClick(item)}
+                  as={Link}
+                  href={`/dashboard/organizations/${item.name}/description`}
                   className={'min-h-[250px] min-w-[250px]'}
                 >
                   <CardHeader className="absolute top-0 z-10 flex-col !items-start bg-white/50 backdrop-blur-sm dark:bg-black/50">
