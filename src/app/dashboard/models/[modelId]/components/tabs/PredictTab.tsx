@@ -84,6 +84,10 @@ export default function PredictTab({ model }: PredictTabProps) {
       case 'STRING':
       case 'SMILES':
         return 'text';
+      case 'FLOAT_ARRAY':
+        return 'floatarray';
+      case 'STRING_ARRAY':
+        return 'stringarray';
       default:
         return 'number';
     }

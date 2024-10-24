@@ -199,10 +199,6 @@ export interface components {
        * @example 0
        */
       id?: number;
-      /** @description A JSON object containing meta information. */
-      meta?: {
-        [key: string]: Record<string, never>;
-      };
       /** @example My Model */
       name: string;
       /** @example A description of your model */
@@ -210,6 +206,7 @@ export interface components {
       type: components['schemas']['ModelType'];
       /** @example 1.0.0 */
       jaqpotpyVersion: string;
+      doas?: components['schemas']['Doa'][];
       libraries: components['schemas']['Library'][];
       dependentFeatures: components['schemas']['Feature'][];
       independentFeatures: components['schemas']['Feature'][];
@@ -218,27 +215,33 @@ export interface components {
       task: components['schemas']['ModelTask'];
       /**
        * Format: byte
-       * @description A base64 representation of the actual model.
+       * @description A base64 representation of the raw model.
        */
-      actualModel: string;
+      rawModel: string;
       creator?: components['schemas']['User'];
       /** @description If the current user can edit the model */
       canEdit?: boolean;
       isAdmin?: boolean;
       tags?: string;
       legacyPredictionService?: string;
+      scores?: {
+        train?: components['schemas']['Scores'];
+        test?: components['schemas']['Scores'];
+        crossValidation?: components['schemas']['Scores'];
+      };
       extraConfig?: components['schemas']['ModelExtraConfig'];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
        * @example 2023-01-01T12:00:00Z
        */
-      createdAt?: Record<string, never>;
+      createdAt?: string;
       /**
+       * Format: date-time
        * @description The date and time when the feature was last updated.
        * @example 2023-01-01T12:00:00Z
        */
-      updatedAt?: Record<string, never>;
+      updatedAt?: string;
     };
     ModelSummary: {
       /**
@@ -261,12 +264,62 @@ export interface components {
        * @description The date and time when the feature was created.
        * @example 2023-01-01T12:00:00Z
        */
-      createdAt: Record<string, never>;
+      createdAt: string;
       /**
+       * Format: date-time
        * @description The date and time when the feature was last updated.
        * @example 2023-01-01T12:00:00Z
        */
-      updatedAt?: Record<string, never>;
+      updatedAt?: string;
+    };
+    Scores: {
+      regression?: components['schemas']['RegressionScores'];
+      binaryClassification?: components['schemas']['BinaryClassificationScores'];
+      multiclassClassification?: components['schemas']['MulticlassClassificationScores'];
+    };
+    RegressionScores: {
+      /** Format: float */
+      r2?: number;
+      /** Format: float */
+      mae?: number;
+      /** Format: float */
+      rmse?: number;
+      /** Format: float */
+      rSquaredDiffRZero?: number;
+      /** Format: float */
+      rSquaredDiffRZeroHat?: number;
+      /** Format: float */
+      absDiffRZeroHat?: number;
+      /** Format: float */
+      k?: number;
+      /** Format: float */
+      kHat?: number;
+    };
+    BinaryClassificationScores: {
+      /** Format: float */
+      accuracy?: number;
+      /** Format: float */
+      balancedAccuracy?: number;
+      precision?: number[];
+      recall?: number[];
+      f1Score?: number[];
+      jaccard?: number[];
+      /** Format: float */
+      matthewsCorrCoef?: number;
+      confusionMatrix?: number[][];
+    };
+    MulticlassClassificationScores: {
+      /** Format: float */
+      accuracy?: number;
+      /** Format: float */
+      balancedAccuracy?: number;
+      precision?: number[];
+      recall?: number[];
+      f1Score?: number[];
+      jaccard?: number[];
+      /** Format: float */
+      matthewsCorrCoef?: number;
+      confusionMatrix?: number[][];
     };
     OrganizationSummary: {
       /**
@@ -298,11 +351,10 @@ export interface components {
     /** @description A JSON object containing extra configuration for the model */
     ModelExtraConfig: {
       torchConfig?: {
-        [key: string]: Record<string, never>;
+        [key: string]: components['schemas']['AnyValue'];
       };
       preprocessors?: components['schemas']['Transformer'][];
       featurizers?: components['schemas']['Transformer'][];
-      doa?: components['schemas']['Transformer'][];
     };
     /** @description A preprocessor for the model */
     Transformer: {
@@ -331,12 +383,68 @@ export interface components {
        * @description The date and time when the feature was created.
        * @example 2023-01-01T12:00:00Z
        */
-      createdAt?: Record<string, never>;
+      createdAt?: string;
       /**
+       * Format: date-time
        * @description The date and time when the feature was last updated.
        * @example 2023-01-01T12:00:00Z
        */
-      updatedAt?: Record<string, never>;
+      updatedAt?: string;
+    };
+    Doa: {
+      /** Format: int64 */
+      id?: number;
+      /**
+       * @example LEVERAGE
+       * @enum {string}
+       */
+      method:
+        | 'LEVERAGE'
+        | 'BOUNDING_BOX'
+        | 'KERNEL_BASED'
+        | 'MEAN_VAR'
+        | 'MAHALANOBIS'
+        | 'CITY_BLOCK';
+      /** @description The doa calculated data */
+      data:
+        | components['schemas']['LeverageDoa']
+        | components['schemas']['BoundingBoxDoa']
+        | components['schemas']['KernelBasedDoa']
+        | components['schemas']['MeanVarDoa']
+        | components['schemas']['MahalanobisDoa']
+        | components['schemas']['CityBlockDoa'];
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was created.
+       * @example 2023-01-01T12:00:00Z
+       */
+      createdAt?: string;
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was last updated.
+       * @example 2023-01-01T12:00:00Z
+       */
+      updatedAt?: string;
+    };
+    LeverageDoa: {
+      /** Format: float */
+      hStar?: number;
+      doaMatrix?: number[][];
+    };
+    BoundingBoxDoa: {
+      boundingBox?: number[][];
+    };
+    KernelBasedDoa: {
+      data?: Record<string, never>;
+    };
+    MeanVarDoa: {
+      bounds?: number[][];
+    };
+    MahalanobisDoa: {
+      data?: Record<string, never>;
+    };
+    CityBlockDoa: {
+      data?: Record<string, never>;
     };
     Feature: {
       /**
@@ -344,10 +452,6 @@ export interface components {
        * @example 1
        */
       id?: number;
-      /** @description A JSON object containing meta information. */
-      meta?: {
-        [key: string]: Record<string, never>;
-      };
       /**
        * @description A key that must start with a letter, followed by any combination of letters, digits, hyphens, or underscores. For example, 'abc123', 'abc-test', or 'Abc_test'. It cannot start with a digit.
        * @example feature-key
@@ -378,12 +482,13 @@ export interface components {
        * @description The date and time when the feature was created.
        * @example 2023-01-01T12:00:00Z
        */
-      createdAt?: Record<string, never>;
+      createdAt?: string;
       /**
+       * Format: date-time
        * @description The date and time when the feature was last updated.
        * @example 2023-01-01T12:00:00Z
        */
-      updatedAt?: Record<string, never>;
+      updatedAt?: string;
     };
     FeaturePossibleValue: {
       /** @example value */
@@ -401,7 +506,9 @@ export interface components {
       | 'CATEGORICAL'
       | 'SMILES'
       | 'STRING'
-      | 'TEXT';
+      | 'TEXT'
+      | 'FLOAT_ARRAY'
+      | 'STRING_ARRAY';
     /**
      * @example PREDICTION
      * @enum {string}
@@ -428,10 +535,14 @@ export interface components {
       /** Format: int64 */
       modelId?: number;
       modelName?: string;
-      executedAt?: Record<string, never>;
-      executionFinishedAt?: Record<string, never>;
-      createdAt?: Record<string, never>;
-      updatedAt?: Record<string, never>;
+      /** Format: date-time */
+      executedAt?: string;
+      /** Format: date-time */
+      executionFinishedAt?: string;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
     };
     DatasetCSV: {
       /**
@@ -452,10 +563,14 @@ export interface components {
       /** Format: int64 */
       modelId?: number;
       modelName?: string;
-      executedAt?: Record<string, never>;
-      executionFinishedAt?: Record<string, never>;
-      createdAt?: Record<string, never>;
-      updatedAt?: Record<string, never>;
+      /** Format: date-time */
+      executedAt?: string;
+      /** Format: date-time */
+      executionFinishedAt?: string;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
     };
     Organization: {
       /** Format: int64 */
@@ -479,8 +594,10 @@ export interface components {
       canEdit?: boolean;
       /** @description If the current user is a member of the organization */
       isMember?: boolean;
-      created_at?: Record<string, never>;
-      updated_at?: Record<string, never>;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
     };
     OrganizationUser: {
       /** Format: int64 */
@@ -513,8 +630,11 @@ export interface components {
        * @enum {string}
        */
       status: 'PENDING' | 'REJECTED' | 'ACCEPTED';
-      /** @description Expiration date of the invitation */
-      expirationDate: Record<string, never>;
+      /**
+       * Format: date-time
+       * @description Expiration date of the invitation
+       */
+      expirationDate: string;
     };
     Lead: {
       /** Format: int64 */
@@ -538,7 +658,7 @@ export interface components {
        * @description The generated API key
        * @example jq_abcd1234efgh5678ijkl
        */
-      clientKey: string;
+      clientKey?: string;
       /** @description A note for the API key */
       note?: string;
       /**
@@ -566,7 +686,7 @@ export interface components {
        */
       lastUsedIp?: string | null;
       /** @description Whether the API key is active or disabled */
-      enabled: boolean;
+      enabled?: boolean;
     };
     ErrorResponse: {
       /** @description Error message */

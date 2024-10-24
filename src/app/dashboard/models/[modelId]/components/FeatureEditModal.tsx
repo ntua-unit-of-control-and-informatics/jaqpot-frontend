@@ -16,14 +16,9 @@ import {
   ModalFooter,
   Textarea,
   Button,
-  useDisclosure,
-  Checkbox,
   Input,
-  Link,
 } from '@nextui-org/react';
-import { CustomError } from '@/app/types/CustomError';
 import toast from 'react-hot-toast';
-import { router } from 'next/client';
 import { ApiResponse } from '@/app/util/response';
 import { useRouter } from 'next/navigation';
 import PossibleValueInput from '@/app/dashboard/models/[modelId]/components/PossibleValueInput';
@@ -64,6 +59,18 @@ const possibleFeatureTypes: FeatureTypeValue[] = [
     label: 'Text',
     description:
       'A text feature type represents larger blocks of text, used for descriptions, comments, or other long-form text data.',
+  },
+  {
+    key: 'FLOAT_ARRAY',
+    label: 'Float Array',
+    description:
+      'A float array feature type represents a collection of decimal numbers, useful for multi-dimensional or sequential data.',
+  },
+  {
+    key: 'STRING_ARRAY',
+    label: 'String Array',
+    description:
+      'A string array feature type represents a collection of strings, useful for multi-dimensional or sequential data.',
   },
 ];
 

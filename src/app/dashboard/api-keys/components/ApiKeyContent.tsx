@@ -42,7 +42,7 @@ export default function ApiKeyContent({
   const handleDelete = async (apiKey: ApiKeyDto) => {
     if (confirm('Are you sure you want to delete this API key?')) {
       setIsLoading(true);
-      const res = await fetch(`/api/user/api-keys/${apiKey.clientKey}`, {
+      const res = await fetch(`/api/user/api-keys/${apiKey.clientKey!}`, {
         method: 'DELETE',
       });
 
@@ -50,7 +50,7 @@ export default function ApiKeyContent({
       if (success) {
         toast.success(`API key deleted successfully`);
         router.refresh();
-        onDelete(apiKey.clientKey);
+        onDelete(apiKey.clientKey!);
       } else {
         toast.error(`Error deleting api key: ${message}`);
       }
