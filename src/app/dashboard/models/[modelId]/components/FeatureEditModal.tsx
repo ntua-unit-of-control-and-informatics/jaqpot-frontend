@@ -66,6 +66,12 @@ const possibleFeatureTypes: FeatureTypeValue[] = [
     description:
       'A float array feature type represents a collection of decimal numbers, useful for multi-dimensional or sequential data.',
   },
+  {
+    key: 'STRING_ARRAY',
+    label: 'String Array',
+    description:
+      'A string array feature type represents a collection of strings, useful for multi-dimensional or sequential data.',
+  },
 ];
 
 // TypeScript interface for clarity

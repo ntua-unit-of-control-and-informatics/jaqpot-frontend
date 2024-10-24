@@ -2,22 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 
-interface FloatArrayInputProps {
+interface ArrayInputProps {
   name: string;
   label: string;
+  type: 'number' | 'text';
   onChange: (e: React.ChangeEvent<any>) => void;
-  defaultValue?: number[];
+  defaultValue?: (number | string)[];
   isDisabled?: boolean;
 }
 
-export default function FloatArrayInput({
+export default function ArrayInput({
   name,
   label,
+  type,
   defaultValue = [],
   onChange,
   isDisabled = false,
-}: FloatArrayInputProps) {
-  const [inputs, setInputs] = useState<number[]>(defaultValue);
+}: ArrayInputProps) {
+  const [inputs, setInputs] = useState<(number | string)[]>(defaultValue);
 
   useEffect(() => {
     onChange({ target: { name, value: inputs } } as any);
@@ -60,7 +62,7 @@ export default function FloatArrayInput({
       {inputs.map((input, index) => (
         <div key={index} className="flex flex-row items-center gap-2 pb-3">
           <Input
-            type="number"
+            type={type}
             label={`${label} ${index + 1}`}
             name={name}
             value={input.toString()}

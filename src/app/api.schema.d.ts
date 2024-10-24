@@ -470,7 +470,7 @@ export interface components {
      * @example FLOAT
      * @enum {string}
      */
-    FeatureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "STRING" | "TEXT" | "FLOAT_ARRAY";
+    FeatureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "STRING" | "TEXT" | "FLOAT_ARRAY" | "STRING_ARRAY";
     /**
      * @example PREDICTION
      * @enum {string}
