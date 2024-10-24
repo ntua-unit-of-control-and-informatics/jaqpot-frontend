@@ -64,16 +64,26 @@ function generatePlots(
 }
 
 const lineColors = [
-  '#8884d8', // Purple
-  '#82ca9d', // Green
-  '#ff7300', // Orange
-  '#0088fe', // Blue
-  '#ff8042', // Coral
-  '#00c49f', // Teal
-  '#ffbb28', // Yellow
-  '#ff3366', // Pink
-  '#a4de6c', // Light Green
-  '#8dd1e1', // Light Blue
+  '#3498db', // Bright Blue
+  '#f1c40f', // Vibrant Yellow
+  '#e74c3c', // Deep Red
+  '#2ecc71', // Lime Green
+  '#9b59b6', // Rich Plum
+  '#1abc9c', // Seafoam Green
+  '#16a085', // Forest Green
+  '#27ae60', // Mint Green
+  '#2980b9', // Navy Blue
+  '#8e44ad', // Lavender
+  '#d35400', // Burnt Orange
+  '#c0392b', // Crimson Red
+  '#7f8c8d', // Dark Gray
+  '#2c3e50', // Charcoal Gray
+  '#95a5a6', // Light Gray
+  '#f7dc6f', // Golden Yellow
+  '#66d9ef', // Sky Blue
+  '#b2fffc', // Pale Blue
+  '#8bc34a', // Olive Green
+  '#ff99cc', // Pastel Pink
 ];
 
 export default function PBPKPlots({ model, dataset }: PBPKPlotsProps) {
