@@ -6,6 +6,7 @@ import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 import { Checkbox } from '@nextui-org/checkbox';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
+import FloatArrayInput from '@/app/dashboard/models/[modelId]/components/FloatArrayInput';
 
 // const jsonExample: DynamicFormSchema[] = [
 //   {
@@ -123,7 +124,8 @@ export type DynamicFormFieldType =
   | 'range'
   | 'date'
   | 'file'
-  | 'search';
+  | 'search'
+  | 'floatarray';
 
 export interface DynamicFormField {
   name: string;
@@ -250,6 +252,14 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             onChange={handleChange}
             isRequired={field.required}
             value={(formData[field.name] || '') as string}
+          />
+        );
+      case 'floatarray':
+        return (
+          <FloatArrayInput
+            name={field.name}
+            label={field.label}
+            onChange={handleChange}
           />
         );
       default:
