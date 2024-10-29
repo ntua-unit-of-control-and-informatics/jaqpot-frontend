@@ -154,20 +154,16 @@ interface DynamicFormProps {
 }
 
 function generateFieldLabel(field: DynamicFormField) {
-  if (field.type === 'select') {
-    return `Select ${field.label}`;
-  } else {
-    return (
-      <>
-        {field.labelTooltip && (
-          <Tooltip content={field.labelTooltip} closeDelay={0}>
-            <InformationCircleIcon className="mr-1 size-4 text-gray-400" />
-          </Tooltip>
-        )}
-        {field.label}
-      </>
-    );
-  }
+  return (
+    <>
+      {field.labelTooltip && (
+        <Tooltip content={field.labelTooltip} closeDelay={0}>
+          <InformationCircleIcon className="mr-1 size-4 text-gray-400" />
+        </Tooltip>
+      )}
+      {field.label}
+    </>
+  );
 }
 
 export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
@@ -217,6 +213,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
           <Autocomplete
             labelPlacement="outside"
             name={field.name}
+            placeholder={`Select ${field.label}`}
             label={generateFieldLabel(field)}
             onSelectionChange={(key) =>
               handleChange({
