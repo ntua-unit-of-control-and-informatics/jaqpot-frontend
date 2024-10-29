@@ -123,7 +123,7 @@ export default function PBPKPlots({ model, dataset }: PBPKPlotsProps) {
                 <XAxis dataKey="time" />
                 <YAxis
                   label={{
-                    value: `(${plot.unit})`,
+                    value: `${plot.unit}`,
                     position: 'insideBottomRight',
                     offset: 10,
                   }}
