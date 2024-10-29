@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { Input } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 
 interface ArrayInputProps {
   name: string;
-  label: string;
+  label: string | ReactNode;
   type: 'number' | 'text';
   onChange: (e: React.ChangeEvent<any>) => void;
   defaultValue?: (number | string)[];
@@ -55,7 +55,7 @@ export default function ArrayInput({
 
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-small">
+      <label className="flex flex-row items-center text-small">
         {label}
         <span className="text-red-500">*</span>
       </label>
@@ -63,7 +63,7 @@ export default function ArrayInput({
         <div key={index} className="flex flex-row items-center gap-2 pb-3">
           <Input
             type={type}
-            label={`${label} ${index + 1}`}
+            label={name}
             name={name}
             value={input.toString()}
             onChange={(event) => handleInputChange(index, event)}
