@@ -16,17 +16,9 @@ interface PBPKPlotsProps {
   dataset: DatasetDto;
 }
 
-const groupByUnits = (
-  dependentFeatures: FeatureDto[],
-): Partial<Record<string, FeatureDto[]>> => {
-  return Object.groupBy(
-    dependentFeatures,
-    (feature) => feature.units ?? 'No Units',
-  );
-};
-
 type PBPKPlot = {
-  unit: string;
+  xUnit: string;
+  yUnit: string;
   plotData: PBPKPlotData[];
 };
 
@@ -38,8 +30,13 @@ type PBPKPlotData = {
 
 function generatePlots(
   groupFeaturesByUnits: Partial<Record<string, FeatureDto[]>>,
+  model: ModelDto,
   dataset: DatasetDto,
 ): PBPKPlot[] {
+  const xUnit =
+    model.dependentFeatures.find((feature) => feature.key === 'time')?.units ??
+    'No Units';
+
   return Object.entries(groupFeaturesByUnits).map(([unit, features]) => {
     const plotData = dataset.result!.map((resultRow: any) => {
       const time = parseFloat(resultRow.time);
@@ -57,7 +54,8 @@ function generatePlots(
     });
 
     return {
-      unit,
+      xUnit,
+      yUnit: unit,
       plotData,
     };
   });
@@ -90,7 +88,7 @@ export default function PBPKPlots({ model, dataset }: PBPKPlotsProps) {
   const groupFeaturesByUnits: Partial<Record<string, FeatureDto[]>> = useMemo(
     () =>
       Object.groupBy(
-        model.dependentFeatures,
+        model.dependentFeatures.filter((feature) => feature.key !== 'time'),
         (feature) => feature.units ?? 'No Units',
       ),
     [model.dependentFeatures],
@@ -100,13 +98,13 @@ export default function PBPKPlots({ model, dataset }: PBPKPlotsProps) {
     return null;
   }
 
-  const plots: PBPKPlot[] = generatePlots(groupFeaturesByUnits, dataset);
+  const plots: PBPKPlot[] = generatePlots(groupFeaturesByUnits, model, dataset);
 
   return (
-    <div className="grid h-full min-h-[400px] w-full grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
+    <div className="grid h-full min-h-[400px] w-full grid-cols-1 gap-2 sm:grid-cols-2">
       {plots.map((plot, index) => (
         <>
-          <div>
+          <div className="p-8">
             <ResponsiveContainer width="100%" height="100%" minHeight={400}>
               <LineChart
                 width={500}
@@ -118,13 +116,23 @@ export default function PBPKPlots({ model, dataset }: PBPKPlotsProps) {
                   left: 20,
                   bottom: 5,
                 }}
+                {...{
+                  overflow: 'visible',
+                }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="time" />
+                <XAxis
+                  dataKey="time"
+                  label={{
+                    value: `${plot.xUnit ?? 'No units'}`,
+                    position: 'right',
+                    offset: 10,
+                  }}
+                />
                 <YAxis
                   label={{
-                    value: `${plot.unit}`,
-                    position: 'insideBottomRight',
+                    value: `${plot.yUnit}`,
+                    position: 'top',
                     offset: 10,
                   }}
                 />
