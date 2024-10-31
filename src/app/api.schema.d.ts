@@ -214,6 +214,16 @@ export interface components {
       sharedWithOrganizations?: components["schemas"]["Organization"][];
       visibility: components["schemas"]["ModelVisibility"];
       task: components["schemas"]["ModelTask"];
+      torchConfig?: {
+        [key: string]: components["schemas"]["AnyValue"];
+      };
+      preprocessors?: components["schemas"]["Transformer"][];
+      featurizers?: components["schemas"]["Transformer"][];
+      /**
+       * Format: byte
+       * @description A base64 representation of the raw preprocessor.
+       */
+      rawPreprocessor?: string;
       /**
        * Format: byte
        * @description A base64 representation of the raw model.
@@ -227,9 +237,9 @@ export interface components {
       tags?: string;
       legacyPredictionService?: string;
       scores?: {
-        train?: components["schemas"]["Scores"];
-        test?: components["schemas"]["Scores"];
-        crossValidation?: components["schemas"]["Scores"];
+        train?: components["schemas"]["Scores"][];
+        test?: components["schemas"]["Scores"][];
+        crossValidation?: components["schemas"]["Scores"][];
       };
       extraConfig?: components["schemas"]["ModelExtraConfig"];
       /**
@@ -280,6 +290,7 @@ export interface components {
       multiclassClassification?: components["schemas"]["MulticlassClassificationScores"];
     };
     RegressionScores: {
+      yName: string;
       /** Format: float */
       r2?: number;
       /** Format: float */
@@ -298,6 +309,7 @@ export interface components {
       kHat?: number;
     };
     BinaryClassificationScores: {
+      yName: string;
       /** Format: float */
       accuracy?: number;
       /** Format: float */
@@ -311,6 +323,7 @@ export interface components {
       confusionMatrix?: number[][];
     };
     MulticlassClassificationScores: {
+      yName: string;
       /** Format: float */
       accuracy?: number;
       /** Format: float */
@@ -321,7 +334,7 @@ export interface components {
       jaccard?: number[];
       /** Format: float */
       matthewsCorrCoef?: number;
-      confusionMatrix?: number[][];
+      confusionMatrix?: number[][][];
     };
     OrganizationSummary: {
       /**
@@ -344,6 +357,8 @@ export interface components {
     };
     /** @description A preprocessor for the model */
     Transformer: {
+      /** Format: int64 */
+      id?: number;
       /** @example StandardScaler */
       name: string;
       config: {
@@ -611,6 +626,61 @@ export interface components {
       name?: string;
       /** @enum {string} */
       status?: "PENDING" | "APPROVED" | "DENIED";
+    };
+    PredictionModel: {
+      /**
+       * Format: int64
+       * @description Unique identifier for the prediction model
+       */
+      id?: number | null;
+      /** @description List of dependent features for the model */
+      dependentFeatures: components["schemas"]["Feature"][];
+      /** @description List of independent features for the model */
+      independentFeatures: components["schemas"]["Feature"][];
+      /** @description Type of the model */
+      type: components["schemas"]["ModelType"];
+      /** @description Raw model data in serialized format */
+      rawModel: string;
+      /** @description Raw preprocessor data in serialized format */
+      rawPreprocessor?: string;
+      /** @description List of Domain of Applicability (DoA) configurations */
+      doas?: components["schemas"]["Doa"][];
+      /** @description List of feature names selected for the model */
+      selectedFeatures?: string[];
+      /** @description Task configuration for the model */
+      task: components["schemas"]["ModelTask"];
+      /** @description List of featurizer configurations applied to the model */
+      featurizers?: components["schemas"]["Transformer"][];
+      /** @description List of preprocessor configurations applied to the model */
+      preprocessors?: components["schemas"]["Transformer"][];
+      /** @description Torch configuration settings, optional */
+      torchConfig?: {
+        [key: string]: components["schemas"]["AnyValue"];
+      } | null;
+      /** @description Additional configuration settings, optional */
+      extraConfig?: {
+        [key: string]: components["schemas"]["AnyValue"];
+      } | null;
+      /** @description Legacy additional information settings, optional */
+      legacyAdditionalInfo?: {
+        [key: string]: components["schemas"]["AnyValue"];
+      } | null;
+      /** @description Legacy prediction service information, if available */
+      legacyPredictionService?: string | null;
+    };
+    PredictionRequest: {
+      /** @description The prediction model to use. */
+      model: components["schemas"]["PredictionModel"];
+      /** @description The dataset to be used for the prediction. */
+      dataset: components["schemas"]["Dataset"];
+      /** @description Optional configuration for additional settings. */
+      extraConfig?: {
+        [key: string]: components["schemas"]["AnyValue"];
+      };
+    };
+    PredictionResponse: {
+      /** @description List of predictions */
+      predictions: components["schemas"]["AnyValue"][];
     };
     /** User */
     User: {
