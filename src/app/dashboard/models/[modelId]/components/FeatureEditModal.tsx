@@ -16,14 +16,9 @@ import {
   ModalFooter,
   Textarea,
   Button,
-  useDisclosure,
-  Checkbox,
   Input,
-  Link,
 } from '@nextui-org/react';
-import { CustomError } from '@/app/types/CustomError';
 import toast from 'react-hot-toast';
-import { router } from 'next/client';
 import { ApiResponse } from '@/app/util/response';
 import { useRouter } from 'next/navigation';
 import PossibleValueInput from '@/app/dashboard/models/[modelId]/components/PossibleValueInput';
@@ -65,6 +60,18 @@ const possibleFeatureTypes: FeatureTypeValue[] = [
     description:
       'A text feature type represents larger blocks of text, used for descriptions, comments, or other long-form text data.',
   },
+  {
+    key: 'FLOAT_ARRAY',
+    label: 'Float Array',
+    description:
+      'A float array feature type represents a collection of decimal numbers, useful for multi-dimensional or sequential data.',
+  },
+  {
+    key: 'STRING_ARRAY',
+    label: 'String Array',
+    description:
+      'A string array feature type represents a collection of strings, useful for multi-dimensional or sequential data.',
+  },
 ];
 
 // TypeScript interface for clarity
@@ -98,6 +105,7 @@ export default function FeatureEditModal({
     key: feature.key,
     name: feature.name,
     units: feature.units,
+    range: feature.range,
     description: feature.description ?? '',
     featureType: feature.featureType,
   });
@@ -186,6 +194,16 @@ export default function FeatureEditModal({
                     name="units"
                     placeholder="Enter the feature units"
                     value={formData.units}
+                    onChange={handleChange}
+                    isDisabled={!isEdit}
+                  ></Input>
+                </div>
+                <div>
+                  <Input
+                    label="Range"
+                    name="range"
+                    placeholder="Enter the feature range"
+                    value={formData.range}
                     onChange={handleChange}
                     isDisabled={!isEdit}
                   ></Input>

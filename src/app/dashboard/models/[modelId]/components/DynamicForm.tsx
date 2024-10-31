@@ -1,11 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Radio, RadioGroup, Select, SelectItem } from '@nextui-org/react';
 import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
 import { Checkbox } from '@nextui-org/checkbox';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
+import ArrayInput from '@/app/dashboard/models/[modelId]/components/ArrayInput';
+import { InformationCircleIcon } from '@heroicons/react/24/solid';
+import { Tooltip } from '@nextui-org/tooltip';
 
 // const jsonExample: DynamicFormSchema[] = [
 //   {
@@ -123,11 +126,14 @@ export type DynamicFormFieldType =
   | 'range'
   | 'date'
   | 'file'
-  | 'search';
+  | 'search'
+  | 'floatarray'
+  | 'stringarray';
 
 export interface DynamicFormField {
   name: string;
   label: string;
+  labelTooltip?: ReactNode | string;
   type: DynamicFormFieldType;
   required: boolean;
   placeholder?: string;
@@ -145,6 +151,19 @@ export interface DynamicFormOption {
 interface DynamicFormProps {
   schema: DynamicFormSchema[];
   onSubmit: Function;
+}
+
+function generateFieldLabel(field: DynamicFormField) {
+  return (
+    <>
+      {field.labelTooltip && (
+        <Tooltip content={field.labelTooltip} closeDelay={0}>
+          <InformationCircleIcon className="mr-1 size-4 text-gray-400" />
+        </Tooltip>
+      )}
+      {field.label}
+    </>
+  );
 }
 
 export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
@@ -194,13 +213,19 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
           <Autocomplete
             labelPlacement="outside"
             name={field.name}
-            label={`Select ${field.label}`}
+            placeholder={`Select ${field.label}`}
+            label={generateFieldLabel(field)}
             onSelectionChange={(key) =>
               handleChange({
                 target: { value: key, type: field.type, name: field.name },
               } as any)
             }
             isRequired={field.required}
+            inputProps={{
+              classNames: {
+                label: 'flex flex-row  items-center justify-center',
+              },
+            }}
           >
             {field.options!.map((option: DynamicFormOption, index: number) => (
               // Send keys so the model can decide how to split the values
@@ -212,7 +237,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
         );
       case 'radio':
         return (
-          <RadioGroup label={field.label}>
+          <RadioGroup label={generateFieldLabel(field)}>
             {field.options!.map((option: any, index: number) => (
               <Radio
                 key={index}
@@ -236,7 +261,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             isRequired={field.required}
             checked={formData[field.name] as boolean | undefined}
           >
-            {field.label}
+            {generateFieldLabel(field)}
           </Checkbox>
         );
       case 'textarea':
@@ -245,11 +270,29 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             labelPlacement="outside"
             rows={3}
             name={field.name}
-            label={field.label}
+            label={generateFieldLabel(field)}
             placeholder={field.placeholder}
             onChange={handleChange}
             isRequired={field.required}
             value={(formData[field.name] || '') as string}
+          />
+        );
+      case 'floatarray':
+        return (
+          <ArrayInput
+            name={field.name}
+            type={'number'}
+            label={generateFieldLabel(field)}
+            onChange={handleChange}
+          />
+        );
+      case 'stringarray':
+        return (
+          <ArrayInput
+            name={field.name}
+            type={'text'}
+            label={generateFieldLabel(field)}
+            onChange={handleChange}
           />
         );
       default:
@@ -259,11 +302,14 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             labelPlacement="outside"
             type={field.type}
             name={field.name}
-            label={field.label}
+            label={generateFieldLabel(field)}
             placeholder={field.placeholder}
             onChange={handleChange}
             isRequired={field.required}
             value={(formData[field.name] || '') as string}
+            classNames={{
+              label: 'flex flex-row  items-center justify-center',
+            }}
           />
         );
     }

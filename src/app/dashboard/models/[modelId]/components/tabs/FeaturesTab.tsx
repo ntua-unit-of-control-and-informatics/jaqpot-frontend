@@ -64,6 +64,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
           <TableHeader>
             <TableColumn>Name</TableColumn>
             <TableColumn>Units</TableColumn>
+            <TableColumn>Range</TableColumn>
             <TableColumn>Description</TableColumn>
             <TableColumn>Type</TableColumn>
             <TableColumn>Actions</TableColumn>
@@ -79,6 +80,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
                   </Tooltip>
                 </TableCell>
                 <TableCell>{independentFeature.units}</TableCell>
+                <TableCell>{independentFeature.range}</TableCell>
                 <TableCell>
                   <Tooltip content={independentFeature.description}>
                     <div className="line-clamp-2">

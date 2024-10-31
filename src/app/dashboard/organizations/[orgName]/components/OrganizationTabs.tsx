@@ -52,18 +52,20 @@ export default function OrganizationTabs({
       >
         <MarkdownRenderer>{organization.description}</MarkdownRenderer>
       </Tab>
-      <Tab
-        key="people"
-        title={
-          <div className="flex items-center space-x-1">
-            <UsersIcon className="size-5" />
-            <span>People</span>
-          </div>
-        }
-        href={`${pathnameWithoutTab}/people`}
-      >
-        <OrganizationPeopleTab organization={organization} />
-      </Tab>
+      {(organization.canEdit || organization.isMember) && (
+        <Tab
+          key="people"
+          title={
+            <div className="flex items-center space-x-1">
+              <UsersIcon className="size-5" />
+              <span>People</span>
+            </div>
+          }
+          href={`${pathnameWithoutTab}/people`}
+        >
+          <OrganizationPeopleTab organization={organization} />
+        </Tab>
+      )}
       {(organization.canEdit || organization.isMember) && (
         <Tab
           key="shared"
