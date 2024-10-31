@@ -102,6 +102,28 @@ export default function PredictTab({ model }: PredictTabProps) {
             type: generateFieldTypeFromFeature(independentFeature),
             name: independentFeature.key,
             label: independentFeature.name,
+            labelTooltip: (
+              <div className="px-1 py-2">
+                <div className="text-tiny">
+                  Type: {independentFeature.featureType}
+                </div>
+                {independentFeature.description && (
+                  <div className="text-tiny">
+                    Description: {independentFeature.description}
+                  </div>
+                )}
+                {independentFeature.units && (
+                  <div className="text-tiny">
+                    Units: {independentFeature.units}
+                  </div>
+                )}
+                {independentFeature.range && (
+                  <div className="text-tiny">
+                    Range: {independentFeature.range}
+                  </div>
+                )}
+              </div>
+            ),
             required: true,
             placeholder: 'Insert value...',
             options: independentFeature.possibleValues?.map(
