@@ -18,24 +18,22 @@ import { isAuthenticated } from '@/app/util/auth';
 import { useSession } from 'next-auth/react';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import ValidateModel from '@/app/dashboard/models/[modelId]/components/ValidateModel';
+import ModelScores from '@/app/dashboard/models/[modelId]/components/scores/ModelScores';
 
 interface ModelEvaluateTabProps {
   model: ModelDto;
 }
 
 export default function ModelEvaluateTab({ model }: ModelEvaluateTabProps) {
-  const defaultContent =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
-
   return (
-    <Accordion>
+    <Accordion disabledKeys={['validate']}>
       <AccordionItem
         key="scores"
         aria-label="Scores"
         subtitle="Press to expand"
         title="Model Scores"
       >
-        {defaultContent}
+        <ModelScores model={model} />
       </AccordionItem>
       <AccordionItem
         key="validate"
