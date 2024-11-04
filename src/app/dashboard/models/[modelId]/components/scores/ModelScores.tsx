@@ -65,9 +65,14 @@ export default function ModelScores({ model }: ModelScoresProps) {
             <h4 className="text-medium font-medium">Train scores</h4>
           </div>
           <Divider className="my-4" />
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-5">
             {trainScores.map((score, index) => (
-              <ScoreCard key={index} scores={score} task={scoreTask} />
+              <ScoreCard
+                key={index}
+                model={model}
+                score={score}
+                task={scoreTask}
+              />
             ))}
           </div>
         </div>
@@ -78,9 +83,14 @@ export default function ModelScores({ model }: ModelScoresProps) {
             <h4 className="text-medium font-medium">Test scores</h4>
           </div>
           <Divider className="my-4" />
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-5">
             {testScores.map((score, index) => (
-              <ScoreCard key={index} scores={score} task={scoreTask} />
+              <ScoreCard
+                key={index}
+                model={model}
+                score={score}
+                task={scoreTask}
+              />
             ))}
           </div>
         </div>
@@ -92,9 +102,14 @@ export default function ModelScores({ model }: ModelScoresProps) {
             <h4 className="text-medium font-medium">Cross validation scores</h4>
           </div>
           <Divider className="my-4" />
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-5">
             {crossValidationScores.map((score, index) => (
-              <ScoreCard key={index} scores={score} task={scoreTask} />
+              <ScoreCard
+                key={index}
+                model={model}
+                score={score}
+                task={scoreTask}
+              />
             ))}
           </div>
         </div>

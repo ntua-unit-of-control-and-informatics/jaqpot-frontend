@@ -309,6 +309,7 @@ export interface components {
       kHat?: number;
     };
     BinaryClassificationScores: {
+      labels?: string[];
       yName: string;
       /** Format: float */
       accuracy?: number;
@@ -323,6 +324,7 @@ export interface components {
       confusionMatrix?: number[][];
     };
     MulticlassClassificationScores: {
+      labels?: string[];
       yName: string;
       /** Format: float */
       accuracy?: number;
@@ -389,14 +391,31 @@ export interface components {
        */
       updatedAt?: string;
     };
+    PredictionDoa: {
+      /** Format: int64 */
+      id?: number;
+      method: components["schemas"]["DoaMethod"];
+      /** @description The doa calculated data */
+      data: {
+        [key: string]: components["schemas"]["AnyValue"];
+      };
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was created.
+       * @example 2023-01-01T12:00:00Z
+       */
+      createdAt?: string;
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was last updated.
+       * @example 2023-01-01T12:00:00Z
+       */
+      updatedAt?: string;
+    };
     Doa: {
       /** Format: int64 */
       id?: number;
-      /**
-       * @example LEVERAGE
-       * @enum {string}
-       */
-      method: "LEVERAGE" | "BOUNDING_BOX" | "KERNEL_BASED" | "MEAN_VAR" | "MAHALANOBIS" | "CITY_BLOCK";
+      method: components["schemas"]["DoaMethod"];
       /** @description The doa calculated data */
       data: components["schemas"]["LeverageDoa"] | components["schemas"]["BoundingBoxDoa"] | components["schemas"]["KernelBasedDoa"] | components["schemas"]["MeanVarDoa"] | components["schemas"]["MahalanobisDoa"] | components["schemas"]["CityBlockDoa"];
       /**
@@ -412,6 +431,11 @@ export interface components {
        */
       updatedAt?: string;
     };
+    /**
+     * @example LEVERAGE
+     * @enum {string}
+     */
+    DoaMethod: "LEVERAGE" | "BOUNDING_BOX" | "KERNEL_BASED" | "MEAN_VAR" | "MAHALANOBIS" | "CITY_BLOCK";
     LeverageDoa: {
       /** Format: float */
       hStar?: number;
@@ -637,17 +661,15 @@ export interface components {
       dependentFeatures: components["schemas"]["Feature"][];
       /** @description List of independent features for the model */
       independentFeatures: components["schemas"]["Feature"][];
-      /** @description Type of the model */
       type: components["schemas"]["ModelType"];
       /** @description Raw model data in serialized format */
       rawModel: string;
       /** @description Raw preprocessor data in serialized format */
       rawPreprocessor?: string;
       /** @description List of Domain of Applicability (DoA) configurations */
-      doas?: components["schemas"]["Doa"][];
+      doas?: components["schemas"]["PredictionDoa"][];
       /** @description List of feature names selected for the model */
       selectedFeatures?: string[];
-      /** @description Task configuration for the model */
       task: components["schemas"]["ModelTask"];
       /** @description List of featurizer configurations applied to the model */
       featurizers?: components["schemas"]["Transformer"][];
@@ -669,9 +691,7 @@ export interface components {
       legacyPredictionService?: string | null;
     };
     PredictionRequest: {
-      /** @description The prediction model to use. */
       model: components["schemas"]["PredictionModel"];
-      /** @description The dataset to be used for the prediction. */
       dataset: components["schemas"]["Dataset"];
       /** @description Optional configuration for additional settings. */
       extraConfig?: {
@@ -679,7 +699,6 @@ export interface components {
       };
     };
     PredictionResponse: {
-      /** @description List of predictions */
       predictions: components["schemas"]["AnyValue"][];
     };
     /** User */
