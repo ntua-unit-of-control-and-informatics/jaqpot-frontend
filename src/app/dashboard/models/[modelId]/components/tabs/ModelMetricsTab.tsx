@@ -24,7 +24,7 @@ interface ModelEvaluateTabProps {
   model: ModelDto;
 }
 
-export default function ModelEvaluateTab({ model }: ModelEvaluateTabProps) {
+export default function ModelMetricsTab({ model }: ModelEvaluateTabProps) {
   return (
     <Accordion disabledKeys={['validate']}>
       <AccordionItem

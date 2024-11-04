@@ -17,7 +17,7 @@ import {
   ShieldCheckIcon,
 } from '@heroicons/react/24/solid';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
-import ModelEvaluateTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelEvaluateTab';
+import ModelMetricsTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelMetricsTab';
 
 interface ModelTabsProps {
   model: ModelDto;
@@ -84,16 +84,16 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         <ModelPredictTab model={model} />
       </Tab>
       <Tab
-        key="evaluate"
+        key="metrics"
         title={
           <div className="flex items-center space-x-1">
             <ChartBarIcon className="size-5" />
-            <span>Evaluate</span>
+            <span>Metrics</span>
           </div>
         }
-        href={`${pathnameWithoutTab}/evaluate`}
+        href={`${pathnameWithoutTab}/metrics`}
       >
-        <ModelEvaluateTab model={model} />
+        <ModelMetricsTab model={model} />
       </Tab>
       {model.canEdit && (
         <Tab

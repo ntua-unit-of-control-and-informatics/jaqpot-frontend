@@ -1,58 +1,40 @@
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  getKeyValue,
-} from '@nextui-org/react';
+import CustomizedTreemapContent from '@/app/dashboard/models/[modelId]/components/scores/CustomizedTreemapContent';
 
 interface ConfusionMatrixProps {
   matrix: number[][][] | undefined;
   classNames: string[];
 }
 
-const rows = [
+import React from 'react';
+import { Treemap, ResponsiveContainer } from 'recharts';
+import Heatmap from '@/app/dashboard/models/[modelId]/components/scores/Heatmap';
+
+const data = [
   {
-    key: '1',
-    name: 'Tony Reichert',
-    role: 'CEO',
-    status: 'Active',
+    name: '12',
+    children: [{ name: 'Axes', size: 1 }],
   },
   {
-    key: '2',
-    name: 'Zoey Lang',
-    role: 'Technical Lead',
-    status: 'Paused',
+    name: '1',
+    children: [{ name: 'AnchorControl', size: 1 }],
   },
   {
-    key: '3',
-    name: 'Jane Fisher',
-    role: 'Senior Developer',
-    status: 'Active',
+    name: '13',
+    children: [{ name: 'Data', size: 1 }],
   },
   {
-    key: '4',
-    name: 'William Howard',
-    role: 'Community Manager',
-    status: 'Vacation',
+    name: '0',
+    children: [{ name: 'DataEvent', size: 1 }],
   },
 ];
 
-const columns = [
-  {
-    key: 'name',
-    label: 'NAME',
-  },
-  {
-    key: 'role',
-    label: 'ROLE',
-  },
-  {
-    key: 'status',
-    label: 'STATUS',
-  },
+const COLORS = [
+  '#8889DD',
+  '#9597E4',
+  '#8DC77B',
+  '#A5D297',
+  '#E2CF45',
+  '#F8C12D',
 ];
 
 export default function ConfusionMatrix({
@@ -61,28 +43,34 @@ export default function ConfusionMatrix({
 }: ConfusionMatrixProps) {
   if (!matrix) return null;
 
+  const xLabels = ['0', '1'];
+  const yLabels = ['0', '1'];
+
+  const getCellColor = (value: number, x: number, y: number) => {
+    if (x === y) {
+      return {
+        bgColor: '#ccffcc',
+        color: 'black',
+      };
+    } else {
+      return { bgColor: '#ffdddd', color: 'black' };
+    }
+  };
   return (
     <>
       <p className="mb-2">
         <b>Confusion matrix</b>
       </p>
-      {JSON.stringify(matrix)}
-      {/*<Table aria-label="Example table with dynamic content">*/}
-      {/*  <TableHeader columns={columns}>*/}
-      {/*    {(column) => (*/}
-      {/*      <TableColumn key={column.key}>{column.label}</TableColumn>*/}
-      {/*    )}*/}
-      {/*  </TableHeader>*/}
-      {/*  <TableBody items={rows}>*/}
-      {/*    {(item) => (*/}
-      {/*      <TableRow key={item.key}>*/}
-      {/*        {(columnKey) => (*/}
-      {/*          <TableCell>{getKeyValue(item, columnKey)}</TableCell>*/}
-      {/*        )}*/}
-      {/*      </TableRow>*/}
-      {/*    )}*/}
-      {/*  </TableBody>*/}
-      {/*</Table>*/}
+      {classNames.map((className, index) => (
+        <Heatmap
+          key={index}
+          legend={className}
+          data={matrix[index]}
+          xLabels={xLabels}
+          yLabels={yLabels}
+          getColor={getCellColor}
+        />
+      ))}
     </>
   );
 }

@@ -18,10 +18,7 @@ export default function ScoreCard({ score, task, model }: ScoreCardProps) {
         <BinaryClassificationScoreCard score={score[task]!} />
       )}
       {task === 'multiclassClassification' && (
-        <MulticlassClassificationScoreCard
-          score={score[task]!}
-          classNames={model.dependentFeatures.map((f) => f.name)}
-        />
+        <MulticlassClassificationScoreCard score={score[task]!} />
       )}
     </>
   );
