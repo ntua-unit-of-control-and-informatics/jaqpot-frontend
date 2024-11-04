@@ -28,3 +28,11 @@ export type DatasetsResponseDto =
 export type ApiKeyDto = components['schemas']['ApiKey'];
 export type ApiKeyResponseDto =
   operations['createApiKey']['responses']['201']['content']['application/json'];
+
+export type ModelScoresDto = components['schemas']['Model']['scores'];
+export type ScoresDto = components['schemas']['Scores'];
+export type RegressionScoreDto = components['schemas']['Scores']['regression'];
+export type BinaryClassificationDto =
+  components['schemas']['Scores']['binaryClassification'];
+export type MulticlassClassificationDto =
+  components['schemas']['Scores']['multiclassClassification'];

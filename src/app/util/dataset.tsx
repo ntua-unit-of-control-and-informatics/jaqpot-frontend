@@ -1,6 +1,9 @@
 import { Chip } from '@nextui-org/chip';
 import React, { ReactNode } from 'react';
 import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
+import { Fetcher } from 'swr';
+import { ApiResponse } from '@/app/util/response';
+import { CustomError } from '@/app/types/CustomError';
 
 export const JAQPOT_METADATA_KEY = 'jaqpotMetadata';
 export const JAQPOT_ROW_ID_KEY = 'jaqpotRowId';
@@ -179,3 +182,20 @@ function generateResultTableRow(
 
   return resultTableRow;
 }
+
+export const datasetFetcher: Fetcher<ApiResponse<DatasetDto>, string> = async (
+  url,
+) => {
+  const res = await fetch(url);
+
+  // If the status code is not in the range 200-299,
+  // we still try to parse and throw it.
+  if (!res.ok) {
+    const message = (await res.json()).message;
+    const status = res.status;
+    // Attach extra info to the error object.
+    throw new CustomError(message, status);
+  }
+
+  return res.json();
+};

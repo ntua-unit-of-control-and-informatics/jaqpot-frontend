@@ -4,18 +4,20 @@ import { useParams, usePathname } from 'next/navigation';
 import { Tab, Tabs } from '@nextui-org/tabs';
 import { ModelDto } from '@/app/api.types';
 import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
-import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/PredictTab';
+import ModelPredictTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelPredictTab';
 import ModelEditTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelEditTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
 import ModelAdminTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelAdminTab';
 import {
   AdjustmentsVerticalIcon,
+  ChartBarIcon,
   ChatBubbleLeftRightIcon,
   PencilSquareIcon,
   RocketLaunchIcon,
   ShieldCheckIcon,
 } from '@heroicons/react/24/solid';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import ModelMetricsTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelMetricsTab';
 
 interface ModelTabsProps {
   model: ModelDto;
@@ -79,7 +81,19 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         }
         href={`${pathnameWithoutTab}/predict`}
       >
-        <PredictTab model={model} />
+        <ModelPredictTab model={model} />
+      </Tab>
+      <Tab
+        key="metrics"
+        title={
+          <div className="flex items-center space-x-1">
+            <ChartBarIcon className="size-5" />
+            <span>Metrics</span>
+          </div>
+        }
+        href={`${pathnameWithoutTab}/metrics`}
+      >
+        <ModelMetricsTab model={model} />
       </Tab>
       {model.canEdit && (
         <Tab

@@ -157,8 +157,12 @@ export default async function Page({ params }: { params: ModelPageParams }) {
           <div className="flex items-center text-sm text-gray-400">
             {model.type && (
               <>
-                <BeakerIcon className="mr-2 size-5 text-gray-400" />
-                <span>{model.type}</span>
+                <Tooltip content={'Model type'} closeDelay={0}>
+                  <div className="flex">
+                    <BeakerIcon className="mr-2 size-5 text-gray-400" />
+                    <span>{model.type}</span>
+                  </div>
+                </Tooltip>
               </>
             )}
           </div>
@@ -175,10 +179,14 @@ export default async function Page({ params }: { params: ModelPageParams }) {
           <div className="flex items-center text-sm text-gray-400">
             {model.createdAt && (
               <>
-                <CalendarDaysIcon className="mr-2 size-5 text-gray-400" />
-                <JaqpotTimeAgo
-                  date={new Date(model.createdAt as unknown as string)}
-                />
+                <Tooltip content={'Date created'} closeDelay={0}>
+                  <div className="flex">
+                    <CalendarDaysIcon className="mr-2 size-5 text-gray-400" />
+                    <JaqpotTimeAgo
+                      date={new Date(model.createdAt as unknown as string)}
+                    />
+                  </div>
+                </Tooltip>
               </>
             )}
           </div>
