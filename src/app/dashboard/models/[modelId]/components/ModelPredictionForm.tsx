@@ -43,8 +43,8 @@ function generateDynamicFormFieldFromFeature(independentFeature: {
   featureDependency?: 'DEPENDENT' | 'INDEPENDENT';
   visible?: boolean;
   possibleValues?: components['schemas']['FeaturePossibleValue'][];
-  createdAt?: Record<string, never>;
-  updatedAt?: Record<string, never>;
+  createdAt?: string;
+  updatedAt?: string;
 }) {
   return {
     sectionTitle: '',
