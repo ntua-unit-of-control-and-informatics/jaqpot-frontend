@@ -43,8 +43,6 @@ export default function ValidationChart({
       };
     }) ?? [];
 
-  console.log(data);
-
   return (
     <div className="container mt-2">
       <ResponsiveContainer width="100%" height={400}>
