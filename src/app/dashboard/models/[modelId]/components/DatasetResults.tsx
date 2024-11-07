@@ -140,7 +140,8 @@ export default function DatasetResults({
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <span className="text-small text-default-400">
-            Total {resultTableData.rows.length} results
+            Total {resultTableData.rows.length} result
+            {resultTableData.rows.length === 1 ? '' : 's'}
           </span>
 
           <Select
@@ -157,7 +158,7 @@ export default function DatasetResults({
         </div>
       </div>
     );
-  }, [resultTableData]);
+  }, [resultTableData, rowsPerPage]);
 
   const pages = Math.ceil(resultTableData.rows.length / rowsPerPage);
 
