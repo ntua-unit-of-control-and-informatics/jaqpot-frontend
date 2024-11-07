@@ -50,7 +50,7 @@ type BaseResultTableRow = {
 
 export type ResultTableRow = BaseResultTableRow & Record<string, string>;
 
-interface ResultTableData {
+export interface ResultTableData {
   headers: ResultTableHeader[];
   rows: ResultTableRow[];
 }

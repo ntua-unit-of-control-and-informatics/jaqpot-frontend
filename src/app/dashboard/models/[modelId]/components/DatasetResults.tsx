@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ApiResponse } from '@/app/util/response';
 import useSWR, { Fetcher } from 'swr';
 import { CustomError } from '@/app/types/CustomError';
@@ -21,6 +21,7 @@ import {
   generateResultTableData,
   ResultTableRow,
   datasetFetcher,
+  ResultTableData,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
 import {
@@ -31,12 +32,19 @@ import {
 } from '@heroicons/react/24/solid';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { logger } from '@/logger';
-import { getKeyValue, useDisclosure } from '@nextui-org/react';
+import {
+  getKeyValue,
+  Select,
+  SelectItem,
+  useDisclosure,
+} from '@nextui-org/react';
 import DoaTableCell from '@/app/dashboard/models/[modelId]/components/DoaTableCell';
 import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
 import DoaModal from '@/app/dashboard/models/[modelId]/components/DoaModal';
 import { Tab, Tabs } from '@nextui-org/tabs';
 import PBPKPlots from '@/app/dashboard/models/[modelId]/components/PBPKPlots';
+import { Pagination } from '@nextui-org/pagination';
+import { Input } from '@nextui-org/input';
 
 const log = logger.child({ module: 'dataset' });
 
@@ -45,16 +53,39 @@ interface PredictionResultProps {
   model: ModelDto;
 }
 
+function downloadResultsCSV(model: ModelDto, dataset: DatasetDto) {
+  fetch(`/api/datasets/export`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      independentFeatures: model.independentFeatures,
+      dependentFeatures: model.dependentFeatures,
+      dataset,
+    }),
+  })
+    .then((response) => response.blob())
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `result-${dataset!.id}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    })
+    .catch((error) => log.error('Error:', error));
+}
+
 export default function DatasetResults({
   datasetId,
   model,
 }: PredictionResultProps) {
   // how often to refresh to check if the dataset is ready, setting to 0 will disable the interval
   const [refreshInterval, setRefreshInterval] = useState(1000);
-  const allFeatures: FeatureDto[] = [
-    ...model.independentFeatures,
-    ...model.dependentFeatures,
-  ];
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [page, setPage] = useState(1);
   const {
     data: apiResponse,
     isLoading,
@@ -83,46 +114,61 @@ export default function DatasetResults({
     }
   }, [dataset]);
 
-  function downloadResultsCSV(model: ModelDto) {
-    fetch(`/api/datasets/export`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        independentFeatures: model.independentFeatures,
-        dependentFeatures: model.dependentFeatures,
-        dataset,
-      }),
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `result-${dataset!.id}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      })
-      .catch((error) => log.error('Error:', error));
-  }
-
-  if (error) return <SWRClientFetchError error={error} />;
-
   const isLoaded =
     !isLoading &&
     dataset?.status !== 'CREATED' &&
     dataset?.status !== 'EXECUTING';
   const loadingState = isLoading ? 'loading' : 'idle';
 
-  const resultTableData = generateResultTableData(
-    model.independentFeatures,
-    model.dependentFeatures,
-    dataset,
+  const resultTableData = useMemo(
+    () =>
+      generateResultTableData(
+        model.independentFeatures,
+        model.dependentFeatures,
+        dataset,
+      ),
+    [model, dataset],
   );
-  const tableHeaders = resultTableData.headers;
-  const tableRows = resultTableData.rows;
+
+  const onRowsPerPageChange = useCallback((e: React.ChangeEvent<any>) => {
+    setRowsPerPage(Number(e.target.value));
+    setPage(1);
+  }, []);
+
+  const topContent = useMemo(() => {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <span className="text-small text-default-400">
+            Total {resultTableData.rows.length} results
+          </span>
+
+          <Select
+            label="Rows per page"
+            className="max-w-xs"
+            onChange={onRowsPerPageChange}
+            selectedKeys={[rowsPerPage.toString()]}
+          >
+            <SelectItem key="10">10</SelectItem>
+            <SelectItem key="25">25</SelectItem>
+            <SelectItem key="50">50</SelectItem>
+            <SelectItem key="100">100</SelectItem>
+          </Select>
+        </div>
+      </div>
+    );
+  }, [resultTableData]);
+
+  const pages = Math.ceil(resultTableData.rows.length / rowsPerPage);
+
+  const rows = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return resultTableData.rows.slice(start, end);
+  }, [page, resultTableData, rowsPerPage]);
+
+  if (error) return <SWRClientFetchError error={error} />;
 
   return (
     <div className="mb-20 mt-5">
@@ -175,20 +221,37 @@ export default function DatasetResults({
                     color="primary"
                     startContent={<ArrowDownTrayIcon className="size-6" />}
                     className="my-2"
-                    onPress={() => downloadResultsCSV(model)}
+                    onPress={() => downloadResultsCSV(model, dataset)}
                   >
                     Export CSV
                   </Button>
                 </div>
-                <Table aria-label="Prediction table" className="mb-6">
-                  <TableHeader columns={tableHeaders}>
+                <Table
+                  aria-label="Prediction table"
+                  className="mb-6"
+                  topContent={topContent}
+                  bottomContent={
+                    <div className="flex w-full justify-center">
+                      <Pagination
+                        isCompact
+                        showControls
+                        showShadow
+                        color="primary"
+                        page={page}
+                        total={pages}
+                        onChange={(page) => setPage(page)}
+                      />
+                    </div>
+                  }
+                >
+                  <TableHeader columns={resultTableData?.headers}>
                     {(column) => (
                       <TableColumn key={column.key}>{column.label}</TableColumn>
                     )}
                   </TableHeader>
 
                   <TableBody
-                    items={tableRows}
+                    items={rows}
                     loadingState={loadingState}
                     emptyContent={'No results to display.'}
                   >
