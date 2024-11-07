@@ -2,11 +2,10 @@ import CustomizedTreemapContent from '@/app/dashboard/models/[modelId]/component
 
 interface ConfusionMatrixProps {
   matrix: number[][][] | undefined;
-  classNames: string[];
+  classNames?: string[];
 }
 
 import React from 'react';
-import { Treemap, ResponsiveContainer } from 'recharts';
 import Heatmap from '@/app/dashboard/models/[modelId]/components/scores/Heatmap';
 
 const data = [
@@ -61,17 +60,19 @@ export default function ConfusionMatrix({
       <p className="mb-2">
         <b>Confusion matrix</b>
       </p>
-      {classNames.map((className, index) => (
-        <div key={index} className="max-w-[360px]">
-          <Heatmap
-            legend={className}
-            data={matrix[index]}
-            xLabels={xLabels}
-            yLabels={yLabels}
-            getColor={getCellColor}
-          />
-        </div>
-      ))}
+      {classNames?.map((className, index) => {
+        return (
+          <div key={index} className="max-w-[360px]">
+            <Heatmap
+              legend={className}
+              data={matrix[index]}
+              xLabels={xLabels}
+              yLabels={yLabels}
+              getColor={getCellColor}
+            />
+          </div>
+        );
+      })}
     </>
   );
 }
