@@ -241,7 +241,6 @@ export interface components {
         test?: components["schemas"]["Scores"][];
         crossValidation?: components["schemas"]["Scores"][];
       };
-      extraConfig?: components["schemas"]["ModelExtraConfig"];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -291,6 +290,7 @@ export interface components {
     };
     RegressionScores: {
       yName: string;
+      folds?: number;
       /** Format: float */
       r2?: number;
       /** Format: float */
@@ -311,6 +311,7 @@ export interface components {
     BinaryClassificationScores: {
       labels?: string[];
       yName: string;
+      folds?: number;
       /** Format: float */
       accuracy?: number;
       /** Format: float */
@@ -326,6 +327,7 @@ export interface components {
     MulticlassClassificationScores: {
       labels?: string[];
       yName: string;
+      folds?: number;
       /** Format: float */
       accuracy?: number;
       /** Format: float */
@@ -349,14 +351,6 @@ export interface components {
     };
     /** @enum {string} */
     ModelType: "SKLEARN" | "TORCH_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
-    /** @description A JSON object containing extra configuration for the model */
-    ModelExtraConfig: {
-      torchConfig?: {
-        [key: string]: components["schemas"]["AnyValue"];
-      };
-      preprocessors?: components["schemas"]["Transformer"][];
-      featurizers?: components["schemas"]["Transformer"][];
-    };
     /** @description A preprocessor for the model */
     Transformer: {
       /** Format: int64 */
@@ -416,8 +410,9 @@ export interface components {
       /** Format: int64 */
       id?: number;
       method: components["schemas"]["DoaMethod"];
-      /** @description The doa calculated data */
-      data: components["schemas"]["LeverageDoa"] | components["schemas"]["BoundingBoxDoa"] | components["schemas"]["KernelBasedDoa"] | components["schemas"]["MeanVarDoa"] | components["schemas"]["MahalanobisDoa"] | components["schemas"]["CityBlockDoa"];
+      data: {
+        [key: string]: components["schemas"]["AnyValue"];
+      };
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -679,10 +674,6 @@ export interface components {
       torchConfig?: {
         [key: string]: components["schemas"]["AnyValue"];
       } | null;
-      /** @description Additional configuration settings, optional */
-      extraConfig?: {
-        [key: string]: components["schemas"]["AnyValue"];
-      } | null;
       /** @description Legacy additional information settings, optional */
       legacyAdditionalInfo?: {
         [key: string]: components["schemas"]["AnyValue"];
@@ -693,10 +684,6 @@ export interface components {
     PredictionRequest: {
       model: components["schemas"]["PredictionModel"];
       dataset: components["schemas"]["Dataset"];
-      /** @description Optional configuration for additional settings. */
-      extraConfig?: {
-        [key: string]: components["schemas"]["AnyValue"];
-      };
     };
     PredictionResponse: {
       predictions: components["schemas"]["AnyValue"][];

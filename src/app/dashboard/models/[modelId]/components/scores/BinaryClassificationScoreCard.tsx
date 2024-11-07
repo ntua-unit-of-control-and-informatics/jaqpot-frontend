@@ -6,6 +6,10 @@ interface BinaryClassificationScoreCardProps {
   score: BinaryClassificationDto;
 }
 
+function transposeMatrix(matrix: number[][]) {
+  return matrix[0].map((col, i) => matrix.map((row) => row[i]));
+}
+
 export default function BinaryClassificationScoreCard({
   score,
 }: BinaryClassificationScoreCardProps) {
@@ -37,7 +41,13 @@ export default function BinaryClassificationScoreCard({
           <b>matthewsCorrCoef</b>: {score!.matthewsCorrCoef}
         </div>
         <div className="my-2 text-sm">
-          <ConfusionMatrix matrix={[score!.confusionMatrix!]} classNames={[]} />
+          <ConfusionMatrix
+            matrix={[
+              score!.confusionMatrix!,
+              transposeMatrix(score!.confusionMatrix!),
+            ]}
+            classNames={score!.labels}
+          />
         </div>
       </CardBody>
     </Card>

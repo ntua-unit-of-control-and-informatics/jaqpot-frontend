@@ -40,7 +40,7 @@ export default function MulticlassClassificationScoreCard({
           <div className="my-2 text-sm">
             <ConfusionMatrix
               matrix={score!.confusionMatrix}
-              classNames={score!.labels!}
+              classNames={score!.labels}
             />
           </div>
         </CardBody>
