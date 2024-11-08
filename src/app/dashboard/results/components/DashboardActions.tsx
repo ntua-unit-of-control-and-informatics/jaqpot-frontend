@@ -14,16 +14,16 @@ const actionImgClassname = 'size-16 text-gray-400';
 const dashboardActionsList = [
   {
     title: 'Create a model',
-    description: 'Learn how to upload and deploy your ML models using our SDKs',
+    description: 'Learn how to deploy your ML models using our SDKs',
     img: <PencilSquareIcon className={actionImgClassname} />,
-    href: '/dashboard/new/model',
+    href: `${process.env.NEXT_PUBLIC_SITE_URL}/docs/getting-started`,
   },
   {
     title: 'Explore models',
     description:
       'Discover a wide range of pre-built models across various categories',
     img: <MagnifyingGlassIcon className={actionImgClassname} />,
-    href: '/dashboard/explore',
+    href: `/dashboard/explore`,
   },
   {
     title: 'My Models',

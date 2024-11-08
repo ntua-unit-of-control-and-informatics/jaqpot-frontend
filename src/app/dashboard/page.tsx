@@ -59,7 +59,7 @@ export default function Dashboard() {
                 color="primary"
                 as={Link}
                 isExternal
-                href="https://jaqpot.org/docs"
+                href={`${process.env.NEXT_PUBLIC_SITE_URL}/docs/getting-started`}
               >
                 Getting started
               </Button>

@@ -37,15 +37,17 @@ export default function CreateMenu() {
             />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu aria-label="Create new items">
+        <DropdownMenu aria-label="Create new model">
           <DropdownItem
             key="new-model"
             textValue="New Model"
-            href="/dashboard/new/model"
+            href={`${process.env.NEXT_PUBLIC_SITE_URL}/docs/getting-started`}
+            target="_blank"
           >
-            <div className="flex">
+            <div className="flex items-center">
               <CircleStackIcon className="mr-2 size-6" />
               New Model
+              <ArrowTopRightOnSquareIcon className={`ml-2 h-4 w-4`} />
             </div>
           </DropdownItem>
           <DropdownItem
