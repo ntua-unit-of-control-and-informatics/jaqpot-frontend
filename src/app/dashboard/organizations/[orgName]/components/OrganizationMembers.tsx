@@ -83,7 +83,7 @@ export default function OrganizationMembers({
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Image
-                          src={`https://api.dicebear.com/9.x/bottts/svg?seed=${item.email.replace(
+                          src={`https://api.dicebear.com/9.x/bottts/svg?seed=${item.email?.replace(
                             ' ',
                             '',
                           )}`}
