@@ -62,15 +62,19 @@ export default function ConfusionMatrix({
       </p>
       {classNames?.map((className, index) => {
         return (
-          <div key={index} className="max-w-[360px]">
-            <Heatmap
-              legend={className}
-              data={matrix[index]}
-              xLabels={xLabels}
-              yLabels={yLabels}
-              getColor={getCellColor}
-            />
-          </div>
+          <>
+            {matrix && matrix[index] && (
+              <div key={index} className="max-w-[360px]">
+                <Heatmap
+                  legend={`Label: ${className}`}
+                  data={matrix[index]}
+                  xLabels={xLabels}
+                  yLabels={yLabels}
+                  getColor={getCellColor}
+                />
+              </div>
+            )}
+          </>
         );
       })}
     </>

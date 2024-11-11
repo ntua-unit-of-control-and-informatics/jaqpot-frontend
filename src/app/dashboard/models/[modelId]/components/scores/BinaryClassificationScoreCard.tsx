@@ -20,32 +20,34 @@ export default function BinaryClassificationScoreCard({
       </CardHeader>
       <CardBody className="overflow-visible py-2">
         <div className="my-2 text-sm">
-          <b>accuracy</b>: {score!.accuracy}
+          <b>Accuracy</b>: {score!.accuracy}
         </div>
         <div className="my-2 text-sm">
-          <b>balancedAccuracy</b>: {score!.balancedAccuracy}
+          <b>Balanced accuracy</b>: {score!.balancedAccuracy}
         </div>
         <div className="my-2 text-sm">
-          <b>precision</b>: {JSON.stringify(score!.precision)}
+          <b>Precision</b>: {JSON.stringify(score!.precision)}
         </div>
         <div className="my-2 text-sm">
-          <b>recall</b>: {JSON.stringify(score!.recall)}
+          <b>Recall</b>: {JSON.stringify(score!.recall)}
         </div>
         <div className="my-2 text-sm">
-          <b>f1Score</b>: {JSON.stringify(score!.f1Score)}
+          <b>F1 score</b>: {JSON.stringify(score!.f1Score)}
         </div>
         <div className="my-2 text-sm">
-          <b>jaccard</b>: {JSON.stringify(score!.jaccard)}
+          <b>Jaccard</b>: {JSON.stringify(score!.jaccard)}
         </div>
         <div className="my-2 text-sm">
-          <b>matthewsCorrCoef</b>: {score!.matthewsCorrCoef}
+          <b>Matthews Correlation Coefficient</b>: {score!.matthewsCorrCoef}
         </div>
+        {score!.folds && (
+          <div className="my-2 text-sm">
+            <b>Folds</b>: {score!.folds}
+          </div>
+        )}
         <div className="my-2 text-sm">
           <ConfusionMatrix
-            matrix={[
-              score!.confusionMatrix!,
-              transposeMatrix(score!.confusionMatrix!),
-            ]}
+            matrix={score!.confusionMatrix}
             classNames={score!.labels}
           />
         </div>
