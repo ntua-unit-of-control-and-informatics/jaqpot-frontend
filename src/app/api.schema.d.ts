@@ -297,16 +297,6 @@ export interface components {
       mae?: number;
       /** Format: float */
       rmse?: number;
-      /** Format: float */
-      rSquaredDiffRZero?: number;
-      /** Format: float */
-      rSquaredDiffRZeroHat?: number;
-      /** Format: float */
-      absDiffRZeroHat?: number;
-      /** Format: float */
-      k?: number;
-      /** Format: float */
-      kHat?: number;
     };
     BinaryClassificationScores: {
       labels?: string[];
