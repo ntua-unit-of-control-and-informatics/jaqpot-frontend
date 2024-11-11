@@ -47,10 +47,7 @@ export default function BinaryClassificationScoreCard({
         )}
         <div className="my-2 text-sm">
           <ConfusionMatrix
-            matrix={[
-              score!.confusionMatrix!,
-              transposeMatrix(score!.confusionMatrix!),
-            ]}
+            matrix={score!.confusionMatrix}
             classNames={score!.labels}
           />
         </div>

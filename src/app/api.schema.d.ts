@@ -322,7 +322,7 @@ export interface components {
       jaccard?: number[];
       /** Format: float */
       matthewsCorrCoef?: number;
-      confusionMatrix?: number[][];
+      confusionMatrix?: number[][][];
     };
     MulticlassClassificationScores: {
       labels?: string[];
@@ -605,9 +605,9 @@ export interface components {
       /** Format: int64 */
       id?: number;
       userId: string;
-      username: string;
+      username?: string;
       /** Format: email */
-      email: string;
+      email?: string;
       associationType: components["schemas"]["OrganizationUserAssociationType"];
     };
     /** @enum {string} */
