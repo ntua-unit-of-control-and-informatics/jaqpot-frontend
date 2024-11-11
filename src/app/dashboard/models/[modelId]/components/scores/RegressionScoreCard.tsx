@@ -14,11 +14,44 @@ export default function RegressionScoreCard({
         <p className="text-tiny font-bold uppercase">{score!.yName}</p>
       </CardHeader>
       <CardBody className="overflow-visible py-2">
-        {Object.entries(score!).map(([key, value]) => (
-          <div key={key} className="my-2 text-sm">
-            <b>{key}</b>: {value}
+        <div className="my-2 text-sm">
+          <b>
+            R<sup>2</sup>
+          </b>
+          : {score!.r2}
+        </div>
+        <div className="my-2 text-sm">
+          <b>MAE</b>: {score!.mae}
+        </div>
+        <div className="my-2 text-sm">
+          <b>RMSE</b>: {score!.rmse}
+        </div>
+        <div className="my-2 text-sm">
+          <b>
+            R<sup>2</sup> diff R=0
+          </b>
+          : {score!.rSquaredDiffRZero}
+        </div>
+        <div className="my-2 text-sm">
+          <b>
+            R<sup>2</sup> diff R=0 Hat
+          </b>
+          : {score!.rSquaredDiffRZeroHat}
+        </div>
+        <div className="my-2 text-sm">
+          <b>Abs diff R=0 Hat</b>: {score!.absDiffRZeroHat}
+        </div>
+        <div className="my-2 text-sm">
+          <b>K</b>: {score!.k}
+        </div>
+        <div className="my-2 text-sm">
+          <b>K Hat</b>: {score!.kHat}
+        </div>
+        {score!.folds && (
+          <div className="my-2 text-sm">
+            <b>Folds</b>: {score!.folds}
           </div>
-        ))}
+        )}
       </CardBody>
     </Card>
   );
