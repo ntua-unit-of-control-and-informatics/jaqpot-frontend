@@ -312,7 +312,7 @@ export interface components {
       jaccard?: number[];
       /** Format: float */
       matthewsCorrCoef?: number;
-      confusionMatrix?: number[][][];
+      confusionMatrix?: number[][];
     };
     MulticlassClassificationScores: {
       labels?: string[];
@@ -328,7 +328,7 @@ export interface components {
       jaccard?: number[];
       /** Format: float */
       matthewsCorrCoef?: number;
-      confusionMatrix?: number[][][];
+      confusionMatrix?: number[][];
     };
     OrganizationSummary: {
       /**
