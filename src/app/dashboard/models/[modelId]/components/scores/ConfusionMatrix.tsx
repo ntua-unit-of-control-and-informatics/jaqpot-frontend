@@ -37,7 +37,7 @@ export default function ConfusionMatrix({
         <b>Confusion matrix</b>
       </p>
       {matrix && (
-        <div className="flex flex-row items-baseline">
+        <div className="flex flex-row items-center">
           <div>
             <b>
               True
