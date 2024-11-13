@@ -7,7 +7,6 @@ interface HeatmapProps {
   xLabels: string[];
   yLabels: string[];
   getColor?: (value: number, x: number, y: number) => HeatmapCellColor;
-  legend?: string;
 }
 
 interface HeatmapCellColor {
@@ -20,7 +19,6 @@ export default function Heatmap({
   xLabels,
   yLabels,
   getColor,
-  legend,
 }: HeatmapProps) {
   // Get min/max for color scaling
   const allValues = data.flat();
@@ -44,9 +42,7 @@ export default function Heatmap({
 
   return (
     <Card className="w-full" shadow="none">
-      <CardHeader>
-        <b>{legend}</b>
-      </CardHeader>
+      <CardHeader></CardHeader>
       <CardBody>
         <div className="flex">
           {/* Y-axis labels */}

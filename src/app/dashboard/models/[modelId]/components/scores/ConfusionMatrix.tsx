@@ -1,31 +1,10 @@
-import CustomizedTreemapContent from '@/app/dashboard/models/[modelId]/components/scores/CustomizedTreemapContent';
-
 interface ConfusionMatrixProps {
-  matrix: number[][][] | undefined;
+  matrix: number[][] | undefined;
   classNames?: string[];
 }
 
 import React from 'react';
-import Heatmap from '@/app/dashboard/models/[modelId]/components/scores/Heatmap';
-
-const data = [
-  {
-    name: '12',
-    children: [{ name: 'Axes', size: 1 }],
-  },
-  {
-    name: '1',
-    children: [{ name: 'AnchorControl', size: 1 }],
-  },
-  {
-    name: '13',
-    children: [{ name: 'Data', size: 1 }],
-  },
-  {
-    name: '0',
-    children: [{ name: 'DataEvent', size: 1 }],
-  },
-];
+import { HeatMapGrid } from 'react-grid-heatmap';
 
 const COLORS = [
   '#8889DD',
@@ -42,9 +21,6 @@ export default function ConfusionMatrix({
 }: ConfusionMatrixProps) {
   if (!matrix) return null;
 
-  const xLabels = ['0', '1'];
-  const yLabels = ['0', '1'];
-
   const getCellColor = (value: number, x: number, y: number) => {
     if (x === y) {
       return {
@@ -56,27 +32,44 @@ export default function ConfusionMatrix({
     }
   };
   return (
-    <>
+    <div className="w-full">
       <p className="mb-2">
         <b>Confusion matrix</b>
       </p>
-      {classNames?.map((className, index) => {
-        return (
-          <>
-            {matrix && matrix[index] && (
-              <div key={index} className="max-w-[360px]">
-                <Heatmap
-                  legend={`Label: ${className}`}
-                  data={matrix[index]}
-                  xLabels={xLabels}
-                  yLabels={yLabels}
-                  getColor={getCellColor}
-                />
-              </div>
-            )}
-          </>
-        );
-      })}
-    </>
+      {matrix && (
+        <div className="flex flex-row items-center">
+          <div>
+            <b>
+              True
+              <br />
+              Class
+            </b>
+          </div>
+          <div className="flex flex-col items-center">
+            <HeatMapGrid
+              data={matrix}
+              xLabels={classNames}
+              yLabels={classNames}
+              // Render cell with tooltip
+              cellRender={(x, y, value) => (
+                <div
+                  title={`Pos(${x}, ${y}) = ${value}`}
+                  className="flex aspect-square items-center justify-center text-sm transition-colors"
+                >
+                  {value}
+                </div>
+              )}
+              cellHeight="5rem"
+              xLabelsPos="bottom"
+              yLabelsPos="left"
+              square
+            />
+            <div>
+              <b>Predicted Label</b>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
