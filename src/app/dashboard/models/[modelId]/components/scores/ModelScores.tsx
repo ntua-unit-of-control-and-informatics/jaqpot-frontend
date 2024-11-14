@@ -65,7 +65,7 @@ export default function ModelScores({ model }: ModelScoresProps) {
             <h4 className="text-medium font-medium">Train scores</h4>
           </div>
           <Divider className="my-4" />
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {trainScores.map((score, index) => (
               <ScoreCard
                 key={index}
