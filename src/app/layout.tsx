@@ -8,6 +8,9 @@ import { openGraphImage } from '@/app/shared.metadata';
 import CookiesConsent from '@/app/components/CookieConsent';
 import { auth } from '@/auth';
 import { isAuthenticated } from '@/app/util/auth';
+import { logger } from '@/logger';
+
+const log = logger.child({ module: 'userOrganizations' });
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -31,12 +34,16 @@ export default async function RootLayout({
   const session = await auth();
   let userSettings = { darkMode: false };
   if (isAuthenticated(session)) {
-    const res = await fetch(`${process.env.API_URL}/v1/user/settings`, {
-      headers: {
-        Authorization: `Bearer ${session!.token}`,
-      },
-    });
-    userSettings = await res.json();
+    try {
+      const res = await fetch(`${process.env.API_URL}/v1/user/settings`, {
+        headers: {
+          Authorization: `Bearer ${session!.token}`,
+        },
+      });
+      userSettings = await res.json();
+    } catch (e) {
+      log.warn('Failed to fetch user settings', e);
+    }
   }
 
   return (
