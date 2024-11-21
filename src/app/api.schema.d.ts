@@ -188,6 +188,12 @@ export interface paths {
      */
     patch: operations["updateApiKey"];
   };
+  "/v1/user/settings": {
+    /** Get user settings */
+    get: operations["getUserSettings"];
+    /** Create or update user settings */
+    post: operations["saveUserSettings"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -241,6 +247,7 @@ export interface components {
         test?: components["schemas"]["Scores"][];
         crossValidation?: components["schemas"]["Scores"][];
       };
+      rPbpkConfig?: components["schemas"]["RPbpkConfig"];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -329,6 +336,10 @@ export interface components {
       /** Format: float */
       matthewsCorrCoef?: number;
       confusionMatrix?: number[][];
+    };
+    /** @description Configuration for the R PBPK models */
+    RPbpkConfig: {
+      odeSolver?: string;
     };
     OrganizationSummary: {
       /**
@@ -664,6 +675,7 @@ export interface components {
       torchConfig?: {
         [key: string]: components["schemas"]["AnyValue"];
       } | null;
+      rPbpkOdeSolver?: string;
       /** @description Legacy additional information settings, optional */
       legacyAdditionalInfo?: {
         [key: string]: components["schemas"]["AnyValue"];
@@ -686,6 +698,16 @@ export interface components {
       lastName?: string;
       email?: string;
       emailVerified?: boolean;
+    };
+    UserSettings: {
+      /** Format: int64 */
+      id?: number;
+      /** @default false */
+      darkMode?: boolean;
+      /** @default false */
+      collapseSidebar?: boolean;
+      isAdmin?: boolean;
+      isUpci?: boolean;
     };
     ApiKey: {
       /**
@@ -1693,6 +1715,49 @@ export interface operations {
       };
       /** @description API key not found */
       404: {
+        content: never;
+      };
+    };
+  };
+  /** Get user settings */
+  getUserSettings: {
+    responses: {
+      /** @description User settings retrieved successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSettings"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+      /** @description Settings not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /** Create or update user settings */
+  saveUserSettings: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserSettings"];
+      };
+    };
+    responses: {
+      /** @description Settings saved successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSettings"];
+        };
+      };
+      /** @description Invalid request */
+      400: {
+        content: never;
+      };
+      /** @description Unauthorized */
+      401: {
         content: never;
       };
     };

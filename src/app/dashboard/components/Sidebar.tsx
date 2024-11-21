@@ -15,13 +15,10 @@ import { ReactElement, useContext, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
 import { Button } from '@nextui-org/button';
-import {
-  SidebarContext,
-  SidebarContextType,
-} from '@/app/dashboard/dashboard-layout';
 import { Tooltip } from '@nextui-org/tooltip';
 import JLogo from '@/app/dashboard/components/Logo/JLogo';
 import UserOrganizations from '@/app/dashboard/components/UserOrganizations';
+import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
 
 interface NavElement {
   name: string;
@@ -32,8 +29,10 @@ interface NavElement {
 
 export default function Sidebar() {
   const { data: session } = useSession();
-  const { isCollapsed, setIsCollapsed } =
-    useContext<SidebarContextType>(SidebarContext);
+  const userSettings = useUserSettingsStore((state) => state.userSettings);
+  const updateUserSettings = useUserSettingsStore(
+    (state) => state.updateUserSettings,
+  );
   const navElement = (
     index: number,
     href: string,
@@ -84,7 +83,7 @@ export default function Sidebar() {
     <div
       className={`fixed bottom-0 left-0 right-0 top-0 z-30 flex w-full items-start justify-end bg-black/50 p-4 md:hidden`}
       onClick={() => {
-        setIsCollapsed(true);
+        updateUserSettings({ ...userSettings, collapseSidebar: true });
       }}
     >
       <XCircleIcon className="h-10 w-10 cursor-pointer text-white" />
@@ -95,11 +94,11 @@ export default function Sidebar() {
     const shownClass = 'translate-x-0';
     const hiddenClass = '-translate-x-full';
 
-    if (isCollapsed === undefined) {
+    if (userSettings.collapseSidebar === undefined) {
       return '-translate-x-full sm:translate-x-0';
-    } else if (isCollapsed) {
+    } else if (userSettings.collapseSidebar) {
       return hiddenClass;
-    } else if (!isCollapsed) {
+    } else if (!userSettings.collapseSidebar) {
       return shownClass;
     }
   }
@@ -107,7 +106,9 @@ export default function Sidebar() {
   return (
     <>
       <button
-        onClick={() => setIsCollapsed(false)}
+        onClick={() =>
+          updateUserSettings({ ...userSettings, collapseSidebar: false })
+        }
         type="button"
         className="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-gray-200 sm:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
@@ -139,7 +140,10 @@ export default function Sidebar() {
                 isIconOnly
                 className={'hidden bg-transparent text-white sm:block'}
                 onClick={() => {
-                  setIsCollapsed(true);
+                  updateUserSettings({
+                    ...userSettings,
+                    collapseSidebar: true,
+                  });
                 }}
               >
                 <ArrowLeftStartOnRectangleIcon className="size-6" />
@@ -207,7 +211,8 @@ export default function Sidebar() {
           </nav>
         </div>
       </aside>
-      {isCollapsed !== undefined && !isCollapsed && <ModalOverlay />}
+      {userSettings.collapseSidebar !== undefined &&
+        !userSettings.collapseSidebar && <ModalOverlay />}
     </>
   );
 }
