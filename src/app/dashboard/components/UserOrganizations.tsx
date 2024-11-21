@@ -67,7 +67,7 @@ export default function UserOrganizations() {
     return (
       <>
         <div className="flex items-center justify-center">
-          <Spinner color="default" />
+          <Spinner color="white" />
         </div>
       </>
     );

@@ -14,29 +14,33 @@ import CreateMenu from '@/app/dashboard/components/CreateMenu';
 import { useSession } from 'next-auth/react';
 import { Button } from '@nextui-org/button';
 import GithubLogo from '@/app/dashboard/components/GithubLogo';
-import {
-  SidebarContext,
-  SidebarContextType,
-} from '@/app/dashboard/dashboard-layout';
 import { Tooltip } from '@nextui-org/tooltip';
-import { UserSettingsContext } from '@/app/dashboard/contexts';
 import NotificationsMenu from '@/app/dashboard/components/NotificationsMenu';
+import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
 
 export default function TopBar() {
   const { data: session } = useSession();
-  const { isCollapsed, setIsCollapsed } =
-    useContext<SidebarContextType>(SidebarContext);
-  const { userSettings, setUserSettings } = useContext(UserSettingsContext);
+  const userSettings = useUserSettingsStore((state) => state.userSettings);
+  const updateUserSettings = useUserSettingsStore(
+    (state) => state.updateUserSettings,
+  );
 
   return (
     <div className="w-full border-b border-b-gray-300 px-4 py-3 shadow-[rgba(0,0,0,0.05)_0_1px_2px_0px] sm:px-8">
       <div className="flex flex-row gap-x-4 sm:gap-x-6">
-        <div className={`hidden ${isCollapsed ? 'sm:flex' : ''} items-center`}>
+        <div
+          className={`hidden ${userSettings.collapseSidebar ? 'sm:flex' : ''} items-center`}
+        >
           <Tooltip content="Open sidebar">
             <Button
               isIconOnly
               className="justify-start bg-transparent"
-              onClick={() => setIsCollapsed(!isCollapsed)}
+              onClick={() =>
+                updateUserSettings({
+                  ...userSettings,
+                  collapseSidebar: !userSettings.collapseSidebar,
+                })
+              }
             >
               <ArrowRightStartOnRectangleIcon className="size-6" />
             </Button>
@@ -52,7 +56,7 @@ export default function TopBar() {
             variant="light"
             className="hidden min-w-10 p-2 sm:block"
             onClick={() =>
-              setUserSettings({
+              updateUserSettings({
                 ...userSettings,
                 darkMode: !userSettings?.darkMode,
               })

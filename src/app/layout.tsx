@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { Providers } from '@/app/providers';
 import { openGraphImage } from '@/app/shared.metadata';
 import CookiesConsent from '@/app/components/CookieConsent';
+import { auth } from '@/auth';
+import { isAuthenticated } from '@/app/util/auth';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,16 +23,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  let userSettings = { darkMode: false };
+  if (isAuthenticated(session)) {
+    const res = await fetch(`${process.env.API_URL}/v1/user/settings`, {
+      headers: {
+        Authorization: `Bearer ${session!.token}`,
+      },
+    });
+    userSettings = await res.json();
+  }
+
   return (
     <html lang="en">
       <GoogleAnalytics />
       <body
-        className={`${inter.className} bg-white dark:bg-slate-800 dark:text-slate-400`}
+        className={`${inter.className} bg-white dark:bg-slate-800 dark:text-slate-400 ${userSettings.darkMode ? 'dark' : ''}`}
       >
         <CookiesConsent />
         <Providers>{children}</Providers>

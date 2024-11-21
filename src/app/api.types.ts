@@ -36,3 +36,5 @@ export type BinaryClassificationDto =
   components['schemas']['Scores']['binaryClassification'];
 export type MulticlassClassificationDto =
   components['schemas']['Scores']['multiclassClassification'];
+
+export type UserSettingsDto = components['schemas']['UserSettings'];
