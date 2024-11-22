@@ -151,7 +151,7 @@ function generateResultTableRow(
     } else if (feature.featureType === 'CATEGORICAL') {
       value =
         feature.possibleValues?.find(
-          (possibleValue) => possibleValue.key === input[feature.key],
+          (possibleValue) => possibleValue.value === input[feature.key],
         )?.value ?? input[feature.key];
     } else {
       value = input[feature.key];

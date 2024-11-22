@@ -128,8 +128,8 @@ export default function PredictTab({ model }: PredictTabProps) {
             placeholder: 'Insert value...',
             options: independentFeature.possibleValues?.map(
               (possibleValue) => ({
-                key: possibleValue.key,
-                value: possibleValue.value,
+                key: possibleValue.value,
+                value: possibleValue.description,
               }),
             ),
           },

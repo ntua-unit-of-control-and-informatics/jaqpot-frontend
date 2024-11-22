@@ -503,9 +503,9 @@ export interface components {
     };
     FeaturePossibleValue: {
       /** @example value */
-      key: string;
-      /** @example value */
       value: string;
+      /** @example my description */
+      description: string;
     };
     /**
      * @example FLOAT

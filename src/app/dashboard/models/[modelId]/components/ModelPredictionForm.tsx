@@ -78,8 +78,8 @@ function generateDynamicFormFieldFromFeature(independentFeature: {
         required: true,
         placeholder: 'Insert value...',
         options: independentFeature.possibleValues?.map((possibleValue) => ({
-          key: possibleValue.key,
-          value: possibleValue.value,
+          key: possibleValue.value,
+          value: possibleValue.description,
         })),
       },
     ],
