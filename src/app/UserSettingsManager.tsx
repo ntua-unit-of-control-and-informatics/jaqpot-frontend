@@ -1,10 +1,14 @@
 'use client';
 
-import useSWR from 'swr';
+import useSWR, { Fetcher } from 'swr';
 import type { UserSettingsDto } from '@/app/api.types';
 import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
+import { ApiResponse } from '@/app/util/response';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher: Fetcher<ApiResponse<UserSettingsDto>> = async (url: string) => {
+  const res = await fetch(url);
+  return res.json();
+};
 
 export default function UserSettingsManager() {
   const userSettings = useUserSettingsStore(
@@ -14,9 +18,9 @@ export default function UserSettingsManager() {
     (state) => state.updateUserSettings,
   );
 
-  useSWR<UserSettingsDto>('/api/user/settings', fetcher, {
-    onSuccess: (data) => {
-      updateUserSettings(data, false);
+  useSWR('/api/user/settings', fetcher, {
+    onSuccess: ({ data }: ApiResponse<UserSettingsDto>) => {
+      updateUserSettings({ ...data }, false);
     },
     revalidateOnFocus: false, // Since we're persisting to localStorage
     revalidateOnReconnect: false,
