@@ -165,6 +165,7 @@ export default function SearchModelsTable() {
           </TableColumn>
 
           <TableColumn key="visibility">Visibility</TableColumn>
+          <TableColumn key="creator">Creator</TableColumn>
         </TableHeader>
         <TableBody
           items={data?.content ?? []}
@@ -188,6 +189,7 @@ export default function SearchModelsTable() {
               <TableCell>{item.independentFeaturesLength}</TableCell>
               <TableCell>{item.dependentFeaturesLength}</TableCell>
               <TableCell>{item.visibility}</TableCell>
+              <TableCell>{item.creator?.username}</TableCell>
             </TableRow>
           )}
         </TableBody>

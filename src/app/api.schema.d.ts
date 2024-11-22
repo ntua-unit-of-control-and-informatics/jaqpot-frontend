@@ -12,13 +12,15 @@ export interface paths {
      */
     get: operations["validateJWT"];
   };
-  "/v1/models": {
-    /** Create a new model */
-    post: operations["createModel"];
-  };
   "/v1/user/models": {
     /** Get paginated models */
     get: operations["getModels"];
+  };
+  "/v1/models": {
+    /** Get paginated models */
+    get: operations["getAllModels"];
+    /** Create a new model */
+    post: operations["createModel"];
   };
   "/v1/models/search": {
     /** Search for models */
@@ -707,7 +709,7 @@ export interface components {
       /** @default false */
       collapseSidebar?: boolean;
       isAdmin?: boolean;
-      isUpci?: boolean;
+      isUpciUser?: boolean;
     };
     ApiKey: {
       /**
@@ -784,24 +786,6 @@ export interface operations {
       };
     };
   };
-  /** Create a new model */
-  createModel: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Model"];
-      };
-    };
-    responses: {
-      /** @description Model created successfully */
-      201: {
-        content: never;
-      };
-      /** @description Invalid input */
-      400: {
-        content: never;
-      };
-    };
-  };
   /** Get paginated models */
   getModels: {
     parameters: {
@@ -823,6 +807,52 @@ export interface operations {
             pageNumber?: number;
           };
         };
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+    };
+  };
+  /** Get paginated models */
+  getAllModels: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description Paginated list of models */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["ModelSummary"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+    };
+  };
+  /** Create a new model */
+  createModel: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Model"];
+      };
+    };
+    responses: {
+      /** @description Model created successfully */
+      201: {
+        content: never;
       };
       /** @description Invalid input */
       400: {

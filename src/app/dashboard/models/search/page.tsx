@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import ModelsTable from '@/app/dashboard/models/components/ModelsTable';
 import React from 'react';
 import {
   generateSharedMetadata,

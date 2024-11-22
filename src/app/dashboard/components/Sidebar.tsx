@@ -7,6 +7,7 @@ import {
   CircleStackIcon,
   Cog8ToothIcon,
   QueueListIcon,
+  ShieldCheckIcon,
   TableCellsIcon,
   XCircleIcon,
 } from '@heroicons/react/24/solid';
@@ -202,6 +203,19 @@ export default function Sidebar() {
                   </svg>
                   Sign In
                 </button>
+              )}
+
+              {(userSettings.isAdmin || userSettings.isUpciUser) && (
+                <li>
+                  <Link
+                    href={`/dashboard/admin`}
+                    className={`group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700 ${pathname === `/admin` ? 'bg-indigo-700' : ''}`}
+                  >
+                    <ShieldCheckIcon className="size-5" />
+
+                    <span className="ms-3">Admin</span>
+                  </Link>
+                </li>
               )}
             </ul>
           </nav>
