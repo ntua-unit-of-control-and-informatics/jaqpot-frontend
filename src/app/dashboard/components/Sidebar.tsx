@@ -205,7 +205,7 @@ export default function Sidebar() {
                 </button>
               )}
 
-              {(userSettings.isAdmin || userSettings.isUpci) && (
+              {(userSettings.isAdmin || userSettings.isUpciUser) && (
                 <li>
                   <Link
                     href={`/dashboard/admin`}

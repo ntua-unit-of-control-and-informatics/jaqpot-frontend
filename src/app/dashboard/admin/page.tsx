@@ -29,7 +29,7 @@ export default async function AdminPage() {
         </Tooltip>
       </div>
 
-      <ModelsTable modelsEndpoint="/api/models" />
+      <ModelsTable modelsEndpoint="/api/models" showCreator={true} />
     </div>
   );
 }
