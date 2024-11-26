@@ -26,9 +26,30 @@ export interface paths {
     /** Search for models */
     get: operations["searchModels"];
   };
+  "/v1/models/{modelId}/archive": {
+    /**
+     * Archive a model
+     * @description Archives a model. Models that remain archived for more than 30 days will be permanently deleted.
+     */
+    post: operations["archiveModel"];
+  };
+  "/v1/models/{modelId}/unarchive": {
+    /**
+     * Unarchive a model
+     * @description Unarchives a previously archived model. This will cancel any scheduled deletion.
+     */
+    post: operations["unarchiveModel"];
+  };
   "/v1/user/shared-models": {
     /** Get paginated shared models */
     get: operations["getSharedModels"];
+  };
+  "/v1/user/archived-models": {
+    /**
+     * Get paginated archived models
+     * @description Retrieve a paginated list of models that have been archived by the user
+     */
+    get: operations["getArchivedModels"];
   };
   "/v1/models/{id}": {
     /**
@@ -222,6 +243,13 @@ export interface components {
       sharedWithOrganizations?: components["schemas"]["Organization"][];
       visibility: components["schemas"]["ModelVisibility"];
       task: components["schemas"]["ModelTask"];
+      archived?: boolean;
+      /**
+       * Format: date-time
+       * @description The date and time when the model was last archived.
+       * @example 2023-01-01T12:00:00Z
+       */
+      archivedAt?: string;
       torchConfig?: {
         [key: string]: components["schemas"]["AnyValue"];
       };
@@ -258,7 +286,7 @@ export interface components {
       createdAt?: string;
       /**
        * Format: date-time
-       * @description The date and time when the feature was last updated.
+       * @description The date and time when the model was last updated.
        * @example 2023-01-01T12:00:00Z
        */
       updatedAt?: string;
@@ -888,6 +916,87 @@ export interface operations {
       };
     };
   };
+  /**
+   * Archive a model
+   * @description Archives a model. Models that remain archived for more than 30 days will be permanently deleted.
+   */
+  archiveModel: {
+    parameters: {
+      path: {
+        /** @description The ID of the model to archive */
+        modelId: number;
+      };
+    };
+    responses: {
+      /** @description Model successfully archived */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * Format: int64
+             * @example 0
+             */
+            id?: number;
+            /**
+             * Format: date-time
+             * @description Timestamp when the model was archived
+             */
+            archivedAt?: string;
+          };
+        };
+      };
+      /** @description Insufficient permissions to archive the model */
+      403: {
+        content: never;
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+      /** @description Model is already archived */
+      409: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Unarchive a model
+   * @description Unarchives a previously archived model. This will cancel any scheduled deletion.
+   */
+  unarchiveModel: {
+    parameters: {
+      path: {
+        /** @description The ID of the model to unarchive */
+        modelId: number;
+      };
+    };
+    responses: {
+      /** @description Model successfully unarchived */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * Format: int64
+             * @example 0
+             */
+            id?: number;
+          };
+        };
+      };
+      /** @description Insufficient permissions to unarchive the model */
+      403: {
+        content: never;
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+      /** @description Model is not currently archived */
+      409: {
+        content: never;
+      };
+    };
+  };
   /** Get paginated shared models */
   getSharedModels: {
     parameters: {
@@ -913,6 +1022,41 @@ export interface operations {
       };
       /** @description Invalid input */
       400: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get paginated archived models
+   * @description Retrieve a paginated list of models that have been archived by the user
+   */
+  getArchivedModels: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description Paginated list of archived models */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["ModelSummary"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+      /** @description Insufficient permissions to access archived models */
+      403: {
         content: never;
       };
     };

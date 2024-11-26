@@ -16,6 +16,9 @@ import React from 'react';
 import { Tooltip } from '@nextui-org/tooltip';
 import { logger } from '@/logger';
 import CustomErrorPage from '@/app/components/CustomErrorPage';
+import Alert from '@/app/components/Alert';
+import { getUserFriendlyDate } from '@/app/util/date';
+import { addDays } from 'date-fns';
 
 const log = logger.child({ module: 'modelPage' });
 
@@ -144,9 +147,25 @@ export default async function Page({ params }: { params: ModelPageParams }) {
     );
   }
 
+  const getModelDeletionDate = (archivedAt: string) => {
+    if (!archivedAt) {
+      log.error('Archived at date is missing on an archived model');
+      return '';
+    }
+    return getUserFriendlyDate(addDays(new Date(archivedAt), 30));
+  };
+
   return (
     <div className="p-2 sm:p-0">
       <ModelBreadcrumbs model={model} />
+
+      {model.archived && (
+        <Alert
+          type="warning"
+          title="Archived Model"
+          description={`This model has been archived and scheduled for deletion ${getModelDeletionDate(model.archivedAt as unknown as string)}. Contact the owner if you need access to this resource. `}
+        />
+      )}
 
       <div className="flex flex-col pl-0">
         {/* Title */}
