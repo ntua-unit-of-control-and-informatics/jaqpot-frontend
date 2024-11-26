@@ -43,6 +43,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         tabContent:
           'rounded-none border-none box-shadow-none group-data-[selected=true]:text-indigo-600 dark:group-data-[selected=true]:text-white',
       }}
+      isDisabled={model.archived && !model.canEdit}
       selectedKey={params.tabName}
       defaultSelectedKey="description"
       className="mt-2.5"
