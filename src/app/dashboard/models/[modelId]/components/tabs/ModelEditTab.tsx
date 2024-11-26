@@ -297,7 +297,7 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
             days
           </b>
           . You can access your archived models in the Archived section of your
-          models page until deletion.
+          models page until deletion. You can undo this action at any time.
         </p>
         {model.archived && (
           <Button color="danger" onPress={() => onOpen()}>
