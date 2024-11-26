@@ -134,7 +134,7 @@ export default function Sidebar() {
         className={`fixed left-0 top-0 z-40 flex h-screen w-72 bg-indigo-600 transition-transform dark:bg-gray-900 ${getCollapsableStateClassname()}`}
         aria-label="Sidebar"
       >
-        <div className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-w-2 scrollbar-thumb-gray-400 scrollbar-track-gray-100 flex min-h-full w-full flex-col overflow-y-scroll">
+        <div className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-w-2 scrollbar-thumb-gray-400 scrollbar-track-gray-100 flex min-h-full w-full flex-col overflow-y-auto">
           <div className="flex items-center px-4 py-4">
             <Tooltip content="Close sidebar">
               <Button
@@ -205,18 +205,19 @@ export default function Sidebar() {
                 </button>
               )}
 
-              {(userSettings.isAdmin || userSettings.isUpciUser) && (
-                <li>
-                  <Link
-                    href={`/dashboard/admin`}
-                    className={`group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700 ${pathname === `/admin` ? 'bg-indigo-700' : ''}`}
-                  >
-                    <ShieldCheckIcon className="size-5" />
+              {isAuthenticated(session) &&
+                (userSettings.isAdmin || userSettings.isUpciUser) && (
+                  <li>
+                    <Link
+                      href={`/dashboard/admin`}
+                      className={`group flex items-center rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700 ${pathname === `/admin` ? 'bg-indigo-700' : ''}`}
+                    >
+                      <ShieldCheckIcon className="size-5" />
 
-                    <span className="ms-3">Admin</span>
-                  </Link>
-                </li>
-              )}
+                      <span className="ms-3">Admin</span>
+                    </Link>
+                  </li>
+                )}
             </ul>
           </nav>
 
