@@ -217,6 +217,10 @@ export interface paths {
     /** Create or update user settings */
     post: operations["saveUserSettings"];
   };
+  "/v1/users/{username}": {
+    /** Get user data */
+    get: operations["getUser"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -728,6 +732,9 @@ export interface components {
       lastName?: string;
       email?: string;
       emailVerified?: boolean;
+      /** Format: byte */
+      avatar?: string;
+      canEdit?: boolean;
     };
     UserSettings: {
       /** Format: int64 */
@@ -736,6 +743,11 @@ export interface components {
       darkMode?: boolean;
       /** @default false */
       collapseSidebar?: boolean;
+      /**
+       * Format: byte
+       * @description A base64 representation of the user's avatar
+       */
+      rawAvatar?: string;
       isAdmin?: boolean;
       isUpciUser?: boolean;
     };
@@ -1932,6 +1944,31 @@ export interface operations {
       };
       /** @description Unauthorized */
       401: {
+        content: never;
+      };
+    };
+  };
+  /** Get user data */
+  getUser: {
+    parameters: {
+      path: {
+        /** @description The ID of the user to retrieve */
+        username: string;
+      };
+    };
+    responses: {
+      /** @description User data retrieved successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["User"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+      /** @description User not found */
+      404: {
         content: never;
       };
     };

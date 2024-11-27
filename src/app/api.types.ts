@@ -38,3 +38,4 @@ export type MulticlassClassificationDto =
   components['schemas']['Scores']['multiclassClassification'];
 
 export type UserSettingsDto = components['schemas']['UserSettings'];
+export type UserDto = components['schemas']['User'];

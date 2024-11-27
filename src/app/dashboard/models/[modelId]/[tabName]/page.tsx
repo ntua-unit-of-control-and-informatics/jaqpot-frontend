@@ -19,6 +19,9 @@ import CustomErrorPage from '@/app/components/CustomErrorPage';
 import Alert from '@/app/components/Alert';
 import { getUserFriendlyDate } from '@/app/util/date';
 import { addDays } from 'date-fns';
+import { Link } from '@nextui-org/link';
+import { User } from '@nextui-org/react';
+import { getAvatarImg } from '@/app/util/avatar';
 
 const log = logger.child({ module: 'modelPage' });
 
@@ -174,6 +177,28 @@ export default async function Page({ params }: { params: ModelPageParams }) {
         </div>
         <div className="flex items-center gap-4 py-3">
           <div className="flex items-center text-sm text-gray-400">
+            {model.creator && (
+              <Tooltip content={'Creator'} closeDelay={0}>
+                <User
+                  name={`${model.creator.firstName} ${model.creator.lastName}`}
+                  description={
+                    <Link
+                      href={`${process.env.NEXT_PUBLIC_APP_URL}/dashboard/user/${model.creator.username}`}
+                      size="sm"
+                    >
+                      @{model.creator.username}
+                    </Link>
+                  }
+                  avatarProps={{
+                    src:
+                      model.creator.avatar ||
+                      getAvatarImg(model.creator?.email),
+                  }}
+                />
+              </Tooltip>
+            )}
+          </div>
+          <div className="flex items-center text-sm text-gray-400">
             {model.type && (
               <>
                 <Tooltip content={'Model type'} closeDelay={0}>
@@ -185,16 +210,7 @@ export default async function Page({ params }: { params: ModelPageParams }) {
               </>
             )}
           </div>
-          <div className="flex items-center text-sm text-gray-400">
-            {model.creator && (
-              <Tooltip content={'Creator'} closeDelay={0}>
-                <div className="flex">
-                  <UserIcon className="mr-2 size-5 text-gray-400" />
-                  <span>{model.creator?.username}</span>
-                </div>
-              </Tooltip>
-            )}
-          </div>
+
           <div className="flex items-center text-sm text-gray-400">
             {model.createdAt && (
               <>

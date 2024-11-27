@@ -14,6 +14,9 @@ import { Button } from '@nextui-org/button';
 import { User } from '@nextui-org/react';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import React from 'react';
+import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
+import { getAvatarImg } from '@/app/util/avatar';
+import { fromBase64ToImage } from '@/app/util/base64';
 
 interface MenuItem {
   key: string;
@@ -24,6 +27,10 @@ interface MenuItem {
 }
 
 export default function UserAvatar({ session }: { session: Session | null }) {
+  const userSettings = useUserSettingsStore((state) => state.userSettings);
+  const updateUserSettings = useUserSettingsStore(
+    (state) => state.updateUserSettings,
+  );
   const unauthenticatedMenuItems: MenuItem[] = [
     {
       key: 'signin',
@@ -53,6 +60,7 @@ export default function UserAvatar({ session }: { session: Session | null }) {
       key: 'signout',
       onPress: async () => {
         await signOut();
+        updateUserSettings({}, false);
         const logoutUrl = new URL(
           `${process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/logout`,
         );
@@ -87,10 +95,8 @@ export default function UserAvatar({ session }: { session: Session | null }) {
               showFallback: true,
               src:
                 session?.user?.image ||
-                `https://api.dicebear.com/9.x/bottts/svg?seed=${session?.user?.email?.replace(
-                  ' ',
-                  '',
-                )}`,
+                fromBase64ToImage(userSettings.rawAvatar) ||
+                getAvatarImg(session?.user?.email),
             }}
             name={session?.user?.name}
           />
