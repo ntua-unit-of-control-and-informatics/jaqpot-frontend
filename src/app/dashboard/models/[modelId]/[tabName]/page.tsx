@@ -21,7 +21,7 @@ import { getUserFriendlyDate } from '@/app/util/date';
 import { addDays } from 'date-fns';
 import { Link } from '@nextui-org/link';
 import { User } from '@nextui-org/react';
-import { getAvatarImg } from '@/app/util/avatar';
+import { getAvatarFallbackImg } from '@/app/util/avatar';
 
 const log = logger.child({ module: 'modelPage' });
 
@@ -191,8 +191,8 @@ export default async function Page({ params }: { params: ModelPageParams }) {
                   }
                   avatarProps={{
                     src:
-                      model.creator.avatar ||
-                      getAvatarImg(model.creator?.email),
+                      model.creator.avatarUrl ||
+                      getAvatarFallbackImg(model.creator?.email),
                   }}
                 />
               </Tooltip>

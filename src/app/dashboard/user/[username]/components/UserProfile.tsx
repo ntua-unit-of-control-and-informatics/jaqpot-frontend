@@ -3,12 +3,16 @@
 import { Card, CardBody, Image } from '@nextui-org/react';
 import { CardHeader } from '@nextui-org/card';
 import { Avatar } from '@nextui-org/avatar';
-import { getAvatarImg } from '@/app/util/avatar';
+import { getAvatarFallbackImg } from '@/app/util/avatar';
 import { Button } from '@nextui-org/button';
 import { Badge } from '@nextui-org/badge';
-import { ChangeEvent, useRef } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import { UserDto } from '@/app/api.types';
-import { PencilSquareIcon, PhotoIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowTopRightOnSquareIcon,
+  PencilSquareIcon,
+  PhotoIcon,
+} from '@heroicons/react/24/solid';
 import {
   Dropdown,
   DropdownItem,
@@ -16,23 +20,60 @@ import {
   DropdownTrigger,
 } from '@nextui-org/dropdown';
 import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
-import { fromBase64ToImage, toBase64 } from '@/app/util/base64';
+import { ApiResponse } from '@/app/util/response';
+import toast from 'react-hot-toast';
+import { Skeleton } from '@nextui-org/skeleton';
+import { Link } from '@nextui-org/link';
 
 interface UserProfileProps {
   user: UserDto;
 }
 
 export default function UserProfile({ user }: UserProfileProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    user.avatarUrl,
+  );
   const updateUserSettings = useUserSettingsStore(
     (state) => state.updateUserSettings,
   );
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const deleteUserAvatar = async () => {
+    setIsLoading(true);
+    const res = await fetch('/api/user/avatar', {
+      method: 'DELETE',
+    });
+    const { success, message }: ApiResponse = await res.json();
+    if (success) {
+      setAvatarUrl(undefined);
+      updateUserSettings({ avatarUrl: undefined }, false);
+    } else {
+      toast.error(`Error deleting avatar:  ${message}`);
+    }
+    setIsLoading(false);
+  };
+
   const handleAvatarUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    debugger;
     const file = event.target.files && event.target.files[0];
     if (file) {
-      const rawAvatar = await toBase64(file);
-      updateUserSettings({ rawAvatar });
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.set('file', file);
+      const res = await fetch('/api/user/avatar', {
+        method: 'POST',
+        body: formData,
+      });
+      const { success, data, message }: ApiResponse<{ avatarUrl: string }> =
+        await res.json();
+      if (success) {
+        setAvatarUrl(data!.avatarUrl);
+        updateUserSettings({ avatarUrl: data!.avatarUrl }, false);
+      } else {
+        toast.error(`Error uploading avatar:  ${message}`);
+      }
+      setIsLoading(false);
     }
   };
 
@@ -41,12 +82,14 @@ export default function UserProfile({ user }: UserProfileProps) {
       <Card className="w-full max-w-2xl">
         <CardHeader className="flex flex-row items-center gap-4 p-6">
           <div className="relative">
-            <Image
-              src={fromBase64ToImage(user?.avatar) || getAvatarImg(user.email)}
-              alt={`${user.firstName} ${user.lastName}`}
-              className="h-48 w-48 text-large"
-              radius="full"
-            />
+            <Skeleton isLoaded={!isLoading}>
+              <Image
+                src={avatarUrl || getAvatarFallbackImg(user.email)}
+                alt={`${user.firstName} ${user.lastName}`}
+                className="h-48 w-48 text-large"
+                radius="full"
+              />
+            </Skeleton>
 
             {user.canEdit && (
               <div className="absolute -bottom-2 -right-2">
@@ -61,11 +104,16 @@ export default function UserProfile({ user }: UserProfileProps) {
                   <DropdownMenu aria-label="Static Actions">
                     <DropdownItem
                       key="new"
-                      onPress={() => inputRef?.current?.click()}
+                      onPress={() => {
+                        debugger;
+                        inputRef?.current?.click();
+                      }}
                     >
                       Upload a photo...
                     </DropdownItem>
-                    <DropdownItem key="copy">Remove photo</DropdownItem>
+                    <DropdownItem key="copy" onPress={() => deleteUserAvatar()}>
+                      Remove photo
+                    </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
                 <input
@@ -111,6 +159,17 @@ export default function UserProfile({ user }: UserProfileProps) {
                 <p className="text-lg font-medium">@{user.username}</p>
               </div>
             </div>
+            {user.canEdit && (
+              <Button
+                as={Link}
+                href={`${process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_ISSUER}/account`}
+                startContent={<PencilSquareIcon className="size-5" />}
+                endContent={<ArrowTopRightOnSquareIcon className="size-5" />}
+                isExternal
+              >
+                Edit
+              </Button>
+            )}
           </div>
         </CardBody>
       </Card>

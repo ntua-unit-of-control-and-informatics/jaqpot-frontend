@@ -732,8 +732,7 @@ export interface components {
       lastName?: string;
       email?: string;
       emailVerified?: boolean;
-      /** Format: byte */
-      avatar?: string;
+      avatarUrl?: string;
       canEdit?: boolean;
     };
     UserSettings: {
@@ -743,6 +742,7 @@ export interface components {
       darkMode?: boolean;
       /** @default false */
       collapseSidebar?: boolean;
+      avatarUrl?: string;
       /**
        * Format: byte
        * @description A base64 representation of the user's avatar

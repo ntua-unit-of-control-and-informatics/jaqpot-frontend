@@ -15,8 +15,7 @@ import { User } from '@nextui-org/react';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import React from 'react';
 import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
-import { getAvatarImg } from '@/app/util/avatar';
-import { fromBase64ToImage } from '@/app/util/base64';
+import { getAvatarFallbackImg } from '@/app/util/avatar';
 
 interface MenuItem {
   key: string;
@@ -42,9 +41,8 @@ export default function UserAvatar({ session }: { session: Session | null }) {
   const authenticatedMenuItems: MenuItem[] = [
     {
       key: 'account',
-      href: `${process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_ISSUER}/account`,
+      href: `/dashboard/user/${session?.user?.name}`,
       label: 'Account',
-      external: true,
     },
     {
       key: 'apikeys',
@@ -95,8 +93,8 @@ export default function UserAvatar({ session }: { session: Session | null }) {
               showFallback: true,
               src:
                 session?.user?.image ||
-                fromBase64ToImage(userSettings.rawAvatar) ||
-                getAvatarImg(session?.user?.email),
+                userSettings.avatarUrl ||
+                getAvatarFallbackImg(session?.user?.email),
             }}
             name={session?.user?.name}
           />

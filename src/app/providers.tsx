@@ -26,7 +26,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <SessionChecker />
         <UserSettingsManager />
         <div>
-          <Toaster toastOptions={{ duration: 7500 }} />
+          <Toaster
+            toastOptions={{
+              duration: 7500,
+              style: {
+                wordBreak: 'break-all',
+              },
+            }}
+          />
         </div>
         {children}
       </NextUIProvider>
