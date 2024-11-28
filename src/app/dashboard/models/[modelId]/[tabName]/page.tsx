@@ -175,7 +175,7 @@ export default async function Page({ params }: { params: ModelPageParams }) {
         <div className="max-w-3xl py-3 text-3xl font-semibold">
           {model.name}
         </div>
-        <div className="flex items-center gap-4 py-3">
+        <div className="flex h-fit flex-nowrap items-center gap-6 overflow-x-scroll py-3 scrollbar-hide">
           <div className="flex items-center text-sm text-gray-400">
             {model.creator && (
               <Tooltip content={'Creator'} closeDelay={0}>
@@ -210,12 +210,11 @@ export default async function Page({ params }: { params: ModelPageParams }) {
               </>
             )}
           </div>
-
           <div className="flex items-center text-sm text-gray-400">
             {model.createdAt && (
               <>
                 <Tooltip content={'Date created'} closeDelay={0}>
-                  <div className="flex">
+                  <div className="flex items-center">
                     <CalendarDaysIcon className="mr-2 size-5 text-gray-400" />
                     <JaqpotTimeAgo
                       date={new Date(model.createdAt as unknown as string)}
