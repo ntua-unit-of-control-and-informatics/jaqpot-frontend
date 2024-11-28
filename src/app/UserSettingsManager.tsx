@@ -11,9 +11,6 @@ const fetcher: Fetcher<ApiResponse<UserSettingsDto>> = async (url: string) => {
 };
 
 export default function UserSettingsManager() {
-  const userSettings = useUserSettingsStore(
-    (state) => state.updateUserSettings,
-  );
   const updateUserSettings = useUserSettingsStore(
     (state) => state.updateUserSettings,
   );

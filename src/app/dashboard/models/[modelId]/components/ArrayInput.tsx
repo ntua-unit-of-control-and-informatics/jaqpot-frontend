@@ -34,7 +34,7 @@ export default function ArrayInput({
 
   // Add a new input field
   const handleAddInput = () => {
-    setInputs([...inputs, 0]);
+    setInputs([...inputs, '']);
   };
 
   // Remove an input field
