@@ -176,56 +176,54 @@ export default async function Page({ params }: { params: ModelPageParams }) {
           {model.name}
         </div>
         <div className="flex h-fit flex-nowrap items-center gap-6 overflow-x-scroll py-3 scrollbar-hide">
-          <div className="flex h-fit flex-nowrap items-center gap-6 overflow-x-scroll py-3 scrollbar-hide">
-            <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
-              {model.creator && (
-                <Tooltip content={'Creator'} closeDelay={0}>
-                  <User
-                    name={`${model.creator.firstName} ${model.creator.lastName}`}
-                    description={
-                      <Link
-                        href={`/dashboard/user/${model.creator.username}`}
-                        size="sm"
-                      >
-                        @{model.creator.username}
-                      </Link>
-                    }
-                    avatarProps={{
-                      src:
-                        model.creator.avatarUrl ||
-                        getAvatarFallbackImg(model.creator?.email),
-                    }}
-                  />
+          <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
+            {model.creator && (
+              <Tooltip content={'Creator'} closeDelay={0}>
+                <User
+                  name={`${model.creator.firstName} ${model.creator.lastName}`}
+                  description={
+                    <Link
+                      href={`/dashboard/user/${model.creator.username}`}
+                      size="sm"
+                    >
+                      @{model.creator.username}
+                    </Link>
+                  }
+                  avatarProps={{
+                    src:
+                      model.creator.avatarUrl ||
+                      getAvatarFallbackImg(model.creator?.email),
+                  }}
+                />
+              </Tooltip>
+            )}
+          </div>
+          <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
+            {model.createdAt && (
+              <>
+                <Tooltip content={'Date created'} closeDelay={0}>
+                  <div className="flex items-center">
+                    <CalendarDaysIcon className="mr-2 size-5 text-gray-400" />
+                    <JaqpotTimeAgo
+                      date={new Date(model.createdAt as unknown as string)}
+                    />
+                  </div>
                 </Tooltip>
-              )}
-            </div>
-            <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
-              {model.createdAt && (
-                <>
-                  <Tooltip content={'Date created'} closeDelay={0}>
-                    <div className="flex items-center">
-                      <CalendarDaysIcon className="mr-2 size-5 text-gray-400" />
-                      <JaqpotTimeAgo
-                        date={new Date(model.createdAt as unknown as string)}
-                      />
-                    </div>
-                  </Tooltip>
-                </>
-              )}
-            </div>
+              </>
+            )}
+          </div>
 
-            <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
-              {model.type && (
-                <>
-                  <Tooltip content={'Model type'} closeDelay={0}>
-                    <div className="flex">
-                      <BeakerIcon className="mr-2 size-5 text-gray-400" />
-                      <span>{model.type}</span>
-                    </div>
-                  </Tooltip>
-                </>
-              )}
-            </div>
+          <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
+            {model.type && (
+              <>
+                <Tooltip content={'Model type'} closeDelay={0}>
+                  <div className="flex">
+                    <BeakerIcon className="mr-2 size-5 text-gray-400" />
+                    <span>{model.type}</span>
+                  </div>
+                </Tooltip>
+              </>
+            )}
           </div>
         </div>
       </div>
