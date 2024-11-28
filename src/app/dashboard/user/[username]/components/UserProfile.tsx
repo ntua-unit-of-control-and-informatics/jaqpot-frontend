@@ -55,7 +55,6 @@ export default function UserProfile({ user }: UserProfileProps) {
   };
 
   const handleAvatarUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-    debugger;
     const file = event.target.files && event.target.files[0];
     if (file) {
       setIsLoading(true);
@@ -104,10 +103,7 @@ export default function UserProfile({ user }: UserProfileProps) {
                   <DropdownMenu aria-label="Static Actions">
                     <DropdownItem
                       key="new"
-                      onPress={() => {
-                        debugger;
-                        inputRef?.current?.click();
-                      }}
+                      onPress={() => inputRef?.current?.click()}
                     >
                       Upload a photo...
                     </DropdownItem>
