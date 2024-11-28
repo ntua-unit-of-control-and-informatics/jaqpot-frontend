@@ -217,6 +217,10 @@ export interface paths {
     /** Create or update user settings */
     post: operations["saveUserSettings"];
   };
+  "/v1/user/avatar": {
+    /** Delete user avatar */
+    delete: operations["deleteUserAvatar"];
+  };
   "/v1/users/{username}": {
     /** Get user data */
     get: operations["getUser"];
@@ -643,6 +647,7 @@ export interface components {
       username?: string;
       /** Format: email */
       email?: string;
+      avatarUrl?: string;
       associationType: components["schemas"]["OrganizationUserAssociationType"];
     };
     /** @enum {string} */
@@ -743,11 +748,6 @@ export interface components {
       /** @default false */
       collapseSidebar?: boolean;
       avatarUrl?: string;
-      /**
-       * Format: byte
-       * @description A base64 representation of the user's avatar
-       */
-      rawAvatar?: string;
       isAdmin?: boolean;
       isUpciUser?: boolean;
     };
@@ -1944,6 +1944,23 @@ export interface operations {
       };
       /** @description Unauthorized */
       401: {
+        content: never;
+      };
+    };
+  };
+  /** Delete user avatar */
+  deleteUserAvatar: {
+    responses: {
+      /** @description Avatar successfully deleted */
+      204: {
+        content: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+      /** @description Avatar not found */
+      404: {
         content: never;
       };
     };

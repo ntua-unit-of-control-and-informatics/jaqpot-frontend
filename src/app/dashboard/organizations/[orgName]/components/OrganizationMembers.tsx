@@ -1,18 +1,8 @@
 'use client';
 
-import {
-  OrganizationDto,
-  OrganizationInvitationDto,
-  OrganizationUserDto,
-} from '@/app/api.types';
+import { OrganizationDto } from '@/app/api.types';
 import React from 'react';
-import {
-  ArrowPathIcon,
-  EyeIcon,
-  PlusIcon,
-  UserMinusIcon,
-} from '@heroicons/react/24/solid';
-import InviteUsersButton from '@/app/dashboard/organizations/[orgName]/components/tabs/InviteUsersButton';
+import { UserMinusIcon } from '@heroicons/react/24/solid';
 import {
   Table,
   TableHeader,
@@ -24,7 +14,9 @@ import {
 } from '@nextui-org/react';
 import { Button } from '@nextui-org/button';
 import { Tooltip } from '@nextui-org/tooltip';
-import Image from 'next/image';
+import { getAvatarFallbackImg } from '@/app/util/avatar';
+import { Avatar } from '@nextui-org/avatar';
+import { Link } from '@nextui-org/link';
 
 interface OrganizationMembersProps {
   organization: OrganizationDto;
@@ -56,8 +48,8 @@ export default function OrganizationMembers({
           items={organization.organizationMembers}
           emptyContent={'No rows to display.'}
         >
-          {(item) => (
-            <TableRow key={item.id}>
+          {(user) => (
+            <TableRow key={user.id}>
               {(columnKey) => {
                 if (columnKey === 'actions') {
                   if (organization.canEdit) {
@@ -82,22 +74,24 @@ export default function OrganizationMembers({
                   return (
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Image
-                          src={`https://api.dicebear.com/9.x/bottts/svg?seed=${item.email?.replace(
-                            ' ',
-                            '',
-                          )}`}
+                        <Avatar
+                          src={
+                            user.avatarUrl || getAvatarFallbackImg(user?.email)
+                          }
                           alt="user avatar"
-                          unoptimized
-                          width={32}
-                          height={32}
+                          size="sm"
                         />
-                        {getKeyValue(item, columnKey)}
+                        <Link
+                          href={`/dashboard/user/${getKeyValue(user, columnKey)}`}
+                          underline="hover"
+                        >
+                          {getKeyValue(user, columnKey)}
+                        </Link>
                       </div>
                     </TableCell>
                   );
                 } else {
-                  return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
+                  return <TableCell>{getKeyValue(user, columnKey)}</TableCell>;
                 }
               }}
             </TableRow>
