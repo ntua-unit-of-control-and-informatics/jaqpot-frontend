@@ -183,7 +183,7 @@ export default async function Page({ params }: { params: ModelPageParams }) {
                   name={`${model.creator.firstName} ${model.creator.lastName}`}
                   description={
                     <Link
-                      href={`${process.env.NEXT_PUBLIC_APP_URL}/dashboard/user/${model.creator.username}`}
+                      href={`/dashboard/user/${model.creator.username}`}
                       size="sm"
                     >
                       @{model.creator.username}
