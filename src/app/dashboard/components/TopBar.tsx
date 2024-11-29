@@ -1,6 +1,6 @@
 'use client';
 
-import { BellIcon } from '@heroicons/react/24/outline';
+import { BellIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import UserAvatar from '@/app/dashboard/components/UserAvatar';
 import { Session } from 'next-auth';
 import SearchBar from '@/app/dashboard/components/SearchBar';
@@ -17,6 +17,7 @@ import GithubLogo from '@/app/dashboard/components/GithubLogo';
 import { Tooltip } from '@nextui-org/tooltip';
 import NotificationsMenu from '@/app/dashboard/components/NotificationsMenu';
 import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
+import { Link } from '@nextui-org/link';
 
 export default function TopBar() {
   const { data: session } = useSession();
@@ -48,10 +49,20 @@ export default function TopBar() {
         </div>
 
         <SearchBar />
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-1">
           <CreateMenu />
           <NotificationsMenu />
           <GithubLogo className="hidden sm:block" />
+          <Button
+            variant="light"
+            isIconOnly
+            as={Link}
+            href={`${process.env.NEXT_PUBLIC_SITE_URL}/docs`}
+            className={`hidden sm:flex`}
+            isExternal
+          >
+            <QuestionMarkCircleIcon className="size-7" />
+          </Button>
           <Button
             variant="light"
             className="hidden min-w-10 p-2 sm:block"
