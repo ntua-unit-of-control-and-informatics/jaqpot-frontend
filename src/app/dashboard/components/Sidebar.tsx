@@ -134,7 +134,7 @@ export default function Sidebar() {
         className={`fixed left-0 top-0 z-40 flex h-screen w-72 bg-indigo-600 transition-transform dark:bg-gray-900 ${getCollapsableStateClassname()}`}
         aria-label="Sidebar"
       >
-        <div className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-w-2 scrollbar-thumb-gray-400 scrollbar-track-gray-100 flex min-h-full w-full flex-col overflow-y-auto">
+        <div className="flex min-h-full w-full flex-col overflow-y-auto scrollbar scrollbar-track-gray-100 scrollbar-thumb-gray-400 scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar-w-2">
           <div className="flex items-center px-4 py-4">
             <Tooltip content="Close sidebar">
               <Button

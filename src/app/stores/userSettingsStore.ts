@@ -34,15 +34,17 @@ export const useUserSettingsStore = create<UserSettingsState>()(
               const { success, message } = await res.json();
               if (success) {
                 // toast.success('User settings updated successfully!');
-                set((state) => ({
-                  userSettings: { ...state.userSettings, ...updatedSettings },
-                }));
               } else {
-                toast.error(`Error archiving model:  ${message}`);
+                log.error(`Error updating user settings:  ${message}`);
+                // toast.error('Could not persist user settings');
               }
             } catch (e) {
               log.error('Error updating user settings', e);
-              toast.error('Error updating user settings');
+              // toast.error('Could not persist user settings');
+            } finally {
+              set((state) => ({
+                userSettings: { ...state.userSettings, ...updatedSettings },
+              }));
             }
           } else {
             set((state) => ({

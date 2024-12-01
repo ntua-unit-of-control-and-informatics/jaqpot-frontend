@@ -18,6 +18,7 @@ import { Tooltip } from '@nextui-org/tooltip';
 import NotificationsMenu from '@/app/dashboard/components/NotificationsMenu';
 import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
 import { Link } from '@nextui-org/link';
+import { isAuthenticated } from '@/app/util/auth';
 
 export default function TopBar() {
   const { data: session } = useSession();
