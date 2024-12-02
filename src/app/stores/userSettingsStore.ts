@@ -3,7 +3,6 @@ import { devtools, persist } from 'zustand/middleware';
 import type {} from '@redux-devtools/extension';
 import { UserSettingsDto } from '@/app/api.types'; // required for devtools typing
 import { logger } from '@/logger';
-import toast from 'react-hot-toast';
 
 const log = logger.child({ module: 'error' });
 
@@ -13,6 +12,7 @@ interface UserSettingsState {
     updatedSettings: Partial<UserSettingsDto>,
     persist?: boolean,
   ) => void;
+  clearUserSettings: () => void;
 }
 
 export const useUserSettingsStore = create<UserSettingsState>()(
@@ -51,6 +51,9 @@ export const useUserSettingsStore = create<UserSettingsState>()(
               userSettings: { ...state.userSettings, ...updatedSettings },
             }));
           }
+        },
+        clearUserSettings: () => {
+          set({ userSettings: {} });
         },
       }),
       {
