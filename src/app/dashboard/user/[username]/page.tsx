@@ -26,10 +26,12 @@ export async function generateMetadata({
   } catch (e) {
     return generateSharedMetadata();
   }
+  const image = user?.avatarUrl;
 
   return generateSharedMetadata(
     `@${user?.username ?? ''}`,
     `User profile for user ${user?.username}`,
+    image ? [image] : undefined,
   );
 }
 

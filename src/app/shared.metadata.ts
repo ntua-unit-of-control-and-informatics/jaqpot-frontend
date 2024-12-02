@@ -7,7 +7,11 @@ export const jaqpotAppDescription =
 export const generateSharedMetadata = (
   pageTitle: string = '',
   pageDescription: string = '',
+  imageUrls: string[] = [],
 ): Metadata => {
+  const ogImageUrls = imageUrls.map((imageUrl) => ({
+    url: imageUrl,
+  }));
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
     title: `${pageTitle} | Jaqpot`,
@@ -17,7 +21,7 @@ export const generateSharedMetadata = (
       url: process.env.NEXT_PUBLIC_APP_URL!,
       type: 'website',
       description: `${pageDescription ? pageDescription + '. ' : ''}${jaqpotAppDescription}`,
-      ...openGraphImage,
+      images: [...ogImageUrls, '/opengraph-logo.png'],
     },
   };
 };
