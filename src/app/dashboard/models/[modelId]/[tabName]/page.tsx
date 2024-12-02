@@ -17,7 +17,7 @@ import { Tooltip } from '@nextui-org/tooltip';
 import { logger } from '@/logger';
 import CustomErrorPage from '@/app/components/CustomErrorPage';
 import Alert from '@/app/components/Alert';
-import { getUserFriendlyDate } from '@/app/util/date';
+import { getUserFriendlyDateWithSuffix } from '@/app/util/date';
 import { addDays } from 'date-fns';
 import { Link } from '@nextui-org/link';
 import { User } from '@nextui-org/react';
@@ -155,7 +155,7 @@ export default async function Page({ params }: { params: ModelPageParams }) {
       log.error('Archived at date is missing on an archived model');
       return '';
     }
-    return getUserFriendlyDate(addDays(new Date(archivedAt), 30));
+    return getUserFriendlyDateWithSuffix(addDays(new Date(archivedAt), 30));
   };
 
   return (

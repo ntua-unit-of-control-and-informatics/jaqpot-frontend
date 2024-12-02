@@ -17,7 +17,7 @@ import useSWR, { Fetcher } from 'swr';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { ApiResponse } from '@/app/util/response';
 import { CustomError } from '@/app/types/CustomError';
-import { getUserFriendlyDate } from '@/app/util/date';
+import { getUserFriendlyDateWithSuffix } from '@/app/util/date';
 import { Button } from '@nextui-org/button';
 import { Tooltip } from '@nextui-org/tooltip';
 import toast from 'react-hot-toast';
