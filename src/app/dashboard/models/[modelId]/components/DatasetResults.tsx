@@ -27,8 +27,7 @@ import { Button } from '@nextui-org/button';
 import {
   ArrowDownTrayIcon,
   BugAntIcon,
-  EyeIcon,
-  InformationCircleIcon,
+  CalendarDaysIcon,
 } from '@heroicons/react/24/solid';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { logger } from '@/logger';
@@ -45,6 +44,13 @@ import { Tab, Tabs } from '@nextui-org/tabs';
 import PBPKPlots from '@/app/dashboard/models/[modelId]/components/PBPKPlots';
 import { Pagination } from '@nextui-org/pagination';
 import { Input } from '@nextui-org/input';
+import { Tooltip } from '@nextui-org/tooltip';
+import { format, formatDistance } from 'date-fns';
+import { ClockIcon } from '@heroicons/react/24/outline';
+import {
+  getUserFriendlyDateWithSuffix,
+  getUserFriendlyDuration,
+} from '@/app/util/date';
 
 const log = logger.child({ module: 'dataset' });
 
@@ -76,6 +82,40 @@ function downloadResultsCSV(model: ModelDto, dataset: DatasetDto) {
       a.remove();
     })
     .catch((error) => log.error('Error:', error));
+}
+
+function getExecutionTimeNode(dataset: DatasetDto | null | undefined) {
+  if (!dataset?.executedAt) return null;
+  const executionFinishedAt = dataset?.executionFinishedAt as unknown as string;
+  const executedAt = dataset?.executedAt as unknown as string;
+
+  const executionTimeInMs =
+    new Date(executionFinishedAt).getTime() - new Date(executedAt).getTime();
+
+  return (
+    <>
+      <div className="flex items-center gap-2 text-foreground/50">
+        <Tooltip content="Executed at" closeDelay={0}>
+          <div className="flex items-center gap-1">
+            <CalendarDaysIcon className="size-6" />
+            <span className="text-sm">
+              {getUserFriendlyDateWithSuffix(new Date(executedAt))}
+            </span>
+          </div>
+        </Tooltip>
+        {dataset?.executionFinishedAt && (
+          <Tooltip content="Execution duration" closeDelay={0}>
+            <div className="flex items-center gap-1">
+              <ClockIcon className="size-6" />
+              <span className="text-sm">
+                {getUserFriendlyDuration(executionTimeInMs)}
+              </span>
+            </div>
+          </Tooltip>
+        )}
+      </div>
+    </>
+  );
 }
 
 export default function DatasetResults({
@@ -196,7 +236,7 @@ export default function DatasetResults({
                 </Accordion>
               </div>
             )}
-            <div>
+            <div className="flex items-center">
               <Link
                 href={`/dashboard/models/${model.id}/results/${datasetId}`}
                 isExternal
@@ -207,6 +247,7 @@ export default function DatasetResults({
               </Link>
               {getDatasetStatusNode(dataset)}
             </div>
+            <div>{getExecutionTimeNode(dataset)}</div>
             {!isLoaded && (
               <div className="flex w-full flex-col gap-2">
                 <Skeleton className="h-3 w-3/5 rounded-lg" />
