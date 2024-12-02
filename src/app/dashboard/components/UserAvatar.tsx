@@ -30,6 +30,9 @@ export default function UserAvatar({ session }: { session: Session | null }) {
   const updateUserSettings = useUserSettingsStore(
     (state) => state.updateUserSettings,
   );
+  const clearUserSettings = useUserSettingsStore(
+    (state) => state.clearUserSettings,
+  );
   const unauthenticatedMenuItems: MenuItem[] = [
     {
       key: 'signin',
@@ -58,7 +61,7 @@ export default function UserAvatar({ session }: { session: Session | null }) {
       key: 'signout',
       onPress: async () => {
         await signOut();
-        updateUserSettings({}, false);
+        clearUserSettings();
         const logoutUrl = new URL(
           `${process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/logout`,
         );
