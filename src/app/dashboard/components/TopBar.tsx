@@ -53,7 +53,7 @@ export default function TopBar() {
         <div className="flex items-center gap-x-1">
           <CreateMenu />
           <NotificationsMenu />
-          <GithubLogo className="hidden sm:block" />
+          <GithubLogo className="hidden text-foreground/50 sm:block" />
           <Button
             variant="light"
             isIconOnly
@@ -62,7 +62,7 @@ export default function TopBar() {
             className={`hidden sm:flex`}
             isExternal
           >
-            <QuestionMarkCircleIcon className="size-7" />
+            <QuestionMarkCircleIcon className="size-7 text-gray-400" />
           </Button>
           <Button
             variant="light"
