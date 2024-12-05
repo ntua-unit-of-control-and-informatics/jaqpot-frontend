@@ -158,7 +158,7 @@ function generateFieldLabel(field: DynamicFormField) {
     <>
       {field.labelTooltip && (
         <Tooltip content={field.labelTooltip} closeDelay={0}>
-          <InformationCircleIcon className="mr-1 size-4 text-gray-400" />
+          <InformationCircleIcon className="size-4 flex-shrink-0 text-gray-400" />
         </Tooltip>
       )}
       {field.label}
@@ -260,6 +260,9 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             onChange={handleChange}
             isRequired={field.required}
             checked={formData[field.name] as boolean | undefined}
+            classNames={{
+              label: 'flex flex-row items-center justify-center text-sm',
+            }}
           >
             {generateFieldLabel(field)}
           </Checkbox>
@@ -320,7 +323,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
       <form onSubmit={handleSubmit}>
         <div className="my-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
           {schema.map((section, sectionIndex) => (
-            <div key={sectionIndex}>
+            <div key={sectionIndex} className="flex items-center">
               <h3>{section.sectionTitle}</h3>
               {section.fields &&
                 section.fields.map((field, fieldIndex) => (
