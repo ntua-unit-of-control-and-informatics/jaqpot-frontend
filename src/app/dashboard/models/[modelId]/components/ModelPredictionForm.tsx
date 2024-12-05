@@ -22,6 +22,8 @@ function generateFieldTypeFromFeature(
       return 'number';
     case 'CATEGORICAL':
       return 'select';
+    case 'BOOLEAN':
+      return 'checkbox';
     case 'TEXT':
     case 'STRING':
     case 'SMILES':

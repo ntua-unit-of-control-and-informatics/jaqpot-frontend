@@ -479,16 +479,32 @@ export interface components {
       boundingBox?: number[][];
     };
     KernelBasedDoa: {
-      data?: Record<string, never>;
+      /** Format: float */
+      sigma?: number;
+      /** Format: float */
+      gamma?: number;
+      /** Format: float */
+      threshold?: number;
+      /**
+       * @example GAUSSIAN
+       * @enum {string}
+       */
+      kernelType?: "GAUSSIAN" | "RBF" | "LAPLACIAN" | "PERCENTILE" | "MEAN_STD";
+      dataPoints?: number[][];
     };
     MeanVarDoa: {
       bounds?: number[][];
     };
     MahalanobisDoa: {
-      data?: Record<string, never>;
+      meanVector?: number[];
+      invCovMatrix?: number[][];
+      /** Format: float */
+      threshold?: number;
     };
     CityBlockDoa: {
-      data?: Record<string, never>;
+      meanVector?: number[];
+      /** Format: float */
+      threshold?: number;
     };
     Feature: {
       /**
@@ -549,7 +565,7 @@ export interface components {
      * @example FLOAT
      * @enum {string}
      */
-    FeatureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "STRING" | "TEXT" | "FLOAT_ARRAY" | "STRING_ARRAY";
+    FeatureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "STRING" | "TEXT" | "BOOLEAN" | "FLOAT_ARRAY" | "STRING_ARRAY";
     /**
      * @example PREDICTION
      * @enum {string}
