@@ -158,7 +158,7 @@ function generateFieldLabel(field: DynamicFormField) {
     <>
       {field.labelTooltip && (
         <Tooltip content={field.labelTooltip} closeDelay={0}>
-          <InformationCircleIcon className="size-4 flex-shrink-0 text-gray-400" />
+          <InformationCircleIcon className="mr-0.5 size-4 flex-shrink-0 text-gray-400" />
         </Tooltip>
       )}
       {field.label}
@@ -309,6 +309,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             placeholder={field.placeholder}
             onChange={handleChange}
             isRequired={field.required}
+            fullWidth={true}
             value={(formData[field.name] || '') as string}
             classNames={{
               label: 'flex flex-row  items-center justify-center',
@@ -323,19 +324,17 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
       <form onSubmit={handleSubmit}>
         <div className="my-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
           {schema.map((section, sectionIndex) => (
-            <div key={sectionIndex} className="flex items-center">
-              <h3>{section.sectionTitle}</h3>
+            <div key={sectionIndex} className="flex w-full items-center">
+              {/*<h3>{section.sectionTitle}</h3>*/}
               {section.fields &&
                 section.fields.map((field, fieldIndex) => (
-                  <div key={fieldIndex}>
-                    <div className="mb-3">
-                      {renderField(field)}
-                      {formErrors[field.name] && (
-                        <div className="text-danger">
-                          {formErrors[field.name]}
-                        </div>
-                      )}
-                    </div>
+                  <div key={fieldIndex} className="mb-3 flex-grow">
+                    {renderField(field)}
+                    {formErrors[field.name] && (
+                      <div className="text-danger">
+                        {formErrors[field.name]}
+                      </div>
+                    )}
                   </div>
                 ))}
             </div>

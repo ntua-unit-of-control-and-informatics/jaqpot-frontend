@@ -97,8 +97,8 @@ function getExecutionTimeNode(dataset: DatasetDto | null | undefined) {
       <div className="flex items-center gap-2 text-foreground/50">
         <Tooltip content="Executed at" closeDelay={0}>
           <div className="flex items-center gap-1">
-            <CalendarDaysIcon className="size-6" />
-            <span className="text-sm">
+            <CalendarDaysIcon className="size-5" />
+            <span className="text-tiny">
               {getUserFriendlyDateWithSuffix(new Date(executedAt))}
             </span>
           </div>
@@ -106,8 +106,8 @@ function getExecutionTimeNode(dataset: DatasetDto | null | undefined) {
         {dataset?.executionFinishedAt && (
           <Tooltip content="Execution duration" closeDelay={0}>
             <div className="flex items-center gap-1">
-              <ClockIcon className="size-6" />
-              <span className="text-sm">
+              <ClockIcon className="size-5" />
+              <span className="text-tiny">
                 {getUserFriendlyDuration(executionTimeInMs)}
               </span>
             </div>
