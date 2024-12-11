@@ -2,6 +2,7 @@
 
 import { signOut, useSession } from 'next-auth/react';
 import useSWR, { Fetcher } from 'swr';
+import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
 
 const fetcher: Fetcher<Response, string> = async (url) => {
   return await fetch(url);
@@ -16,17 +17,25 @@ export default function SessionChecker() {
     revalidateOnFocus: false, // Since we're persisting to localStorage
     revalidateOnReconnect: false,
   });
+  const clearUserSettings = useUserSettingsStore(
+    (state) => state.clearUserSettings,
+  );
+
+  const silentlySignOut = () => {
+    signOut({ redirect: false });
+    clearUserSettings();
+  };
 
   if (isLoading) return null;
   if (!res) {
-    signOut({ redirect: false });
+    silentlySignOut();
     return null;
   }
   if (!res.ok && res.status === 401) {
-    signOut({ redirect: false });
+    silentlySignOut();
   }
 
-  if (error) signOut({ redirect: false });
+  if (error) silentlySignOut();
 
   return null;
 }
