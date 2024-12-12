@@ -28,7 +28,6 @@ export default function SessionChecker() {
   } = useSWR(`/api/auth/validate`, fetcher, {
     revalidateOnFocus: false, // Since we're persisting to localStorage
     revalidateOnReconnect: false,
-    revalidateOnMount: false,
   });
 
   const silentlySignOut = useCallback(() => {
