@@ -166,6 +166,20 @@ function generateFieldLabel(field: DynamicFormField) {
   );
 }
 
+function retrieveInputValueFromString(
+  type: DynamicFormFieldType,
+  checked: boolean,
+  value: string,
+) {
+  if (type === 'number') {
+    return Number(value);
+  } else if (type === 'checkbox') {
+    return checked;
+  }
+
+  return value;
+}
+
 export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   const [formData, setFormData] = useState<{ [key: string]: string | boolean }>(
     {},
@@ -176,7 +190,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     const { value, type, name, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: retrieveInputValueFromString(type, checked, value),
     });
   };
 
@@ -284,7 +298,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
         return (
           <ArrayInput
             name={field.name}
-            type={'number'}
+            type="number"
             label={generateFieldLabel(field)}
             onChange={handleChange}
           />
@@ -293,7 +307,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
         return (
           <ArrayInput
             name={field.name}
-            type={'text'}
+            type="text"
             label={generateFieldLabel(field)}
             onChange={handleChange}
           />
