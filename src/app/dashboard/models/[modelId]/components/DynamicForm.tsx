@@ -354,7 +354,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             </div>
           ))}
         </div>
-        <Button type="submit" color="primary" className="mt-5">
+        <Button type="submit" color="primary">
           Submit
         </Button>
       </form>

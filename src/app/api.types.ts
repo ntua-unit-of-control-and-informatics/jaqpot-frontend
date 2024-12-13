@@ -1,6 +1,7 @@
 import { components, operations } from './api.schema.d';
 
 export type ModelDto = components['schemas']['Model'];
+export type ModelTypeDto = components['schemas']['ModelType'];
 export type ModelSummaryDto = components['schemas']['ModelSummary'];
 export type FeatureDto = components['schemas']['Feature'];
 export type FeaturePossibleValueDto =

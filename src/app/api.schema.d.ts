@@ -84,6 +84,13 @@ export interface paths {
      */
     post: operations["predictWithModelCSV"];
   };
+  "/v1/models/{modelId}/predict/stream": {
+    /**
+     * Stream predictions from LLM Model
+     * @description Submit a prompt for streaming prediction using a specific LLM model
+     */
+    post: operations["streamPredictWithModel"];
+  };
   "/v1/models/{id}/partial": {
     /** Partially update specific fields of a model */
     patch: operations["partiallyUpdateModel"];
@@ -286,6 +293,7 @@ export interface components {
         crossValidation?: components["schemas"]["Scores"][];
       };
       rPbpkConfig?: components["schemas"]["RPbpkConfig"];
+      dockerConfig?: components["schemas"]["DockerConfig"];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -379,6 +387,18 @@ export interface components {
     RPbpkConfig: {
       odeSolver?: string;
     };
+    DockerConfig: {
+      /**
+       * @description Unique identifier used for internal service discovery
+       * @example my-docker-model
+       */
+      appName: string;
+      /**
+       * @description Reference to the Docker image (for admin documentation)
+       * @example my-repo/my-docker-model:1.0.0
+       */
+      dockerImage?: string;
+    };
     OrganizationSummary: {
       /**
        * Format: int64
@@ -389,7 +409,7 @@ export interface components {
       name: string;
     };
     /** @enum {string} */
-    ModelType: "SKLEARN_ONNX" | "TORCH_SEQUENCE_ONNX" | "TORCH_GEOMETRIC_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
+    ModelType: "SKLEARN_ONNX" | "TORCH_SEQUENCE_ONNX" | "TORCH_GEOMETRIC_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "DOCKER" | "DOCKER_LLM" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
     /** @description A preprocessor for the model */
     Transformer: {
       /** Format: int64 */
@@ -707,7 +727,7 @@ export interface components {
        * Format: int64
        * @description Unique identifier for the prediction model
        */
-      id?: number | null;
+      id: number;
       /** @description List of dependent features for the model */
       dependentFeatures: components["schemas"]["Feature"][];
       /** @description List of independent features for the model */
@@ -1214,6 +1234,61 @@ export interface operations {
       /** @description Prediction created successfully */
       201: {
         content: never;
+      };
+      /** @description Invalid Request */
+      400: {
+        content: never;
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+      /** @description Internal Server Error */
+      500: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Stream predictions from LLM Model
+   * @description Submit a prompt for streaming prediction using a specific LLM model
+   */
+  streamPredictWithModel: {
+    parameters: {
+      path: {
+        /** @description The ID of the LLM model to use for prediction */
+        modelId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /**
+           * @description The input prompt for the LLM
+           * @example What is machine learning?
+           */
+          prompt?: string;
+          options?: {
+            /**
+             * @description Maximum number of tokens to generate
+             * @default 100
+             */
+            max_tokens?: number;
+            /**
+             * @description Sampling temperature
+             * @default 0.7
+             */
+            temperature?: number;
+          };
+        };
+      };
+    };
+    responses: {
+      /** @description Streaming response started */
+      200: {
+        content: {
+          "text/event-stream": string;
+        };
       };
       /** @description Invalid Request */
       400: {
