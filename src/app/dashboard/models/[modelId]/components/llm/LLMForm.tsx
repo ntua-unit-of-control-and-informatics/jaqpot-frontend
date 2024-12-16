@@ -2,14 +2,17 @@ import { Textarea } from '@nextui-org/input';
 import { ModelDto } from '@/app/api.types';
 import React, { useState } from 'react';
 import { Button } from '@nextui-org/button';
-import { ArrowUpCircleIcon, ArrowUpIcon } from '@heroicons/react/24/solid';
+import { ArrowUpIcon } from '@heroicons/react/24/solid';
 import { KeyboardEvent } from '@react-types/shared/src/events';
-import { ApiResponse } from '@/app/util/response';
-import toast from 'react-hot-toast';
-import { createPrediction } from '@/app/dashboard/models/[modelId]/components/tabs/ModelPredictTab';
+import { Card, CardBody } from '@nextui-org/react';
+import useSWR from 'swr';
+import { createDatasetFetcher, datasetFetcher } from '@/app/util/dataset';
+import { Spinner } from '@nextui-org/spinner';
+import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 
 interface LLMFormProps {
   model: ModelDto;
+  datasetId?: string;
 }
 const placeholders = [
   'Ask me about the meaning of life...',
@@ -19,8 +22,8 @@ const placeholders = [
   'Debate whether hot dogs are sandwiches...',
 ];
 
-export function LLMForm({ model }: LLMFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
+export function LLMForm({ model, datasetId }: LLMFormProps) {
+  const [isFormLoading, setIsFormLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const [placeholder] = useState(
     placeholders[Math.floor(Math.random() * placeholders.length)],
@@ -74,17 +77,31 @@ export function LLMForm({ model }: LLMFormProps) {
   };
 
   const handleFormSubmit = async (formData: any) => {
-    setIsLoading(true);
+    setIsFormLoading(true);
     const res = await createStreamingPrediction(model.id!.toString(), [
       formData,
     ]);
 
-    setIsLoading(false);
+    setIsFormLoading(false);
   };
 
+  const {
+    data: apiResponse,
+    isLoading,
+    error,
+  } = useSWR(
+    datasetId !== 'new' ? `/api/datasets/${datasetId}` : null,
+    datasetFetcher,
+  );
+
+  const dataset = apiResponse?.data;
+
+  if (isLoading) return <Spinner />;
+  if (error) return <SWRClientFetchError error={error} />;
+
   return (
-    <>
-      <div className="mb-6 flex w-full flex-wrap gap-4 md:mb-0 md:flex-nowrap">
+    <Card className={'w-full'}>
+      <CardBody>
         <Textarea
           name={'prompt'}
           placeholder={placeholder}
@@ -97,10 +114,20 @@ export function LLMForm({ model }: LLMFormProps) {
             </Button>
           }
         ></Textarea>
-      </div>
-      <div>
-        <p>{response && <div>{response}</div>}</p>
-      </div>
-    </>
+        <div>
+          <p>{response}</p>
+        </div>
+        {dataset?.input.map((inputRow: any, index) => (
+          <>
+            <Card key={`input-${index}`}>
+              <CardBody>{inputRow.prompt}</CardBody>
+            </Card>
+            <Card key={`result-${index}`}>
+              <CardBody>{(dataset?.result?.[index] as any)?.output}</CardBody>
+            </Card>
+          </>
+        ))}
+      </CardBody>
+    </Card>
   );
 }

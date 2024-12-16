@@ -8,7 +8,6 @@ import toast from 'react-hot-toast';
 import { ApiResponse } from '@/app/util/response';
 import { Spinner } from '@nextui-org/spinner';
 import ModelPredictionForm from '@/app/dashboard/models/[modelId]/components/ModelPredictionForm';
-import { LLMForm } from '@/app/dashboard/models/[modelId]/components/LLMForm';
 import { isAuthenticated } from '@/app/util/auth';
 import Alert from '@/app/components/Alert';
 import { useSession } from 'next-auth/react';
@@ -78,20 +77,14 @@ export default function ModelPredictTab({ model }: ModelPredictTabProps) {
           description="You need to be logged in to make predictions"
         />
       )}
-      {model.type === 'DOCKER_LLM' && <LLMForm model={model} />}
+      <ModelPredictionForm
+        onFormSubmit={handleFormSubmit}
+        model={model}
+        onCSVFormSubmit={handleCSVFormSubmit}
+      />
 
-      {model.type !== 'DOCKER_LLM' && (
-        <>
-          <ModelPredictionForm
-            onFormSubmit={handleFormSubmit}
-            model={model}
-            onCSVFormSubmit={handleCSVFormSubmit}
-          />
-
-          {loading && <Spinner className="my-3" />}
-          {datasetId && <DatasetResults model={model} datasetId={datasetId} />}
-        </>
-      )}
+      {loading && <Spinner className="my-3" />}
+      {datasetId && <DatasetResults model={model} datasetId={datasetId} />}
     </div>
   );
 }

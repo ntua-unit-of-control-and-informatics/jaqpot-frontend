@@ -62,7 +62,7 @@ export async function POST(
   const input = await request.json();
 
   const dataset: DatasetDto = {
-    type: 'PREDICTION',
+    type: 'CHAT',
     entryType: 'ARRAY',
     input,
   };

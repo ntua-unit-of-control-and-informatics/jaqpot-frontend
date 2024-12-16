@@ -84,13 +84,6 @@ export interface paths {
      */
     post: operations["predictWithModelCSV"];
   };
-  "/v1/models/{modelId}/predict/stream": {
-    /**
-     * Stream predictions from LLM Model
-     * @description Submit a prompt for streaming prediction using a specific LLM model
-     */
-    post: operations["streamPredictWithModel"];
-  };
   "/v1/models/{id}/partial": {
     /** Partially update specific fields of a model */
     patch: operations["partiallyUpdateModel"];
@@ -108,6 +101,13 @@ export interface paths {
      * @description Retrieve all datasets associated with a specific user ID
      */
     get: operations["getDatasets"];
+  };
+  "/v1/user/models/{modelId}/datasets": {
+    /**
+     * Get Datasets by Model ID
+     * @description Retrieve all datasets associated with a specific model ID
+     */
+    get: operations["getDatasetsByModelId"];
   };
   "/v1/datasets/{id}": {
     /**
@@ -590,13 +590,15 @@ export interface components {
      * @example PREDICTION
      * @enum {string}
      */
-    DatasetType: "PREDICTION";
+    DatasetType: "PREDICTION" | "CHAT";
     Dataset: {
       /**
        * Format: int64
        * @example 1
        */
       id?: number;
+      /** @example My Dataset */
+      name?: string;
       type: components["schemas"]["DatasetType"];
       /**
        * @example ARRAY
@@ -1249,61 +1251,6 @@ export interface operations {
       };
     };
   };
-  /**
-   * Stream predictions from LLM Model
-   * @description Submit a prompt for streaming prediction using a specific LLM model
-   */
-  streamPredictWithModel: {
-    parameters: {
-      path: {
-        /** @description The ID of the LLM model to use for prediction */
-        modelId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          /**
-           * @description The input prompt for the LLM
-           * @example What is machine learning?
-           */
-          prompt?: string;
-          options?: {
-            /**
-             * @description Maximum number of tokens to generate
-             * @default 100
-             */
-            max_tokens?: number;
-            /**
-             * @description Sampling temperature
-             * @default 0.7
-             */
-            temperature?: number;
-          };
-        };
-      };
-    };
-    responses: {
-      /** @description Streaming response started */
-      200: {
-        content: {
-          "text/event-stream": string;
-        };
-      };
-      /** @description Invalid Request */
-      400: {
-        content: never;
-      };
-      /** @description Model not found */
-      404: {
-        content: never;
-      };
-      /** @description Internal Server Error */
-      500: {
-        content: never;
-      };
-    };
-  };
   /** Partially update specific fields of a model */
   partiallyUpdateModel: {
     parameters: {
@@ -1429,6 +1376,40 @@ export interface operations {
         };
       };
       /** @description User or datasets not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get Datasets by Model ID
+   * @description Retrieve all datasets associated with a specific model ID
+   */
+  getDatasetsByModelId: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
+      };
+      path: {
+        modelId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["Dataset"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Model or datasets not found */
       404: {
         content: never;
       };

@@ -3,7 +3,7 @@
 import { useParams, usePathname } from 'next/navigation';
 import { Tab, Tabs } from '@nextui-org/tabs';
 import { ModelDto } from '@/app/api.types';
-import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
+import ModelFeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelFeaturesTab';
 import ModelPredictTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelPredictTab';
 import ModelEditTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelEditTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
@@ -11,6 +11,7 @@ import ModelAdminTab from '@/app/dashboard/models/[modelId]/components/tabs/Mode
 import {
   AdjustmentsVerticalIcon,
   ChartBarIcon,
+  ChatBubbleLeftEllipsisIcon,
   ChatBubbleLeftRightIcon,
   PencilSquareIcon,
   RocketLaunchIcon,
@@ -18,6 +19,8 @@ import {
 } from '@heroicons/react/24/solid';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import ModelMetricsTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelMetricsTab';
+import { LLMForm } from '@/app/dashboard/models/[modelId]/components/llm/LLMForm';
+import ModelChatTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelChatTab';
 
 interface ModelTabsProps {
   model: ModelDto;
@@ -25,9 +28,12 @@ interface ModelTabsProps {
 
 export default function ModelTabs({ model }: ModelTabsProps) {
   const pathname = usePathname();
-  const params = useParams<{ tabName: string }>();
+  const params = useParams<{ tabName: string; datasetId?: string }>();
 
-  const pathnameWithoutTab = pathname.substring(0, pathname.lastIndexOf('/'));
+  const pathnameWithoutTab = pathname.substring(
+    0,
+    pathname.lastIndexOf(`/${params.tabName}`),
+  );
 
   return (
     <Tabs
@@ -70,20 +76,36 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         }
         href={`${pathnameWithoutTab}/features`}
       >
-        <FeaturesTab model={model} />
+        <ModelFeaturesTab model={model} />
       </Tab>
-      <Tab
-        key="predict"
-        title={
-          <div className="flex items-center space-x-1">
-            <RocketLaunchIcon className="size-5" />
-            <span>Predict</span>
-          </div>
-        }
-        href={`${pathnameWithoutTab}/predict`}
-      >
-        <ModelPredictTab model={model} />
-      </Tab>
+      {model.type === 'DOCKER_LLM' && (
+        <Tab
+          key="chat"
+          title={
+            <div className="flex items-center space-x-1">
+              <ChatBubbleLeftEllipsisIcon className="size-5" />
+              <span>Chat</span>
+            </div>
+          }
+          href={`${pathnameWithoutTab}/chat`}
+        >
+          <ModelChatTab model={model} datasetId={params.datasetId} />
+        </Tab>
+      )}
+      {model.type !== 'DOCKER_LLM' && (
+        <Tab
+          key="predict"
+          title={
+            <div className="flex items-center space-x-1">
+              <RocketLaunchIcon className="size-5" />
+              <span>Predict</span>
+            </div>
+          }
+          href={`${pathnameWithoutTab}/predict`}
+        >
+          <ModelPredictTab model={model} />
+        </Tab>
+      )}
       <Tab
         key="metrics"
         title={
