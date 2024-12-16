@@ -1,5 +1,5 @@
 import { Textarea } from '@nextui-org/input';
-import { ModelDto } from '@/app/api.types';
+import { DatasetDto, ModelDto } from '@/app/api.types';
 import React, { useState } from 'react';
 import { Button } from '@nextui-org/button';
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
@@ -30,13 +30,16 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
   );
   const [response, setResponse] = useState<string>('');
 
-  const createStreamingPrediction = async (modelId: string, data: any) => {
+  const createStreamingPrediction = async (
+    modelId: string,
+    datasetDto: DatasetDto,
+  ) => {
     const apiResponse = await fetch(`/api/models/${modelId}/predict/stream`, {
       method: 'POST',
       headers: {
         'Content-Type': 'text/event-stream',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(datasetDto),
     });
 
     if (!apiResponse.body) return;
@@ -65,22 +68,23 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { value, type, name, checked } = e.target;
     setFormData({
-      ...formData,
-      [name]: value,
+      ...dataset!!,
+      input: [...dataset!!.input, { prompt: value }],
     });
   };
 
   const handleKeyPress = async (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
-      await handleFormSubmit(formData);
+      await handleFormSubmit(dataset);
     }
   };
 
   const handleFormSubmit = async (formData: any) => {
     setIsFormLoading(true);
-    const res = await createStreamingPrediction(model.id!.toString(), [
-      formData,
-    ]);
+    const res = await createStreamingPrediction(
+      model.id!.toString(),
+      dataset!!,
+    );
 
     setIsFormLoading(false);
   };
@@ -94,11 +98,9 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
     datasetFetcher,
   );
 
-  const dataset = apiResponse?.data;
-
   if (isLoading) return <Spinner />;
   if (error) return <SWRClientFetchError error={error} />;
-
+  const dataset = apiResponse!.data;
   return (
     <Card className={'w-full'}>
       <CardBody>

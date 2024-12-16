@@ -59,13 +59,7 @@ export async function POST(
     );
   }
 
-  const input = await request.json();
-
-  const dataset: DatasetDto = {
-    type: 'CHAT',
-    entryType: 'ARRAY',
-    input,
-  };
+  const dataset = await request.json();
 
   const streamResponse = await fetch(
     `${process.env.API_URL}/v1/models/${params.modelId}/predict/stream`,
