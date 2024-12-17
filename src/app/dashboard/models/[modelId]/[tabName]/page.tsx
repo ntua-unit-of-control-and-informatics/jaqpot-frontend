@@ -113,6 +113,7 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
 
 interface ModelPageParams {
   modelId: string;
+  datasetId?: string;
 }
 
 async function retrieveModelOrLegacy(modelId: string): Promise<ModelDto> {

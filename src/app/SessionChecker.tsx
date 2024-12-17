@@ -30,13 +30,12 @@ export default function SessionChecker() {
     revalidateOnReconnect: false,
   });
 
-  const silentlySignOut = useCallback(() => {
-    signOut({ redirect: false });
+  const silentlySignOut = useCallback(async () => {
+    await signOut({ redirect: false });
     clearUserSettings();
   }, []);
 
   if (hasRun) return null;
-  setHasRun(true);
 
   if (isLoading) return null;
   if (!res) {

@@ -119,7 +119,6 @@ export default function ModelPredictionForm({
   onCSVFormSubmit,
   includeIndependentFeatures = false,
 }: ModelPredictionFormProps) {
-  const { data: session } = useSession();
   const [predictionUploadType, setPredictionUploadType] = useState('form');
 
   const predictionFormSchema = generatePredictionFormSchema(
@@ -129,13 +128,6 @@ export default function ModelPredictionForm({
 
   return (
     <>
-      {!isAuthenticated(session) && (
-        <Alert
-          type="warning"
-          title="Authentication required!"
-          description="You need to be logged in to make predictions"
-        />
-      )}
       <RadioGroup
         label="Choose Your Prediction Input Method"
         orientation="horizontal"

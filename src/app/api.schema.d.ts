@@ -102,6 +102,13 @@ export interface paths {
      */
     get: operations["getDatasets"];
   };
+  "/v1/user/models/{modelId}/datasets": {
+    /**
+     * Get Datasets by Model ID
+     * @description Retrieve all datasets associated with a specific model ID
+     */
+    get: operations["getDatasetsByModelId"];
+  };
   "/v1/datasets/{id}": {
     /**
      * Get a Dataset
@@ -286,6 +293,7 @@ export interface components {
         crossValidation?: components["schemas"]["Scores"][];
       };
       rPbpkConfig?: components["schemas"]["RPbpkConfig"];
+      dockerConfig?: components["schemas"]["DockerConfig"];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
@@ -379,6 +387,18 @@ export interface components {
     RPbpkConfig: {
       odeSolver?: string;
     };
+    DockerConfig: {
+      /**
+       * @description Unique identifier used for internal service discovery
+       * @example my-docker-model
+       */
+      appName: string;
+      /**
+       * @description Reference to the Docker image (for admin documentation)
+       * @example my-repo/my-docker-model:1.0.0
+       */
+      dockerImage?: string;
+    };
     OrganizationSummary: {
       /**
        * Format: int64
@@ -389,7 +409,7 @@ export interface components {
       name: string;
     };
     /** @enum {string} */
-    ModelType: "SKLEARN_ONNX" | "TORCH_SEQUENCE_ONNX" | "TORCH_GEOMETRIC_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
+    ModelType: "SKLEARN_ONNX" | "TORCH_SEQUENCE_ONNX" | "TORCH_GEOMETRIC_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "DOCKER" | "DOCKER_LLM" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
     /** @description A preprocessor for the model */
     Transformer: {
       /** Format: int64 */
@@ -570,13 +590,15 @@ export interface components {
      * @example PREDICTION
      * @enum {string}
      */
-    DatasetType: "PREDICTION";
+    DatasetType: "PREDICTION" | "CHAT";
     Dataset: {
       /**
        * Format: int64
        * @example 1
        */
       id?: number;
+      /** @example My Dataset */
+      name?: string;
       type: components["schemas"]["DatasetType"];
       /**
        * @example ARRAY
@@ -707,7 +729,7 @@ export interface components {
        * Format: int64
        * @description Unique identifier for the prediction model
        */
-      id?: number | null;
+      id: number;
       /** @description List of dependent features for the model */
       dependentFeatures: components["schemas"]["Feature"][];
       /** @description List of independent features for the model */
@@ -1354,6 +1376,40 @@ export interface operations {
         };
       };
       /** @description User or datasets not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get Datasets by Model ID
+   * @description Retrieve all datasets associated with a specific model ID
+   */
+  getDatasetsByModelId: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
+      };
+      path: {
+        modelId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["Dataset"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Model or datasets not found */
       404: {
         content: never;
       };

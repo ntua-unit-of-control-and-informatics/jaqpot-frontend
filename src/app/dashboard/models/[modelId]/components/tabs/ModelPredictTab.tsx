@@ -1,14 +1,16 @@
 'use client';
 
-import { ModelDto } from '@/app/api.types';
+import { ModelDto, ModelTypeDto } from '@/app/api.types';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import DatasetResults from '@/app/dashboard/models/[modelId]/components/DatasetResults';
 import toast from 'react-hot-toast';
 import { ApiResponse } from '@/app/util/response';
 import { Spinner } from '@nextui-org/spinner';
-import { useSession } from 'next-auth/react';
 import ModelPredictionForm from '@/app/dashboard/models/[modelId]/components/ModelPredictionForm';
+import { isAuthenticated } from '@/app/util/auth';
+import Alert from '@/app/components/Alert';
+import { useSession } from 'next-auth/react';
 
 export async function createPrediction(modelId: string, data: any) {
   return await fetch(`/api/models/${modelId}/predict`, {
@@ -38,6 +40,7 @@ export default function ModelPredictTab({ model }: ModelPredictTabProps) {
   const params = useParams<{ modelId: string }>();
   const [loading, setIsLoading] = useState(false);
   const [datasetId, setDatasetId] = useState<string | undefined>(undefined);
+  const { data: session } = useSession();
 
   const handleFormSubmit = async (formData: any) => {
     setIsLoading(true);
@@ -67,6 +70,13 @@ export default function ModelPredictTab({ model }: ModelPredictTabProps) {
 
   return (
     <div className="container mt-2">
+      {!isAuthenticated(session) && (
+        <Alert
+          type="warning"
+          title="Authentication required!"
+          description="You need to be logged in to make predictions"
+        />
+      )}
       <ModelPredictionForm
         onFormSubmit={handleFormSubmit}
         model={model}

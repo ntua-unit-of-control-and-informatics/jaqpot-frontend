@@ -42,7 +42,7 @@ function FeatureRowActions(props: {
   );
 }
 
-export default function FeaturesTab({ model }: FeaturesTabProps) {
+export default function ModelFeaturesTab({ model }: FeaturesTabProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedFeature, setSelectedFeature] = useState<
     FeatureDto | undefined
