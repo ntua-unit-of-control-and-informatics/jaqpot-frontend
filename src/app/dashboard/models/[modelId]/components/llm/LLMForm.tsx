@@ -10,6 +10,7 @@ import { datasetFetcher } from '@/app/util/dataset';
 import { Spinner } from '@nextui-org/spinner';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import ChatGrid from '@/app/dashboard/models/[modelId]/components/llm/ChatMessage';
+import toast from 'react-hot-toast';
 
 interface LLMFormProps {
   model: ModelDto;
@@ -119,7 +120,7 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
         ...prev,
       ]);
     } catch (error) {
-      console.error('Prediction error:', error);
+      toast.error('An error occurred while processing your request.');
     } finally {
       setIsFormLoading(false);
       setCurrentResponse(undefined);

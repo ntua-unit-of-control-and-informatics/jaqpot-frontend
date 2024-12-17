@@ -60,7 +60,6 @@ export async function POST(
   }
 
   const body = await request.json();
-  console.log(params.datasetId);
 
   const streamResponse = await fetch(
     `${process.env.API_URL}/v1/models/${params.modelId}/predict/stream/${params.datasetId}`,
