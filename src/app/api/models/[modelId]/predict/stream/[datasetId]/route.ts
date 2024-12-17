@@ -9,7 +9,6 @@ import { isAuthenticated } from '@/app/util/auth';
 import { DatasetDto } from '@/app/api.types';
 import { NextApiResponse } from 'next';
 
-// https://developer.mozilla.org/docs/Web/API/ReadableStream#convert_async_iterator_to_stream
 function iteratorToStream(reader: any) {
   return new ReadableStream({
     async pull(controller) {
@@ -22,29 +21,6 @@ function iteratorToStream(reader: any) {
       }
     },
   });
-}
-
-function sleep(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time);
-  });
-}
-
-const encoder = new TextEncoder();
-
-async function* makeIterator() {
-  yield encoder.encode('<p>One</p>');
-  await sleep(200);
-  yield encoder.encode('<p>Two</p>');
-  await sleep(200);
-  yield encoder.encode('<p>Three</p>');
-}
-
-export async function GET() {
-  const iterator = makeIterator();
-  const stream = iteratorToStream(iterator);
-
-  return new Response(stream);
 }
 
 export async function POST(
