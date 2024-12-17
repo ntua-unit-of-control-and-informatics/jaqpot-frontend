@@ -19,7 +19,6 @@ import {
 } from '@heroicons/react/24/solid';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import ModelMetricsTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelMetricsTab';
-import { LLMForm } from '@/app/dashboard/models/[modelId]/components/llm/LLMForm';
 import ModelChatTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelChatTab';
 
 interface ModelTabsProps {

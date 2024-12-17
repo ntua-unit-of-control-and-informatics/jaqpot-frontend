@@ -46,10 +46,10 @@ const fetchDatasets = async (modelId: string, page: number) => {
   }
 };
 
-export default function LLMNavigation({ model, datasetId }: LLMTabsProps) {
+export default function LLMNavigation({ model }: LLMTabsProps) {
   const params = useParams<{ datasetId: string }>();
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(
-    datasetId ? new Set([datasetId]) : new Set<string>(),
+    params.datasetId ? new Set([params.datasetId]) : new Set<string>(),
   );
 
   const router = useRouter();
@@ -132,7 +132,7 @@ export default function LLMNavigation({ model, datasetId }: LLMTabsProps) {
           </TableBody>
         </Table>
       </div>
-      <LLMForm model={model} datasetId={datasetId} />
+      <LLMForm model={model} datasetId={params.datasetId} />
     </div>
   );
 }

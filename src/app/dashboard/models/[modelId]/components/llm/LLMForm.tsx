@@ -31,7 +31,7 @@ const placeholders = [
 
 export function LLMForm({ model, datasetId }: LLMFormProps) {
   const [isFormLoading, setIsFormLoading] = useState(false);
-  const [textareaContent, setTextareaContent] = useState<string | undefined>();
+  const [textareaContent, setTextareaContent] = useState<string>('');
   const [placeholder] = useState(
     placeholders[Math.floor(Math.random() * placeholders.length)],
   );
@@ -47,7 +47,6 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
     datasetFetcher,
   );
 
-  // Initialize chat history from dataset
   useEffect(() => {
     if (apiResponse?.data) {
       const dataset = apiResponse.data;
@@ -61,16 +60,16 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
 
   const createStreamingPrediction = async (
     modelId: string,
-    datasetDto: DatasetDto,
+    streamingPredictionRequestDto: { prompt: string },
   ) => {
-    const apiResponse = await fetch(`/api/models/${modelId}/predict/stream`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/event-stream' },
-      body: JSON.stringify(datasetDto),
-    });
-    setIsFormLoading(false);
-    setCurrentResponse(undefined);
-    setTextareaContent(undefined);
+    const apiResponse = await fetch(
+      `/api/models/${modelId}/predict/stream/${datasetId}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/event-stream' },
+        body: JSON.stringify(streamingPredictionRequestDto),
+      },
+    );
 
     if (!apiResponse.body) return;
 
@@ -103,28 +102,28 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
   const handleFormSubmit = async () => {
     if (!textareaContent?.trim() || isFormLoading) return;
 
-    const prompt = textareaContent;
+    const prompt = textareaContent.trim();
     setIsFormLoading(true);
 
     try {
       const dataset = apiResponse?.data;
       const response = await createStreamingPrediction(model.id!.toString(), {
-        ...dataset!!,
-        input: [{ prompt }, ...dataset!!.input],
+        prompt,
       });
 
-      // Update chat history with new message
       setChatHistory((prev) => [
         {
           prompt,
-          reply: response,
+          output: response,
         },
         ...prev,
       ]);
     } catch (error) {
-      // console.error('Prediction error:', error);
+      console.error('Prediction error:', error);
     } finally {
+      setIsFormLoading(false);
       setCurrentResponse(undefined);
+      setTextareaContent('');
     }
   };
 
@@ -157,7 +156,6 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
           />
         </form>
 
-        {/* Show current streaming response if any */}
         {currentResponse && (
           <div className="mt-4">
             <ChatGrid

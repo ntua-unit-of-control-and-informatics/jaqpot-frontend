@@ -49,7 +49,7 @@ export async function GET() {
 
 export async function POST(
   request: Request,
-  { params }: { params: { modelId: string } },
+  { params }: { params: { modelId: string; datasetId: string } },
 ) {
   const session = await auth();
   if (!isAuthenticated(session)) {
@@ -59,17 +59,18 @@ export async function POST(
     );
   }
 
-  const dataset = await request.json();
+  const body = await request.json();
+  console.log(params.datasetId);
 
   const streamResponse = await fetch(
-    `${process.env.API_URL}/v1/models/${params.modelId}/predict/stream`,
+    `${process.env.API_URL}/v1/models/${params.modelId}/predict/stream/${params.datasetId}`,
     {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${session!.token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(dataset),
+      body: JSON.stringify(body),
     },
   );
 
