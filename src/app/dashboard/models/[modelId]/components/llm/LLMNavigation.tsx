@@ -61,8 +61,13 @@ export default function LLMNavigation({ model }: LLMTabsProps) {
     data: apiResponse,
     error,
     isLoading,
-  } = useSWR([model.id!.toString(), page], ([modelId, page]) =>
-    fetchDatasets(modelId, page - 1),
+  } = useSWR(
+    [model.id!.toString(), page],
+    ([modelId, page]) => fetchDatasets(modelId, page - 1),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
   );
 
   if (error) return <SWRClientFetchError error={error} />;
@@ -80,17 +85,7 @@ export default function LLMNavigation({ model }: LLMTabsProps) {
         <Button
           color="primary"
           onPress={async () => {
-            const datasetDto: DatasetDto = {
-              type: 'CHAT',
-              input: [],
-              entryType: 'ARRAY',
-            };
-            const res = await fetch(`/api/user/models/${model.id}/datasets`, {
-              method: 'POST',
-              body: JSON.stringify(datasetDto),
-            });
-            const { data } = await res.json();
-            router.push(`${pathnameWithoutDatasetId}/${data.id}`);
+            router.push(`${pathnameWithoutDatasetId}/new`);
           }}
         >
           Start new chat

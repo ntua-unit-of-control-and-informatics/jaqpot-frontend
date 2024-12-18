@@ -86,7 +86,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
               <span>Chat</span>
             </div>
           }
-          href={`${pathnameWithoutTab}/chat`}
+          href={`${pathnameWithoutTab}/chat/new`}
         >
           <ModelChatTab model={model} datasetId={params.datasetId} />
         </Tab>
