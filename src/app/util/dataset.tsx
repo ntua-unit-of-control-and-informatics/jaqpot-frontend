@@ -183,24 +183,6 @@ function generateResultTableRow(
   return resultTableRow;
 }
 
-export const createDatasetFetcher: Fetcher<
-  ApiResponse<DatasetDto>,
-  string
-> = async (url) => {
-  const res = await fetch(url, { method: 'POST' });
-
-  // If the status code is not in the range 200-299,
-  // we still try to parse and throw it.
-  if (!res.ok) {
-    const message = (await res.json()).message;
-    const status = res.status;
-    // Attach extra info to the error object.
-    throw new CustomError(message, status);
-  }
-
-  return res.json();
-};
-
 export const datasetFetcher: Fetcher<ApiResponse<DatasetDto>, string> = async (
   url,
 ) => {
