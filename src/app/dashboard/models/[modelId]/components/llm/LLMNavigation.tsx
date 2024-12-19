@@ -121,7 +121,11 @@ export default function LLMNavigation({ model }: LLMTabsProps) {
           <TableBody items={rows}>
             {(item: any) => (
               <TableRow key={item.key} className={'cursor-pointer'}>
-                {(columnKey) => <TableCell>{item.name}</TableCell>}
+                {(columnKey) => (
+                  <TableCell>
+                    <div className="line-clamp-2">{item.name}</div>
+                  </TableCell>
+                )}
               </TableRow>
             )}
           </TableBody>
