@@ -9,6 +9,7 @@ import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
 import ArrayInput from '@/app/dashboard/models/[modelId]/components/ArrayInput';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { Tooltip } from '@nextui-org/tooltip';
+import { isNullOrUndefinedOrEmpty } from '@/app/util/string';
 
 // const jsonExample: DynamicFormSchema[] = [
 //   {
@@ -204,7 +205,10 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     schema.forEach((section) => {
       if (section.fields) {
         section.fields.forEach((field) => {
-          if (field.required && !formData[field.name]) {
+          if (
+            field.required &&
+            isNullOrUndefinedOrEmpty(formData[field.name])
+          ) {
             formIsValid = false;
             errors[field.name] = 'This field is required';
           }
@@ -348,7 +352,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
                   <div key={fieldIndex} className="mb-3 flex-grow">
                     {renderField(field)}
                     {formErrors[field.name] && (
-                      <div className="text-danger">
+                      <div className="text-sm text-danger">
                         {formErrors[field.name]}
                       </div>
                     )}
