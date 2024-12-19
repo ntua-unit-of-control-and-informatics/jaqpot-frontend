@@ -171,6 +171,8 @@ function retrieveInputValueFromString(
   checked: boolean,
   value: string,
 ) {
+  if (value === '') return undefined;
+
   if (type === 'number') {
     return Number(value);
   } else if (type === 'checkbox') {
@@ -181,16 +183,17 @@ function retrieveInputValueFromString(
 }
 
 export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
-  const [formData, setFormData] = useState<{ [key: string]: string | boolean }>(
-    {},
-  );
+  const [formData, setFormData] = useState<{
+    [key: string]: string | boolean | number;
+  }>({});
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { value, type, name, checked } = e.target;
+    const inputValue = retrieveInputValueFromString(type, checked, value);
     setFormData({
       ...formData,
-      [name]: retrieveInputValueFromString(type, checked, value),
+      [name]: inputValue,
     });
   };
 
@@ -291,7 +294,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             placeholder={field.placeholder}
             onChange={handleChange}
             isRequired={field.required}
-            value={(formData[field.name] || '') as string}
+            value={(formData[field.name] ?? '') as string}
           />
         );
       case 'floatarray':
@@ -324,7 +327,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             onChange={handleChange}
             isRequired={field.required}
             fullWidth={true}
-            value={(formData[field.name] || '') as string}
+            value={(formData[field.name] ?? '') as string}
             classNames={{
               label: 'flex flex-row  items-center justify-center',
             }}
