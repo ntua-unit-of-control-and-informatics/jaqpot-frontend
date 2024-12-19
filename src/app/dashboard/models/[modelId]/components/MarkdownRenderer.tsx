@@ -103,7 +103,6 @@ export default function MarkdownRenderer({
           const match = /language-(\w+)/.exec(className || '');
           return match ? (
             <SyntaxHighlighter
-              {...rest}
               PreTag="div"
               // eslint-disable-next-line react/no-children-prop
               children={String(children).replace(/\n$/, '')}
