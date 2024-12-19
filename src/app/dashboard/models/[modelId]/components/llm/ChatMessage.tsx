@@ -1,4 +1,5 @@
 import { ChatMessage } from '@/app/dashboard/models/[modelId]/components/llm/LLMForm';
+import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
 
 function ChatMessageContent({ prompt, output }: ChatMessage) {
   return (
@@ -10,7 +11,9 @@ function ChatMessageContent({ prompt, output }: ChatMessage) {
 
       <div className="contents">
         <div className=""></div>
-        <div className="break-words rounded bg-gray-100 p-4">{output}</div>
+        <div className="rounded-lg bg-gray-100 p-4">
+          <MarkdownRenderer>{output}</MarkdownRenderer>
+        </div>
       </div>
     </>
   );

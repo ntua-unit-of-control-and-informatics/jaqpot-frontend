@@ -3,6 +3,9 @@
 import Markdown from 'react-markdown';
 import { Link } from '@nextui-org/link';
 import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 export default function MarkdownRenderer({
   children,
@@ -11,7 +14,7 @@ export default function MarkdownRenderer({
 }>) {
   return (
     <Markdown
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, remarkBreaks]}
       className="max-w-full whitespace-normal"
       components={{
         a(props: any) {
@@ -93,6 +96,23 @@ export default function MarkdownRenderer({
             <td className="table-cell px-6 py-4 text-sm font-medium text-gray-800 dark:text-neutral-200">
               {children}
             </td>
+          );
+        },
+        code(props) {
+          const { children, className, node, ...rest } = props;
+          const match = /language-(\w+)/.exec(className || '');
+          return match ? (
+            <SyntaxHighlighter
+              PreTag="div"
+              // eslint-disable-next-line react/no-children-prop
+              children={String(children).replace(/\n$/, '')}
+              language={match[1]}
+              style={materialDark}
+            />
+          ) : (
+            <code {...rest} className={className}>
+              {children}
+            </code>
           );
         },
       }}
