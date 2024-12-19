@@ -137,13 +137,13 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
       if (done) break;
 
       if (value) {
-        const formattedValue = value.trim();
+        const formattedValue = value;
         fullResponse += formattedValue + ' ';
-        setCurrentResponse(fullResponse.trim());
+        setCurrentResponse(fullResponse);
       }
     }
 
-    return fullResponse.trim();
+    return fullResponse;
   };
 
   const handleKeyPress = async (e: KeyboardEvent) => {
