@@ -36,14 +36,18 @@ const fetchDatasets = async (modelId: string, page: number) => {
   // If the status code is not in the range 200-299,
   // we still try to parse and throw it.
   if (!res.ok) {
-    const message = (await res.json()).message;
-    const status = res.status;
-    if (status >= 500) {
-      log.error(message);
+    if (res.status === 401) {
+      throw new Error(
+        'You are not logged in. Please log in to access this page.',
+      );
+    } else if (res.status === 403) {
+      throw new Error('You do not have permission to access this page.');
+    } else {
+      throw new Error('Unknown error occurred.');
     }
-  } else {
-    return res.json();
   }
+
+  return res.json();
 };
 
 export default function LLMNavigation({ model }: LLMTabsProps) {
@@ -73,7 +77,7 @@ export default function LLMNavigation({ model }: LLMTabsProps) {
   if (error) return <SWRClientFetchError error={error} />;
   if (isLoading) return <Spinner />;
 
-  const data = apiResponse.data;
+  const data = apiResponse?.data;
   const rows = data.content?.map((dataset: DatasetDto) => ({
     key: dataset.id,
     name: dataset.name ?? dataset.id,
