@@ -124,8 +124,6 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
         body: JSON.stringify(streamingPredictionRequestDto),
       },
     );
-    debugger;
-
     if (!apiResponse.body || !apiResponse.ok) {
       throw new Error('Failed to create streaming prediction');
     }
