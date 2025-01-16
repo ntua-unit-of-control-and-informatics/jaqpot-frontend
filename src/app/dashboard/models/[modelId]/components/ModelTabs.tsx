@@ -77,7 +77,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       >
         <ModelFeaturesTab model={model} />
       </Tab>
-      {model.type === 'OPENAI_LLM' && (
+      {(model.type === 'OPENAI_LLM' || model.type === 'CUSTOM_LLM') && (
         <Tab
           key="chat"
           title={
