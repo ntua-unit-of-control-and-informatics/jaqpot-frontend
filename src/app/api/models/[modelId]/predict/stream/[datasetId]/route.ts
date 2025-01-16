@@ -6,8 +6,6 @@ import {
 } from '@/app/util/response';
 import { auth } from '@/auth';
 import { isAuthenticated } from '@/app/util/auth';
-import { DatasetDto } from '@/app/api.types';
-import { NextApiResponse } from 'next';
 
 function iteratorToStream(reader: any) {
   return new ReadableStream({
@@ -48,6 +46,10 @@ export async function POST(
       body: JSON.stringify(body),
     },
   );
+
+  if (!streamResponse.ok) {
+    return errorResponse('Failed to create streaming prediction', 500);
+  }
 
   const reader = streamResponse
     .body!.pipeThrough(new TextDecoderStream())
