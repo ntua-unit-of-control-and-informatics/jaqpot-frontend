@@ -84,8 +84,8 @@ export default function LLMNavigation({ model }: LLMTabsProps) {
   }));
 
   return (
-    <div className="flex flex-row gap-5">
-      <div className="flex max-w-48 flex-col gap-3">
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-[auto_1fr]">
+      <div className="order-last flex w-full flex-col gap-3 sm:order-first sm:w-48">
         <Button
           color="primary"
           onPress={async () => {
@@ -135,7 +135,10 @@ export default function LLMNavigation({ model }: LLMTabsProps) {
           </TableBody>
         </Table>
       </div>
-      <LLMForm model={model} datasetId={params.datasetId} />
+
+      <div className="order-first sm:order-last">
+        <LLMForm model={model} datasetId={params.datasetId} />
+      </div>
     </div>
   );
 }
