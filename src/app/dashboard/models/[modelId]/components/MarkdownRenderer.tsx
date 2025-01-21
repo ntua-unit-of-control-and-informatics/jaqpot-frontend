@@ -99,7 +99,7 @@ export default function MarkdownRenderer({
           );
         },
         pre({ children }) {
-          return <pre className="whitespace-pre-wrap">{children}</pre>;
+          return <pre className="whitespace-pre-line">{children}</pre>;
         },
         code(props) {
           const { children, className, node, ...rest } = props;
