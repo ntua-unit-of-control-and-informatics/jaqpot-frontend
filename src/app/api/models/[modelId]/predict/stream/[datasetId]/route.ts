@@ -48,6 +48,9 @@ export async function POST(
   );
 
   if (!streamResponse.ok) {
+    if (streamResponse.status === 429) {
+      return errorResponse('Rate limit exceeded', 429);
+    }
     return errorResponse('Failed to create streaming prediction', 500);
   }
 
