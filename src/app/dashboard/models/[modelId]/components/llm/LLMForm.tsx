@@ -101,7 +101,7 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
       const shouldScroll =
         (container.scrollTop + container.clientHeight) /
           container.scrollHeight >=
-        0.5;
+        0.7;
 
       if (shouldScroll) {
         container.scrollTo({
