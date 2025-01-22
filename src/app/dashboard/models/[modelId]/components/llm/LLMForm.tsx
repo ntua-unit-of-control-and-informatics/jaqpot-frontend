@@ -49,6 +49,7 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
   const router = useRouter();
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const promptRef = useRef<HTMLTextAreaElement>(null);
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [textareaContent, setTextareaContent] = useState<string>('');
   const [placeholder] = useState(
@@ -105,7 +106,7 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
       if (shouldScroll) {
         container.scrollTo({
           top: maxScroll,
-          behavior: 'smooth',
+          behavior: 'auto',
         });
       }
     }
@@ -203,6 +204,10 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
       setIsFormLoading(false);
       setCurrentResponse(undefined);
       setTextareaContent('');
+      setTimeout(() => {
+        promptRef.current?.focus();
+      });
+
       if (datasetId === 'new') {
         router.replace(`/dashboard/models/${model.id}/chat/${dataset.id}`);
       }
@@ -238,6 +243,7 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
 
         <form onSubmit={(e) => e.preventDefault()} className="mt-5">
           <Textarea
+            ref={promptRef}
             name="prompt"
             placeholder={placeholder}
             className="max-w-full"
