@@ -53,6 +53,14 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
             'A 7.3 billion parameter language model that performs well on reasoning, math, and coding tasks',
         },
         {
+          id: 2000,
+          name: 'DeepSeek-R1-Distill-Qwen-1.5B',
+          imageUrl:
+            'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/3822d8e2eca90b33218be14a1c93485805b700d3/deepseek.svg',
+          description:
+            'DeepSeek-R1-Distill-Qwen-1.5B is a 1.5 billion parameter language model that was created by distilling the larger Qwen model. The model has been optimized specifically for tasks that involve reasoning.',
+        },
+        {
           id: 1983,
           name: 'LLama 3.2 1B',
           imageUrl:
