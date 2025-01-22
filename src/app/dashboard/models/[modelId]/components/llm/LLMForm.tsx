@@ -124,8 +124,14 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
         body: JSON.stringify(streamingPredictionRequestDto),
       },
     );
-
-    if (!apiResponse.body) return;
+    if (!apiResponse.body || !apiResponse.ok) {
+      if (apiResponse.status === 429) {
+        throw new Error(
+          'Rate limit exceeded for this model. Please try again later.',
+        );
+      }
+      throw new Error('Failed to create streaming prediction');
+    }
 
     const reader = apiResponse.body
       .pipeThrough(new TextDecoderStream())
@@ -192,7 +198,7 @@ export function LLMForm({ model, datasetId }: LLMFormProps) {
         },
       ]);
     } catch (error) {
-      toast.error('An error occurred while processing your request.');
+      toast.error('Error: ' + (error as any).message);
     } finally {
       setIsFormLoading(false);
       setCurrentResponse(undefined);

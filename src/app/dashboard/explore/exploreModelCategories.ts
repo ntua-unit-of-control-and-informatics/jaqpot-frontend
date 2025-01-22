@@ -39,6 +39,32 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
   description: 'Explore models hosted in the Jaqpot platform',
   categories: [
     {
+      name: 'LLMs',
+      description: 'Large language models for text generation and analysis',
+      imageUrl:
+        'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/refs/heads/master/LLM.webp',
+      models: [
+        {
+          id: 1994,
+          name: 'Mistral 7B',
+          imageUrl:
+            'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/refs/heads/master/mistral-7b-v0.1.jpg',
+          description:
+            'A 7.3 billion parameter language model that performs well on reasoning, math, and coding tasks',
+        },
+        {
+          id: 1983,
+          name: 'LLama 3.2 1B',
+          imageUrl:
+            'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/refs/heads/master/llama.png',
+          description:
+            "A compact 1 billion parameter version of meta's llama 3.2 model, optimized for efficiency",
+        },
+      ],
+      organizations: [],
+      categories: [],
+    },
+    {
       name: 'PFAS',
       description: 'Predictive models for per- and polyfluoroalkyl substances',
       imageUrl:

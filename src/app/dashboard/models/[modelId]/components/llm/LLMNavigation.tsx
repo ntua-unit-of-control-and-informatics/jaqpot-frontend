@@ -84,8 +84,8 @@ export default function LLMNavigation({ model }: LLMTabsProps) {
   }));
 
   return (
-    <div className="flex flex-row gap-5">
-      <div className="flex max-w-48 flex-col gap-3">
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-[auto_1fr]">
+      <div className="order-last flex w-full flex-col gap-3 sm:order-first sm:w-48">
         <Button
           color="primary"
           onPress={async () => {
@@ -101,21 +101,45 @@ export default function LLMNavigation({ model }: LLMTabsProps) {
             router.push(`${pathnameWithoutDatasetId}/${[...keys][0]}`);
           }}
           selectionMode="single"
-          className="flex-shrink"
           align="center"
           bottomContent={
             data?.totalPages ?? 0 > 0 ? (
-              <Pagination
-                isCompact
-                showShadow
-                showControls
-                siblings={1}
-                boundaries={1}
-                color="primary"
-                page={page}
-                total={data.totalPages ?? 0}
-                onChange={(page) => setPage(page)}
-              />
+              <>
+                <Pagination
+                  isCompact
+                  showShadow
+                  siblings={1}
+                  boundaries={1}
+                  color="primary"
+                  page={page}
+                  total={data.totalPages ?? 0}
+                  onChange={(page) => setPage(page)}
+                />
+                <div className="flex justify-center gap-2">
+                  <Button
+                    color="secondary"
+                    size="sm"
+                    variant="flat"
+                    isDisabled={page === 1}
+                    onPress={() =>
+                      setPage((prev) => (prev > 1 ? prev - 1 : prev))
+                    }
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    color="secondary"
+                    size="sm"
+                    variant="flat"
+                    isDisabled={page >= data.totalPages}
+                    onPress={() =>
+                      setPage((prev) => (prev < 10 ? prev + 1 : prev))
+                    }
+                  >
+                    Next
+                  </Button>
+                </div>
+              </>
             ) : null
           }
         >
@@ -135,7 +159,10 @@ export default function LLMNavigation({ model }: LLMTabsProps) {
           </TableBody>
         </Table>
       </div>
-      <LLMForm model={model} datasetId={params.datasetId} />
+
+      <div className="order-first sm:order-last">
+        <LLMForm model={model} datasetId={params.datasetId} />
+      </div>
     </div>
   );
 }

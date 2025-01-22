@@ -108,6 +108,11 @@ export interface paths {
      * @description Retrieve all datasets associated with a specific model ID
      */
     get: operations["getDatasetsByModelId"];
+    /**
+     * Create a dataset
+     * @description Create a new dataset from the provided data
+     */
+    post: operations["createDataset"];
   };
   "/v1/datasets/{id}": {
     /**
@@ -409,7 +414,7 @@ export interface components {
       name: string;
     };
     /** @enum {string} */
-    ModelType: "SKLEARN_ONNX" | "TORCH_SEQUENCE_ONNX" | "TORCH_GEOMETRIC_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "DOCKER" | "DOCKER_LLM" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
+    ModelType: "SKLEARN_ONNX" | "TORCH_SEQUENCE_ONNX" | "TORCH_GEOMETRIC_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "DOCKER" | "OPENAI_LLM" | "CUSTOM_LLM" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
     /** @description A preprocessor for the model */
     Transformer: {
       /** Format: int64 */
@@ -1411,6 +1416,38 @@ export interface operations {
       };
       /** @description Model or datasets not found */
       404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Create a dataset
+   * @description Create a new dataset from the provided data
+   */
+  createDataset: {
+    parameters: {
+      path: {
+        modelId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Dataset"];
+      };
+    };
+    responses: {
+      /** @description dataset created successfully */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Dataset"];
+        };
+      };
+      /** @description invalid input */
+      400: {
+        content: never;
+      };
+      /** @description unauthorized */
+      401: {
         content: never;
       };
     };

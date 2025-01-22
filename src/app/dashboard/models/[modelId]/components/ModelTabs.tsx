@@ -77,7 +77,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
       >
         <ModelFeaturesTab model={model} />
       </Tab>
-      {model.type === 'DOCKER_LLM' && (
+      {(model.type === 'OPENAI_LLM' || model.type === 'CUSTOM_LLM') && (
         <Tab
           key="chat"
           title={
@@ -91,7 +91,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
           <ModelChatTab model={model} datasetId={params.datasetId} />
         </Tab>
       )}
-      {model.type !== 'DOCKER_LLM' && (
+      {model.type !== 'OPENAI_LLM' && (
         <Tab
           key="predict"
           title={
