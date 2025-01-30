@@ -169,6 +169,7 @@ export default function DatasetResults({
       ),
     [model, dataset],
   );
+  console.log(resultTableData);
 
   const onRowsPerPageChange = useCallback((e: React.ChangeEvent<any>) => {
     setRowsPerPage(Number(e.target.value));
@@ -315,7 +316,7 @@ export default function DatasetResults({
                           }
                           return (
                             <TableCell>
-                              {getKeyValue(item, columnKey)}
+                              {getKeyValue(item, columnKey).toString()}
                             </TableCell>
                           );
                         }}
