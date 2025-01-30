@@ -315,7 +315,7 @@ export default function DatasetResults({
                           }
                           return (
                             <TableCell>
-                              {getKeyValue(item, columnKey).toString()}
+                              {getKeyValue(item, columnKey)?.toString()}
                             </TableCell>
                           );
                         }}
