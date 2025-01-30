@@ -72,6 +72,11 @@ const possibleFeatureTypes: FeatureTypeValue[] = [
     description:
       'A string array feature type represents a collection of strings, useful for multi-dimensional or sequential data.',
   },
+  {
+    key: 'BOOLEAN',
+    label: 'Boolean',
+    description: 'A boolean value that can either be true/false',
+  },
 ];
 
 // TypeScript interface for clarity

@@ -172,7 +172,7 @@ function retrieveInputValueFromString(
   checked: boolean,
   value: string,
 ) {
-  if (value === '') return undefined;
+  if (type !== 'checkbox' && value === '') return undefined;
 
   if (type === 'number') {
     return Number(value);
@@ -183,10 +183,28 @@ function retrieveInputValueFromString(
   return value;
 }
 
+function generateDefaultFormValues(
+  schema: DynamicFormSchema[],
+): DynamicFormState {
+  let defaultValues: { [key: string]: string | boolean | number } = {};
+  schema.forEach((section) => {
+    if (section.fields) {
+      section.fields.forEach((field) => {
+        if (field.type === 'checkbox') defaultValues[field.name] = false;
+      });
+    }
+  });
+  return defaultValues;
+}
+
+type DynamicFormState = {
+  [key: string]: string | boolean | number;
+};
+
 export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
-  const [formData, setFormData] = useState<{
-    [key: string]: string | boolean | number;
-  }>({});
+  const [formData, setFormData] = useState<DynamicFormState>(
+    generateDefaultFormValues(schema),
+  );
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<any>) => {
@@ -280,7 +298,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             name={field.name}
             onChange={handleChange}
             isRequired={field.required}
-            checked={formData[field.name] as boolean | undefined}
+            checked={(formData[field.name] as boolean) ?? false}
             classNames={{
               label: 'flex flex-row items-center justify-center text-sm',
             }}
