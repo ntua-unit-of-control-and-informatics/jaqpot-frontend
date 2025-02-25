@@ -73,6 +73,25 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
       categories: [],
     },
     {
+      name: 'Generative',
+      description:
+        'Models designed to generate novel data, such as molecules, images, and sequences, using AI-driven probabilistic and deep learning approaches.',
+      imageUrl:
+        'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/refs/heads/master/generative.webp',
+      models: [
+        {
+          id: 2032,
+          name: 'GFlowNet LogP Generator',
+          imageUrl:
+            'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/refs/heads/master/gflownet.webp',
+          description:
+            'A generative model based on GFlowNet that designs molecules with high logP values, optimizing for lipophilicity in drug discovery applications.',
+        },
+      ],
+      organizations: [],
+      categories: [],
+    },
+    {
       name: 'PFAS',
       description: 'Predictive models for per- and polyfluoroalkyl substances',
       imageUrl:
