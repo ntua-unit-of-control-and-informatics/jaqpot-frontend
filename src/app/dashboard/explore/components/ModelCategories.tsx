@@ -42,6 +42,12 @@ interface ModelCategoriesProps {
   categories: string[];
 }
 
+const getModelHref = (item: ExplorePageModel): string => {
+  if ('href' in item) return item.href;
+  if ('id' in item) return `/dashboard/models/${item.id}/description`;
+  return '#'; // Fallback
+};
+
 export default function ModelCategories({ categories }: ModelCategoriesProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -100,7 +106,8 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
                 key={index}
                 as={Link}
                 isPressable
-                href={`/dashboard/models/${item.id}/description`}
+                href={getModelHref(item)}
+                isExternal={'href' in item}
                 className={'min-h-[250px] min-w-[250px]'}
               >
                 <CardHeader className="absolute top-0 z-10 flex-col !items-start bg-white/50 backdrop-blur-sm dark:bg-black/50">
