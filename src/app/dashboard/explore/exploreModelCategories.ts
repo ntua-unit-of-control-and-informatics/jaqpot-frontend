@@ -97,6 +97,25 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
       categories: [],
     },
     {
+      name: 'Image-Analysis',
+      description:
+        'This category includes AI-driven models designed to analyze, generate, and enhance images using deep learning and probabilistic approaches. These models can perform tasks such as pattern recognition, image segmentation, and data generation, enabling advancements in fields like scientific research, medical imaging, and generative design.',
+      imageUrl:
+        'https://nanoimage.jaqpot.org/nanoImage/resources/images/hero-bg.jpg',
+      models: [
+        {
+          name: 'Extracting data from microscopy images',
+          imageUrl:
+            'https://nanoimage.jaqpot.org/nanoImage/resources/images/hero-bg.jpg',
+          href: 'https://nanoimage.jaqpot.org/nanoImage/',
+          description:
+            'A generative model based on GFlowNet that designs molecules with high logP values, optimizing for lipophilicity in drug discovery applications.',
+        },
+      ],
+      organizations: [],
+      categories: [],
+    },
+    {
       name: 'PFAS',
       description: 'Predictive models for per- and polyfluoroalkyl substances',
       imageUrl:
@@ -274,7 +293,6 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
           description:
             'This machine learning model serves as an interface for the QSAR Toolbox API, allowing users to input SMILES strings and select a QSPR model to generate predictive values for various properties.',
         },
-
         {
           id: 6,
           name: 'QSAR Toolbox Calculator Integration',
@@ -282,6 +300,14 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
             'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/master/QSAR_toolbox_logo.jpg',
           description:
             'This machine learning model serves as an interface for the QSAR Toolbox API, allowing users to input SMILES strings and select a QSPR model to generate predictive values for various properties.',
+        },
+        {
+          id: 2032,
+          name: 'GFlowNet LogP Generator',
+          imageUrl:
+            'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/refs/heads/master/gflownet.webp',
+          description:
+            'A generative model based on GFlowNet that designs molecules with high logP values, optimizing for lipophilicity in drug discovery applications.',
         },
       ],
     },
