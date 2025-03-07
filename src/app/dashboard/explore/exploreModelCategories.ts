@@ -116,6 +116,26 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
       categories: [],
     },
     {
+      name: 'Read-across',
+      description:
+        'Read-across is a computational approach used for property prediction by identifying structurally similar molecules and inferring their characteristics. Unlike traditional machine learning models, read-across relies on similarity searches to find close molecular analogs and make predictions based on known properties of similar compounds. This method is widely used in toxicology, regulatory science, and chemical risk assessment.',
+      imageUrl:
+        'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/refs/heads/master/read-across.webp',
+      models: [
+        {
+          name: 'Apellis',
+          imageUrl:
+            'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/refs/heads/master/read-across.webp',
+          href: 'https://apellis.jaqpot.org/',
+          description:
+            'A computational model that performs similarity-based predictions by identifying structurally related molecules and inferring their properties, supporting applications in chemical safety and regulatory assessments.',
+        },
+      ],
+      organizations: [],
+      categories: [],
+    },
+
+    {
       name: 'PFAS',
       description: 'Predictive models for per- and polyfluoroalkyl substances',
       imageUrl:
