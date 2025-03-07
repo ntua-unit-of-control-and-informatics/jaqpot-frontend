@@ -348,7 +348,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
             'PBK model for describing the biodistribution of TiO2 nanoparticles in rats after IV injection',
         },
         {
-          id: 1731,
+          id: 1730,
           name: 'PFOA IV rat PBK model',
           imageUrl:
             'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/master/Tsiros_PFOA_2024.png',
