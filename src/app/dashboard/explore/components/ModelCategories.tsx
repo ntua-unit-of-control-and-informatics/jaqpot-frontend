@@ -65,7 +65,7 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
           <h2 className="mb-5 text-xl font-bold underline underline-offset-8">
             Categories
           </h2>
-          <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {currentCategory.categories.map((item, index) => (
               <Card
                 shadow="sm"
