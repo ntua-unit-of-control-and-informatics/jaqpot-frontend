@@ -99,7 +99,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
     {
       name: 'Image-Analysis',
       description:
-        'This category includes AI-driven models designed to analyze, generate, and enhance images using deep learning and probabilistic approaches. These models can perform tasks such as pattern recognition, image segmentation, and data generation, enabling advancements in fields like scientific research, medical imaging, and generative design.',
+        'This category includes AI-driven models or ImageJ-algorithms designed to analyze, generate, and enhance images using deep learning and probabilistic approaches. These models can perform tasks such as pattern recognition, image segmentation, and data generation, enabling advancements in fields like scientific research, medical imaging, and generative design.',
       imageUrl:
         'https://nanoimage.jaqpot.org/nanoImage/resources/images/hero-bg.jpg',
       models: [
