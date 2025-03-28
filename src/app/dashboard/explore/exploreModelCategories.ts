@@ -254,7 +254,7 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
       models: [
         {
           id: 1837,
-          name: 'QSAR Toolbox Integration',
+          name: 'QSAR Toolbox QSAR Model Integration',
           imageUrl:
             'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/master/QSAR_toolbox_logo.jpg',
           description:
