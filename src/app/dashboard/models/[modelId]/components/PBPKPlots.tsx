@@ -102,59 +102,66 @@ export default function PBPKPlots({ model, dataset }: PBPKPlotsProps) {
 
   return (
     <div className="grid h-full min-h-[400px] w-full grid-cols-1 gap-2 sm:grid-cols-2">
-      {plots.map((plot, index) => (
-        <>
-          <div className="p-8">
-            <ResponsiveContainer width="100%" height="100%" minHeight={400}>
-              <LineChart
-                width={500}
-                height={300}
-                data={plot.plotData}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-                {...{
-                  overflow: 'visible',
-                }}
+      {plots.map((plot, index) => {
+        const plotValues = Object.entries(plot.plotData[0]);
+        return (
+          <>
+            <div className="p-8">
+              <ResponsiveContainer
+                width="100%"
+                height={Math.max(plotValues.length * 15, 400)}
+                minHeight={400}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="time"
-                  label={{
-                    value: `${plot.xUnit ?? 'No units'}`,
-                    position: 'right',
-                    offset: 10,
+                <LineChart
+                  width={500}
+                  height={300}
+                  data={plot.plotData}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
                   }}
-                />
-                <YAxis
-                  label={{
-                    value: `${plot.yUnit}`,
-                    position: 'top',
-                    offset: 10,
+                  {...{
+                    overflow: 'visible',
                   }}
-                />
-                <Tooltip />
-                <Legend />
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="time"
+                    label={{
+                      value: `${plot.xUnit ?? 'No units'}`,
+                      position: 'right',
+                      offset: 10,
+                    }}
+                  />
+                  <YAxis
+                    label={{
+                      value: `${plot.yUnit}`,
+                      position: 'top',
+                      offset: 10,
+                    }}
+                  />
+                  <Tooltip />
+                  <Legend />
 
-                {Object.entries(plot.plotData[0]).map(([key, value], index) => {
-                  if (key === 'time') return null;
-                  return (
-                    <Line
-                      key={key}
-                      type="monotone"
-                      dataKey={key}
-                      stroke={lineColors[index % lineColors.length]}
-                    />
-                  );
-                })}
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </>
-      ))}
+                  {plotValues.map(([key, value], index) => {
+                    if (key === 'time') return null;
+                    return (
+                      <Line
+                        key={key}
+                        type="monotone"
+                        dataKey={key}
+                        stroke={lineColors[index % lineColors.length]}
+                      />
+                    );
+                  })}
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </>
+        );
+      })}
     </div>
   );
 }
