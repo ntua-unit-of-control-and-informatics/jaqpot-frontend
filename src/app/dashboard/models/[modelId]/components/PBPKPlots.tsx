@@ -103,13 +103,13 @@ export default function PBPKPlots({ model, dataset }: PBPKPlotsProps) {
   return (
     <div className="grid h-full min-h-[400px] w-full grid-cols-1 gap-2 sm:grid-cols-2">
       {plots.map((plot, index) => {
-        const plotValues = Object.entries(plot.plotData[0]);
+        const plotEntries = Object.entries(plot.plotData[0]);
         return (
           <>
             <div className="p-8">
               <ResponsiveContainer
                 width="100%"
-                height={Math.max(plotValues.length * 15, 400)}
+                height={Math.max(plotEntries.length * 15, 400)}
                 minHeight={400}
               >
                 <LineChart
@@ -145,7 +145,7 @@ export default function PBPKPlots({ model, dataset }: PBPKPlotsProps) {
                   <Tooltip />
                   <Legend />
 
-                  {plotValues.map(([key, value], index) => {
+                  {plotEntries.map(([key, value], index) => {
                     if (key === 'time') return null;
                     return (
                       <Line
