@@ -55,7 +55,8 @@ const config: Config = {
       nocompatible: true,
       preferredStrategy: 'pseudoelements',
     }),
+    require('tailwindcss-animate'),
   ],
-  darkMode: 'selector',
+  darkMode: ['selector', 'class'],
 };
 export default config;
