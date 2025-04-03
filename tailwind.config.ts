@@ -57,6 +57,6 @@ const config: Config = {
     }),
     require('tailwindcss-animate'),
   ],
-  darkMode: ['selector', 'class'],
+  darkMode: 'selector',
 };
 export default config;
