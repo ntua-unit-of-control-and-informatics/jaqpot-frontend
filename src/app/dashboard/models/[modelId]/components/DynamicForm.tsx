@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useState } from 'react';
+import React, { ChangeEvent, ReactNode, useState } from 'react';
 import { Radio, RadioGroup, Select, SelectItem } from '@nextui-org/react';
 import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
@@ -126,7 +126,7 @@ export type DynamicFormFieldType =
   | 'color'
   | 'range'
   | 'date'
-  | 'file'
+  | 'image'
   | 'search'
   | 'floatarray'
   | 'stringarray';
@@ -213,6 +213,18 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     setFormData({
       ...formData,
       [name]: inputValue,
+    });
+  };
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    const file = e.target.files![0];
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const inputFile = buffer.toString('base64');
+    setFormData({
+      ...formData,
+      [name]: inputFile,
     });
   };
 
@@ -335,6 +347,16 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             type="text"
             label={generateFieldLabel(field)}
             onChange={handleChange}
+          />
+        );
+      case 'image':
+        return (
+          <Input
+            type="file"
+            name={field.name}
+            accept="image/png, image/jpeg"
+            label={generateFieldLabel(field)}
+            onChange={handleFileChange}
           />
         );
       default:
