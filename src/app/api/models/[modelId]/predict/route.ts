@@ -20,12 +20,13 @@ export async function POST(
     );
   }
 
-  const input = await request.json();
+  const { input, resultTypes } = await request.json();
 
   const dataset: DatasetDto = {
     type: 'PREDICTION',
     entryType: 'ARRAY',
     input,
+    resultTypes,
   };
 
   const res = await fetch(
