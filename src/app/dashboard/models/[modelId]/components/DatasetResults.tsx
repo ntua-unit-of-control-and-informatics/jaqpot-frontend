@@ -132,7 +132,12 @@ function renderResultTableCell(
     );
   }
 
-  if (item) return getKeyValue(item, columnKey)?.toString();
+  if (item)
+    return (
+      <div className="line-clamp-3 max-w-xs text-pretty break-all">
+        {getKeyValue(item, columnKey)?.toString()}
+      </div>
+    );
 }
 
 export default function DatasetResults({
@@ -305,9 +310,7 @@ export default function DatasetResults({
                 >
                   <TableHeader columns={resultTableData?.headers}>
                     {(column) => (
-                      <TableColumn key={column.key} maxWidth={300}>
-                        {column.label}
-                      </TableColumn>
+                      <TableColumn key={column.key}>{column.label}</TableColumn>
                     )}
                   </TableHeader>
 
