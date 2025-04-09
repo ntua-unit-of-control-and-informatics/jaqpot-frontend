@@ -32,6 +32,8 @@ function generateFieldTypeFromFeature(
       return 'floatarray';
     case 'STRING_ARRAY':
       return 'stringarray';
+    case 'IMAGE':
+      return 'image';
     default:
       return 'number';
   }

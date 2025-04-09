@@ -1,8 +1,9 @@
 'use client';
 
-import React, { ReactNode, useState } from 'react';
+import React, { ChangeEvent, ReactNode, useState } from 'react';
 import { Radio, RadioGroup, Select, SelectItem } from '@nextui-org/react';
 import { Input, Textarea } from '@nextui-org/input';
+import { Input as ShadCNInput } from '@/components/ui/input';
 import { Button } from '@nextui-org/button';
 import { Checkbox } from '@nextui-org/checkbox';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
@@ -126,7 +127,7 @@ export type DynamicFormFieldType =
   | 'color'
   | 'range'
   | 'date'
-  | 'file'
+  | 'image'
   | 'search'
   | 'floatarray'
   | 'stringarray';
@@ -213,6 +214,18 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     setFormData({
       ...formData,
       [name]: inputValue,
+    });
+  };
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    const file = e.target.files![0];
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const inputFile = buffer.toString('base64');
+    setFormData({
+      ...formData,
+      [name]: inputFile,
     });
   };
 
@@ -336,6 +349,18 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             label={generateFieldLabel(field)}
             onChange={handleChange}
           />
+        );
+      case 'image':
+        return (
+          <>
+            <div className="flex items-center">{generateFieldLabel(field)}</div>
+            <ShadCNInput
+              type="file"
+              name={field.name}
+              accept="image/png, image/jpeg"
+              onChange={handleFileChange}
+            />
+          </>
         );
       default:
         // Handle other HTML5 input types like number, date, email, etc.
