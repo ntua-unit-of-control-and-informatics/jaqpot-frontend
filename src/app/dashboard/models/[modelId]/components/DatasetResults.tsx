@@ -117,15 +117,20 @@ function renderResultTableCell(
   model: ModelDto,
   columnKey: string | number,
 ) {
-  if (model.dependentFeatures.find((f) => f.key === columnKey))
+  if (
+    model.dependentFeatures.find(
+      (f) => f.key === columnKey && f.featureType === 'IMAGE',
+    )
+  ) {
     return (
       <Image
-        src={'/opengraph-logo.png'}
+        src={getKeyValue(item, columnKey)}
         width={100}
         height={100}
         alt={'image'}
       />
     );
+  }
 
   if (item) return getKeyValue(item, columnKey)?.toString();
 }
@@ -300,7 +305,9 @@ export default function DatasetResults({
                 >
                   <TableHeader columns={resultTableData?.headers}>
                     {(column) => (
-                      <TableColumn key={column.key}>{column.label}</TableColumn>
+                      <TableColumn key={column.key} maxWidth={300}>
+                        {column.label}
+                      </TableColumn>
                     )}
                   </TableHeader>
 

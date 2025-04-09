@@ -50,7 +50,7 @@ function generateResultTypesFromDependentFeatures(model: ModelDto): {
 } {
   return model.dependentFeatures.reduce((acc, dependentFeature) => {
     if (dependentFeature.featureType === 'IMAGE') {
-      return Object.assign(acc, { [dependentFeature.key]: 'IMAGE' });
+      return Object.assign(acc, { [dependentFeature.key]: 'BASE64' });
     }
 
     return acc;
