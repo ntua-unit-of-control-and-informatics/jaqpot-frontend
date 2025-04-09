@@ -598,6 +598,8 @@ export interface components {
      * @enum {string}
      */
     DatasetType: "PREDICTION" | "CHAT";
+    /** @enum {string} */
+    DatasetResultType: "BASE64";
     Dataset: {
       /**
        * Format: int64
@@ -614,6 +616,9 @@ export interface components {
       entryType: "ARRAY";
       input: unknown[];
       result?: unknown[];
+      resultTypes?: {
+        [key: string]: components["schemas"]["DatasetResultType"];
+      };
       /** @enum {string} */
       status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
       failureReason?: string;

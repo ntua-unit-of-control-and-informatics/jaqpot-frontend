@@ -1,6 +1,11 @@
 'use client';
 
-import { ModelDto, ModelTypeDto } from '@/app/api.types';
+import {
+  DatasetDto,
+  DatasetResultType,
+  ModelDto,
+  ModelTypeDto,
+} from '@/app/api.types';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import DatasetResults from '@/app/dashboard/models/[modelId]/components/DatasetResults';
@@ -12,13 +17,17 @@ import { isAuthenticated } from '@/app/util/auth';
 import Alert from '@/app/components/Alert';
 import { useSession } from 'next-auth/react';
 
-export async function createPrediction(modelId: string, data: any) {
+export async function createPrediction(
+  modelId: string,
+  input: any,
+  resultTypes?: { [key: string]: DatasetResultType },
+) {
   return await fetch(`/api/models/${modelId}/predict`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ input, resultTypes }),
   });
 }
 
@@ -36,6 +45,18 @@ interface ModelPredictTabProps {
   model: ModelDto;
 }
 
+function generateResultTypesFromDependentFeatures(model: ModelDto): {
+  [key: string]: DatasetResultType;
+} {
+  return model.dependentFeatures.reduce((acc, dependentFeature) => {
+    if (dependentFeature.featureType === 'IMAGE') {
+      return Object.assign(acc, { [dependentFeature.key]: 'BASE64' });
+    }
+
+    return acc;
+  }, {});
+}
+
 export default function ModelPredictTab({ model }: ModelPredictTabProps) {
   const params = useParams<{ modelId: string }>();
   const [loading, setIsLoading] = useState(false);
@@ -44,7 +65,8 @@ export default function ModelPredictTab({ model }: ModelPredictTabProps) {
 
   const handleFormSubmit = async (formData: any) => {
     setIsLoading(true);
-    const res = await createPrediction(params.modelId, [formData]);
+    const resultTypes = generateResultTypesFromDependentFeatures(model);
+    const res = await createPrediction(params.modelId, [formData], resultTypes);
     const { success, data, message }: ApiResponse<{ datasetId: string }> =
       await res.json();
     if (success) {
