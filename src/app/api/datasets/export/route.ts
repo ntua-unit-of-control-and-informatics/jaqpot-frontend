@@ -19,8 +19,6 @@ function generateCSVFromData(
     dataset,
   );
 
-  console.log(headers);
-
   const headerRow = headers.map((header) => header.label).join(',');
 
   const rowsIn2DArray = rows.map((row) => {
