@@ -31,7 +31,7 @@ function generateCSVFromData(
   });
   const resultRows = rowsIn2DArray.map((rowValues) => {
     const escapedRowValues = rowValues.map((value) => {
-      if (value.toString().includes(',')) {
+      if (value?.toString().includes(',')) {
         return `"${value}"`;
       }
       return value;
