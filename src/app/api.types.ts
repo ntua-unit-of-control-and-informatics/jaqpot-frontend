@@ -7,6 +7,7 @@ export type FeatureDto = components['schemas']['Feature'];
 export type FeaturePossibleValueDto =
   components['schemas']['FeaturePossibleValue'];
 export type DatasetDto = components['schemas']['Dataset'];
+export type DatasetResultType = components['schemas']['DatasetResultType'];
 export type DatasetCSVDto = components['schemas']['DatasetCSV'];
 export type OrganizationDto = components['schemas']['Organization'];
 export type OrganizationInvitationDto =

@@ -1,6 +1,6 @@
 'use client';
 
-import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
+import { DatasetDto, ModelDto } from '@/app/api.types';
 import {
   Table,
   TableBody,
@@ -10,18 +10,14 @@ import {
   TableRow,
 } from '@nextui-org/table';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ApiResponse } from '@/app/util/response';
 import useSWR, { Fetcher } from 'swr';
-import { CustomError } from '@/app/types/CustomError';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { Skeleton } from '@nextui-org/skeleton';
 import { Link } from '@nextui-org/link';
 import {
   getDatasetStatusNode,
   generateResultTableData,
-  ResultTableRow,
   datasetFetcher,
-  ResultTableData,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
 import {
@@ -38,19 +34,17 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import DoaTableCell from '@/app/dashboard/models/[modelId]/components/DoaTableCell';
-import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
 import DoaModal from '@/app/dashboard/models/[modelId]/components/DoaModal';
 import { Tab, Tabs } from '@nextui-org/tabs';
 import PBPKPlots from '@/app/dashboard/models/[modelId]/components/PBPKPlots';
 import { Pagination } from '@nextui-org/pagination';
-import { Input } from '@nextui-org/input';
 import { Tooltip } from '@nextui-org/tooltip';
-import { format, formatDistance } from 'date-fns';
 import { ClockIcon } from '@heroicons/react/24/outline';
 import {
   getUserFriendlyDateWithSuffix,
   getUserFriendlyDuration,
 } from '@/app/util/date';
+import Image from 'next/image';
 
 const log = logger.child({ module: 'dataset' });
 
@@ -116,6 +110,34 @@ function getExecutionTimeNode(dataset: DatasetDto | null | undefined) {
       </div>
     </>
   );
+}
+
+function renderResultTableCell(
+  item: any,
+  model: ModelDto,
+  columnKey: string | number,
+) {
+  if (
+    model.dependentFeatures.find(
+      (f) => f.key === columnKey && f.featureType === 'IMAGE',
+    )
+  ) {
+    return (
+      <Image
+        src={getKeyValue(item, columnKey)}
+        width={100}
+        height={100}
+        alt={'image'}
+      />
+    );
+  }
+
+  if (item)
+    return (
+      <div className="line-clamp-3 max-w-xs text-pretty break-all">
+        {getKeyValue(item, columnKey)?.toString()}
+      </div>
+    );
 }
 
 export default function DatasetResults({
@@ -315,7 +337,7 @@ export default function DatasetResults({
                           }
                           return (
                             <TableCell>
-                              {getKeyValue(item, columnKey)?.toString()}
+                              {renderResultTableCell(item, model, columnKey)}
                             </TableCell>
                           );
                         }}
