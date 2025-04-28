@@ -149,10 +149,13 @@ function generateResultTableRow(
     if (!input) {
       value = 'N/A';
     } else if (feature.featureType === 'CATEGORICAL') {
+      const possibleValue = feature.possibleValues?.find(
+        (possibleValue) => possibleValue.value === input[feature.key],
+      );
       value =
-        feature.possibleValues?.find(
-          (possibleValue) => possibleValue.value === input[feature.key],
-        )?.value ?? input[feature.key];
+        possibleValue?.description ?? // qsartoolbox possible values response
+        possibleValue?.value ??
+        input[feature.key];
     } else {
       value = input[feature.key];
     }
