@@ -25,6 +25,15 @@ interface ModelTabsProps {
   model: ModelDto;
 }
 
+function modelHasMetrics(model: ModelDto) {
+  return (
+    model.scores &&
+    (model.scores.train?.length ||
+      model.scores.test?.length ||
+      model.scores.crossValidation?.length)
+  );
+}
+
 export default function ModelTabs({ model }: ModelTabsProps) {
   const pathname = usePathname();
   const params = useParams<{ tabName: string; datasetId?: string }>();
@@ -34,10 +43,14 @@ export default function ModelTabs({ model }: ModelTabsProps) {
     pathname.lastIndexOf(`/${params.tabName}`),
   );
 
+  const disabledKeys = ['discussion'];
+  if (!modelHasMetrics(model)) {
+    disabledKeys.push('metrics');
+  }
   return (
     <Tabs
       aria-label="Tabs"
-      disabledKeys={['discussion']}
+      disabledKeys={disabledKeys}
       classNames={{
         base: 'w-full',
         tabList:
