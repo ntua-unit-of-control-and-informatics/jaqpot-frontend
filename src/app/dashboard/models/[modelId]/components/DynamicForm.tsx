@@ -357,7 +357,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             <ShadCNInput
               type="file"
               name={field.name}
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpeg, image/tif"
               onChange={handleFileChange}
             />
           </>
