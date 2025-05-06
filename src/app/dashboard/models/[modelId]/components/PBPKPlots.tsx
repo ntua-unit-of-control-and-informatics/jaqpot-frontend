@@ -79,7 +79,6 @@ const lineColors = [
   '#95a5a6', // Light Gray
   '#f7dc6f', // Golden Yellow
   '#66d9ef', // Sky Blue
-  '#b2fffc', // Pale Blue
   '#8bc34a', // Olive Green
   '#ff99cc', // Pastel Pink
 ];
