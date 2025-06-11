@@ -4,7 +4,6 @@ import {
   BeakerIcon,
   UserIcon,
   CalendarDaysIcon,
-  BuildingOfficeIcon,
 } from '@heroicons/react/24/solid';
 import ModelTabs from '@/app/dashboard/models/[modelId]/components/ModelTabs';
 import { notFound, redirect } from 'next/navigation';
@@ -13,11 +12,16 @@ import ModelBreadcrumbs from '@/app/dashboard/models/[modelId]/components/ModelB
 import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
-import { getErrorMessageFromResponse } from '@/app/util/response';
-import { Link } from '@nextui-org/link';
 import React from 'react';
 import { Tooltip } from '@nextui-org/tooltip';
 import { logger } from '@/logger';
+import CustomErrorPage from '@/app/components/CustomErrorPage';
+import Alert from '@/app/components/Alert';
+import { getUserFriendlyDateWithSuffix } from '@/app/util/date';
+import { addDays } from 'date-fns';
+import { Link } from '@nextui-org/link';
+import { User } from '@nextui-org/react';
+import { getAvatarFallbackImg } from '@/app/util/avatar';
 
 const log = logger.child({ module: 'modelPage' });
 
@@ -56,10 +60,14 @@ export async function getLegacyModel(
   );
 
   if (!res.ok) {
-    if (res.status === 404) {
+    if (res.status === 401 || res.status === 404) {
       return undefined;
-    } else if (res.status === 401 || res.status === 403) {
-      redirect('/dashboard/unauthorized');
+    } else if (res.status === 401) {
+      throw new Error(
+        'You are not logged in. Please log in to access this page.',
+      );
+    } else if (res.status === 403) {
+      throw new Error('You do not have permission to access this page.');
     }
     log.warn(
       `Legacy model with id ${modelId} not found, status returned: ${res.status}`,
@@ -87,8 +95,12 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
   if (!res.ok) {
     if (res.status === 404) {
       return undefined;
-    } else if (res.status === 401 || res.status === 403) {
-      redirect('/dashboard/unauthorized');
+    } else if (res.status === 401) {
+      throw new Error(
+        'You are not logged in. Please log in to access this page.',
+      );
+    } else if (res.status === 403) {
+      throw new Error('You do not have permission to access this page.');
     }
     log.warn(
       `Model with id ${modelId} not found, status returned: ${res.status}`,
@@ -101,6 +113,7 @@ export async function getModel(modelId: string): Promise<ModelDto | undefined> {
 
 interface ModelPageParams {
   modelId: string;
+  datasetId?: string;
 }
 
 async function retrieveModelOrLegacy(modelId: string): Promise<ModelDto> {
@@ -122,43 +135,94 @@ async function retrieveModelOrLegacy(modelId: string): Promise<ModelDto> {
 }
 
 export default async function Page({ params }: { params: ModelPageParams }) {
-  const model = await retrieveModelOrLegacy(params.modelId);
+  let model;
+  try {
+    model = await retrieveModelOrLegacy(params.modelId);
+  } catch (e: any) {
+    if (e?.message === 'NEXT_REDIRECT' || e?.digest === 'NEXT_NOT_FOUND') {
+      throw e;
+    }
+
+    return (
+      <CustomErrorPage
+        title="Something's wrong here 🚧"
+        description={(e as any)?.message}
+      />
+    );
+  }
+
+  const getModelDeletionDate = (archivedAt: string) => {
+    if (!archivedAt) {
+      log.error('Archived at date is missing on an archived model');
+      return '';
+    }
+    return getUserFriendlyDateWithSuffix(addDays(new Date(archivedAt), 30));
+  };
 
   return (
     <div className="p-2 sm:p-0">
       <ModelBreadcrumbs model={model} />
+
+      {model.archived && (
+        <Alert
+          type="warning"
+          title="Archived Model"
+          description={`This model has been archived and scheduled for deletion ${getModelDeletionDate(model.archivedAt as unknown as string)}. Contact the owner if you need access to this resource. `}
+        />
+      )}
 
       <div className="flex flex-col pl-0">
         {/* Title */}
         <div className="max-w-3xl py-3 text-3xl font-semibold">
           {model.name}
         </div>
-        <div className="flex items-center gap-4 py-3">
-          <div className="flex items-center text-sm text-gray-400">
-            {model.type && (
-              <>
-                <BeakerIcon className="mr-2 size-5 text-gray-400" />
-                <span>{model.type}</span>
-              </>
-            )}
-          </div>
-          <div className="flex items-center text-sm text-gray-400">
+        <div className="flex h-fit flex-nowrap items-center gap-6 overflow-x-scroll py-3 scrollbar-hide">
+          <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
             {model.creator && (
               <Tooltip content={'Creator'} closeDelay={0}>
-                <div className="flex">
-                  <UserIcon className="mr-2 size-5 text-gray-400" />
-                  <span>{model.creator?.username}</span>
-                </div>
+                <User
+                  name={`${model.creator.firstName} ${model.creator.lastName}`}
+                  description={
+                    <Link
+                      href={`/dashboard/user/${model.creator.username}`}
+                      size="sm"
+                    >
+                      @{model.creator.username}
+                    </Link>
+                  }
+                  avatarProps={{
+                    src:
+                      model.creator.avatarUrl ||
+                      getAvatarFallbackImg(model.creator?.email),
+                  }}
+                />
               </Tooltip>
             )}
           </div>
-          <div className="flex items-center text-sm text-gray-400">
+          <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
             {model.createdAt && (
               <>
-                <CalendarDaysIcon className="mr-2 size-5 text-gray-400" />
-                <JaqpotTimeAgo
-                  date={new Date(model.createdAt as unknown as string)}
-                />
+                <Tooltip content={'Date created'} closeDelay={0}>
+                  <div className="flex items-center">
+                    <CalendarDaysIcon className="mr-2 size-5 text-gray-400" />
+                    <JaqpotTimeAgo
+                      date={new Date(model.createdAt as unknown as string)}
+                    />
+                  </div>
+                </Tooltip>
+              </>
+            )}
+          </div>
+
+          <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
+            {model.type && (
+              <>
+                <Tooltip content={'Model type'} closeDelay={0}>
+                  <div className="flex">
+                    <BeakerIcon className="mr-2 size-5 text-gray-400" />
+                    <span>{model.type}</span>
+                  </div>
+                </Tooltip>
               </>
             )}
           </div>

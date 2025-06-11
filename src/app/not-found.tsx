@@ -1,7 +1,11 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { Button } from '@nextui-org/button';
 import CustomErrorPage from '@/app/components/CustomErrorPage';
+import { Metadata } from 'next';
+import { generateSharedMetadata } from '@/app/shared.metadata';
+
+export const metadata: Metadata = generateSharedMetadata(
+  '404',
+  'Page Not Found',
+);
 
 export default function NotFound() {
   return (

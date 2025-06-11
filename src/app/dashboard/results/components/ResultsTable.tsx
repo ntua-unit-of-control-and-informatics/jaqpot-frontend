@@ -111,7 +111,6 @@ export default function ResultsTable() {
         <TableColumn key="status" allowsSorting>
           Status
         </TableColumn>
-        <TableColumn key="input">Input</TableColumn>
         <TableColumn key="executedAt" allowsSorting>
           Executed at
         </TableColumn>
@@ -146,9 +145,6 @@ export default function ResultsTable() {
               </Link>
             </TableCell>
             <TableCell>{getDatasetStatusNode(item)}</TableCell>
-            <TableCell>
-              <div className="line-clamp-2">{JSON.stringify(item.input)}</div>
-            </TableCell>
             <TableCell>
               {item.executedAt && (
                 <JaqpotTimeAgo

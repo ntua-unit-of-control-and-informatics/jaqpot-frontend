@@ -3,34 +3,54 @@
 import { useParams, usePathname } from 'next/navigation';
 import { Tab, Tabs } from '@nextui-org/tabs';
 import { ModelDto } from '@/app/api.types';
-import FeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/FeaturesTab';
-import PredictTab from '@/app/dashboard/models/[modelId]/components/tabs/PredictTab';
+import ModelFeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelFeaturesTab';
+import ModelPredictTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelPredictTab';
 import ModelEditTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelEditTab';
 import MarkdownRenderer from '@/app/dashboard/models/[modelId]/components/MarkdownRenderer';
 import ModelAdminTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelAdminTab';
 import {
   AdjustmentsVerticalIcon,
+  ChartBarIcon,
+  ChatBubbleLeftEllipsisIcon,
   ChatBubbleLeftRightIcon,
   PencilSquareIcon,
   RocketLaunchIcon,
   ShieldCheckIcon,
 } from '@heroicons/react/24/solid';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import ModelMetricsTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelMetricsTab';
+import ModelChatTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelChatTab';
 
 interface ModelTabsProps {
   model: ModelDto;
 }
 
+function modelHasMetrics(model: ModelDto) {
+  return (
+    model.scores &&
+    (model.scores.train?.length ||
+      model.scores.test?.length ||
+      model.scores.crossValidation?.length)
+  );
+}
+
 export default function ModelTabs({ model }: ModelTabsProps) {
   const pathname = usePathname();
-  const params = useParams<{ tabName: string }>();
+  const params = useParams<{ tabName: string; datasetId?: string }>();
 
-  const pathnameWithoutTab = pathname.substring(0, pathname.lastIndexOf('/'));
+  const pathnameWithoutTab = pathname.substring(
+    0,
+    pathname.lastIndexOf(`/${params.tabName}`),
+  );
 
+  const disabledKeys = ['discussion'];
+  if (!modelHasMetrics(model)) {
+    disabledKeys.push('metrics');
+  }
   return (
     <Tabs
       aria-label="Tabs"
-      disabledKeys={['discussion']}
+      disabledKeys={disabledKeys}
       classNames={{
         base: 'w-full',
         tabList:
@@ -41,6 +61,7 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         tabContent:
           'rounded-none border-none box-shadow-none group-data-[selected=true]:text-indigo-600 dark:group-data-[selected=true]:text-white',
       }}
+      isDisabled={model.archived && !model.canEdit}
       selectedKey={params.tabName}
       defaultSelectedKey="description"
       className="mt-2.5"
@@ -67,19 +88,47 @@ export default function ModelTabs({ model }: ModelTabsProps) {
         }
         href={`${pathnameWithoutTab}/features`}
       >
-        <FeaturesTab model={model} />
+        <ModelFeaturesTab model={model} />
       </Tab>
+      {(model.type === 'OPENAI_LLM' || model.type === 'CUSTOM_LLM') && (
+        <Tab
+          key="chat"
+          title={
+            <div className="flex items-center space-x-1">
+              <ChatBubbleLeftEllipsisIcon className="size-5" />
+              <span>Chat</span>
+            </div>
+          }
+          href={`${pathnameWithoutTab}/chat/new`}
+        >
+          <ModelChatTab model={model} datasetId={params.datasetId} />
+        </Tab>
+      )}
+      {model.type !== 'OPENAI_LLM' && (
+        <Tab
+          key="predict"
+          title={
+            <div className="flex items-center space-x-1">
+              <RocketLaunchIcon className="size-5" />
+              <span>Predict</span>
+            </div>
+          }
+          href={`${pathnameWithoutTab}/predict`}
+        >
+          <ModelPredictTab model={model} />
+        </Tab>
+      )}
       <Tab
-        key="predict"
+        key="metrics"
         title={
           <div className="flex items-center space-x-1">
-            <RocketLaunchIcon className="size-5" />
-            <span>Predict</span>
+            <ChartBarIcon className="size-5" />
+            <span>Metrics</span>
           </div>
         }
-        href={`${pathnameWithoutTab}/predict`}
+        href={`${pathnameWithoutTab}/metrics`}
       >
-        <PredictTab model={model} />
+        <ModelMetricsTab model={model} />
       </Tab>
       {model.canEdit && (
         <Tab

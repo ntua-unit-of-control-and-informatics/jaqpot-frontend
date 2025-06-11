@@ -1,27 +1,44 @@
 import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
-import { generateResultTableRow } from '@/app/util/dataset';
+import {
+  generateResultTableData,
+  JAQPOT_METADATA_KEY,
+  JAQPOT_ROW_ID_KEY,
+  JAQPOT_ROW_LABEL_KEY,
+} from '@/app/util/dataset';
+import { useMemo } from 'react';
+import { getKeyValue } from '@nextui-org/react';
 
 function generateCSVFromData(
   independentFeatures: FeatureDto[],
   dependentFeatures: FeatureDto[],
   dataset: DatasetDto,
 ) {
-  const headerRow = [...independentFeatures, ...dependentFeatures]
-    .map((feature) => {
-      return feature.name;
-    })
-    .join(',');
+  const { headers, rows } = generateResultTableData(
+    independentFeatures,
+    dependentFeatures,
+    dataset,
+  );
 
-  const resultRows =
-    dataset.result?.map((result: any, resultIndex: number) => {
-      return generateResultTableRow(
-        independentFeatures,
-        dependentFeatures,
-        dataset,
-        resultIndex,
-        result,
-      ).join(',');
-    }) ?? [];
+  const headerRow = headers.map((header) => header.label).join(',');
+
+  const rowsIn2DArray = rows.map((row) => {
+    return headers.map((header) => {
+      if (header.key === JAQPOT_METADATA_KEY) {
+        return JSON.stringify(getKeyValue(row, header.key));
+      }
+      return row[header.key];
+    });
+  });
+  const resultRows = rowsIn2DArray.map((rowValues) => {
+    const escapedRowValues = rowValues.map((value) => {
+      if (value?.toString().includes(',')) {
+        return `"${value}"`;
+      }
+      return value;
+    });
+
+    return escapedRowValues.join(',');
+  });
 
   return [headerRow, ...resultRows].join('\n');
 }

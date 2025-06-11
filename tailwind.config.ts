@@ -51,6 +51,11 @@ const config: Config = {
         },
       },
     }),
+    require('tailwind-scrollbar')({
+      nocompatible: true,
+      preferredStrategy: 'pseudoelements',
+    }),
+    require('tailwindcss-animate'),
   ],
   darkMode: 'selector',
 };

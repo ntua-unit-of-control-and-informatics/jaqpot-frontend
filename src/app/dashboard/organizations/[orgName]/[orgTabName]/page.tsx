@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import React from 'react';
-import { BuildingOfficeIcon, UserIcon } from '@heroicons/react/24/solid';
+import { UserIcon } from '@heroicons/react/24/solid';
+import { BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import { isAuthenticated } from '@/app/util/auth';
 import OrganizationTabs from '@/app/dashboard/organizations/[orgName]/components/OrganizationTabs';
 import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
@@ -9,6 +10,9 @@ import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import { getModel } from '@/app/dashboard/models/[modelId]/[tabName]/page';
 import { Tooltip } from '@nextui-org/tooltip';
+import { User } from '@nextui-org/react';
+import { Link } from '@nextui-org/link';
+import { getAvatarFallbackImg } from '@/app/util/avatar';
 
 export async function generateMetadata({
   params,
@@ -39,14 +43,26 @@ export default async function Page({
           {organization.name}
         </div>
         <div className="flex items-center gap-4 py-3">
-          <Tooltip content={'Creator'} closeDelay={0}>
-            <div className="flex items-center text-sm text-gray-400">
-              <>
-                <UserIcon className="mr-2 size-5 text-gray-400" />
-                <span>{organization.creator?.username}</span>
-              </>
-            </div>
-          </Tooltip>
+          {organization.creator && (
+            <Tooltip content={'Creator'} closeDelay={0}>
+              <User
+                name={`${organization.creator.firstName} ${organization.creator.lastName}`}
+                description={
+                  <Link
+                    href={`/dashboard/user/${organization.creator.username}`}
+                    size="sm"
+                  >
+                    @{organization.creator.username}
+                  </Link>
+                }
+                avatarProps={{
+                  src:
+                    organization.creator.avatarUrl ||
+                    getAvatarFallbackImg(organization.creator?.email),
+                }}
+              />
+            </Tooltip>
+          )}
         </div>
         <OrganizationTabs organization={organization} />
       </div>

@@ -3,6 +3,9 @@
 import Markdown from 'react-markdown';
 import { Link } from '@nextui-org/link';
 import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 export default function MarkdownRenderer({
   children,
@@ -11,7 +14,7 @@ export default function MarkdownRenderer({
 }>) {
   return (
     <Markdown
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, remarkBreaks]}
       className="max-w-full whitespace-normal"
       components={{
         a(props: any) {
@@ -45,11 +48,17 @@ export default function MarkdownRenderer({
             </h3>
           );
         },
+        hr({ children }) {
+          return <hr className="my-3" />;
+        },
+        br({ children }) {
+          return <div className="my-2 block" />;
+        },
         ol({ children }) {
-          return <ol className="list-inside list-decimal">{children}</ol>;
+          return <ol className="ms-4 list-inside list-decimal">{children}</ol>;
         },
         ul({ children }) {
-          return <ul className="list-inside list-disc">{children}</ul>;
+          return <ul className="ms-4 list-inside list-disc">{children}</ul>;
         },
         li({ children }) {
           return <li className="mb-2 list-item list-inside">{children}</li>;
@@ -93,6 +102,26 @@ export default function MarkdownRenderer({
             <td className="table-cell px-6 py-4 text-sm font-medium text-gray-800 dark:text-neutral-200">
               {children}
             </td>
+          );
+        },
+        pre({ children }) {
+          return <pre className="whitespace-pre-line">{children}</pre>;
+        },
+        code(props) {
+          const { children, className, node, ...rest } = props;
+          const match = /language-(\w+)/.exec(className || '');
+          return match ? (
+            <SyntaxHighlighter
+              PreTag="div"
+              // eslint-disable-next-line react/no-children-prop
+              children={String(children).replace(/\n$/, '')}
+              language={match[1]}
+              style={materialDark}
+            />
+          ) : (
+            <code {...rest} className={className}>
+              {children}
+            </code>
           );
         },
       }}

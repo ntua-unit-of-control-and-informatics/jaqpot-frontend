@@ -42,7 +42,7 @@ function FeatureRowActions(props: {
   );
 }
 
-export default function FeaturesTab({ model }: FeaturesTabProps) {
+export default function ModelFeaturesTab({ model }: FeaturesTabProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedFeature, setSelectedFeature] = useState<
     FeatureDto | undefined
@@ -56,14 +56,15 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
   }, [isOpen]);
 
   return (
-    <div className="grid grid-cols-1 sm:divide-x sm:divide-dashed lg:grid-cols-2">
-      <div className="pr-4">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:divide-x lg:divide-dashed">
+      <div>
         <h2 className="mb-4 font-semibold">Independent Features</h2>
 
         <Table aria-label="Independent features table">
           <TableHeader>
             <TableColumn>Name</TableColumn>
             <TableColumn>Units</TableColumn>
+            <TableColumn>Range</TableColumn>
             <TableColumn>Description</TableColumn>
             <TableColumn>Type</TableColumn>
             <TableColumn>Actions</TableColumn>
@@ -79,6 +80,7 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
                   </Tooltip>
                 </TableCell>
                 <TableCell>{independentFeature.units}</TableCell>
+                <TableCell>{independentFeature.range}</TableCell>
                 <TableCell>
                   <Tooltip content={independentFeature.description}>
                     <div className="line-clamp-2">
@@ -107,8 +109,8 @@ export default function FeaturesTab({ model }: FeaturesTabProps) {
           </TableBody>
         </Table>
       </div>
-      <div className="pl-4">
-        <h2 className="mb-4 font-semibold">Dependent Features</h2>
+      <div className="pl-0 lg:pl-4">
+        <h2 className="mb-4 mt-4 font-semibold sm:mt-0">Dependent Features</h2>
         <Table aria-label="Dependent features table">
           <TableHeader>
             <TableColumn>Name</TableColumn>

@@ -14,6 +14,8 @@ import { Button } from '@nextui-org/button';
 import { User } from '@nextui-org/react';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import React from 'react';
+import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
+import { getAvatarFallbackImg } from '@/app/util/avatar';
 
 interface MenuItem {
   key: string;
@@ -24,6 +26,13 @@ interface MenuItem {
 }
 
 export default function UserAvatar({ session }: { session: Session | null }) {
+  const userSettings = useUserSettingsStore((state) => state.userSettings);
+  const updateUserSettings = useUserSettingsStore(
+    (state) => state.updateUserSettings,
+  );
+  const clearUserSettings = useUserSettingsStore(
+    (state) => state.clearUserSettings,
+  );
   const unauthenticatedMenuItems: MenuItem[] = [
     {
       key: 'signin',
@@ -35,9 +44,13 @@ export default function UserAvatar({ session }: { session: Session | null }) {
   const authenticatedMenuItems: MenuItem[] = [
     {
       key: 'account',
-      href: `${process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_ISSUER}/account`,
+      href: `/dashboard/user/${session?.user?.name}`,
       label: 'Account',
-      external: true,
+    },
+    {
+      key: 'apikeys',
+      href: '/dashboard/api-keys',
+      label: 'API keys',
     },
     {
       key: 'settings',
@@ -48,6 +61,7 @@ export default function UserAvatar({ session }: { session: Session | null }) {
       key: 'signout',
       onPress: async () => {
         await signOut();
+        clearUserSettings();
         const logoutUrl = new URL(
           `${process.env.NEXT_PUBLIC_AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/logout`,
         );
@@ -82,10 +96,8 @@ export default function UserAvatar({ session }: { session: Session | null }) {
               showFallback: true,
               src:
                 session?.user?.image ||
-                `https://api.dicebear.com/9.x/bottts/svg?seed=${session?.user?.email?.replace(
-                  ' ',
-                  '',
-                )}`,
+                userSettings.avatarUrl ||
+                getAvatarFallbackImg(session?.user?.email),
             }}
             name={session?.user?.name}
           />

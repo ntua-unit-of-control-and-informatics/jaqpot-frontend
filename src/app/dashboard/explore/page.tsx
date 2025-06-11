@@ -5,6 +5,7 @@ import {
   openGraphImage,
 } from '@/app/shared.metadata';
 import ModelCategories from '@/app/dashboard/explore/components/ModelCategories';
+import ExplorePageBreadcrumbs from '@/app/dashboard/explore/components/ExplorePageBreadcrumbs';
 
 export const metadata: Metadata = generateSharedMetadata(
   'Explore models',
@@ -12,5 +13,10 @@ export const metadata: Metadata = generateSharedMetadata(
 );
 
 export default function Page() {
-  return <ModelCategories />;
+  return (
+    <>
+      <ExplorePageBreadcrumbs categories={[]} />
+      <ModelCategories categories={[]} />
+    </>
+  );
 }

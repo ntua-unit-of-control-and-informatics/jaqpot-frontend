@@ -1,14 +1,7 @@
-import { notFound, redirect } from 'next/navigation';
-import React from 'react';
-import { BuildingOfficeIcon, UserIcon } from '@heroicons/react/24/solid';
-import { isAuthenticated } from '@/app/util/auth';
-import OrganizationTabs from '@/app/dashboard/organizations/[orgName]/components/OrganizationTabs';
-import OrganizationBreadcrumbs from '@/app/dashboard/organizations/[orgName]/components/OrganizationBreadcrumbs';
+import { redirect } from 'next/navigation';
 import { getOrganizationByName } from '@/app/dashboard/organizations/[orgName]/requests';
 import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
-import { getModel } from '@/app/dashboard/models/[modelId]/[tabName]/page';
-import { Tooltip } from '@nextui-org/tooltip';
 
 export async function generateMetadata({
   params,

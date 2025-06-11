@@ -12,21 +12,44 @@ export interface paths {
      */
     get: operations["validateJWT"];
   };
-  "/v1/models": {
-    /** Create a new model */
-    post: operations["createModel"];
-  };
   "/v1/user/models": {
     /** Get paginated models */
     get: operations["getModels"];
+  };
+  "/v1/models": {
+    /** Get paginated models */
+    get: operations["getAllModels"];
+    /** Create a new model */
+    post: operations["createModel"];
   };
   "/v1/models/search": {
     /** Search for models */
     get: operations["searchModels"];
   };
+  "/v1/models/{modelId}/archive": {
+    /**
+     * Archive a model
+     * @description Archives a model. Models that remain archived for more than 30 days will be permanently deleted.
+     */
+    post: operations["archiveModel"];
+  };
+  "/v1/models/{modelId}/unarchive": {
+    /**
+     * Unarchive a model
+     * @description Unarchives a previously archived model. This will cancel any scheduled deletion.
+     */
+    post: operations["unarchiveModel"];
+  };
   "/v1/user/shared-models": {
     /** Get paginated shared models */
     get: operations["getSharedModels"];
+  };
+  "/v1/user/archived-models": {
+    /**
+     * Get paginated archived models
+     * @description Retrieve a paginated list of models that have been archived by the user
+     */
+    get: operations["getArchivedModels"];
   };
   "/v1/models/{id}": {
     /**
@@ -78,6 +101,18 @@ export interface paths {
      * @description Retrieve all datasets associated with a specific user ID
      */
     get: operations["getDatasets"];
+  };
+  "/v1/user/models/{modelId}/datasets": {
+    /**
+     * Get Datasets by Model ID
+     * @description Retrieve all datasets associated with a specific model ID
+     */
+    get: operations["getDatasetsByModelId"];
+    /**
+     * Create a dataset
+     * @description Create a new dataset from the provided data
+     */
+    post: operations["createDataset"];
   };
   "/v1/datasets/{id}": {
     /**
@@ -135,6 +170,73 @@ export interface paths {
      */
     put: operations["updateInvitation"];
   };
+  "/v1/leads": {
+    /**
+     * Get All Leads
+     * @description Retrieve all leads
+     */
+    get: operations["getAllLeads"];
+    /**
+     * Create a Lead
+     * @description Create a new lead
+     */
+    post: operations["createLead"];
+  };
+  "/v1/leads/{id}": {
+    /**
+     * Get a Lead by ID
+     * @description Retrieve a single lead by its ID
+     */
+    get: operations["getLeadById"];
+    /**
+     * Update a Lead by ID
+     * @description Update the details of an existing lead
+     */
+    put: operations["updateLeadById"];
+    /**
+     * Delete a Lead by ID
+     * @description Delete a single lead by its ID
+     */
+    delete: operations["deleteLeadById"];
+  };
+  "/v1/user/api-keys": {
+    /**
+     * Get All API Keys for the User
+     * @description Retrieve all API keys associated with the authenticated user.
+     */
+    get: operations["getAllApiKeysForUser"];
+    /**
+     * Create an API Key for the User
+     * @description Generate and return an API key for programmatic access. This API key is associated with the user and can be used for authenticating future requests.
+     */
+    post: operations["createApiKey"];
+  };
+  "/v1/user/api-keys/{key}": {
+    /**
+     * Delete an API Key
+     * @description Delete a specific API key associated with the authenticated user. Only the user or an admin can delete keys.
+     */
+    delete: operations["deleteApiKey"];
+    /**
+     * Update API Key
+     * @description Update an API key's metadata, such as its note or status (enable/disable).
+     */
+    patch: operations["updateApiKey"];
+  };
+  "/v1/user/settings": {
+    /** Get user settings */
+    get: operations["getUserSettings"];
+    /** Create or update user settings */
+    post: operations["saveUserSettings"];
+  };
+  "/v1/user/avatar": {
+    /** Delete user avatar */
+    delete: operations["deleteUserAvatar"];
+  };
+  "/v1/users/{username}": {
+    /** Get user data */
+    get: operations["getUser"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -147,46 +249,68 @@ export interface components {
        * @example 0
        */
       id?: number;
-      /** @description A JSON object containing meta information. */
-      meta?: {
-        [key: string]: Record<string, never>;
-      };
       /** @example My Model */
       name: string;
       /** @example A description of your model */
       description?: string;
       type: components["schemas"]["ModelType"];
       /** @example 1.0.0 */
-      jaqpotpyVersion: string;
+      jaqpotpyVersion?: string;
+      doas?: components["schemas"]["Doa"][];
       libraries: components["schemas"]["Library"][];
       dependentFeatures: components["schemas"]["Feature"][];
       independentFeatures: components["schemas"]["Feature"][];
       sharedWithOrganizations?: components["schemas"]["Organization"][];
       visibility: components["schemas"]["ModelVisibility"];
       task: components["schemas"]["ModelTask"];
+      archived?: boolean;
+      /**
+       * Format: date-time
+       * @description The date and time when the model was last archived.
+       * @example 2023-01-01T12:00:00Z
+       */
+      archivedAt?: string;
+      torchConfig?: {
+        [key: string]: components["schemas"]["AnyValue"];
+      };
+      preprocessors?: components["schemas"]["Transformer"][];
+      featurizers?: components["schemas"]["Transformer"][];
       /**
        * Format: byte
-       * @description A base64 representation of the actual model.
+       * @description A base64 representation of the raw preprocessor.
        */
-      actualModel: string;
+      rawPreprocessor?: string;
+      /**
+       * Format: byte
+       * @description A base64 representation of the raw model.
+       */
+      rawModel: string;
       creator?: components["schemas"]["User"];
       /** @description If the current user can edit the model */
       canEdit?: boolean;
       isAdmin?: boolean;
+      selectedFeatures?: string[];
       tags?: string;
       legacyPredictionService?: string;
-      extraConfig?: components["schemas"]["ModelExtraConfig"];
+      scores?: {
+        train?: components["schemas"]["Scores"][];
+        test?: components["schemas"]["Scores"][];
+        crossValidation?: components["schemas"]["Scores"][];
+      };
+      rPbpkConfig?: components["schemas"]["RPbpkConfig"];
+      dockerConfig?: components["schemas"]["DockerConfig"];
       /**
        * Format: date-time
        * @description The date and time when the feature was created.
        * @example 2023-01-01T12:00:00Z
        */
-      createdAt?: Record<string, never>;
+      createdAt?: string;
       /**
-       * @description The date and time when the feature was last updated.
+       * Format: date-time
+       * @description The date and time when the model was last updated.
        * @example 2023-01-01T12:00:00Z
        */
-      updatedAt?: Record<string, never>;
+      updatedAt?: string;
     };
     ModelSummary: {
       /**
@@ -209,12 +333,78 @@ export interface components {
        * @description The date and time when the feature was created.
        * @example 2023-01-01T12:00:00Z
        */
-      createdAt: Record<string, never>;
+      createdAt: string;
       /**
+       * Format: date-time
        * @description The date and time when the feature was last updated.
        * @example 2023-01-01T12:00:00Z
        */
-      updatedAt?: Record<string, never>;
+      updatedAt?: string;
+    };
+    Scores: {
+      regression?: components["schemas"]["RegressionScores"];
+      binaryClassification?: components["schemas"]["BinaryClassificationScores"];
+      multiclassClassification?: components["schemas"]["MulticlassClassificationScores"];
+    };
+    RegressionScores: {
+      yName: string;
+      folds?: number;
+      /** Format: float */
+      r2?: number;
+      /** Format: float */
+      mae?: number;
+      /** Format: float */
+      rmse?: number;
+    };
+    BinaryClassificationScores: {
+      labels?: string[];
+      yName: string;
+      folds?: number;
+      /** Format: float */
+      accuracy?: number;
+      /** Format: float */
+      balancedAccuracy?: number;
+      precision?: number[];
+      recall?: number[];
+      f1Score?: number[];
+      jaccard?: number[];
+      /** Format: float */
+      matthewsCorrCoef?: number;
+      confusionMatrix?: number[][];
+    };
+    MulticlassClassificationScores: {
+      labels?: string[];
+      yName: string;
+      folds?: number;
+      /** Format: float */
+      accuracy?: number;
+      /** Format: float */
+      balancedAccuracy?: number;
+      precision?: number[];
+      recall?: number[];
+      f1Score?: number[];
+      jaccard?: number[];
+      /** Format: float */
+      matthewsCorrCoef?: number;
+      confusionMatrix?: number[][];
+    };
+    /** @description Configuration for the R PBPK models */
+    RPbpkConfig: {
+      odeSolver?: string;
+    };
+    DockerConfig: {
+      /**
+       * @description Unique identifier used for internal service discovery
+       * @example my-docker-model
+       */
+      appName: string;
+      /**
+       * @description Reference to the Docker image (for admin documentation)
+       * @example my-repo/my-docker-model:1.0.0
+       */
+      dockerImage?: string;
+      /** @description The ID of the LLM model */
+      llmModelId?: string;
     };
     OrganizationSummary: {
       /**
@@ -226,35 +416,21 @@ export interface components {
       name: string;
     };
     /** @enum {string} */
-    ModelType: "SKLEARN" | "TORCH" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "QSAR_TOOLBOX";
-    /** @description A JSON object containing extra configuration for the model */
-    ModelExtraConfig: {
-      torchConfig?: {
-        [key: string]: Record<string, never>;
-      };
-      preprocessors?: components["schemas"]["Preprocessor"][];
-      featurizers?: components["schemas"]["Featurizer"][];
-    };
+    ModelType: "SKLEARN_ONNX" | "TORCH_ONNX" | "TORCH_SEQUENCE_ONNX" | "TORCH_GEOMETRIC_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "DOCKER" | "OPENAI_LLM" | "CUSTOM_LLM" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
     /** @description A preprocessor for the model */
-    Preprocessor: {
+    Transformer: {
+      /** Format: int64 */
+      id?: number;
       /** @example StandardScaler */
       name: string;
       config: {
-        [key: string]: Record<string, never>;
-      };
-    };
-    /** @description A featurizer for the model */
-    Featurizer: {
-      /** @example RDKitFeaturizer */
-      name: string;
-      config: {
-        [key: string]: Record<string, never>;
+        [key: string]: components["schemas"]["AnyValue"];
       };
     };
     /** @enum {string} */
     ModelVisibility: "PUBLIC" | "ORG_SHARED" | "PRIVATE";
     /** @enum {string} */
-    ModelTask: "REGRESSION" | "CLASSIFICATION" | "BINARY_CLASSIFICATION" | "MULTICLASS_CLASSIFICATION";
+    ModelTask: "REGRESSION" | "BINARY_CLASSIFICATION" | "MULTICLASS_CLASSIFICATION";
     Library: {
       /** Format: int64 */
       id?: number;
@@ -267,12 +443,95 @@ export interface components {
        * @description The date and time when the feature was created.
        * @example 2023-01-01T12:00:00Z
        */
-      createdAt?: Record<string, never>;
+      createdAt?: string;
       /**
+       * Format: date-time
        * @description The date and time when the feature was last updated.
        * @example 2023-01-01T12:00:00Z
        */
-      updatedAt?: Record<string, never>;
+      updatedAt?: string;
+    };
+    PredictionDoa: {
+      /** Format: int64 */
+      id?: number;
+      method: components["schemas"]["DoaMethod"];
+      /** @description The doa calculated data */
+      data: {
+        [key: string]: components["schemas"]["AnyValue"];
+      };
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was created.
+       * @example 2023-01-01T12:00:00Z
+       */
+      createdAt?: string;
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was last updated.
+       * @example 2023-01-01T12:00:00Z
+       */
+      updatedAt?: string;
+    };
+    Doa: {
+      /** Format: int64 */
+      id?: number;
+      method: components["schemas"]["DoaMethod"];
+      data: {
+        [key: string]: components["schemas"]["AnyValue"];
+      };
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was created.
+       * @example 2023-01-01T12:00:00Z
+       */
+      createdAt?: string;
+      /**
+       * Format: date-time
+       * @description The date and time when the feature was last updated.
+       * @example 2023-01-01T12:00:00Z
+       */
+      updatedAt?: string;
+    };
+    /**
+     * @example LEVERAGE
+     * @enum {string}
+     */
+    DoaMethod: "LEVERAGE" | "BOUNDING_BOX" | "KERNEL_BASED" | "MEAN_VAR" | "MAHALANOBIS" | "CITY_BLOCK";
+    LeverageDoa: {
+      /** Format: float */
+      hStar?: number;
+      doaMatrix?: number[][];
+    };
+    BoundingBoxDoa: {
+      boundingBox?: number[][];
+    };
+    KernelBasedDoa: {
+      /** Format: float */
+      sigma?: number;
+      /** Format: float */
+      gamma?: number;
+      /** Format: float */
+      threshold?: number;
+      /**
+       * @example GAUSSIAN
+       * @enum {string}
+       */
+      kernelType?: "GAUSSIAN" | "RBF" | "LAPLACIAN" | "PERCENTILE" | "MEAN_STD";
+      dataPoints?: number[][];
+    };
+    MeanVarDoa: {
+      bounds?: number[][];
+    };
+    MahalanobisDoa: {
+      meanVector?: number[];
+      invCovMatrix?: number[][];
+      /** Format: float */
+      threshold?: number;
+    };
+    CityBlockDoa: {
+      meanVector?: number[];
+      /** Format: float */
+      threshold?: number;
     };
     Feature: {
       /**
@@ -280,10 +539,6 @@ export interface components {
        * @example 1
        */
       id?: number;
-      /** @description A JSON object containing meta information. */
-      meta?: {
-        [key: string]: Record<string, never>;
-      };
       /**
        * @description A key that must start with a letter, followed by any combination of letters, digits, hyphens, or underscores. For example, 'abc123', 'abc-test', or 'Abc_test'. It cannot start with a digit.
        * @example feature-key
@@ -295,10 +550,15 @@ export interface components {
        */
       name: string;
       /**
-       * @description A name for the feature that will appear on top of the form field
-       * @example A feature unit
+       * @description The units for the feature
+       * @example mg/s
        */
       units?: string;
+      /**
+       * @description The range for the feature
+       * @example 0-100
+       */
+      range?: string;
       description?: string;
       featureType: components["schemas"]["FeatureType"];
       /**
@@ -314,35 +574,40 @@ export interface components {
        * @description The date and time when the feature was created.
        * @example 2023-01-01T12:00:00Z
        */
-      createdAt?: Record<string, never>;
+      createdAt?: string;
       /**
+       * Format: date-time
        * @description The date and time when the feature was last updated.
        * @example 2023-01-01T12:00:00Z
        */
-      updatedAt?: Record<string, never>;
+      updatedAt?: string;
     };
     FeaturePossibleValue: {
       /** @example value */
-      key: string;
-      /** @example value */
       value: string;
+      /** @example my description */
+      description: string;
     };
     /**
      * @example FLOAT
      * @enum {string}
      */
-    FeatureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "STRING" | "TEXT";
+    FeatureType: "INTEGER" | "FLOAT" | "CATEGORICAL" | "SMILES" | "STRING" | "TEXT" | "BOOLEAN" | "FLOAT_ARRAY" | "STRING_ARRAY" | "IMAGE";
     /**
      * @example PREDICTION
      * @enum {string}
      */
-    DatasetType: "PREDICTION";
+    DatasetType: "PREDICTION" | "CHAT";
+    /** @enum {string} */
+    DatasetResultType: "BASE64";
     Dataset: {
       /**
        * Format: int64
        * @example 1
        */
       id?: number;
+      /** @example My Dataset */
+      name?: string;
       type: components["schemas"]["DatasetType"];
       /**
        * @example ARRAY
@@ -351,6 +616,9 @@ export interface components {
       entryType: "ARRAY";
       input: unknown[];
       result?: unknown[];
+      resultTypes?: {
+        [key: string]: components["schemas"]["DatasetResultType"];
+      };
       /** @enum {string} */
       status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
       failureReason?: string;
@@ -358,10 +626,14 @@ export interface components {
       /** Format: int64 */
       modelId?: number;
       modelName?: string;
-      executedAt?: Record<string, never>;
-      executionFinishedAt?: Record<string, never>;
-      createdAt?: Record<string, never>;
-      updatedAt?: Record<string, never>;
+      /** Format: date-time */
+      executedAt?: string;
+      /** Format: date-time */
+      executionFinishedAt?: string;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
     };
     DatasetCSV: {
       /**
@@ -382,10 +654,14 @@ export interface components {
       /** Format: int64 */
       modelId?: number;
       modelName?: string;
-      executedAt?: Record<string, never>;
-      executionFinishedAt?: Record<string, never>;
-      createdAt?: Record<string, never>;
-      updatedAt?: Record<string, never>;
+      /** Format: date-time */
+      executedAt?: string;
+      /** Format: date-time */
+      executionFinishedAt?: string;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
     };
     Organization: {
       /** Format: int64 */
@@ -409,16 +685,19 @@ export interface components {
       canEdit?: boolean;
       /** @description If the current user is a member of the organization */
       isMember?: boolean;
-      created_at?: Record<string, never>;
-      updated_at?: Record<string, never>;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
     };
     OrganizationUser: {
       /** Format: int64 */
       id?: number;
       userId: string;
-      username: string;
+      username?: string;
       /** Format: email */
-      email: string;
+      email?: string;
+      avatarUrl?: string;
       associationType: components["schemas"]["OrganizationUserAssociationType"];
     };
     /** @enum {string} */
@@ -443,15 +722,119 @@ export interface components {
        * @enum {string}
        */
       status: "PENDING" | "REJECTED" | "ACCEPTED";
-      /** @description Expiration date of the invitation */
-      expirationDate: Record<string, never>;
+      /**
+       * Format: date-time
+       * @description Expiration date of the invitation
+       */
+      expirationDate: string;
+    };
+    Lead: {
+      /** Format: int64 */
+      id?: number;
+      email?: string;
+      name?: string;
+      /** @enum {string} */
+      status?: "PENDING" | "APPROVED" | "DENIED";
+    };
+    PredictionModel: {
+      /**
+       * Format: int64
+       * @description Unique identifier for the prediction model
+       */
+      id: number;
+      /** @description List of dependent features for the model */
+      dependentFeatures: components["schemas"]["Feature"][];
+      /** @description List of independent features for the model */
+      independentFeatures: components["schemas"]["Feature"][];
+      type: components["schemas"]["ModelType"];
+      /** @description Raw model data in serialized format */
+      rawModel: string;
+      /** @description Raw preprocessor data in serialized format */
+      rawPreprocessor?: string;
+      /** @description List of Domain of Applicability (DoA) configurations */
+      doas?: components["schemas"]["PredictionDoa"][];
+      /** @description List of feature names selected for the model */
+      selectedFeatures?: string[];
+      task: components["schemas"]["ModelTask"];
+      /** @description List of featurizer configurations applied to the model */
+      featurizers?: components["schemas"]["Transformer"][];
+      /** @description List of preprocessor configurations applied to the model */
+      preprocessors?: components["schemas"]["Transformer"][];
+      /** @description Torch configuration settings, optional */
+      torchConfig?: {
+        [key: string]: components["schemas"]["AnyValue"];
+      } | null;
+      rPbpkOdeSolver?: string;
+      /** @description Legacy additional information settings, optional */
+      legacyAdditionalInfo?: {
+        [key: string]: components["schemas"]["AnyValue"];
+      } | null;
+      /** @description Legacy prediction service information, if available */
+      legacyPredictionService?: string | null;
+    };
+    PredictionRequest: {
+      model: components["schemas"]["PredictionModel"];
+      dataset: components["schemas"]["Dataset"];
+    };
+    PredictionResponse: {
+      predictions: components["schemas"]["AnyValue"][];
     };
     /** User */
     User: {
       id: string;
       username?: string;
+      firstName?: string;
+      lastName?: string;
       email?: string;
       emailVerified?: boolean;
+      avatarUrl?: string;
+      canEdit?: boolean;
+    };
+    UserSettings: {
+      /** Format: int64 */
+      id?: number;
+      /** @default false */
+      darkMode?: boolean;
+      /** @default false */
+      collapseSidebar?: boolean;
+      avatarUrl?: string;
+      isAdmin?: boolean;
+      isUpciUser?: boolean;
+    };
+    ApiKey: {
+      /**
+       * @description The generated API key
+       * @example jq_abcd1234efgh5678ijkl
+       */
+      clientKey?: string;
+      /** @description A note for the API key */
+      note?: string;
+      /**
+       * @description The ID of the user associated with the API key
+       * @example 12345
+       */
+      userId?: string;
+      /**
+       * Format: date-time
+       * @description The expiration time of the API key (if any)
+       * @example 2024-12-31T23:59:59Z
+       */
+      expiresAt?: string | null;
+      /** @enum {string} */
+      expirationTime: "THREE_MONTHS" | "SIX_MONTHS";
+      /**
+       * Format: date-time
+       * @description The last time the API key was used
+       * @example 2024-09-23T12:00:00Z
+       */
+      lastUsed?: string | null;
+      /**
+       * @description The IP address from which the API key was last used
+       * @example 192.168.1.1
+       */
+      lastUsedIp?: string | null;
+      /** @description Whether the API key is active or disabled */
+      enabled?: boolean;
     };
     ErrorResponse: {
       /** @description Error message */
@@ -493,24 +876,6 @@ export interface operations {
       };
     };
   };
-  /** Create a new model */
-  createModel: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Model"];
-      };
-    };
-    responses: {
-      /** @description Model created successfully */
-      201: {
-        content: never;
-      };
-      /** @description Invalid input */
-      400: {
-        content: never;
-      };
-    };
-  };
   /** Get paginated models */
   getModels: {
     parameters: {
@@ -532,6 +897,52 @@ export interface operations {
             pageNumber?: number;
           };
         };
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+    };
+  };
+  /** Get paginated models */
+  getAllModels: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description Paginated list of models */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["ModelSummary"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+    };
+  };
+  /** Create a new model */
+  createModel: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Model"];
+      };
+    };
+    responses: {
+      /** @description Model created successfully */
+      201: {
+        content: never;
       };
       /** @description Invalid input */
       400: {
@@ -567,6 +978,87 @@ export interface operations {
       };
     };
   };
+  /**
+   * Archive a model
+   * @description Archives a model. Models that remain archived for more than 30 days will be permanently deleted.
+   */
+  archiveModel: {
+    parameters: {
+      path: {
+        /** @description The ID of the model to archive */
+        modelId: number;
+      };
+    };
+    responses: {
+      /** @description Model successfully archived */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * Format: int64
+             * @example 0
+             */
+            id?: number;
+            /**
+             * Format: date-time
+             * @description Timestamp when the model was archived
+             */
+            archivedAt?: string;
+          };
+        };
+      };
+      /** @description Insufficient permissions to archive the model */
+      403: {
+        content: never;
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+      /** @description Model is already archived */
+      409: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Unarchive a model
+   * @description Unarchives a previously archived model. This will cancel any scheduled deletion.
+   */
+  unarchiveModel: {
+    parameters: {
+      path: {
+        /** @description The ID of the model to unarchive */
+        modelId: number;
+      };
+    };
+    responses: {
+      /** @description Model successfully unarchived */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * Format: int64
+             * @example 0
+             */
+            id?: number;
+          };
+        };
+      };
+      /** @description Insufficient permissions to unarchive the model */
+      403: {
+        content: never;
+      };
+      /** @description Model not found */
+      404: {
+        content: never;
+      };
+      /** @description Model is not currently archived */
+      409: {
+        content: never;
+      };
+    };
+  };
   /** Get paginated shared models */
   getSharedModels: {
     parameters: {
@@ -592,6 +1084,41 @@ export interface operations {
       };
       /** @description Invalid input */
       400: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get paginated archived models
+   * @description Retrieve a paginated list of models that have been archived by the user
+   */
+  getArchivedModels: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description Paginated list of archived models */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["ModelSummary"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+      /** @description Insufficient permissions to access archived models */
+      403: {
         content: never;
       };
     };
@@ -798,6 +1325,11 @@ export interface operations {
            * @example mg/L
            */
           units?: string;
+          /**
+           * @description The range that this feature is using
+           * @example 0-100
+           */
+          range?: string;
           /** @example An updated description for this feature */
           description?: string;
           featureType: components["schemas"]["FeatureType"];
@@ -857,6 +1389,72 @@ export interface operations {
       };
       /** @description User or datasets not found */
       404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get Datasets by Model ID
+   * @description Retrieve all datasets associated with a specific model ID
+   */
+  getDatasetsByModelId: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
+      };
+      path: {
+        modelId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["Dataset"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Model or datasets not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Create a dataset
+   * @description Create a new dataset from the provided data
+   */
+  createDataset: {
+    parameters: {
+      path: {
+        modelId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Dataset"];
+      };
+    };
+    responses: {
+      /** @description dataset created successfully */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Dataset"];
+        };
+      };
+      /** @description invalid input */
+      400: {
+        content: never;
+      };
+      /** @description unauthorized */
+      401: {
         content: never;
       };
     };
@@ -1160,6 +1758,349 @@ export interface operations {
         content: never;
       };
       /** @description Invitation not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get All Leads
+   * @description Retrieve all leads
+   */
+  getAllLeads: {
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Lead"][];
+        };
+      };
+    };
+  };
+  /**
+   * Create a Lead
+   * @description Create a new lead
+   */
+  createLead: {
+    responses: {
+      /** @description Lead created successfully */
+      201: {
+        content: never;
+      };
+      /** @description Invalid request data */
+      400: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get a Lead by ID
+   * @description Retrieve a single lead by its ID
+   */
+  getLeadById: {
+    parameters: {
+      path: {
+        /** @description The ID of the lead to retrieve */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Lead"];
+        };
+      };
+      /** @description Lead not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Update a Lead by ID
+   * @description Update the details of an existing lead
+   */
+  updateLeadById: {
+    parameters: {
+      path: {
+        /** @description The ID of the lead to update */
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Lead"];
+      };
+    };
+    responses: {
+      /** @description Lead updated successfully */
+      200: {
+        content: never;
+      };
+      /** @description Invalid request data */
+      400: {
+        content: never;
+      };
+      /** @description Lead not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Delete a Lead by ID
+   * @description Delete a single lead by its ID
+   */
+  deleteLeadById: {
+    parameters: {
+      path: {
+        /** @description The ID of the lead to delete */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description Lead deleted successfully */
+      204: {
+        content: never;
+      };
+      /** @description Lead not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get All API Keys for the User
+   * @description Retrieve all API keys associated with the authenticated user.
+   */
+  getAllApiKeysForUser: {
+    responses: {
+      /** @description Successful Response with the user's API keys */
+      200: {
+        content: {
+          "application/json": {
+              /** @description The API key */
+              clientKey?: string;
+              /** @description Description of the API key */
+              note?: string;
+              /**
+               * Format: date-time
+               * @description Creation timestamp of the API key
+               */
+              createdAt?: string;
+              /**
+               * Format: date-time
+               * @description Expiration timestamp of the API key (optional)
+               */
+              expiresAt?: string;
+              /** @description Whether the API key is active or disabled */
+              enabled?: boolean;
+            }[];
+        };
+      };
+      /** @description Unauthorized request, the user must be authenticated */
+      401: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Create an API Key for the User
+   * @description Generate and return an API key for programmatic access. This API key is associated with the user and can be used for authenticating future requests.
+   */
+  createApiKey: {
+    /** @description Payload to create a new API key */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ApiKey"];
+      };
+    };
+    responses: {
+      /** @description API Key created successfully */
+      201: {
+        content: {
+          "application/json": {
+            /**
+             * @description The generated API key
+             * @example jq_abcd1234efgh5678ijkl
+             */
+            clientKey?: string;
+            /** @description The generated API secret */
+            clientSecret?: string;
+          };
+        };
+      };
+      /** @description Invalid input, such as a missing user ID */
+      400: {
+        content: never;
+      };
+      /** @description Unauthorized request, the user must be authenticated */
+      401: {
+        content: never;
+      };
+      /** @description User not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Delete an API Key
+   * @description Delete a specific API key associated with the authenticated user. Only the user or an admin can delete keys.
+   */
+  deleteApiKey: {
+    parameters: {
+      path: {
+        /** @description The API key to delete */
+        key: string;
+      };
+    };
+    responses: {
+      /** @description API key deleted successfully */
+      204: {
+        content: never;
+      };
+      /** @description Unauthorized request, the user must be authenticated */
+      401: {
+        content: never;
+      };
+      /** @description API key not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Update API Key
+   * @description Update an API key's metadata, such as its note or status (enable/disable).
+   */
+  updateApiKey: {
+    parameters: {
+      path: {
+        /** @description The API key to update */
+        key: string;
+      };
+    };
+    /** @description Payload to update API key metadata */
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description Updated description for the API key */
+          note?: string;
+          /** @description Set to `false` to disable the API key */
+          enabled?: boolean;
+        };
+      };
+    };
+    responses: {
+      /** @description API key updated successfully */
+      200: {
+        content: {
+          "application/json": {
+            /** @description The updated API key */
+            key?: string;
+            /** @description The updated description of the API key */
+            note?: string;
+            /** @description Whether the API key is active or disabled */
+            enabled?: boolean;
+          };
+        };
+      };
+      /** @description Invalid request, such as malformed input */
+      400: {
+        content: never;
+      };
+      /** @description Unauthorized request, the user must be authenticated */
+      401: {
+        content: never;
+      };
+      /** @description API key not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /** Get user settings */
+  getUserSettings: {
+    responses: {
+      /** @description User settings retrieved successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSettings"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+      /** @description Settings not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /** Create or update user settings */
+  saveUserSettings: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserSettings"];
+      };
+    };
+    responses: {
+      /** @description Settings saved successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserSettings"];
+        };
+      };
+      /** @description Invalid request */
+      400: {
+        content: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+    };
+  };
+  /** Delete user avatar */
+  deleteUserAvatar: {
+    responses: {
+      /** @description Avatar successfully deleted */
+      204: {
+        content: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+      /** @description Avatar not found */
+      404: {
+        content: never;
+      };
+    };
+  };
+  /** Get user data */
+  getUser: {
+    parameters: {
+      path: {
+        /** @description The ID of the user to retrieve */
+        username: string;
+      };
+    };
+    responses: {
+      /** @description User data retrieved successfully */
+      200: {
+        content: {
+          "application/json": components["schemas"]["User"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: never;
+      };
+      /** @description User not found */
       404: {
         content: never;
       };

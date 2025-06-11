@@ -5,11 +5,14 @@ import { Switch } from '@nextui-org/switch';
 import React, { useContext } from 'react';
 import { useSession } from 'next-auth/react';
 import {} from '@/app/dashboard/dashboard-layout';
-import { UserSettingsContext } from '@/app/dashboard/contexts';
+import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
 
 export default function UserSettings() {
   const { data: session } = useSession();
-  const { userSettings, setUserSettings } = useContext(UserSettingsContext);
+  const userSettings = useUserSettingsStore((state) => state.userSettings);
+  const updateUserSettings = useUserSettingsStore(
+    (state) => state.updateUserSettings,
+  );
 
   return (
     <div>
@@ -17,7 +20,7 @@ export default function UserSettings() {
         defaultSelected={userSettings?.darkMode}
         isSelected={userSettings?.darkMode ?? false}
         onValueChange={(isSelected) => {
-          setUserSettings({
+          updateUserSettings({
             ...userSettings,
             darkMode: !userSettings?.darkMode,
           });

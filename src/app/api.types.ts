@@ -1,11 +1,13 @@
 import { components, operations } from './api.schema.d';
 
 export type ModelDto = components['schemas']['Model'];
+export type ModelTypeDto = components['schemas']['ModelType'];
 export type ModelSummaryDto = components['schemas']['ModelSummary'];
 export type FeatureDto = components['schemas']['Feature'];
 export type FeaturePossibleValueDto =
   components['schemas']['FeaturePossibleValue'];
 export type DatasetDto = components['schemas']['Dataset'];
+export type DatasetResultType = components['schemas']['DatasetResultType'];
 export type DatasetCSVDto = components['schemas']['DatasetCSV'];
 export type OrganizationDto = components['schemas']['Organization'];
 export type OrganizationInvitationDto =
@@ -24,3 +26,18 @@ export type OrganizationInvitationsRequestDto =
 
 export type DatasetsResponseDto =
   operations['getDatasets']['responses']['200']['content']['application/json'];
+
+export type ApiKeyDto = components['schemas']['ApiKey'];
+export type ApiKeyResponseDto =
+  operations['createApiKey']['responses']['201']['content']['application/json'];
+
+export type ModelScoresDto = components['schemas']['Model']['scores'];
+export type ScoresDto = components['schemas']['Scores'];
+export type RegressionScoreDto = components['schemas']['Scores']['regression'];
+export type BinaryClassificationDto =
+  components['schemas']['Scores']['binaryClassification'];
+export type MulticlassClassificationDto =
+  components['schemas']['Scores']['multiclassClassification'];
+
+export type UserSettingsDto = components['schemas']['UserSettings'];
+export type UserDto = components['schemas']['User'];

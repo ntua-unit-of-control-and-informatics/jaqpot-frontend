@@ -39,16 +39,15 @@ function backgroundColorRotation(index: number) {
 
 export default function UserOrganizations() {
   const { data: session } = useSession();
-  const [isLoading, setIsLoading] = useState(true);
   const {
     data: apiResponse,
     trigger,
     error,
+    isMutating,
   } = useSWRMutation(`/api/user/organizations`, fetcher);
 
   useEffect(() => {
-    setIsLoading(true);
-    trigger().finally(() => setIsLoading(false));
+    trigger();
   }, [trigger]);
 
   let userOrganizations;
@@ -64,7 +63,14 @@ export default function UserOrganizations() {
     userOrganizations?.filter((org) => !org.canEdit) ?? [];
 
   if (error) return;
-  if (isLoading) return <Spinner />;
+  if (isMutating)
+    return (
+      <>
+        <div className="flex items-center justify-center">
+          <Spinner color="white" />
+        </div>
+      </>
+    );
 
   return (
     <ul className="space-y-2 font-medium">

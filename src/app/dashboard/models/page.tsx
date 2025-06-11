@@ -50,7 +50,7 @@ export default async function ModelsPage() {
           Your models{' '}
         </h2>
         <Tooltip content="Models created by you" closeDelay={0}>
-          <InformationCircleIcon className="ml-1 size-5 text-gray-400" />
+          <InformationCircleIcon className="ml-1 size-4 text-gray-400" />
         </Tooltip>
       </div>
 
@@ -64,7 +64,7 @@ export default async function ModelsPage() {
           content="These models are privately shared with the organizations you are a member of. Only members of the specified organizations can access these models."
           closeDelay={0}
         >
-          <InformationCircleIcon className="ml-1 size-5 text-gray-400" />
+          <InformationCircleIcon className="ml-1 size-4 text-gray-400" />
         </Tooltip>
       </div>
       <ModelsTable
@@ -72,6 +72,19 @@ export default async function ModelsPage() {
         showSharedOrganizations={true}
         userOrganizations={userOrganizations}
       />
+
+      <div className="my-5 flex items-center">
+        <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
+          Your archived models
+        </h2>
+        <Tooltip
+          content="These models will be deleted 30 days after they have been archived."
+          closeDelay={0}
+        >
+          <InformationCircleIcon className="ml-1 size-4 text-gray-400" />
+        </Tooltip>
+      </div>
+      <ModelsTable modelsEndpoint="/api/user/archived" />
     </div>
   );
 }

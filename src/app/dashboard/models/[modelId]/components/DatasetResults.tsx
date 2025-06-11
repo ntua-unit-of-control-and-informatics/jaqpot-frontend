@@ -1,6 +1,6 @@
 'use client';
 
-import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
+import { DatasetDto, ModelDto } from '@/app/api.types';
 import {
   Table,
   TableBody,
@@ -9,22 +9,42 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table';
-import React, { useEffect, useState } from 'react';
-import { ApiResponse } from '@/app/util/response';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
-import { CustomError } from '@/app/types/CustomError';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { Skeleton } from '@nextui-org/skeleton';
 import { Link } from '@nextui-org/link';
-import { Chip } from '@nextui-org/chip';
 import {
   getDatasetStatusNode,
-  generateResultTableRow,
+  generateResultTableData,
+  datasetFetcher,
 } from '@/app/util/dataset';
 import { Button } from '@nextui-org/button';
-import { ArrowDownTrayIcon, BugAntIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowDownTrayIcon,
+  BugAntIcon,
+  CalendarDaysIcon,
+} from '@heroicons/react/24/solid';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { logger } from '@/logger';
+import {
+  getKeyValue,
+  Select,
+  SelectItem,
+  useDisclosure,
+} from '@nextui-org/react';
+import DoaTableCell from '@/app/dashboard/models/[modelId]/components/DoaTableCell';
+import DoaModal from '@/app/dashboard/models/[modelId]/components/DoaModal';
+import { Tab, Tabs } from '@nextui-org/tabs';
+import PBPKPlots from '@/app/dashboard/models/[modelId]/components/PBPKPlots';
+import { Pagination } from '@nextui-org/pagination';
+import { Tooltip } from '@nextui-org/tooltip';
+import { ClockIcon } from '@heroicons/react/24/outline';
+import {
+  getUserFriendlyDateWithSuffix,
+  getUserFriendlyDuration,
+} from '@/app/util/date';
+import Image from 'next/image';
 
 const log = logger.child({ module: 'dataset' });
 
@@ -33,20 +53,92 @@ interface PredictionResultProps {
   model: ModelDto;
 }
 
-const fetcher: Fetcher<ApiResponse<DatasetDto>, string> = async (url) => {
-  const res = await fetch(url);
+function downloadResultsCSV(model: ModelDto, dataset: DatasetDto) {
+  fetch(`/api/datasets/export`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      independentFeatures: model.independentFeatures,
+      dependentFeatures: model.dependentFeatures,
+      dataset,
+    }),
+  })
+    .then((response) => response.blob())
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `result-${dataset!.id}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    })
+    .catch((error) => log.error('Error:', error));
+}
 
-  // If the status code is not in the range 200-299,
-  // we still try to parse and throw it.
-  if (!res.ok) {
-    const message = (await res.json()).message;
-    const status = res.status;
-    // Attach extra info to the error object.
-    throw new CustomError(message, status);
+function getExecutionTimeNode(dataset: DatasetDto | null | undefined) {
+  if (!dataset?.executedAt) return null;
+  const executionFinishedAt = dataset?.executionFinishedAt as unknown as string;
+  const executedAt = dataset?.executedAt as unknown as string;
+
+  const executionTimeInMs =
+    new Date(executionFinishedAt).getTime() - new Date(executedAt).getTime();
+
+  return (
+    <>
+      <div className="flex items-center gap-2 text-foreground/50">
+        <Tooltip content="Executed at" closeDelay={0}>
+          <div className="flex items-center gap-1">
+            <CalendarDaysIcon className="size-5" />
+            <span className="text-tiny">
+              {getUserFriendlyDateWithSuffix(new Date(executedAt))}
+            </span>
+          </div>
+        </Tooltip>
+        {dataset?.executionFinishedAt && (
+          <Tooltip content="Execution duration" closeDelay={0}>
+            <div className="flex items-center gap-1">
+              <ClockIcon className="size-5" />
+              <span className="text-tiny">
+                {getUserFriendlyDuration(executionTimeInMs)}
+              </span>
+            </div>
+          </Tooltip>
+        )}
+      </div>
+    </>
+  );
+}
+
+function renderResultTableCell(
+  item: any,
+  model: ModelDto,
+  columnKey: string | number,
+) {
+  if (
+    model.dependentFeatures.find(
+      (f) => f.key === columnKey && f.featureType === 'IMAGE',
+    )
+  ) {
+    return (
+      <Image
+        src={getKeyValue(item, columnKey)}
+        width={100}
+        height={100}
+        alt={'image'}
+      />
+    );
   }
 
-  return res.json();
-};
+  if (item)
+    return (
+      <div className="line-clamp-3 max-w-xs text-pretty break-all">
+        {getKeyValue(item, columnKey)?.toString()}
+      </div>
+    );
+}
 
 export default function DatasetResults({
   datasetId,
@@ -54,15 +146,26 @@ export default function DatasetResults({
 }: PredictionResultProps) {
   // how often to refresh to check if the dataset is ready, setting to 0 will disable the interval
   const [refreshInterval, setRefreshInterval] = useState(1000);
-  const allFeatures: FeatureDto[] = [
-    ...model.independentFeatures,
-    ...model.dependentFeatures,
-  ];
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [page, setPage] = useState(1);
   const {
     data: apiResponse,
     isLoading,
     error,
-  } = useSWR(`/api/datasets/${datasetId}`, fetcher, { refreshInterval });
+  } = useSWR(`/api/datasets/${datasetId}`, datasetFetcher, { refreshInterval });
+
+  const {
+    isOpen: isDoaModalOpen,
+    onOpen: onDoaModalOpen,
+    onOpenChange: onDoaModalChange,
+  } = useDisclosure();
+  const [selectedRow, setSelectedRow] = useState<any | undefined>();
+
+  useEffect(() => {
+    if (!isDoaModalOpen) {
+      setSelectedRow(undefined);
+    }
+  }, [isDoaModalOpen]);
 
   const dataset = apiResponse?.data;
   useEffect(() => {
@@ -73,130 +176,193 @@ export default function DatasetResults({
     }
   }, [dataset]);
 
-  function downloadResultsCSV(model: ModelDto) {
-    fetch(`/api/datasets/export`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        independentFeatures: model.independentFeatures,
-        dependentFeatures: model.dependentFeatures,
-        dataset,
-      }),
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `result-${dataset!.id}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      })
-      .catch((error) => log.error('Error:', error));
-  }
-
-  if (error) return <SWRClientFetchError error={error} />;
-
   const isLoaded =
     !isLoading &&
     dataset?.status !== 'CREATED' &&
     dataset?.status !== 'EXECUTING';
   const loadingState = isLoading ? 'loading' : 'idle';
 
-  const tableHeaders = allFeatures.map((feature, index) => (
-    <TableColumn key={index}>{feature.name}</TableColumn>
-  ));
-
-  function generateTableRows() {
-    if (!dataset?.result) {
-      return [];
-    }
-
-    return dataset?.result.map((result: any, resultIndex: number) => {
-      const resultTableData = generateResultTableRow(
+  const resultTableData = useMemo(
+    () =>
+      generateResultTableData(
         model.independentFeatures,
         model.dependentFeatures,
         dataset,
-        resultIndex,
-        result,
-      );
-      return (
-        <TableRow key={resultIndex}>
-          {resultTableData.map((value, index) => (
-            <TableCell key={index}>{value}</TableCell>
-          ))}
-        </TableRow>
-      );
-    });
-  }
+      ),
+    [model, dataset],
+  );
 
-  const tableRows = generateTableRows();
+  const onRowsPerPageChange = useCallback((e: React.ChangeEvent<any>) => {
+    setRowsPerPage(Number(e.target.value));
+    setPage(1);
+  }, []);
+
+  const topContent = useMemo(() => {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <span className="text-small text-default-400">
+            Total {resultTableData.rows.length} result
+            {resultTableData.rows.length === 1 ? '' : 's'}
+          </span>
+
+          <Select
+            label="Rows per page"
+            className="max-w-xs"
+            onChange={onRowsPerPageChange}
+            selectedKeys={[rowsPerPage.toString()]}
+          >
+            <SelectItem key="10">10</SelectItem>
+            <SelectItem key="25">25</SelectItem>
+            <SelectItem key="50">50</SelectItem>
+            <SelectItem key="100">100</SelectItem>
+          </Select>
+        </div>
+      </div>
+    );
+  }, [resultTableData, rowsPerPage]);
+
+  const pages = Math.ceil(resultTableData.rows.length / rowsPerPage);
+
+  const rows = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return resultTableData.rows.slice(start, end);
+  }, [page, resultTableData, rowsPerPage]);
+
+  if (error) return <SWRClientFetchError error={error} />;
 
   return (
-    <div className="mb-20 mt-5 flex flex-col gap-4">
-      <div className="max-w-xl">
-        {dataset?.status === 'FAILURE' && model.isAdmin && (
-          <Accordion>
-            <AccordionItem
-              key="1"
-              aria-label="Accordion 1"
-              subtitle="You can only see this if you are a nerd"
-              title="Data for nerds"
-              startContent={<BugAntIcon className="size-6" />}
-            >
-              <p className="text-sm">
-                legacy prediction service: {model.legacyPredictionService}
-              </p>
-              <p className="text-sm">
-                Failure reason: {dataset?.failureReason}
-              </p>
-            </AccordionItem>
-          </Accordion>
-        )}
-      </div>
-      <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
-        Result
-      </h2>
-      <div>
-        <Link
-          href={`/dashboard/models/${model.id}/results/${datasetId}`}
-          isExternal
-          showAnchorIcon
-          className="mr-2"
-        >
-          ID {datasetId}
-        </Link>
-        {getDatasetStatusNode(dataset)}
-      </div>
-      {!isLoaded && (
-        <div className="flex w-full flex-col gap-2">
-          <Skeleton className="h-3 w-3/5 rounded-lg" />
-          <Skeleton className="h-3 w-4/5 rounded-lg" />
-          <Skeleton className="h-3 w-2/5 rounded-lg" />
-          <Skeleton className="w-5/5 h-3 rounded-lg" />
-        </div>
-      )}
-      {isLoaded && dataset?.status === 'SUCCESS' && (
-        <>
-          <div>
-            <Button
-              color="primary"
-              startContent={<ArrowDownTrayIcon className="size-6" />}
-              className="my-2"
-              onPress={() => downloadResultsCSV(model)}
-            >
-              Export CSV
-            </Button>
+    <div className="mb-20 mt-5">
+      <Tabs>
+        <Tab key="result" title="Result">
+          <div className="flex flex-col gap-4">
+            {dataset?.status === 'FAILURE' && model.isAdmin && (
+              <div className="max-w-xl">
+                <Accordion>
+                  <AccordionItem
+                    key="1"
+                    aria-label="Accordion 1"
+                    subtitle="You can only see this if you are a nerd"
+                    title="Data for nerds"
+                    startContent={<BugAntIcon className="size-6" />}
+                  >
+                    <p className="text-sm">
+                      legacy prediction service: {model.legacyPredictionService}
+                    </p>
+                    <p className="text-sm">
+                      Failure reason: {dataset?.failureReason}
+                    </p>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+            )}
+            <div className="flex items-center">
+              <Link
+                href={`/dashboard/models/${model.id}/results/${datasetId}`}
+                isExternal
+                showAnchorIcon
+                className="mr-2"
+              >
+                ID {datasetId}
+              </Link>
+              {getDatasetStatusNode(dataset)}
+            </div>
+            <div>{getExecutionTimeNode(dataset)}</div>
+            {!isLoaded && (
+              <div className="flex w-full flex-col gap-2">
+                <Skeleton className="h-3 w-3/5 rounded-lg" />
+                <Skeleton className="h-3 w-4/5 rounded-lg" />
+                <Skeleton className="h-3 w-2/5 rounded-lg" />
+                <Skeleton className="w-5/5 h-3 rounded-lg" />
+              </div>
+            )}
+            {isLoaded && dataset?.status === 'SUCCESS' && (
+              <>
+                <div>
+                  <Button
+                    color="primary"
+                    startContent={<ArrowDownTrayIcon className="size-6" />}
+                    className="my-2"
+                    onPress={() => downloadResultsCSV(model, dataset)}
+                  >
+                    Export CSV
+                  </Button>
+                </div>
+                <Table
+                  aria-label="Prediction table"
+                  className="mb-6"
+                  topContent={topContent}
+                  bottomContent={
+                    <div className="flex w-full justify-center">
+                      <Pagination
+                        isCompact
+                        showControls
+                        showShadow
+                        color="primary"
+                        page={page}
+                        total={pages}
+                        onChange={(page) => setPage(page)}
+                      />
+                    </div>
+                  }
+                >
+                  <TableHeader columns={resultTableData?.headers}>
+                    {(column) => (
+                      <TableColumn key={column.key}>{column.label}</TableColumn>
+                    )}
+                  </TableHeader>
+
+                  <TableBody
+                    items={rows}
+                    loadingState={loadingState}
+                    emptyContent={'No results to display.'}
+                  >
+                    {(item) => (
+                      <TableRow key={item.key}>
+                        {(columnKey) => {
+                          if (columnKey === 'doa') {
+                            return (
+                              <TableCell>
+                                <DoaTableCell
+                                  value={getKeyValue(item, columnKey)}
+                                  onPress={() => {
+                                    setSelectedRow(item);
+                                    onDoaModalOpen();
+                                  }}
+                                />
+                              </TableCell>
+                            );
+                          }
+                          return (
+                            <TableCell>
+                              {renderResultTableCell(item, model, columnKey)}
+                            </TableCell>
+                          );
+                        }}
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </>
+            )}
+
+            {selectedRow && (
+              <DoaModal
+                doaDetails={selectedRow.doaDetails}
+                isOpen={isDoaModalOpen}
+                onOpenChange={onDoaModalChange}
+              />
+            )}
           </div>
-          <Table aria-label="Prediction table" className="mb-6">
-            <TableHeader>{tableHeaders}</TableHeader>
-            <TableBody loadingState={loadingState}>{tableRows}</TableBody>
-          </Table>
-        </>
-      )}
+        </Tab>
+        {model.type === 'R_PBPK' && dataset && dataset.status === 'SUCCESS' && (
+          <Tab key="plots" title="Plots">
+            <PBPKPlots model={model} dataset={dataset} />
+          </Tab>
+        )}
+      </Tabs>
     </div>
   );
 }

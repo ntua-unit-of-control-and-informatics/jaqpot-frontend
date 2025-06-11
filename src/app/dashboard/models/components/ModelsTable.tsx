@@ -36,6 +36,7 @@ type ExtraQueryParams = {
 interface ModelsTableProps {
   modelsEndpoint: string;
   showSharedOrganizations?: boolean;
+  showCreator?: boolean;
   userOrganizations?: OrganizationDto[];
   extraQueryParams?: ExtraQueryParams;
 }
@@ -103,6 +104,7 @@ export default function ModelsTable({
   modelsEndpoint,
   showSharedOrganizations = false,
   userOrganizations = [],
+  showCreator = false,
   extraQueryParams,
 }: ModelsTableProps) {
   const router = useRouter();
@@ -151,7 +153,7 @@ export default function ModelsTable({
   const rows = data?.content?.map((model: ModelSummaryDto) => {
     return {
       ...model,
-      name: <div className="sm:min-w-80">{model.name}</div>,
+      name: <div className="sm:min-w-56">{model.name}</div>,
       description: <div className="line-clamp-3">{model.description}</div>,
       createdAt: <JaqpotTimeAgo date={model.createdAt as any} />,
       sharedWithOrganizations: model.sharedWithOrganizations
@@ -165,6 +167,13 @@ export default function ModelsTable({
     columns.push({
       key: 'sharedWithOrganizations',
       label: 'Shared with organizations',
+    });
+  }
+
+  if (showCreator) {
+    columns.push({
+      key: 'creator',
+      label: 'Creator',
     });
   }
 
@@ -244,9 +253,12 @@ export default function ModelsTable({
               as={Link}
               href={`/dashboard/models/${item.id}`}
             >
-              {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-              )}
+              {(columnKey) => {
+                if (columnKey === 'creator') {
+                  return <TableCell>{item.creator?.username}</TableCell>;
+                }
+                return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
+              }}
             </TableRow>
           )}
         </TableBody>

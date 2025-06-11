@@ -1,10 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { ChangeEvent, ReactNode, useState } from 'react';
 import { Radio, RadioGroup, Select, SelectItem } from '@nextui-org/react';
 import { Input, Textarea } from '@nextui-org/input';
+import { Input as ShadCNInput } from '@/components/ui/input';
 import { Button } from '@nextui-org/button';
 import { Checkbox } from '@nextui-org/checkbox';
+import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
+import ArrayInput from '@/app/dashboard/models/[modelId]/components/ArrayInput';
+import { InformationCircleIcon } from '@heroicons/react/24/solid';
+import { Tooltip } from '@nextui-org/tooltip';
+import { isNullOrUndefinedOrEmpty } from '@/app/util/string';
 import SmilesInput from '@/app/dashboard/models/[modelId]/components/SmilesInput';
 
 // const jsonExample: DynamicFormSchema[] = [
@@ -123,12 +129,15 @@ export type DynamicFormFieldType =
   | 'color'
   | 'range'
   | 'date'
-  | 'file'
-  | 'search';
+  | 'image'
+  | 'search'
+  | 'floatarray'
+  | 'stringarray';
 
 export interface DynamicFormField {
   name: string;
   label: string;
+  labelTooltip?: ReactNode | string;
   type: DynamicFormFieldType;
   required: boolean;
   placeholder?: string;
@@ -148,17 +157,77 @@ interface DynamicFormProps {
   onSubmit: Function;
 }
 
+function generateFieldLabel(field: DynamicFormField) {
+  return (
+    <>
+      {field.labelTooltip && (
+        <Tooltip content={field.labelTooltip} closeDelay={0}>
+          <InformationCircleIcon className="mr-0.5 size-4 flex-shrink-0 text-gray-400" />
+        </Tooltip>
+      )}
+      {field.label}
+    </>
+  );
+}
+
+function retrieveInputValueFromString(
+  type: DynamicFormFieldType,
+  checked: boolean,
+  value: string,
+) {
+  if (type !== 'checkbox' && value === '') return undefined;
+
+  if (type === 'number') {
+    return Number(value);
+  } else if (type === 'checkbox') {
+    return checked;
+  }
+
+  return value;
+}
+
+function generateDefaultFormValues(
+  schema: DynamicFormSchema[],
+): DynamicFormState {
+  let defaultValues: { [key: string]: string | boolean | number } = {};
+  schema.forEach((section) => {
+    if (section.fields) {
+      section.fields.forEach((field) => {
+        if (field.type === 'checkbox') defaultValues[field.name] = false;
+      });
+    }
+  });
+  return defaultValues;
+}
+
+type DynamicFormState = {
+  [key: string]: string | boolean | number;
+};
+
 export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
-  const [formData, setFormData] = useState<{ [key: string]: string | boolean }>(
-    {},
+  const [formData, setFormData] = useState<DynamicFormState>(
+    generateDefaultFormValues(schema),
   );
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<any>) => {
-    const { name, value, type, checked } = e.target;
+    const { value, type, name, checked } = e.target;
+    const inputValue = retrieveInputValueFromString(type, checked, value);
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: inputValue,
+    });
+  };
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    const file = e.target.files![0];
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const inputFile = buffer.toString('base64');
+    setFormData({
+      ...formData,
+      [name]: inputFile,
     });
   };
 
@@ -169,7 +238,10 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     schema.forEach((section) => {
       if (section.fields) {
         section.fields.forEach((field) => {
-          if (field.required && !formData[field.name]) {
+          if (
+            field.required &&
+            isNullOrUndefinedOrEmpty(formData[field.name])
+          ) {
             formIsValid = false;
             errors[field.name] = 'This field is required';
           }
@@ -192,21 +264,34 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
     switch (field.type) {
       case 'select':
         return (
-          <Select
+          <Autocomplete
+            labelPlacement="outside"
             name={field.name}
-            onChange={handleChange}
-            label="Select..."
-            required={field.required}
+            placeholder={`Select ${field.label}`}
+            label={generateFieldLabel(field)}
+            onSelectionChange={(key) =>
+              handleChange({
+                target: { value: key, type: field.type, name: field.name },
+              } as any)
+            }
+            isRequired={field.required}
+            inputProps={{
+              classNames: {
+                label: 'flex flex-row  items-center justify-center',
+              },
+            }}
           >
             {field.options!.map((option: DynamicFormOption, index: number) => (
               // Send keys so the model can decide how to split the values
-              <SelectItem key={option.key}>{option.value}</SelectItem>
+              <AutocompleteItem key={option.key}>
+                {option.value}
+              </AutocompleteItem>
             ))}
-          </Select>
+          </Autocomplete>
         );
       case 'radio':
         return (
-          <RadioGroup label="Select...">
+          <RadioGroup label={generateFieldLabel(field)}>
             {field.options!.map((option: any, index: number) => (
               <Radio
                 key={index}
@@ -227,19 +312,35 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             type="checkbox"
             name={field.name}
             onChange={handleChange}
-            required={field.required}
-            checked={formData[field.name] as boolean | undefined}
-          />
+            isRequired={field.required}
+            checked={(formData[field.name] as boolean) ?? false}
+            classNames={{
+              label: 'flex flex-row items-center justify-center text-sm',
+            }}
+          >
+            {generateFieldLabel(field)}
+          </Checkbox>
         );
       case 'textarea':
         return (
           <Textarea
+            labelPlacement="outside"
             rows={3}
             name={field.name}
+            label={generateFieldLabel(field)}
             placeholder={field.placeholder}
             onChange={handleChange}
-            required={field.required}
-            value={(formData[field.name] || '') as string}
+            isRequired={field.required}
+            value={(formData[field.name] ?? '') as string}
+          />
+        );
+      case 'floatarray':
+        return (
+          <ArrayInput
+            name={field.name}
+            type="number"
+            label={generateFieldLabel(field)}
+            onChange={handleChange}
           />
         );
       case 'smiles':
@@ -251,16 +352,43 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             value={(formData[field.name] || '') as string}
           />
         );
+      case 'stringarray':
+        return (
+          <ArrayInput
+            name={field.name}
+            type="text"
+            label={generateFieldLabel(field)}
+            onChange={handleChange}
+          />
+        );
+      case 'image':
+        return (
+          <>
+            <div className="flex items-center">{generateFieldLabel(field)}</div>
+            <ShadCNInput
+              type="file"
+              name={field.name}
+              accept="image/png, image/jpeg, image/tif, image/tiff, .tif"
+              onChange={handleFileChange}
+            />
+          </>
+        );
       default:
         // Handle other HTML5 input types like number, date, email, etc.
         return (
           <Input
+            labelPlacement="outside"
             type={field.type}
             name={field.name}
+            label={generateFieldLabel(field)}
             placeholder={field.placeholder}
             onChange={handleChange}
-            required={field.required}
-            value={(formData[field.name] || '') as string}
+            isRequired={field.required}
+            fullWidth={true}
+            value={(formData[field.name] ?? '') as string}
+            classNames={{
+              label: 'flex flex-row  items-center justify-center',
+            }}
           />
         );
     }
@@ -269,30 +397,25 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4 grid grid-cols-2 gap-6 sm:grid-cols-4">
+        <div className="my-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
           {schema.map((section, sectionIndex) => (
-            <div key={sectionIndex}>
-              <h3>{section.sectionTitle}</h3>
+            <div key={sectionIndex} className="flex w-full items-center">
+              {/*<h3>{section.sectionTitle}</h3>*/}
               {section.fields &&
                 section.fields.map((field, fieldIndex) => (
-                  <div key={fieldIndex}>
-                    <div className="mb-3">
-                      <div className="mb-5">
-                        <label className="break-words">{field.label}</label>
+                  <div key={fieldIndex} className="mb-3 flex-grow">
+                    {renderField(field)}
+                    {formErrors[field.name] && (
+                      <div className="text-sm text-danger">
+                        {formErrors[field.name]}
                       </div>
-                      {renderField(field)}
-                      {formErrors[field.name] && (
-                        <div className="text-danger">
-                          {formErrors[field.name]}
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
                 ))}
             </div>
           ))}
         </div>
-        <Button type="submit" color="primary" className="mt-5">
+        <Button type="submit" color="primary">
           Submit
         </Button>
       </form>

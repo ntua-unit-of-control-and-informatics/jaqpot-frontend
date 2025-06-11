@@ -6,7 +6,13 @@ import {
   OrganizationDto,
   PartiallyUpdateModelRequestDto,
 } from '@/app/api.types';
-import { Select, SelectItem } from '@nextui-org/react';
+import {
+  Card,
+  CardBody,
+  Select,
+  SelectItem,
+  useDisclosure,
+} from '@nextui-org/react';
 import { Input, Textarea } from '@nextui-org/input';
 import React, { useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
@@ -18,6 +24,10 @@ import { ApiResponse } from '@/app/util/response';
 import { useRouter } from 'next/navigation';
 import { Link } from '@nextui-org/link';
 import Alert from '@/app/components/Alert';
+import { Divider } from '@nextui-org/divider';
+import { CardHeader } from '@nextui-org/card';
+import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
+import ModelArchiveModal from '@/app/dashboard/models/[modelId]/components/ModelArchiveModal';
 
 interface FeaturesTabProps {
   model: ModelDto;
@@ -52,17 +62,13 @@ export type PartiallyUpdateModelRequestDtoWithStringIds = Omit<
 
 export default function ModelEditTab({ model }: FeaturesTabProps) {
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const possibleModelTaskValues = [
     {
       key: 'REGRESSION',
       label: 'Regression',
       description: 'Predict a continuous value.',
-    },
-    {
-      key: 'CLASSIFICATION',
-      label: 'Classification',
-      description: 'Predict a discrete value.',
     },
     {
       key: 'BINARY_CLASSIFICATION',
@@ -279,6 +285,36 @@ export default function ModelEditTab({ model }: FeaturesTabProps) {
           Save changes
         </Button>
       </form>
+      <div>
+        <h2 className="my-10 scroll-m-20 text-3xl font-semibold tracking-tight transition-colors">
+          Danger zone
+        </h2>
+        <p className="mb-4 text-sm">
+          Archived models are hidden from public searches and marked with a
+          warning banner.{' '}
+          <b>
+            Please note: archived models will be permanently deleted after 30
+            days
+          </b>
+          . You can access your archived models in the Archived section of your
+          models page until deletion. You can undo this action at any time.
+        </p>
+        {model.archived && (
+          <Button color="danger" onPress={() => onOpen()}>
+            Unarchive model
+          </Button>
+        )}
+        {!model.archived && (
+          <Button color="danger" onPress={() => onOpen()}>
+            Archive model
+          </Button>
+        )}
+      </div>
+      <ModelArchiveModal
+        model={model}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      />
     </div>
   );
 }

@@ -1,6 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface CustomErrorPageProps {
   title: string;
@@ -11,6 +14,7 @@ export default function CustomErrorPage({
   title,
   description,
 }: CustomErrorPageProps) {
+  const router = useRouter();
   return (
     <div className="flex min-h-screen flex-col items-center p-5 text-center">
       <Image
@@ -22,9 +26,20 @@ export default function CustomErrorPage({
       />
       <h1 className="mt-5 text-4xl font-bold">{title}</h1>
       <p className="mt-4 max-w-xl">{description}</p>
-      <Button as={Link} color="primary" href="/dashboard" className="mt-10">
-        Go to the Dashboard
-      </Button>
+      <div className="mt-10 flex gap-5">
+        <Button
+          color="primary"
+          onPress={
+            // Attempt to recover by trying to re-render the segment
+            () => window.location.reload()
+          }
+        >
+          Try again
+        </Button>
+        <Button color="primary" onPress={() => router.back()}>
+          Go back
+        </Button>
+      </div>
     </div>
   );
 }
