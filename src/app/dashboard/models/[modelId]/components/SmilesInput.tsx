@@ -12,7 +12,7 @@ import { Button } from '@nextui-org/button';
 import SmilesDrawer from '@/app/dashboard/models/[modelId]/components/SmilesDrawer';
 import { PaintBrushIcon } from '@heroicons/react/24/solid';
 import { Input } from '@nextui-org/input';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface SmilesInputProps {
   name: string;
@@ -28,22 +28,52 @@ export default function SmilesInput({
   value,
 }: SmilesInputProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const handleOnChange = (smiles: string) => {
-    value = smiles;
+  const [drawnSmiles, setDrawnSmiles] = useState<string>(value || '');
+
+  const handleSmilesChange = (smiles: string) => {
+    setDrawnSmiles(smiles);
   };
+
+  const handleSaveDrawnSmiles = () => {
+    if (onChange) {
+      // Create a synthetic event that matches the expected format
+      const syntheticEvent = {
+        target: {
+          name,
+          value: drawnSmiles,
+          type: 'text',
+        },
+      } as React.ChangeEvent<any>;
+      
+      onChange(syntheticEvent);
+    }
+    onOpenChange();
+  };
+
+  const handleCancel = () => {
+    // Reset to current value and close
+    setDrawnSmiles(value || '');
+    onOpenChange();
+  };
+
   return (
     <>
       <Input
         type="string"
-        label="Smiles "
-        placeholder="Enter SMILES string"
+        label="SMILES"
+        placeholder="Enter SMILES string or use the molecular editor"
         name={name}
         onChange={onChange}
         required={required}
         value={value ?? ''}
         endContent={
-          <Button isIconOnly onPress={onOpen}>
-            <PaintBrushIcon className="size-6" />
+          <Button 
+            isIconOnly 
+            onPress={onOpen}
+            variant="light"
+            className="text-primary"
+          >
+            <PaintBrushIcon className="size-5" />
           </Button>
         }
       />
@@ -53,23 +83,37 @@ export default function SmilesInput({
         onOpenChange={onOpenChange}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
-        size={'xl'}
+        size="2xl"
       >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modal Title
+                Draw Molecular Structure
               </ModalHeader>
               <ModalBody>
-                <SmilesDrawer />
+                <div className="flex flex-col items-center">
+                  <SmilesDrawer 
+                    smiles={drawnSmiles}
+                    onChange={handleSmilesChange}
+                    width="550px"
+                    height="400px"
+                  />
+                </div>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
+                <Button 
+                  color="danger" 
+                  variant="light" 
+                  onPress={handleCancel}
+                >
+                  Cancel
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
+                <Button 
+                  color="primary" 
+                  onPress={handleSaveDrawnSmiles}
+                >
+                  Use This Structure
                 </Button>
               </ModalFooter>
             </>

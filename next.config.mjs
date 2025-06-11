@@ -1,5 +1,3 @@
-import CopyPlugin from "copy-webpack-plugin";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: "standalone",
@@ -15,20 +13,6 @@ const nextConfig = {
     },
     experimental: {
         serverComponentsExternalPackages: ["pino", "pino-pretty"],
-    },
-    webpack: function (config, options) {
-        config.plugins = [
-            ...config.plugins,
-            new CopyPlugin({
-                patterns: [
-                    {
-                        from: "node_modules/marvinjs/editor.html",
-                        to: "public/asds"
-                    }
-                ],
-            }),
-        ];
-        return config;
     },
 };
 
