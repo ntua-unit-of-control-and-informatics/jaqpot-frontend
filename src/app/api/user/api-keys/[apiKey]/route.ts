@@ -7,10 +7,8 @@ import {
 import { auth } from '@/auth';
 import { isAuthenticated } from '@/app/util/auth';
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: { apiKey: string } },
-): Promise<NextResponse<ApiResponse>> {
+export async function PATCH(request: Request, props: { params: Promise<{ apiKey: string }> }): Promise<NextResponse<ApiResponse>> {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -35,10 +33,8 @@ export async function PATCH(
   return handleApiResponse(res);
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { apiKey: string } },
-) {
+export async function DELETE(request: Request, props: { params: Promise<{ apiKey: string }> }) {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(

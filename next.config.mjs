@@ -11,9 +11,7 @@ const nextConfig = {
             },
         ],
     },
-    experimental: {
-        serverComponentsExternalPackages: ["pino", "pino-pretty"],
-    },
+    serverExternalPackages: ["pino", "pino-pretty"],
 };
 
 export default nextConfig;

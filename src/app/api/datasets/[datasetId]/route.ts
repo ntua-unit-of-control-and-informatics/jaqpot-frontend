@@ -7,10 +7,8 @@ import {
 import { isAuthenticated } from '@/app/util/auth';
 import { NextResponse } from 'next/server';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { datasetId: string } },
-): Promise<NextResponse<ApiResponse>> {
+export async function GET(request: Request, props: { params: Promise<{ datasetId: string }> }): Promise<NextResponse<ApiResponse>> {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(

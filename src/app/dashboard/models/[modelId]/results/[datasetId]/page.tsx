@@ -10,11 +10,12 @@ export const metadata: Metadata = generateSharedMetadata(
   'Explore datasets used as inputs for predictive models and view prediction results on the Jaqpot platform. Manage and analyze datasets seamlessly to improve model accuracy',
 );
 
-export default async function Page({
-  params,
-}: {
-  params: { modelId: string; datasetId: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ modelId: string; datasetId: string }>;
+  }
+) {
+  const params = await props.params;
   const model = await getModel(params.modelId);
   if (!model) {
     notFound();

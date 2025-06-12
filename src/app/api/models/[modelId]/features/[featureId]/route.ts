@@ -9,8 +9,9 @@ import { NextResponse } from 'next/server';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { modelId: string; featureId: string } },
+  props: { params: Promise<{ modelId: string; featureId: string }> }
 ): Promise<NextResponse<ApiResponse>> {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(

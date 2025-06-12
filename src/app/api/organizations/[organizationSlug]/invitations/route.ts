@@ -7,10 +7,8 @@ import {
 import { auth } from '@/auth';
 import { isAuthenticated } from '@/app/util/auth';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { organizationSlug: string } },
-): Promise<NextResponse<ApiResponse>> {
+export async function GET(request: Request, props: { params: Promise<{ organizationSlug: string }> }): Promise<NextResponse<ApiResponse>> {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -32,10 +30,8 @@ export async function GET(
   return handleApiResponse(res);
 }
 
-export async function POST(
-  request: Request,
-  { params }: { params: { organizationSlug: string } },
-): Promise<NextResponse<ApiResponse>> {
+export async function POST(request: Request, props: { params: Promise<{ organizationSlug: string }> }): Promise<NextResponse<ApiResponse>> {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(

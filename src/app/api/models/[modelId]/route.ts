@@ -7,10 +7,8 @@ import {
 import { isAuthenticated } from '@/app/util/auth';
 import { NextResponse } from 'next/server';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { modelId: string } },
-): Promise<NextResponse<ApiResponse>> {
+export async function GET(request: Request, props: { params: Promise<{ modelId: string }> }): Promise<NextResponse<ApiResponse>> {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -32,10 +30,8 @@ export async function GET(
   return handleApiResponse(res);
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { modelId: string } },
-) {
+export async function DELETE(request: Request, props: { params: Promise<{ modelId: string }> }) {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
