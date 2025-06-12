@@ -9,9 +9,8 @@ import { isAuthenticated } from '@/app/util/auth';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: Promise<{ apiKey: string }> },
+  { params }: { params: { apiKey: string } },
 ): Promise<NextResponse<ApiResponse>> {
-  const { apiKey } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -22,7 +21,7 @@ export async function PATCH(
 
   const data = await request.json();
   const res = await fetch(
-    `${process.env.API_URL}/v1/user/api-keys/${apiKey}`,
+    `${process.env.API_URL}/v1/user/api-keys/${params.apiKey}`,
     {
       method: 'PATCH',
       headers: {
@@ -38,9 +37,8 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ apiKey: string }> },
+  { params }: { params: { apiKey: string } },
 ) {
-  const { apiKey } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -50,7 +48,7 @@ export async function DELETE(
   }
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/user/api-keys/${apiKey}`,
+    `${process.env.API_URL}/v1/user/api-keys/${params.apiKey}`,
     {
       method: 'DELETE',
       headers: {

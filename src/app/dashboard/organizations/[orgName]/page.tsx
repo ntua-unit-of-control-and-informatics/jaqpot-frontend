@@ -6,10 +6,9 @@ import { generateSharedMetadata } from '@/app/shared.metadata';
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ orgName: string }>;
+  params: { orgName: string };
 }): Promise<Metadata> {
-  const { orgName } = await params;
-  const organization = await getOrganizationByName(orgName);
+  const organization = await getOrganizationByName(params.orgName);
 
   return generateSharedMetadata(organization?.name, organization?.description);
 }
@@ -17,8 +16,7 @@ export async function generateMetadata({
 export default async function Page({
   params,
 }: {
-  params: Promise<{ orgName: string }>;
+  params: { orgName: string };
 }) {
-  const { orgName } = await params;
-  redirect(`/dashboard/organizations/${orgName}/description`);
+  redirect(`/dashboard/organizations/${params.orgName}/description`);
 }

@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: Promise<{ modelId: string; featureId: string }> },
+  { params }: { params: { modelId: string; featureId: string } },
 ): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
@@ -19,10 +19,9 @@ export async function PATCH(
     );
   }
 
-  const { modelId, featureId } = await params;
   const data = await request.json();
   const res = await fetch(
-    `${process.env.API_URL}/v1/models/${modelId}/features/${featureId}`,
+    `${process.env.API_URL}/v1/models/${params.modelId}/features/${params.featureId}`,
     {
       method: 'PATCH',
       headers: {

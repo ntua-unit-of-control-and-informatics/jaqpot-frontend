@@ -13,10 +13,9 @@ export const metadata: Metadata = generateSharedMetadata(
 export default async function Page({
   params,
 }: {
-  params: Promise<{ modelId: string; datasetId: string }>;
+  params: { modelId: string; datasetId: string };
 }) {
-  const { modelId, datasetId } = await params;
-  const model = await getModel(modelId);
+  const model = await getModel(params.modelId);
   if (!model) {
     notFound();
   }
@@ -24,10 +23,10 @@ export default async function Page({
   return (
     <>
       <ResultBreadcrumbs
-        modelId={modelId}
-        datasetId={datasetId}
+        modelId={params.modelId}
+        datasetId={params.datasetId}
       />
-      <DatasetResults datasetId={datasetId} model={model} />
+      <DatasetResults datasetId={params.datasetId} model={model} />
     </>
   );
 }

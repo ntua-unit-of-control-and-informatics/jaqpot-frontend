@@ -10,9 +10,8 @@ import { generatePaginationAndSortingSearchParams } from '@/app/util/sort';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ modelId: string }> },
+  { params }: { params: { modelId: string } },
 ): Promise<NextResponse<ApiResponse>> {
-  const { modelId } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -24,7 +23,7 @@ export async function POST(
   const data = await request.json();
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/user/models/${modelId}/datasets`,
+    `${process.env.API_URL}/v1/user/models/${params.modelId}/datasets`,
     {
       method: 'POST',
       headers: {
@@ -40,9 +39,8 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ modelId: string }> },
+  { params }: { params: { modelId: string } },
 ): Promise<NextResponse<ApiResponse>> {
-  const { modelId } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -54,7 +52,7 @@ export async function GET(
   const searchParams = generatePaginationAndSortingSearchParams(request);
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/user/models/${modelId}/datasets?${searchParams}`,
+    `${process.env.API_URL}/v1/user/models/${params.modelId}/datasets?${searchParams}`,
     {
       headers: {
         Authorization: `Bearer ${session!.token}`,
