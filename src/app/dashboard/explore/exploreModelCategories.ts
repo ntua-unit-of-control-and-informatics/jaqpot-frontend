@@ -104,6 +104,13 @@ export const EXPLORE_PAGE_CATEGORIES: ExplorePageCategory = {
         'https://nanoimage.jaqpot.org/nanoImage/resources/images/hero-bg.jpg',
       models: [
         {
+          name: 'Classifying nanomaterials from TEM images',
+          imageUrl:
+            'https://raw.githubusercontent.com/ntua-unit-of-control-and-informatics/images/refs/heads/master/nanomaterial-classification.png',
+          id: 2111,
+          description: 'Classifies nanomaterial types from TEM images.',
+        },
+        {
           name: 'Extracting data from microscopy images',
           imageUrl:
             'https://nanoimage.jaqpot.org/nanoImage/resources/images/hero-bg.jpg',

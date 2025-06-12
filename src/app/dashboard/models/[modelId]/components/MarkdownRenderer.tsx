@@ -48,11 +48,17 @@ export default function MarkdownRenderer({
             </h3>
           );
         },
+        hr({ children }) {
+          return <hr className="my-3" />;
+        },
+        br({ children }) {
+          return <div className="my-2 block" />;
+        },
         ol({ children }) {
-          return <ol className="list-inside list-decimal">{children}</ol>;
+          return <ol className="ms-4 list-inside list-decimal">{children}</ol>;
         },
         ul({ children }) {
-          return <ul className="list-inside list-disc">{children}</ul>;
+          return <ul className="ms-4 list-inside list-disc">{children}</ul>;
         },
         li({ children }) {
           return <li className="mb-2 list-item list-inside">{children}</li>;
