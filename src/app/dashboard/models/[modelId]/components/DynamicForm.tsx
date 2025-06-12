@@ -11,6 +11,7 @@ import ArrayInput from '@/app/dashboard/models/[modelId]/components/ArrayInput';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { Tooltip } from '@nextui-org/tooltip';
 import { isNullOrUndefinedOrEmpty } from '@/app/util/string';
+import SmilesInput from '@/app/dashboard/models/[modelId]/components/SmilesInput';
 
 // const jsonExample: DynamicFormSchema[] = [
 //   {
@@ -117,6 +118,7 @@ export interface DynamicFormSchema {
 
 export type DynamicFormFieldType =
   | 'text'
+  | 'smiles'
   | 'number'
   | 'email'
   | 'password'
@@ -339,6 +341,15 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             type="number"
             label={generateFieldLabel(field)}
             onChange={handleChange}
+          />
+        );
+      case 'smiles':
+        return (
+          <SmilesInput
+            name={field.name}
+            onChange={handleChange}
+            required={field.required}
+            value={(formData[field.name] || '') as string}
           />
         );
       case 'stringarray':

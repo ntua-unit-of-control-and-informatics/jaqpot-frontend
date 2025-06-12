@@ -27,7 +27,7 @@ function generateFieldTypeFromFeature(
     case 'TEXT':
     case 'STRING':
     case 'SMILES':
-      return 'text';
+      return 'smiles';
     case 'FLOAT_ARRAY':
       return 'floatarray';
     case 'STRING_ARRAY':
