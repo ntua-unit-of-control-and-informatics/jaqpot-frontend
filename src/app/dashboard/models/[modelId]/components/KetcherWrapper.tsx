@@ -31,18 +31,23 @@ export default function KetcherWrapper({
       if (!containerRef.current) return;
 
       try {
-        // Dynamic imports
-        const [{ StandaloneStructServiceProvider }, { Editor }] =
-          await Promise.all([
-            import('ketcher-standalone'),
-            import('ketcher-react'),
-          ]);
+        // Dynamic imports with type assertions to work around module resolution issues
+        const [ketcherStandalone, ketcherReact] = await Promise.all([
+          // @ts-ignore
+          import('ketcher-standalone'),
+          // @ts-ignore
+          import('ketcher-react'),
+        ]);
+
+        const { StandaloneStructServiceProvider } = ketcherStandalone;
+        const { Editor } = ketcherReact;
 
         if (!mounted) return;
 
         const structServiceProvider = new StandaloneStructServiceProvider();
 
-        const editor: any = new Editor({
+        // @ts-ignore
+        const editor = new Editor({
           staticResourcesUrl: '',
           structServiceProvider,
         });

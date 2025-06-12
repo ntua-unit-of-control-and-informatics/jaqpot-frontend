@@ -36,19 +36,20 @@ function KetcherComponent({
   const [currentSmiles, setCurrentSmiles] = useState<string>('');
   const cleanupRef = useRef<(() => void)[]>([]);
 
-
   useEffect(() => {
     const initKetcher = async () => {
       try {
-
-        // Dynamic imports for client-side only - import both modules
+        // Dynamic imports for client-side only - import both modules with type assertions
         const [ketcherStandalone, ketcherReact] = await Promise.all([
+          // @ts-ignore
           import('ketcher-standalone'),
+          // @ts-ignore
           import('ketcher-react'),
         ]);
 
         // Import styles separately
         try {
+          // @ts-ignore
           await import('ketcher-react/dist/index.css');
         } catch (styleError) {
           // Styles failed to load, continue without them
@@ -70,7 +71,7 @@ function KetcherComponent({
 
   const handleInit = (ketcherInstance: any) => {
     // Clean up any existing listeners before setting up new ones
-    cleanupRef.current.forEach(cleanup => {
+    cleanupRef.current.forEach((cleanup) => {
       try {
         cleanup();
       } catch (error) {
@@ -171,7 +172,7 @@ function KetcherComponent({
       // Store cleanup function for timeouts
       cleanupRef.current.push(
         () => clearTimeout(initialTimeout),
-        () => clearTimeout(eventTimeout)
+        () => clearTimeout(eventTimeout),
       );
     }
   };
@@ -191,7 +192,7 @@ function KetcherComponent({
   useEffect(() => {
     return () => {
       // Clean up all event listeners and timeouts when component unmounts
-      cleanupRef.current.forEach(cleanup => {
+      cleanupRef.current.forEach((cleanup) => {
         try {
           cleanup();
         } catch (error) {
@@ -223,7 +224,6 @@ function KetcherComponent({
       </div>
     );
   }
-
 
   return (
     <div>
