@@ -23,9 +23,9 @@ import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
 
 interface NavElement {
   name: string;
-  icon: ReactElement;
+  icon: ReactElement<any>;
   href: string;
-  after?: ReactElement;
+  after?: ReactElement<any>;
 }
 
 export default function Sidebar() {
@@ -38,8 +38,8 @@ export default function Sidebar() {
     index: number,
     href: string,
     name: string,
-    icon: ReactElement,
-    after?: ReactElement,
+    icon: ReactElement<any>,
+    after?: ReactElement<any>,
   ) => (
     <li key={index}>
       <Link

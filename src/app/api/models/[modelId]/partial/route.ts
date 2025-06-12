@@ -7,10 +7,8 @@ import {
 import { isAuthenticated } from '@/app/util/auth';
 import { NextResponse } from 'next/server';
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: { modelId: string } },
-): Promise<NextResponse<ApiResponse>> {
+export async function PATCH(request: Request, props: { params: Promise<{ modelId: string }> }): Promise<NextResponse<ApiResponse>> {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(

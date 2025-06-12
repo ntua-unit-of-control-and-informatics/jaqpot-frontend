@@ -15,11 +15,12 @@ interface UserPageParams {
   username: string;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: UserPageParams;
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<UserPageParams>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   let user;
   try {
     user = await getUser(params.username);
@@ -66,7 +67,8 @@ async function getUser(username: string): Promise<UserDto | undefined> {
   return res.json();
 }
 
-export default async function Page({ params }: { params: UserPageParams }) {
+export default async function Page(props: { params: Promise<UserPageParams> }) {
+  const params = await props.params;
   let user;
   try {
     user = await getUser(params.username);

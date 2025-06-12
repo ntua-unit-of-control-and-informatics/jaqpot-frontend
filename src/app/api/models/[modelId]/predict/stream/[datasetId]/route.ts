@@ -23,8 +23,9 @@ function iteratorToStream(reader: any) {
 
 export async function POST(
   request: Request,
-  { params }: { params: { modelId: string; datasetId: string } },
+  props: { params: Promise<{ modelId: string; datasetId: string }> }
 ) {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(

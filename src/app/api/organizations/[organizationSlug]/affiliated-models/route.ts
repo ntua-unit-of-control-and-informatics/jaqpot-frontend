@@ -10,8 +10,9 @@ import { generatePaginationAndSortingSearchParams } from '@/app/util/sort';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { organizationSlug: string } },
+  props: { params: Promise<{ organizationSlug: string }> }
 ): Promise<NextResponse<ApiResponse>> {
+  const params = await props.params;
   const authorizationHeader: Record<string, string> = {};
   const session = await auth();
   if (isAuthenticated(session)) {

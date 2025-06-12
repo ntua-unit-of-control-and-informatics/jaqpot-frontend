@@ -1,5 +1,6 @@
 import { redirect, usePathname } from 'next/navigation';
 
-export default function Page({ params }: { params: { modelId: string } }) {
+export default async function Page(props: { params: Promise<{ modelId: string }> }) {
+  const params = await props.params;
   redirect(`/dashboard/models/${params.modelId}/description`);
 }

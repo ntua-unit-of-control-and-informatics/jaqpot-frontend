@@ -25,11 +25,12 @@ import { getAvatarFallbackImg } from '@/app/util/avatar';
 
 const log = logger.child({ module: 'modelPage' });
 
-export async function generateMetadata({
-  params,
-}: {
-  params: ModelPageParams;
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<ModelPageParams>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   let model;
   try {
     model = await retrieveModelOrLegacy(params.modelId);
@@ -134,7 +135,8 @@ async function retrieveModelOrLegacy(modelId: string): Promise<ModelDto> {
   return model;
 }
 
-export default async function Page({ params }: { params: ModelPageParams }) {
+export default async function Page(props: { params: Promise<ModelPageParams> }) {
+  const params = await props.params;
   let model;
   try {
     model = await retrieveModelOrLegacy(params.modelId);

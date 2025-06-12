@@ -11,8 +11,9 @@ import { NextResponse } from 'next/server';
 
 export async function PUT(
   request: Request,
-  { params }: { params: { organizationSlug: string; invitationId: string } },
+  props: { params: Promise<{ organizationSlug: string; invitationId: string }> }
 ): Promise<NextResponse<ApiResponse>> {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(

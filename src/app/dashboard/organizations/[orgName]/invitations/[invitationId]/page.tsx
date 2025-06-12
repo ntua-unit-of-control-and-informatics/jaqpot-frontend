@@ -34,11 +34,12 @@ async function getOrganizationInvitation(
   return res.json();
 }
 
-export default async function Page({
-  params,
-}: {
-  params: { orgName: string; invitationId: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ orgName: string; invitationId: string }>;
+  }
+) {
+  const params = await props.params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return (
