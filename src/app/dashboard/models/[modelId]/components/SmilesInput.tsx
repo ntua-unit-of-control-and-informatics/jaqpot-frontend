@@ -7,6 +7,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
+  Tooltip,
 } from '@nextui-org/react';
 import { Button } from '@nextui-org/button';
 import SmilesDrawer from '@/app/dashboard/models/[modelId]/components/SmilesDrawer';
@@ -67,14 +68,16 @@ export default function SmilesInput({
         required={required}
         value={value ?? ''}
         endContent={
-          <Button 
-            isIconOnly 
-            onPress={onOpen}
-            variant="light"
-            className="text-primary"
-          >
-            <PaintBrushIcon className="size-5" />
-          </Button>
+          <Tooltip content="Open molecular editor to draw chemical structures and generate SMILES">
+            <Button 
+              isIconOnly 
+              onPress={onOpen}
+              variant="light"
+              className="text-primary"
+            >
+              <PaintBrushIcon className="size-5" />
+            </Button>
+          </Tooltip>
         }
       />
 
