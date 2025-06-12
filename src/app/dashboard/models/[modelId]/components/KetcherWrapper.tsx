@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
+import { logger } from '@/logger';
 
 interface KetcherWrapperProps {
   height?: string;
@@ -8,6 +9,8 @@ interface KetcherWrapperProps {
   smiles?: string;
   onChange?: (smiles: string) => void;
 }
+
+const log = logger.child({ module: 'KetcherWrapper' });
 
 export default function KetcherWrapper({
   height = '450px',
@@ -57,7 +60,7 @@ export default function KetcherWrapper({
             try {
               editor.setMolecule(smiles);
             } catch (err) {
-              console.error('Error setting initial SMILES:', err);
+              log.error('Error setting initial SMILES:', err);
             }
           }, 1000);
         }
@@ -75,10 +78,10 @@ export default function KetcherWrapper({
                   }
                 })
                 .catch((err: any) => {
-                  console.error('Error getting SMILES:', err);
+                  log.error('Error getting SMILES:', err);
                 });
             } catch (err) {
-              console.error('Error in checkForChanges:', err);
+              log.error('Error in checkForChanges:', err);
             }
           };
 
@@ -99,7 +102,7 @@ export default function KetcherWrapper({
           };
         }
       } catch (err) {
-        console.error('Failed to load Ketcher:', err);
+        log.error('Failed to load Ketcher:', err);
         if (mounted) {
           setError('Failed to load molecular editor');
         }
@@ -114,7 +117,7 @@ export default function KetcherWrapper({
         try {
           ketcherRef.current.destroy?.();
         } catch (err) {
-          console.error('Error destroying Ketcher:', err);
+          log.error('Error destroying Ketcher:', err);
         }
       }
     };
@@ -126,7 +129,7 @@ export default function KetcherWrapper({
       try {
         ketcherRef.current.setMolecule(smiles);
       } catch (err) {
-        console.error('Error updating SMILES:', err);
+        log.error('Error updating SMILES:', err);
       }
     }
   }, [smiles, isLoaded]);
