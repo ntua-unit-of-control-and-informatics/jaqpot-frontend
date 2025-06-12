@@ -18,11 +18,12 @@ interface UserPageParams {
 export async function generateMetadata({
   params,
 }: {
-  params: UserPageParams;
+  params: Promise<UserPageParams>;
 }): Promise<Metadata> {
+  const { username } = await params;
   let user;
   try {
-    user = await getUser(params.username);
+    user = await getUser(username);
   } catch (e) {
     return generateSharedMetadata();
   }
@@ -66,10 +67,11 @@ async function getUser(username: string): Promise<UserDto | undefined> {
   return res.json();
 }
 
-export default async function Page({ params }: { params: UserPageParams }) {
+export default async function Page({ params }: { params: Promise<UserPageParams> }) {
+  const { username } = await params;
   let user;
   try {
-    user = await getUser(params.username);
+    user = await getUser(username);
   } catch (e: any) {
     if (e?.message === 'NEXT_REDIRECT' || e?.digest === 'NEXT_NOT_FOUND') {
       throw e;

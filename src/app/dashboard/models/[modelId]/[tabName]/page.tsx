@@ -28,11 +28,12 @@ const log = logger.child({ module: 'modelPage' });
 export async function generateMetadata({
   params,
 }: {
-  params: ModelPageParams;
+  params: Promise<ModelPageParams>;
 }): Promise<Metadata> {
+  const { modelId } = await params;
   let model;
   try {
-    model = await retrieveModelOrLegacy(params.modelId);
+    model = await retrieveModelOrLegacy(modelId);
   } catch (e) {
     return generateSharedMetadata();
   }
@@ -134,10 +135,11 @@ async function retrieveModelOrLegacy(modelId: string): Promise<ModelDto> {
   return model;
 }
 
-export default async function Page({ params }: { params: ModelPageParams }) {
+export default async function Page({ params }: { params: Promise<ModelPageParams> }) {
+  const { modelId } = await params;
   let model;
   try {
-    model = await retrieveModelOrLegacy(params.modelId);
+    model = await retrieveModelOrLegacy(modelId);
   } catch (e: any) {
     if (e?.message === 'NEXT_REDIRECT' || e?.digest === 'NEXT_NOT_FOUND') {
       throw e;

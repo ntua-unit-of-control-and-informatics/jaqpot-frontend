@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(
   request: Request,
-  { params }: { params: { organizationSlug: string; invitationId: string } },
+  { params }: { params: Promise<{ organizationSlug: string; invitationId: string }> },
 ): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
@@ -19,8 +19,9 @@ export async function POST(
     );
   }
 
+  const { organizationSlug, invitationId } = await params;
   const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/invitations/${params.invitationId}/resend`,
+    `${process.env.API_URL}/v1/organizations/${organizationSlug}/invitations/${invitationId}/resend`,
     {
       method: 'POST',
       headers: {

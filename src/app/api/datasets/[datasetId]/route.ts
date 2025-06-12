@@ -9,8 +9,9 @@ import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,
-  { params }: { params: { datasetId: string } },
+  { params }: { params: Promise<{ datasetId: string }> },
 ): Promise<NextResponse<ApiResponse>> {
+  const { datasetId } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -20,7 +21,7 @@ export async function GET(
   }
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/datasets/${params.datasetId}`,
+    `${process.env.API_URL}/v1/datasets/${datasetId}`,
     {
       headers: {
         Authorization: `Bearer ${session!.token}`,

@@ -10,8 +10,9 @@ import { NextResponse } from 'next/server';
 
 export async function POST(
   request: Request,
-  { params }: { params: { modelId: string } },
+  { params }: { params: Promise<{ modelId: string }> },
 ): Promise<NextResponse<ApiResponse>> {
+  const { modelId } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -30,7 +31,7 @@ export async function POST(
   };
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/models/${params.modelId}/predict`,
+    `${process.env.API_URL}/v1/models/${modelId}/predict`,
     {
       method: 'POST',
       headers: {

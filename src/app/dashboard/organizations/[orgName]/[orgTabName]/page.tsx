@@ -17,9 +17,10 @@ import { getAvatarFallbackImg } from '@/app/util/avatar';
 export async function generateMetadata({
   params,
 }: {
-  params: { orgName: string };
+  params: Promise<{ orgName: string; orgTabName: string }>;
 }): Promise<Metadata> {
-  const organization = await getOrganizationByName(params.orgName);
+  const { orgName } = await params;
+  const organization = await getOrganizationByName(orgName);
 
   return generateSharedMetadata(organization?.name, organization?.description);
 }
@@ -27,9 +28,10 @@ export async function generateMetadata({
 export default async function Page({
   params,
 }: {
-  params: { orgName: string };
+  params: Promise<{ orgName: string; orgTabName: string }>;
 }) {
-  const organization = await getOrganizationByName(params.orgName);
+  const { orgName } = await params;
+  const organization = await getOrganizationByName(orgName);
   if (!organization) {
     notFound();
   }
