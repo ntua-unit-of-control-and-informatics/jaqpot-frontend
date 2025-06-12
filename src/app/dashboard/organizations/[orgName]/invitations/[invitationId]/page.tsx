@@ -37,8 +37,9 @@ async function getOrganizationInvitation(
 export default async function Page({
   params,
 }: {
-  params: { orgName: string; invitationId: string };
+  params: Promise<{ orgName: string; invitationId: string }>;
 }) {
+  const { orgName, invitationId } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return (
@@ -49,13 +50,13 @@ export default async function Page({
     );
   }
 
-  const organization = await getOrganizationByName(params.orgName);
+  const organization = await getOrganizationByName(orgName);
   if (!organization) {
     notFound();
   }
   const organizationInvitation = await getOrganizationInvitation(
-    params.orgName,
-    params.invitationId,
+    orgName,
+    invitationId,
   );
 
   if (!organizationInvitation) {
