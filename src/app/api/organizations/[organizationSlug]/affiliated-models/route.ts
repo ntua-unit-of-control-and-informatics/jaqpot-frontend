@@ -10,8 +10,9 @@ import { generatePaginationAndSortingSearchParams } from '@/app/util/sort';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { organizationSlug: string } },
+  { params }: { params: Promise<{ organizationSlug: string }> },
 ): Promise<NextResponse<ApiResponse>> {
+  const { organizationSlug } = await params;
   const authorizationHeader: Record<string, string> = {};
   const session = await auth();
   if (isAuthenticated(session)) {
@@ -21,7 +22,7 @@ export async function GET(
   const searchParams = generatePaginationAndSortingSearchParams(request);
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/affiliated-models?${searchParams}`,
+    `${process.env.API_URL}/v1/organizations/${organizationSlug}/affiliated-models?${searchParams}`,
     {
       headers: {
         ...authorizationHeader,

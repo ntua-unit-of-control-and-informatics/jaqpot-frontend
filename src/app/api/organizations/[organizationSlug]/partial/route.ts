@@ -9,8 +9,9 @@ import { NextResponse } from 'next/server';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { organizationSlug: string } },
+  { params }: { params: Promise<{ organizationSlug: string }> },
 ): Promise<NextResponse<ApiResponse>> {
+  const { organizationSlug } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -21,7 +22,7 @@ export async function PATCH(
 
   const data = await request.json();
   const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/partial`,
+    `${process.env.API_URL}/v1/organizations/${organizationSlug}/partial`,
     {
       method: 'PATCH',
       headers: {
