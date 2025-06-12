@@ -20,7 +20,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
-    "framer-motion": "^11.2.10",
+    "framer-motion": "^12.17.0",
     "jsme-editor": "^2024.4.29",
     "jwt-decode": "^4.0.0",
     "ketcher-core": "^3.2.0",
@@ -48,7 +48,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "@testing-library/react": "^16.0.0",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^20",
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",

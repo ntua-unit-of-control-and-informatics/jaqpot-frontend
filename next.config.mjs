@@ -11,8 +11,11 @@ const nextConfig = {
             },
         ],
     },
-    experimental: {
-        serverComponentsExternalPackages: ["pino", "pino-pretty"],
+    serverExternalPackages: ["pino", "pino-pretty"],
+    // Force webpack instead of turbopack to avoid stack overflow issues
+    webpack: (config, { dev, isServer }) => {
+        // Return the modified config
+        return config;
     },
 };
 
