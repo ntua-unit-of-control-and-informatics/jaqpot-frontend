@@ -9,9 +9,8 @@ import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ modelId: string }> },
+  { params }: { params: { modelId: string } },
 ): Promise<NextResponse<ApiResponse>> {
-  const { modelId } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -21,7 +20,7 @@ export async function GET(
   }
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/models/${modelId}`,
+    `${process.env.API_URL}/v1/models/${params.modelId}`,
     {
       headers: {
         Authorization: `Bearer ${session!.token}`,
@@ -35,9 +34,8 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ modelId: string }> },
+  { params }: { params: { modelId: string } },
 ) {
-  const { modelId } = await params;
   const session = await auth();
   if (!isAuthenticated(session)) {
     return errorResponse(
@@ -47,7 +45,7 @@ export async function DELETE(
   }
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/models/${modelId}`,
+    `${process.env.API_URL}/v1/models/${params.modelId}`,
     {
       method: 'DELETE',
       headers: {

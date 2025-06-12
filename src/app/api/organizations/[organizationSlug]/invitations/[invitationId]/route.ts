@@ -11,7 +11,7 @@ import { NextResponse } from 'next/server';
 
 export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ organizationSlug: string; invitationId: string }> },
+  { params }: { params: { organizationSlug: string; invitationId: string } },
 ): Promise<NextResponse<ApiResponse>> {
   const session = await auth();
   if (!isAuthenticated(session)) {
@@ -21,11 +21,10 @@ export async function PUT(
     );
   }
 
-  const { organizationSlug, invitationId } = await params;
   const organizationInvitationDto = await request.json();
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/organizations/${organizationSlug}/invitations/${invitationId}`,
+    `${process.env.API_URL}/v1/organizations/${params.organizationSlug}/invitations/${params.invitationId}`,
     {
       method: 'PUT',
       headers: {

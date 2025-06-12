@@ -23,7 +23,7 @@ function iteratorToStream(reader: any) {
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ modelId: string; datasetId: string }> },
+  { params }: { params: { modelId: string; datasetId: string } },
 ) {
   const session = await auth();
   if (!isAuthenticated(session)) {
@@ -33,11 +33,10 @@ export async function POST(
     );
   }
 
-  const { modelId, datasetId } = await params;
   const body = await request.json();
 
   const streamResponse = await fetch(
-    `${process.env.API_URL}/v1/models/${modelId}/predict/stream/${datasetId}`,
+    `${process.env.API_URL}/v1/models/${params.modelId}/predict/stream/${params.datasetId}`,
     {
       method: 'POST',
       headers: {
