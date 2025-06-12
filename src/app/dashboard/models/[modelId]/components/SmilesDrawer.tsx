@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
 // Simple debounce utility
@@ -34,6 +34,7 @@ function KetcherComponent({
   const [ketcher, setKetcher] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentSmiles, setCurrentSmiles] = useState<string>('');
+  const cleanupRef = useRef<(() => void)[]>([]);
 
 
   useEffect(() => {
@@ -68,24 +69,35 @@ function KetcherComponent({
   }, []);
 
   const handleInit = (ketcherInstance: any) => {
+    // Clean up any existing listeners before setting up new ones
+    cleanupRef.current.forEach(cleanup => {
+      try {
+        cleanup();
+      } catch (error) {
+        // Ignore cleanup errors
+      }
+    });
+    cleanupRef.current = [];
+
     (window as any).ketcher = ketcherInstance;
     setKetcher(ketcherInstance);
 
     // Set initial SMILES if provided
     if (smiles) {
-      setTimeout(() => {
+      const smilesTimeout = setTimeout(() => {
         try {
           void ketcherInstance.setMolecule(smiles);
         } catch (error) {
           // Error setting initial SMILES, ignore
         }
       }, 500);
+      cleanupRef.current.push(() => clearTimeout(smilesTimeout));
     }
 
     // Set up change detection
     if (onChange) {
       // Call onChange immediately with current state
-      setTimeout(() => {
+      const initialTimeout = setTimeout(() => {
         try {
           ketcherInstance
             .getSmiles()
@@ -125,7 +137,7 @@ function KetcherComponent({
       const debouncedChange = debounce(handleStructureChange, 500);
 
       // Set up event listeners
-      setTimeout(() => {
+      const eventTimeout = setTimeout(() => {
         const selectors = [
           '.ketcher-root',
           '[class*="ketcher"]',
@@ -143,10 +155,24 @@ function KetcherComponent({
 
         if (ketcherContainer) {
           ketcherContainer.addEventListener('mouseup', debouncedChange);
+          // Store cleanup function
+          cleanupRef.current.push(() => {
+            ketcherContainer.removeEventListener('mouseup', debouncedChange);
+          });
         } else {
           document.addEventListener('mouseup', debouncedChange);
+          // Store cleanup function
+          cleanupRef.current.push(() => {
+            document.removeEventListener('mouseup', debouncedChange);
+          });
         }
       }, 1500);
+
+      // Store cleanup function for timeouts
+      cleanupRef.current.push(
+        () => clearTimeout(initialTimeout),
+        () => clearTimeout(eventTimeout)
+      );
     }
   };
 
@@ -160,6 +186,21 @@ function KetcherComponent({
       }
     }
   }, [smiles, ketcher]);
+
+  // Cleanup effect
+  useEffect(() => {
+    return () => {
+      // Clean up all event listeners and timeouts when component unmounts
+      cleanupRef.current.forEach(cleanup => {
+        try {
+          cleanup();
+        } catch (error) {
+          // Ignore cleanup errors
+        }
+      });
+      cleanupRef.current = [];
+    };
+  }, []);
 
   if (isLoading) {
     return (
