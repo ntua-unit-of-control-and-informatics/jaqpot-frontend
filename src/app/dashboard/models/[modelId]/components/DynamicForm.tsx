@@ -349,6 +349,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
             name={field.name}
             onChange={handleChange}
             required={field.required}
+            label={generateFieldLabel(field)}
             value={(formData[field.name] || '') as string}
           />
         );

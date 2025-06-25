@@ -13,10 +13,11 @@ import { Button } from '@nextui-org/button';
 import SmilesDrawer from '@/app/dashboard/models/[modelId]/components/SmilesDrawer';
 import { PaintBrushIcon } from '@heroicons/react/24/solid';
 import { Input } from '@nextui-org/input';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 interface SmilesInputProps {
   name: string;
+  label?: string | ReactNode;
   onChange?: (e: React.ChangeEvent<any>) => void;
   required?: boolean;
   value?: string;
@@ -27,6 +28,7 @@ export default function SmilesInput({
   onChange,
   required,
   value,
+  label,
 }: SmilesInputProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [drawnSmiles, setDrawnSmiles] = useState<string>(value || '');
@@ -45,7 +47,7 @@ export default function SmilesInput({
           type: 'text',
         },
       } as React.ChangeEvent<any>;
-      
+
       onChange(syntheticEvent);
     }
     onOpenChange();
@@ -61,7 +63,8 @@ export default function SmilesInput({
     <>
       <Input
         type="string"
-        label="SMILES"
+        labelPlacement="outside"
+        label={label}
         placeholder="Enter SMILES string or use the molecular editor"
         name={name}
         onChange={onChange}
@@ -69,8 +72,8 @@ export default function SmilesInput({
         value={value ?? ''}
         endContent={
           <Tooltip content="Open molecular editor to draw chemical structures and generate SMILES">
-            <Button 
-              isIconOnly 
+            <Button
+              isIconOnly
               onPress={onOpen}
               variant="light"
               className="text-primary"
@@ -79,6 +82,9 @@ export default function SmilesInput({
             </Button>
           </Tooltip>
         }
+        classNames={{
+          label: 'flex flex-row  items-center justify-center',
+        }}
       />
 
       <Modal
@@ -96,7 +102,7 @@ export default function SmilesInput({
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col items-center">
-                  <SmilesDrawer 
+                  <SmilesDrawer
                     smiles={drawnSmiles}
                     onChange={handleSmilesChange}
                     width="550px"
@@ -105,17 +111,10 @@ export default function SmilesInput({
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button 
-                  color="danger" 
-                  variant="light" 
-                  onPress={handleCancel}
-                >
+                <Button color="danger" variant="light" onPress={handleCancel}>
                   Cancel
                 </Button>
-                <Button 
-                  color="primary" 
-                  onPress={handleSaveDrawnSmiles}
-                >
+                <Button color="primary" onPress={handleSaveDrawnSmiles}>
                   Use This Structure
                 </Button>
               </ModalFooter>
