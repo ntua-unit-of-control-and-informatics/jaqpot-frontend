@@ -178,6 +178,15 @@ export default function UsersTable({ usersEndpoint }: UsersTableProps) {
         aria-label="Users table"
         sortDescriptor={sortDescriptor}
         onSortChange={onSortChange}
+        topContent={
+          data ? (
+            <div className="flex justify-between items-center">
+              <span className="text-small text-default-400">
+                Total {data.totalElements} user{data.totalElements === 1 ? '' : 's'}
+              </span>
+            </div>
+          ) : null
+        }
         bottomContent={
           data && data.totalPages > 1 ? (
             <div className="flex w-full justify-center">

@@ -217,6 +217,15 @@ export default function ModelsTable({
         aria-label="Models table"
         sortDescriptor={sortDescriptor}
         onSortChange={onSortChange}
+        topContent={
+          data ? (
+            <div className="flex justify-between items-center">
+              <span className="text-small text-default-400">
+                Total {data.totalElements} model{data.totalElements === 1 ? '' : 's'}
+              </span>
+            </div>
+          ) : null
+        }
         bottomContent={
           data?.totalPages ?? 0 > 0 ? (
             <div className="flex w-full justify-center">

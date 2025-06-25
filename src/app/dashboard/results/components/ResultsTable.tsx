@@ -85,6 +85,15 @@ export default function ResultsTable() {
       aria-label="Results table"
       sortDescriptor={sortDescriptor}
       onSortChange={onSortChange}
+      topContent={
+        data ? (
+          <div className="flex justify-between items-center">
+            <span className="text-small text-default-400">
+              Total {data.totalElements} result{data.totalElements === 1 ? '' : 's'}
+            </span>
+          </div>
+        ) : null
+      }
       bottomContent={
         data?.totalPages ?? 0 > 0 ? (
           <div className="flex w-full justify-center">
