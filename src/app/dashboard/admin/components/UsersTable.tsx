@@ -14,7 +14,7 @@ import { UserDto } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
 import { Spinner } from '@nextui-org/spinner';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
-import { CustomError } from '@/app/types/CustomError';
+import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import { ApiResponse } from '@/app/util/response';
 import { SortDescriptor } from '@react-types/shared/src/collections';
 import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
@@ -43,10 +43,10 @@ const fetcher: Fetcher<ApiResponse<UsersResponseDto>, string> = async (url) => {
   // If the status code is not in the range 200-299,
   // we still try to parse and throw it.
   if (!res.ok) {
-    const error = new CustomError('An error occurred while fetching the data.');
-    // Attach extra info to the error object.
-    error.info = await res.json();
-    error.status = res.status;
+    const error = new JaqpotCustomError(
+      'An error occurred while fetching the data.',
+      res.status,
+    );
     throw error;
   }
 
@@ -58,9 +58,9 @@ function useUsersPage(
   sort: string[],
   usersEndpoint: string,
 ): {
-  data: UsersResponseDto | undefined;
+  data: UsersResponseDto | null | undefined;
   isLoading: boolean;
-  error: CustomError | undefined;
+  error: JaqpotCustomError | undefined;
 } {
   const sortQuery = sort.length > 0 ? `&sort=${sort.join('&sort=')}` : '';
   const { data, error, isLoading } = useSWR(
@@ -88,7 +88,11 @@ export default function UsersTable({ usersEndpoint }: UsersTableProps) {
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>();
   const [sort, setSort] = useState<string[]>(['createdAt|desc']); // Default sort by signup date
 
-  const { data, isLoading, error } = useUsersPage(page - 1, sort, usersEndpoint);
+  const { data, isLoading, error } = useUsersPage(
+    page - 1,
+    sort,
+    usersEndpoint,
+  );
 
   const columns = [
     {

@@ -12,7 +12,7 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 import { ApiResponse } from '@/app/util/response';
 import useSWR, { Fetcher } from 'swr';
-import { CustomError } from '@/app/types/CustomError';
+import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { Skeleton } from '@nextui-org/skeleton';
 import { Link } from '@nextui-org/link';

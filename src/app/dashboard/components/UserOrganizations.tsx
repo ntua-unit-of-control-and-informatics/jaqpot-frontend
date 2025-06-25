@@ -4,7 +4,7 @@ import Link from 'next/link';
 import useSWR, { Fetcher } from 'swr';
 import { ApiResponse } from '@/app/util/response';
 import { DatasetDto, OrganizationDto } from '@/app/api.types';
-import { CustomError } from '@/app/types/CustomError';
+import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import React, { useEffect, useState } from 'react';
 import { Spinner } from '@nextui-org/spinner';
 import useSWRMutation from 'swr/mutation';

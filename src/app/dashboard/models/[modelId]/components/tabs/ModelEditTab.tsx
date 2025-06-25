@@ -16,7 +16,7 @@ import {
 import { Input, Textarea } from '@nextui-org/input';
 import React, { useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
-import { CustomError } from '@/app/types/CustomError';
+import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import { Button } from '@nextui-org/button';
 import toast from 'react-hot-toast';
 import { router } from 'next/client';
@@ -47,7 +47,7 @@ const orgFetcher: Fetcher<OrganizationDto[], string> = async (url) => {
   if (!success) {
     const status = res.status;
     // Attach extra info to the error object.
-    throw new CustomError(message, status);
+    throw new JaqpotCustomError(message, status);
   }
 
   return data;

@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
 import { Fetcher } from 'swr';
 import { ApiResponse } from '@/app/util/response';
-import { CustomError } from '@/app/types/CustomError';
+import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 
 export const JAQPOT_METADATA_KEY = 'jaqpotMetadata';
 export const JAQPOT_ROW_ID_KEY = 'jaqpotRowId';
@@ -197,7 +197,7 @@ export const datasetFetcher: Fetcher<ApiResponse<DatasetDto>, string> = async (
     const message = (await res.json()).message;
     const status = res.status;
     // Attach extra info to the error object.
-    throw new CustomError(message, status);
+    throw new JaqpotCustomError(message, status);
   }
 
   return res.json();

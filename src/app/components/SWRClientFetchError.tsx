@@ -1,9 +1,9 @@
 'use client';
 
-import { CustomError } from '@/app/types/CustomError';
+import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 
 interface ClientFetchErrorProps {
-  error: CustomError;
+  error: JaqpotCustomError;
   className?: string;
 }
 
