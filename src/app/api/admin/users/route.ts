@@ -22,7 +22,7 @@ export async function GET(
   const searchParams = generatePaginationAndSortingSearchParams(request);
 
   const res = await fetch(
-    `${process.env.API_URL}/v1/models?${searchParams.toString()}`,
+    `${process.env.API_URL}/v1/admin/users?${searchParams.toString()}`,
     {
       headers: {
         Authorization: `Bearer ${session!.token}`,

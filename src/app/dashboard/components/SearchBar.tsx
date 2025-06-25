@@ -9,7 +9,7 @@ import useDebouncedState from '@/app/util/debounce';
 import useSWR, { Fetcher } from 'swr';
 import toast from 'react-hot-toast';
 import { ApiResponse, handleApiResponse } from '@/app/util/response';
-import { CustomError } from '@/app/types/CustomError';
+import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import { useRouter } from 'next/navigation';
 import { Key } from '@react-types/shared';
 import { KeyboardEvent } from '@react-types/shared/src/events';
@@ -34,7 +34,7 @@ const fetchWithQueryParams = async (
     const message = (await res.json()).message;
     const status = res.status;
     // Attach extra info to the error object.
-    throw new CustomError(message, status);
+    throw new JaqpotCustomError(message, status);
   }
 
   return res.json();

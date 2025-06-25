@@ -15,7 +15,7 @@ import useSWR, { Fetcher } from 'swr';
 import { Spinner } from '@nextui-org/spinner';
 import { useRouter } from 'next/navigation';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
-import { CustomError } from '@/app/types/CustomError';
+import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import { ApiResponse } from '@/app/util/response';
 import { Link } from '@nextui-org/link';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
@@ -34,7 +34,7 @@ const fetcher: Fetcher<ApiResponse<DatasetsResponseDto>, string> = async (
     const message = (await res.json()).message;
     const status = res.status;
     // Attach extra info to the error object.
-    throw new CustomError(message, status);
+    throw new JaqpotCustomError(message, status);
   }
 
   return res.json();
