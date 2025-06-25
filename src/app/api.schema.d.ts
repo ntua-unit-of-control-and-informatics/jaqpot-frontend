@@ -12,13 +12,25 @@ export interface paths {
      */
     get: operations["validateJWT"];
   };
+  "/v1/admin/users": {
+    /**
+     * Get paginated users for admins
+     * @description Retrieve a paginated list of users ordered by signup date descending. Only accessible by admin or UPCI users.
+     */
+    get: operations["getUsers"];
+  };
+  "/v1/admin/models": {
+    /**
+     * Get all models for admins
+     * @description Retrieve a paginated list of all models in the system. Only accessible by admin or UPCI users.
+     */
+    get: operations["getAllModels"];
+  };
   "/v1/user/models": {
     /** Get paginated models */
     get: operations["getModels"];
   };
   "/v1/models": {
-    /** Get paginated models */
-    get: operations["getAllModels"];
     /** Create a new model */
     post: operations["createModel"];
   };
@@ -237,6 +249,14 @@ export interface paths {
     /** Get user data */
     get: operations["getUser"];
   };
+  "/v1/large-models": {
+    /** Create a large model and get a presigned S3 upload URL */
+    post: operations["createLargeModel"];
+  };
+  "/v1/large-models/{modelId}/confirm-upload": {
+    /** Confirm that a large model has been uploaded to S3 */
+    post: operations["confirmLargeModelUpload"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -284,7 +304,7 @@ export interface components {
        * Format: byte
        * @description A base64 representation of the raw model.
        */
-      rawModel: string;
+      rawModel?: string;
       creator?: components["schemas"]["User"];
       /** @description If the current user can edit the model */
       canEdit?: boolean;
@@ -617,8 +637,8 @@ export interface components {
       input: unknown[];
       result?: unknown[];
       resultTypes?: {
-        [key: string]: components["schemas"]["DatasetResultType"];
-      };
+        [key: string]: components["schemas"]["AnyValue"];
+      } | null;
       /** @enum {string} */
       status?: "CREATED" | "EXECUTING" | "FAILURE" | "SUCCESS";
       failureReason?: string;
@@ -748,7 +768,7 @@ export interface components {
       independentFeatures: components["schemas"]["Feature"][];
       type: components["schemas"]["ModelType"];
       /** @description Raw model data in serialized format */
-      rawModel: string;
+      rawModel?: string;
       /** @description Raw preprocessor data in serialized format */
       rawPreprocessor?: string;
       /** @description List of Domain of Applicability (DoA) configurations */
@@ -789,6 +809,11 @@ export interface components {
       emailVerified?: boolean;
       avatarUrl?: string;
       canEdit?: boolean;
+      /**
+       * Format: date-time
+       * @description User signup date
+       */
+      createdAt?: string;
     };
     UserSettings: {
       /** Format: int64 */
@@ -876,8 +901,67 @@ export interface operations {
       };
     };
   };
-  /** Get paginated models */
-  getModels: {
+  /**
+   * Get paginated users for admins
+   * @description Retrieve a paginated list of users ordered by signup date descending. Only accessible by admin or UPCI users.
+   */
+  getUsers: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description Paginated list of users */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["User"][];
+            pageable?: {
+              sort?: {
+                empty?: boolean;
+                sorted?: boolean;
+                unsorted?: boolean;
+              };
+              offset?: number;
+              pageSize?: number;
+              pageNumber?: number;
+              unpaged?: boolean;
+              paged?: boolean;
+            };
+            last?: boolean;
+            totalPages?: number;
+            totalElements?: number;
+            size?: number;
+            number?: number;
+            sort?: {
+              empty?: boolean;
+              sorted?: boolean;
+              unsorted?: boolean;
+            };
+            first?: boolean;
+            numberOfElements?: number;
+            empty?: boolean;
+          };
+        };
+      };
+      /** @description Unauthorized - user must be authenticated as admin or UPCI user */
+      401: {
+        content: never;
+      };
+      /** @description Forbidden - insufficient privileges */
+      403: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get all models for admins
+   * @description Retrieve a paginated list of all models in the system. Only accessible by admin or UPCI users.
+   */
+  getAllModels: {
     parameters: {
       query?: {
         page?: number;
@@ -891,21 +975,46 @@ export interface operations {
         content: {
           "application/json": {
             content?: components["schemas"]["ModelSummary"][];
-            totalElements?: number;
+            pageable?: {
+              sort?: {
+                empty?: boolean;
+                sorted?: boolean;
+                unsorted?: boolean;
+              };
+              offset?: number;
+              pageSize?: number;
+              pageNumber?: number;
+              unpaged?: boolean;
+              paged?: boolean;
+            };
+            last?: boolean;
             totalPages?: number;
-            pageSize?: number;
-            pageNumber?: number;
+            totalElements?: number;
+            size?: number;
+            number?: number;
+            sort?: {
+              empty?: boolean;
+              sorted?: boolean;
+              unsorted?: boolean;
+            };
+            first?: boolean;
+            numberOfElements?: number;
+            empty?: boolean;
           };
         };
       };
-      /** @description Invalid input */
-      400: {
+      /** @description Unauthorized - user must be authenticated as admin or UPCI user */
+      401: {
+        content: never;
+      };
+      /** @description Forbidden - insufficient privileges */
+      403: {
         content: never;
       };
     };
   };
   /** Get paginated models */
-  getAllModels: {
+  getModels: {
     parameters: {
       query?: {
         page?: number;
@@ -2102,6 +2211,59 @@ export interface operations {
       };
       /** @description User not found */
       404: {
+        content: never;
+      };
+    };
+  };
+  /** Create a large model and get a presigned S3 upload URL */
+  createLargeModel: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Model"];
+      };
+    };
+    responses: {
+      /** @description Model created and upload URL generated */
+      201: {
+        content: {
+          "application/json": {
+            modelId?: string;
+            uploadUrl?: string;
+          };
+        };
+      };
+      /** @description Invalid input */
+      400: {
+        content: never;
+      };
+      /** @description Not authorized to upload model for this organization */
+      403: {
+        content: never;
+      };
+    };
+  };
+  /** Confirm that a large model has been uploaded to S3 */
+  confirmLargeModelUpload: {
+    parameters: {
+      path: {
+        modelId: string;
+      };
+    };
+    responses: {
+      /** @description Upload confirmed successfully */
+      204: {
+        content: never;
+      };
+      /** @description Invalid or missing upload */
+      400: {
+        content: never;
+      };
+      /** @description Not authorized */
+      403: {
+        content: never;
+      };
+      /** @description Upload already confirmed or too large */
+      409: {
         content: never;
       };
     };

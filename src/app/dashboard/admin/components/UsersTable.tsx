@@ -20,6 +20,7 @@ import { SortDescriptor } from '@react-types/shared/src/collections';
 import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { Chip, getKeyValue } from '@nextui-org/react';
+import { format } from 'date-fns';
 
 interface UsersResponseDto {
   content: UserDto[];
@@ -119,9 +120,14 @@ export default function UsersTable({ usersEndpoint }: UsersTableProps) {
       key: 'emailVerified',
       label: 'Email Verified',
     },
+    {
+      key: 'createdAt',
+      label: 'Signup Date',
+      allowsSorting: true,
+    },
   ];
 
-  const rows = data?.content?.map((user: UserDto) => {
+  const rows = data?.content?.map((user: UserDto & { createdAt?: string }) => {
     return {
       ...user,
       email: <div className="sm:min-w-56">{user.email}</div>,
@@ -143,6 +149,13 @@ export default function UsersTable({ usersEndpoint }: UsersTableProps) {
         >
           {user.emailVerified ? 'Verified' : 'Unverified'}
         </Chip>
+      ),
+      createdAt: user.createdAt ? (
+        <div className="text-sm">
+          {format(new Date(user.createdAt), 'MMM dd, yyyy HH:mm')}
+        </div>
+      ) : (
+        <div className="text-sm text-gray-500">-</div>
       ),
     };
   });
