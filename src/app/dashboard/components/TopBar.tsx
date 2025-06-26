@@ -1,6 +1,6 @@
 'use client';
 
-import { BellIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { BellIcon, QuestionMarkCircleIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 import UserAvatar from '@/app/dashboard/components/UserAvatar';
 import { Session } from 'next-auth';
 import SearchBar from '@/app/dashboard/components/SearchBar';
@@ -64,6 +64,18 @@ export default function TopBar() {
           >
             <QuestionMarkCircleIcon className="size-7 text-gray-400" />
           </Button>
+          <Tooltip content="Contact Support">
+            <Button
+              variant="light"
+              isIconOnly
+              className={`hidden sm:flex`}
+              onClick={() => {
+                window.location.href = 'mailto:upci.ntua@gmail.com?subject=Jaqpot Support Request&body=Hello,%0A%0APlease describe your issue or question:%0A%0A';
+              }}
+            >
+              <EnvelopeIcon className="size-7 text-gray-400" />
+            </Button>
+          </Tooltip>
           <Button
             variant="light"
             className="hidden min-w-10 p-2 sm:block"
