@@ -161,8 +161,8 @@ function generateFieldLabel(field: DynamicFormField) {
   return (
     <>
       {field.labelTooltip && (
-        <Tooltip content={field.labelTooltip} closeDelay={0} tabIndex={-1}>
-          <InformationCircleIcon className="mr-0.5 size-4 flex-shrink-0 text-gray-400" />
+        <Tooltip content={field.labelTooltip} closeDelay={0}>
+          <InformationCircleIcon className="mr-0.5 size-4 flex-shrink-0 text-gray-400" tabIndex={-1} />
         </Tooltip>
       )}
       {field.label}
