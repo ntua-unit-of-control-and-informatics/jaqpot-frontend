@@ -77,6 +77,7 @@ export default function SmilesInput({
               onPress={onOpen}
               variant="light"
               className="text-primary"
+              tabIndex={-1}
             >
               <PaintBrushIcon className="size-5" />
             </Button>
