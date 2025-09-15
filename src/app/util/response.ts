@@ -38,7 +38,7 @@ export async function getErrorMessageFromResponse(
       default:
         message = undefined;
     }
-  } catch (e) {
+  } catch (e: any) {
     log.warn('Could not parse response', e);
   }
 

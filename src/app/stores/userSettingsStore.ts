@@ -38,7 +38,7 @@ export const useUserSettingsStore = create<UserSettingsState>()(
                 log.error(`Error updating user settings:  ${message}`);
                 // toast.error('Could not persist user settings');
               }
-            } catch (e) {
+            } catch (e: any) {
               log.error('Error updating user settings', e);
               // toast.error('Could not persist user settings');
             } finally {
