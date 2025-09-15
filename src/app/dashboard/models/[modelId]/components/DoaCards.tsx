@@ -22,7 +22,7 @@ export default function DoaCards({ doaDetails }: DoaCardsProps) {
         {Object.entries(doaDetails).map(([key, value]) => {
           if (key === 'majorityVoting') return null;
           return (
-            <Card key={key} className="max-w-[400px] flex-grow">
+            <Card key={key} className="max-w-[400px] grow">
               <CardHeader>
                 Method: <strong className="ml-1">{key}</strong>
               </CardHeader>

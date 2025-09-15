@@ -179,7 +179,7 @@ export default async function Page(props: {
           {model.name}
         </div>
         <div className="flex h-fit flex-nowrap items-center gap-6 overflow-x-scroll py-3 scrollbar-hide">
-          <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
+          <div className="flex shrink-0 items-center text-sm text-gray-400">
             {model.creator && (
               <Tooltip content={'Creator'} closeDelay={0}>
                 <User
@@ -201,7 +201,7 @@ export default async function Page(props: {
               </Tooltip>
             )}
           </div>
-          <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
+          <div className="flex shrink-0 items-center text-sm text-gray-400">
             {model.createdAt && (
               <>
                 <Tooltip content={'Date created'} closeDelay={0}>
@@ -216,7 +216,7 @@ export default async function Page(props: {
             )}
           </div>
 
-          <div className="flex flex-shrink-0 items-center text-sm text-gray-400">
+          <div className="flex shrink-0 items-center text-sm text-gray-400">
             {model.type && (
               <>
                 <Tooltip content={'Model type'} closeDelay={0}>

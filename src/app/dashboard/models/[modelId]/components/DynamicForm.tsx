@@ -162,7 +162,7 @@ function generateFieldLabel(field: DynamicFormField) {
     <>
       {field.labelTooltip && (
         <Tooltip content={field.labelTooltip} closeDelay={0}>
-          <InformationCircleIcon className="mr-0.5 size-4 flex-shrink-0 text-gray-400" tabIndex={-1} />
+          <InformationCircleIcon className="mr-0.5 size-4 shrink-0 text-gray-400" tabIndex={-1} />
         </Tooltip>
       )}
       {field.label}
@@ -404,7 +404,7 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
               {/*<h3>{section.sectionTitle}</h3>*/}
               {section.fields &&
                 section.fields.map((field, fieldIndex) => (
-                  <div key={fieldIndex} className="mb-3 flex-grow">
+                  <div key={fieldIndex} className="mb-3 grow">
                     {renderField(field)}
                     {formErrors[field.name] && (
                       <div className="text-sm text-danger">

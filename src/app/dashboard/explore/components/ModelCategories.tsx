@@ -76,7 +76,7 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
                 className={'min-h-[250px] min-w-[250px]'}
                 isBlurred
               >
-                <CardHeader className="absolute top-0 z-10 flex-col !items-start bg-white/50 backdrop-blur-sm dark:bg-black/50">
+                <CardHeader className="absolute top-0 z-10 flex-col items-start! bg-white/50 backdrop-blur-xs dark:bg-black/50">
                   <p className="text-base font-bold uppercase">{item.name}</p>
                   <h4 className="line-clamp-2 text-sm font-medium">
                     {item.description}
@@ -110,7 +110,7 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
                 isExternal={'href' in item}
                 className={'min-h-[250px] min-w-[250px]'}
               >
-                <CardHeader className="absolute top-0 z-10 flex-col !items-start bg-white/50 backdrop-blur-sm dark:bg-black/50">
+                <CardHeader className="absolute top-0 z-10 flex-col items-start! bg-white/50 backdrop-blur-xs dark:bg-black/50">
                   <p className="text-base font-bold uppercase">{item.name}</p>
                   <h4 className="line-clamp-2 text-sm font-medium">
                     {item.description}
@@ -143,7 +143,7 @@ export default function ModelCategories({ categories }: ModelCategoriesProps) {
                   href={`/dashboard/organizations/${item.name}/description`}
                   className={'min-h-[250px] min-w-[250px]'}
                 >
-                  <CardHeader className="absolute top-0 z-10 flex-col !items-start bg-white/50 backdrop-blur-sm dark:bg-black/50">
+                  <CardHeader className="absolute top-0 z-10 flex-col items-start! bg-white/50 backdrop-blur-xs dark:bg-black/50">
                     <p className="text-base font-bold uppercase">{item.name}</p>
                     <h4 className="line-clamp-3 text-sm font-medium">
                       {item.description}
