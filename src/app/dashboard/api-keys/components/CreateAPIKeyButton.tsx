@@ -1,25 +1,24 @@
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Radio,
-  RadioGroup,
-  useDisclosure,
-} from "@heroui/react";
 import React, { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import 'react-multi-email/dist/style.css';
 import { ApiResponse } from '@/app/util/response';
 import { ApiKeyDto, ApiKeyResponseDto } from '@/app/api.types';
 import toast from 'react-hot-toast';
-import { Input } from "@heroui/input";
+import { Input } from '@heroui/input';
 import { useRouter } from 'next/navigation';
 import Alert from '@/app/components/Alert';
-import { Snippet } from "@heroui/snippet";
-import { Spinner } from "@heroui/spinner";
+import { Snippet } from '@heroui/snippet';
+import { Spinner } from '@heroui/spinner';
+import { useDisclosure } from '@heroui/react';
+import { Button } from '@heroui/button';
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from '@heroui/modal';
+import { Radio, RadioGroup } from '@heroui/radio';
 
 async function createAPIKey(formData: ApiKeyDto): Promise<ApiResponse> {
   const res = await fetch(`/api/user/api-keys`, {

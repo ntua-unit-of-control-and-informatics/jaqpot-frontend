@@ -40,7 +40,7 @@ export default async function RootLayout({
         },
       });
       userSettings = await res.json();
-    } catch (e) {
+    } catch (e: any) {
       log.warn('Failed to fetch user settings', e);
     }
   }

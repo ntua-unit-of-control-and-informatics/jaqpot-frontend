@@ -6,7 +6,7 @@ import {
   JAQPOT_ROW_LABEL_KEY,
 } from '@/app/util/dataset';
 import { useMemo } from 'react';
-import { getKeyValue } from "@heroui/react";
+import { getKeyValue } from '@heroui/table';
 
 function generateCSVFromData(
   independentFeatures: FeatureDto[],

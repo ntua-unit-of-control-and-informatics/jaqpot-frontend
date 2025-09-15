@@ -13,15 +13,15 @@ import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
 import React from 'react';
-import { Tooltip } from "@heroui/tooltip";
+import { Tooltip } from '@heroui/tooltip';
 import { logger } from '@/logger';
 import CustomErrorPage from '@/app/components/CustomErrorPage';
 import Alert from '@/app/components/Alert';
 import { getUserFriendlyDateWithSuffix } from '@/app/util/date';
 import { addDays } from 'date-fns';
-import { Link } from "@heroui/link";
-import { User } from "@heroui/react";
+import { Link } from '@heroui/link';
 import { getAvatarFallbackImg } from '@/app/util/avatar';
+import { User } from '@heroui/user';
 
 const log = logger.child({ module: 'modelPage' });
 
@@ -178,7 +178,7 @@ export default async function Page(props: {
         <div className="max-w-3xl py-3 text-3xl font-semibold">
           {model.name}
         </div>
-        <div className="flex h-fit flex-nowrap items-center gap-6 overflow-x-scroll py-3 scrollbar-hide">
+        <div className="scrollbar-hide flex h-fit flex-nowrap items-center gap-6 overflow-x-scroll py-3">
           <div className="flex shrink-0 items-center text-sm text-gray-400">
             {model.creator && (
               <Tooltip content={'Creator'} closeDelay={0}>

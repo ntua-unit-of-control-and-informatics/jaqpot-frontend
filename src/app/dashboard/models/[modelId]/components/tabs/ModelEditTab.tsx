@@ -2,32 +2,21 @@
 
 import {
   ModelDto,
-  ModelsResponseDto,
   OrganizationDto,
   PartiallyUpdateModelRequestDto,
 } from '@/app/api.types';
-import {
-  Card,
-  CardBody,
-  Select,
-  SelectItem,
-  useDisclosure,
-} from "@heroui/react";
-import { Input, Textarea } from "@heroui/input";
+import { Input, Textarea } from '@heroui/input';
 import React, { useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
 import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 import toast from 'react-hot-toast';
-import { router } from 'next/client';
 import { ApiResponse } from '@/app/util/response';
 import { useRouter } from 'next/navigation';
-import { Link } from "@heroui/link";
-import Alert from '@/app/components/Alert';
-import { Divider } from "@heroui/divider";
-import { CardHeader } from "@heroui/card";
-import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
+import { Link } from '@heroui/link';
 import ModelArchiveModal from '@/app/dashboard/models/[modelId]/components/ModelArchiveModal';
+import { useDisclosure } from '@heroui/react';
+import { Select, SelectItem } from '@heroui/react';
 
 interface FeaturesTabProps {
   model: ModelDto;

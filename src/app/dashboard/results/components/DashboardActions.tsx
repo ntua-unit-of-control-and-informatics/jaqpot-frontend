@@ -1,13 +1,13 @@
 'use client';
 
-import { Card, CardBody, CardFooter } from "@heroui/react";
+import { Card, CardBody, CardFooter } from '@heroui/card';
 import {
   CircleStackIcon,
   PencilSquareIcon,
   TableCellsIcon,
 } from '@heroicons/react/24/solid';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { Link } from "@heroui/link";
+import { Link } from '@heroui/link';
 
 const actionImgClassname = 'size-16 text-gray-400';
 

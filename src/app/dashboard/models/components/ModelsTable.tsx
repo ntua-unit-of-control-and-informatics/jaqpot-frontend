@@ -2,14 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import {
+  getKeyValue,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-} from "@heroui/table";
-import { Pagination } from "@heroui/pagination";
+} from '@heroui/table';
+import { Pagination } from '@heroui/pagination';
 import {
   ModelDto,
   ModelsResponseDto,
@@ -17,7 +18,7 @@ import {
   OrganizationDto,
 } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
-import { Spinner } from "@heroui/spinner";
+import { Spinner } from '@heroui/spinner';
 import { useRouter } from 'next/navigation';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
@@ -25,7 +26,7 @@ import { ApiResponse } from '@/app/util/response';
 import { SortDescriptor } from '@react-types/shared/src/collections';
 import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
-import { getKeyValue, Select, SelectItem } from "@heroui/react";
+import { Select, SelectItem } from '@heroui/select';
 import Link from 'next/link';
 
 type ExtraQueryParamKeys = 'organizationId';
@@ -219,9 +220,10 @@ export default function ModelsTable({
         onSortChange={onSortChange}
         topContent={
           data ? (
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <span className="text-small text-default-400">
-                Total {data.totalElements} model{data.totalElements === 1 ? '' : 's'}
+                Total {data.totalElements} model
+                {data.totalElements === 1 ? '' : 's'}
               </span>
             </div>
           ) : null

@@ -1,16 +1,16 @@
 'use client';
 
-import { Card, CardBody, CardFooter, Image } from "@heroui/react";
+import { Card } from '@heroui/card';
+import { Image } from '@heroui/image';
 import { usePathname, useRouter } from 'next/navigation';
 import PageHeading from '@/app/components/PageHeading';
-import { CardHeader } from "@heroui/card";
+import { CardHeader } from '@heroui/card';
 import {
   EXPLORE_PAGE_CATEGORIES,
   ExplorePageCategory,
   ExplorePageModel,
-  ExplorePageOrganization,
 } from '@/app/dashboard/explore/exploreModelCategories';
-import { Link } from "@heroui/link";
+import { Link } from '@heroui/link';
 
 function traverse(
   categoriesFromPath: string[],

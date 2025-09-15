@@ -64,7 +64,7 @@ export default function KetcherWrapper({
           setTimeout(() => {
             try {
               editor.setMolecule(smiles);
-            } catch (err) {
+            } catch (err: any) {
               log.error('Error setting initial SMILES:', err);
             }
           }, 1000);
@@ -85,7 +85,7 @@ export default function KetcherWrapper({
                 .catch((err: any) => {
                   log.error('Error getting SMILES:', err);
                 });
-            } catch (err) {
+            } catch (err: any) {
               log.error('Error in checkForChanges:', err);
             }
           };
@@ -106,7 +106,7 @@ export default function KetcherWrapper({
             document.removeEventListener('mouseup', handleMouseUp);
           };
         }
-      } catch (err) {
+      } catch (err: any) {
         log.error('Failed to load Ketcher:', err);
         if (mounted) {
           setError('Failed to load molecular editor');
@@ -121,7 +121,7 @@ export default function KetcherWrapper({
       if (ketcherRef.current) {
         try {
           ketcherRef.current.destroy?.();
-        } catch (err) {
+        } catch (err: any) {
           log.error('Error destroying Ketcher:', err);
         }
       }
@@ -133,7 +133,7 @@ export default function KetcherWrapper({
     if (ketcherRef.current && smiles && isLoaded) {
       try {
         ketcherRef.current.setMolecule(smiles);
-      } catch (err) {
+      } catch (err: any) {
         log.error('Error updating SMILES:', err);
       }
     }
@@ -172,7 +172,7 @@ export default function KetcherWrapper({
         <p className="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
           Generated SMILES:
         </p>
-        <p className="break-all font-mono text-xs text-gray-600 dark:text-gray-400">
+        <p className="font-mono text-xs break-all text-gray-600 dark:text-gray-400">
           {currentSmiles || '(empty - draw a molecule above)'}
         </p>
       </div>
