@@ -7,7 +7,7 @@ import { auth } from '@/auth';
 import { isAuthenticated } from '@/app/util/auth';
 import { errorResponse, handleApiResponse } from '@/app/util/response';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Tooltip } from "@heroui/tooltip";
 
 export const metadata: Metadata = generateSharedMetadata(
   'Your models',

@@ -4,7 +4,7 @@ import {
   ModelScoresDto,
   ScoresDto,
 } from '@/app/api.types';
-import { Divider } from '@nextui-org/divider';
+import { Divider } from "@heroui/divider";
 import { useMemo } from 'react';
 import ScoreCard from '@/app/dashboard/models/[modelId]/components/scores/ScoreCard';
 

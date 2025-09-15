@@ -1,8 +1,8 @@
 import { ApiKeyDto } from '@/app/api.types';
-import { Switch } from '@nextui-org/switch';
-import { Snippet } from '@nextui-org/snippet';
+import { Switch } from "@heroui/switch";
+import { Snippet } from "@heroui/snippet";
 import React, { useEffect, useState } from 'react';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import toast from 'react-hot-toast';
 import { ApiResponse } from '@/app/util/response';
 import { useRouter } from 'next/navigation';

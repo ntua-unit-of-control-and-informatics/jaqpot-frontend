@@ -7,7 +7,7 @@ import DynamicForm, {
 import { FeatureDto, ModelDto } from '@/app/api.types';
 import { isAuthenticated } from '@/app/util/auth';
 import Alert from '@/app/components/Alert';
-import { Radio, RadioGroup } from '@nextui-org/react';
+import { Radio, RadioGroup } from "@heroui/react";
 import UploadCSVForm from '@/app/dashboard/models/[modelId]/components/UploadCSVForm';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';

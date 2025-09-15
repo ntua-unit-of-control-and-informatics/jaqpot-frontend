@@ -1,7 +1,7 @@
 import { JAQPOT_METADATA_KEY } from '@/app/util/dataset';
-import { Card, CardBody } from '@nextui-org/react';
-import { CardHeader } from '@nextui-org/card';
-import { Divider } from '@nextui-org/divider';
+import { Card, CardBody } from "@heroui/react";
+import { CardHeader } from "@heroui/card";
+import { Divider } from "@heroui/divider";
 import React from 'react';
 
 interface DoaCardsProps {

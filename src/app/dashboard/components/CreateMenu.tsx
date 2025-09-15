@@ -7,16 +7,16 @@ import {
   LightBulbIcon,
 } from '@heroicons/react/24/outline';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Tooltip } from "@heroui/tooltip";
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from '@nextui-org/dropdown';
-import { Button } from '@nextui-org/button';
+} from "@heroui/dropdown";
+import { Button } from "@heroui/button";
 import { useRouter } from 'next/navigation';
-import { Link } from '@nextui-org/link';
+import { Link } from "@heroui/link";
 
 export default function CreateMenu() {
   const router = useRouter();

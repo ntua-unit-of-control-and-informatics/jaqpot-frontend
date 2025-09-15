@@ -2,7 +2,7 @@
 
 import { ModelDto } from '@/app/api.types';
 import React from 'react';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import { useRouter } from 'next/navigation';
 import Alert from '@/app/components/Alert';
 

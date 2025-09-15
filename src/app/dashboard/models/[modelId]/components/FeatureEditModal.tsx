@@ -6,7 +6,7 @@ import {
   PartiallyUpdateFeatureRequestDto,
   PartiallyUpdateModelRequestDto,
 } from '@/app/api.types';
-import { Select, SelectItem } from '@nextui-org/react';
+import { Select, SelectItem } from "@heroui/react";
 import React, { useState } from 'react';
 import {
   Modal,
@@ -17,7 +17,7 @@ import {
   Textarea,
   Button,
   Input,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import toast from 'react-hot-toast';
 import { ApiResponse } from '@/app/util/response';
 import { useRouter } from 'next/navigation';

@@ -1,11 +1,11 @@
 'use client';
 
-import { Card, CardBody, Image } from '@nextui-org/react';
-import { CardHeader } from '@nextui-org/card';
-import { Avatar } from '@nextui-org/avatar';
+import { Card, CardBody, Image } from "@heroui/react";
+import { CardHeader } from "@heroui/card";
+import { Avatar } from "@heroui/avatar";
 import { getAvatarFallbackImg } from '@/app/util/avatar';
-import { Button } from '@nextui-org/button';
-import { Badge } from '@nextui-org/badge';
+import { Button } from "@heroui/button";
+import { Badge } from "@heroui/badge";
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { UserDto } from '@/app/api.types';
 import {
@@ -18,12 +18,12 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from '@nextui-org/dropdown';
+} from "@heroui/dropdown";
 import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
 import { ApiResponse } from '@/app/util/response';
 import toast from 'react-hot-toast';
-import { Skeleton } from '@nextui-org/skeleton';
-import { Link } from '@nextui-org/link';
+import { Skeleton } from "@heroui/skeleton";
+import { Link } from "@heroui/link";
 
 interface UserProfileProps {
   user: UserDto;

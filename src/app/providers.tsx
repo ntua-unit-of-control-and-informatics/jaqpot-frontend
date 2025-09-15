@@ -1,6 +1,6 @@
 'use client';
 
-import { NextUIProvider } from '@nextui-org/react';
+import { HeroUIProvider } from "@heroui/react";
 import { useRouter } from 'next/navigation';
 import { Toaster } from 'react-hot-toast';
 import SessionChecker from '@/app/SessionChecker';
@@ -22,7 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <NextUIProvider navigate={router.push}>
+      <HeroUIProvider navigate={router.push}>
         <SessionChecker />
         <UserSettingsManager />
         <div>
@@ -36,7 +36,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           />
         </div>
         {children}
-      </NextUIProvider>
+      </HeroUIProvider>
     </>
   );
 }

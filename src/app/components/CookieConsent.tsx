@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Link } from '@nextui-org/link';
+import { Link } from "@heroui/link";
 
 const LOCAL_STORAGE_KEY = 'jaqpotCookieConsent';
 

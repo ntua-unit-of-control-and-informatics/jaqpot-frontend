@@ -13,14 +13,14 @@ import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
 import React from 'react';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Tooltip } from "@heroui/tooltip";
 import { logger } from '@/logger';
 import CustomErrorPage from '@/app/components/CustomErrorPage';
 import Alert from '@/app/components/Alert';
 import { getUserFriendlyDateWithSuffix } from '@/app/util/date';
 import { addDays } from 'date-fns';
-import { Link } from '@nextui-org/link';
-import { User } from '@nextui-org/react';
+import { Link } from "@heroui/link";
+import { User } from "@heroui/react";
 import { getAvatarFallbackImg } from '@/app/util/avatar';
 
 const log = logger.child({ module: 'modelPage' });

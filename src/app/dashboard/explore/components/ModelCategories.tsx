@@ -1,16 +1,16 @@
 'use client';
 
-import { Card, CardBody, CardFooter, Image } from '@nextui-org/react';
+import { Card, CardBody, CardFooter, Image } from "@heroui/react";
 import { usePathname, useRouter } from 'next/navigation';
 import PageHeading from '@/app/components/PageHeading';
-import { CardHeader } from '@nextui-org/card';
+import { CardHeader } from "@heroui/card";
 import {
   EXPLORE_PAGE_CATEGORIES,
   ExplorePageCategory,
   ExplorePageModel,
   ExplorePageOrganization,
 } from '@/app/dashboard/explore/exploreModelCategories';
-import { Link } from '@nextui-org/link';
+import { Link } from "@heroui/link";
 
 function traverse(
   categoriesFromPath: string[],

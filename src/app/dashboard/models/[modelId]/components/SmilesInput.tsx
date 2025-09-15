@@ -8,11 +8,11 @@ import {
   ModalHeader,
   useDisclosure,
   Tooltip,
-} from '@nextui-org/react';
-import { Button } from '@nextui-org/button';
+} from "@heroui/react";
+import { Button } from "@heroui/button";
 import SmilesDrawer from '@/app/dashboard/models/[modelId]/components/SmilesDrawer';
 import { PaintBrushIcon } from '@heroicons/react/24/solid';
-import { Input } from '@nextui-org/input';
+import { Input } from "@heroui/input";
 import React, { ReactNode, useState } from 'react';
 
 interface SmilesInputProps {

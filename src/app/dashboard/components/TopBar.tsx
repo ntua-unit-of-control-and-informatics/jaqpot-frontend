@@ -12,12 +12,12 @@ import {
 import React, { useContext } from 'react';
 import CreateMenu from '@/app/dashboard/components/CreateMenu';
 import { useSession } from 'next-auth/react';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import GithubLogo from '@/app/dashboard/components/GithubLogo';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Tooltip } from "@heroui/tooltip";
 import NotificationsMenu from '@/app/dashboard/components/NotificationsMenu';
 import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
-import { Link } from '@nextui-org/link';
+import { Link } from "@heroui/link";
 import { isAuthenticated } from '@/app/util/auth';
 
 export default function TopBar() {

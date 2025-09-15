@@ -5,10 +5,10 @@ import React, { useState } from 'react';
 import { OrganizationDto } from '@/app/api.types';
 import { ApiResponse } from '@/app/util/response';
 import toast from 'react-hot-toast';
-import { Input, Textarea } from '@nextui-org/input';
-import { Select, SelectItem } from '@nextui-org/react';
+import { Input, Textarea } from "@heroui/input";
+import { Select, SelectItem } from "@heroui/react";
 import { organizationVisibilitySelectValues } from '@/app/types/organization-select.types';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import { useSWRConfig } from 'swr';
 
 export default function NewOrganization() {

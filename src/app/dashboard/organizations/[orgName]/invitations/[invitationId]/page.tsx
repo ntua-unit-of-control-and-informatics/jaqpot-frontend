@@ -1,8 +1,8 @@
 import { auth } from '@/auth';
 import { isAuthenticated } from '@/app/util/auth';
 import React from 'react';
-import { Checkbox } from '@nextui-org/checkbox';
-import { Button } from '@nextui-org/button';
+import { Checkbox } from "@heroui/checkbox";
+import { Button } from "@heroui/button";
 import OrganizationInvitation from '@/app/dashboard/organizations/[orgName]/invitations/[invitationId]/components/OrganizationInvitation';
 import { notFound } from 'next/navigation';
 import { OrganizationDto, OrganizationInvitationDto } from '@/app/api.types';

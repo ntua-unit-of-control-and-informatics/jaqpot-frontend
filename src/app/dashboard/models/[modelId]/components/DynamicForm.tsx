@@ -1,15 +1,15 @@
 'use client';
 
 import React, { ChangeEvent, ReactNode, useState } from 'react';
-import { Radio, RadioGroup, Select, SelectItem } from '@nextui-org/react';
-import { Input, Textarea } from '@nextui-org/input';
+import { Radio, RadioGroup, Select, SelectItem } from "@heroui/react";
+import { Input, Textarea } from "@heroui/input";
 import { Input as ShadCNInput } from '@/components/ui/input';
-import { Button } from '@nextui-org/button';
-import { Checkbox } from '@nextui-org/checkbox';
-import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
+import { Button } from "@heroui/button";
+import { Checkbox } from "@heroui/checkbox";
+import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import ArrayInput from '@/app/dashboard/models/[modelId]/components/ArrayInput';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Tooltip } from "@heroui/tooltip";
 import { isNullOrUndefinedOrEmpty } from '@/app/util/string';
 import SmilesInput from '@/app/dashboard/models/[modelId]/components/SmilesInput';
 
@@ -283,9 +283,9 @@ export default function DynamicForm({ schema, onSubmit }: DynamicFormProps) {
           >
             {field.options!.map((option: DynamicFormOption, index: number) => (
               // Send keys so the model can decide how to split the values
-              <AutocompleteItem key={option.key}>
+              (<AutocompleteItem key={option.key}>
                 {option.value}
-              </AutocompleteItem>
+              </AutocompleteItem>)
             ))}
           </Autocomplete>
         );

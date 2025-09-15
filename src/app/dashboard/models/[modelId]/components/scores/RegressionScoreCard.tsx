@@ -1,5 +1,5 @@
 import { RegressionScoreDto } from '@/app/api.types';
-import { Card, CardHeader, CardBody, Image } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, Image } from "@heroui/react";
 
 interface RegressionScoreCardProps {
   score: RegressionScoreDto;

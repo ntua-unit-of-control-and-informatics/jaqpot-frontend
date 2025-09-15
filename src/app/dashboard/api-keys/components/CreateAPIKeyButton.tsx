@@ -8,18 +8,18 @@ import {
   Radio,
   RadioGroup,
   useDisclosure,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import React, { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import 'react-multi-email/dist/style.css';
 import { ApiResponse } from '@/app/util/response';
 import { ApiKeyDto, ApiKeyResponseDto } from '@/app/api.types';
 import toast from 'react-hot-toast';
-import { Input } from '@nextui-org/input';
+import { Input } from "@heroui/input";
 import { useRouter } from 'next/navigation';
 import Alert from '@/app/components/Alert';
-import { Snippet } from '@nextui-org/snippet';
-import { Spinner } from '@nextui-org/spinner';
+import { Snippet } from "@heroui/snippet";
+import { Spinner } from "@heroui/spinner";
 
 async function createAPIKey(formData: ApiKeyDto): Promise<ApiResponse> {
   const res = await fetch(`/api/user/api-keys`, {

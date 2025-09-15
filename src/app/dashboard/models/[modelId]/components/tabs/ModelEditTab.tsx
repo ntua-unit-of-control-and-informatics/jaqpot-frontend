@@ -12,20 +12,20 @@ import {
   Select,
   SelectItem,
   useDisclosure,
-} from '@nextui-org/react';
-import { Input, Textarea } from '@nextui-org/input';
+} from "@heroui/react";
+import { Input, Textarea } from "@heroui/input";
 import React, { useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
 import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import toast from 'react-hot-toast';
 import { router } from 'next/client';
 import { ApiResponse } from '@/app/util/response';
 import { useRouter } from 'next/navigation';
-import { Link } from '@nextui-org/link';
+import { Link } from "@heroui/link";
 import Alert from '@/app/components/Alert';
-import { Divider } from '@nextui-org/divider';
-import { CardHeader } from '@nextui-org/card';
+import { Divider } from "@heroui/divider";
+import { CardHeader } from "@heroui/card";
 import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
 import ModelArchiveModal from '@/app/dashboard/models/[modelId]/components/ModelArchiveModal';
 

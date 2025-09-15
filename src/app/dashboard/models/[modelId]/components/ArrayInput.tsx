@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Input } from '@nextui-org/input';
-import { Button } from '@nextui-org/button';
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
 
 interface ArrayInputProps {
   name: string;

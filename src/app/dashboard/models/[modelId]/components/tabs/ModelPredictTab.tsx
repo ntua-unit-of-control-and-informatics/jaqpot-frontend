@@ -11,7 +11,7 @@ import { useState } from 'react';
 import DatasetResults from '@/app/dashboard/models/[modelId]/components/DatasetResults';
 import toast from 'react-hot-toast';
 import { ApiResponse } from '@/app/util/response';
-import { Spinner } from '@nextui-org/spinner';
+import { Spinner } from "@heroui/spinner";
 import ModelPredictionForm from '@/app/dashboard/models/[modelId]/components/ModelPredictionForm';
 import { isAuthenticated } from '@/app/util/auth';
 import Alert from '@/app/components/Alert';

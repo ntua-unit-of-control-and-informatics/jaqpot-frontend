@@ -6,7 +6,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import React, { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { ReactMultiEmail } from 'react-multi-email';

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardBody } from '@nextui-org/react';
-import { CardHeader } from '@nextui-org/card';
+import { Card, CardBody } from "@heroui/react";
+import { CardHeader } from "@heroui/card";
 
 interface HeatmapProps {
   data: number[][];

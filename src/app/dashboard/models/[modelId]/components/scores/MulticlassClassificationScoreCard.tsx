@@ -1,5 +1,5 @@
 import { MulticlassClassificationDto } from '@/app/api.types';
-import { Card, CardBody, CardHeader, Image } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Image } from "@heroui/react";
 import ConfusionMatrix from '@/app/dashboard/models/[modelId]/components/scores/ConfusionMatrix';
 
 interface MulticlassClassificationScoreCardProps {

@@ -6,13 +6,13 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from '@nextui-org/table';
-import { Tooltip } from '@nextui-org/tooltip';
-import { EditIcon } from '@nextui-org/shared-icons';
+} from "@heroui/table";
+import { Tooltip } from "@heroui/tooltip";
+import { EditIcon } from "@heroui/shared-icons";
 import { EyeIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
-import { useDisclosure } from '@nextui-org/react';
+import { useDisclosure } from "@heroui/react";
 import { useEffect, useState } from 'react';
 
 interface FeaturesTabProps {

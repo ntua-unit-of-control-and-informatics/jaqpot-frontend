@@ -12,14 +12,14 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import useSWR, { Fetcher } from 'swr';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { ApiResponse } from '@/app/util/response';
 import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import { getUserFriendlyDateWithSuffix } from '@/app/util/date';
-import { Button } from '@nextui-org/button';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Button } from "@heroui/button";
+import { Tooltip } from "@heroui/tooltip";
 import toast from 'react-hot-toast';
 
 interface OrganizationInvitationsProps {

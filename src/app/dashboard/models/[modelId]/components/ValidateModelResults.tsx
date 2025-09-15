@@ -8,30 +8,30 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from '@nextui-org/table';
+} from "@heroui/table";
 import React, { useEffect, useMemo, useState } from 'react';
 import { ApiResponse } from '@/app/util/response';
 import useSWR, { Fetcher } from 'swr';
 import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
-import { Skeleton } from '@nextui-org/skeleton';
-import { Link } from '@nextui-org/link';
+import { Skeleton } from "@heroui/skeleton";
+import { Link } from "@heroui/link";
 import {
   getDatasetStatusNode,
   generateResultTableData,
   ResultTableRow,
   datasetFetcher,
 } from '@/app/util/dataset';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import {
   ArrowDownTrayIcon,
   BugAntIcon,
   EyeIcon,
   InformationCircleIcon,
 } from '@heroicons/react/24/solid';
-import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import { Accordion, AccordionItem } from "@heroui/accordion";
 import { logger } from '@/logger';
-import { getKeyValue, useDisclosure } from '@nextui-org/react';
+import { getKeyValue, useDisclosure } from "@heroui/react";
 import DoaTableCell from '@/app/dashboard/models/[modelId]/components/DoaTableCell';
 import FeatureEditModal from '@/app/dashboard/models/[modelId]/components/FeatureEditModal';
 import DoaModal from '@/app/dashboard/models/[modelId]/components/DoaModal';

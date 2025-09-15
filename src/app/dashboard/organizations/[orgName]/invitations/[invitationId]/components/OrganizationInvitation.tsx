@@ -1,9 +1,9 @@
 'use client';
 
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import React from 'react';
 import { OrganizationDto, OrganizationInvitationDto } from '@/app/api.types';
-import { BreadcrumbItem, Breadcrumbs } from '@nextui-org/breadcrumbs';
+import { BreadcrumbItem, Breadcrumbs } from "@heroui/breadcrumbs";
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';

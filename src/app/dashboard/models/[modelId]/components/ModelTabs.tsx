@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams, usePathname } from 'next/navigation';
-import { Tab, Tabs } from '@nextui-org/tabs';
+import { Tab, Tabs } from "@heroui/tabs";
 import { ModelDto } from '@/app/api.types';
 import ModelFeaturesTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelFeaturesTab';
 import ModelPredictTab from '@/app/dashboard/models/[modelId]/components/tabs/ModelPredictTab';

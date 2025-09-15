@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { generateSharedMetadata, openGraphImage } from '@/app/shared.metadata';
-import { Link } from '@nextui-org/link';
-import { Button } from '@nextui-org/button';
+import { Link } from "@heroui/link";
+import { Button } from "@heroui/button";
 import {
   ArrowLongRightIcon,
   CircleStackIcon,
@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/solid';
 import React from 'react';
 import DashboardActions from '@/app/dashboard/results/components/DashboardActions';
-import { Divider } from '@nextui-org/divider';
+import { Divider } from "@heroui/divider";
 
 export const metadata: Metadata = generateSharedMetadata(
   'Dashboard: Manage your machine learning models and predictions',

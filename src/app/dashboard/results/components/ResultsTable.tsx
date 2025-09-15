@@ -8,16 +8,16 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from '@nextui-org/table';
-import { Pagination } from '@nextui-org/pagination';
+} from "@heroui/table";
+import { Pagination } from "@heroui/pagination";
 import { DatasetDto, DatasetsResponseDto } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
-import { Spinner } from '@nextui-org/spinner';
+import { Spinner } from "@heroui/spinner";
 import { useRouter } from 'next/navigation';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import { ApiResponse } from '@/app/util/response';
-import { Link } from '@nextui-org/link';
+import { Link } from "@heroui/link";
 import JaqpotTimeAgo from '@/app/dashboard/models/[modelId]/components/JaqpotTimeAgo';
 import { getDatasetStatusNode } from '@/app/util/dataset';
 import { SortDescriptor } from '@react-types/shared/src/collections';
