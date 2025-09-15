@@ -3,8 +3,8 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from '@nextui-org/dropdown';
-import { Button } from '@nextui-org/button';
+} from "@heroui/dropdown";
+import { Button } from "@heroui/button";
 import { useRouter } from 'next/navigation';
 import { BellIcon } from '@heroicons/react/24/outline';
 import React from 'react';

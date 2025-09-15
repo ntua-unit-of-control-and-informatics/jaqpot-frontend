@@ -9,9 +9,9 @@ import { getOrganizationByName } from '@/app/dashboard/organizations/[orgName]/r
 import { Metadata } from 'next';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import { getModel } from '@/app/dashboard/models/[modelId]/[tabName]/page';
-import { Tooltip } from '@nextui-org/tooltip';
-import { User } from '@nextui-org/react';
-import { Link } from '@nextui-org/link';
+import { Tooltip } from "@heroui/tooltip";
+import { User } from "@heroui/react";
+import { Link } from "@heroui/link";
 import { getAvatarFallbackImg } from '@/app/util/avatar';
 
 export async function generateMetadata(

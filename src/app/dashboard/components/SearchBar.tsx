@@ -1,8 +1,8 @@
 'use client';
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
-import { SearchIcon } from '@nextui-org/shared-icons';
+import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
+import { SearchIcon } from "@heroui/shared-icons";
 import { useEffect, useState } from 'react';
 import { ModelDto, ModelsResponseDto } from '@/app/api.types';
 import useDebouncedState from '@/app/util/debounce';
@@ -13,7 +13,7 @@ import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import { useRouter } from 'next/navigation';
 import { Key } from '@react-types/shared';
 import { KeyboardEvent } from '@react-types/shared/src/events';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 
 const fetchWithQueryParams = async (
   url: string,

@@ -41,7 +41,7 @@ export default function DashboardMostPopularModels({
     <ResponsiveContainer
       width={width}
       height={height}
-      className="p-2 border-1 rounded"
+      className="p-2 border rounded-sm"
     >
       <BarChart data={data}>
         <XAxis dataKey="name" />

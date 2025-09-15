@@ -1,5 +1,5 @@
 import { CheckIcon } from '@heroicons/react/24/solid';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';

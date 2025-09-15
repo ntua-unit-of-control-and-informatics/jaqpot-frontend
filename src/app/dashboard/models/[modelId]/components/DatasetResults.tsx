@@ -8,37 +8,37 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from '@nextui-org/table';
+} from "@heroui/table";
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useSWR, { Fetcher } from 'swr';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
-import { Skeleton } from '@nextui-org/skeleton';
-import { Link } from '@nextui-org/link';
+import { Skeleton } from "@heroui/skeleton";
+import { Link } from "@heroui/link";
 import {
   getDatasetStatusNode,
   generateResultTableData,
   datasetFetcher,
 } from '@/app/util/dataset';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import {
   ArrowDownTrayIcon,
   BugAntIcon,
   CalendarDaysIcon,
 } from '@heroicons/react/24/solid';
-import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import { Accordion, AccordionItem } from "@heroui/accordion";
 import { logger } from '@/logger';
 import {
   getKeyValue,
   Select,
   SelectItem,
   useDisclosure,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import DoaTableCell from '@/app/dashboard/models/[modelId]/components/DoaTableCell';
 import DoaModal from '@/app/dashboard/models/[modelId]/components/DoaModal';
-import { Tab, Tabs } from '@nextui-org/tabs';
+import { Tab, Tabs } from "@heroui/tabs";
 import PBPKPlots from '@/app/dashboard/models/[modelId]/components/PBPKPlots';
-import { Pagination } from '@nextui-org/pagination';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Pagination } from "@heroui/pagination";
+import { Tooltip } from "@heroui/tooltip";
 import { ClockIcon } from '@heroicons/react/24/outline';
 import {
   getUserFriendlyDateWithSuffix,

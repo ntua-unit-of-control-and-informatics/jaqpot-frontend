@@ -1,4 +1,4 @@
-import { Tab, Tabs } from '@nextui-org/tabs';
+import { Tab, Tabs } from "@heroui/tabs";
 import { LLMForm } from '@/app/dashboard/models/[modelId]/components/llm/LLMForm';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { DatasetDto, ModelDto, ModelsResponseDto } from '@/app/api.types';
@@ -6,11 +6,11 @@ import useSWR from 'swr';
 import React, { useState } from 'react';
 import { ApiResponse } from '@/app/util/response';
 import { logger } from '@/logger';
-import { Spinner } from '@nextui-org/spinner';
+import { Spinner } from "@heroui/spinner";
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
-import { Pagination } from '@nextui-org/pagination';
-import { Card } from '@nextui-org/react';
-import { Link } from '@nextui-org/link';
+import { Pagination } from "@heroui/pagination";
+import { Card } from "@heroui/react";
+import { Link } from "@heroui/link";
 import {
   Table,
   TableBody,
@@ -18,8 +18,8 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from '@nextui-org/table';
-import { Button } from '@nextui-org/button';
+} from "@heroui/table";
+import { Button } from "@heroui/button";
 
 interface LLMTabsProps {
   model: ModelDto;

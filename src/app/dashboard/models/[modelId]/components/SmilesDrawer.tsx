@@ -207,7 +207,7 @@ function KetcherComponent({
     return (
       <div
         style={{ width, height }}
-        className="flex items-center justify-center rounded border border-gray-300"
+        className="flex items-center justify-center rounded-sm border border-gray-300"
       >
         <div>Loading molecular editor...</div>
       </div>
@@ -218,7 +218,7 @@ function KetcherComponent({
     return (
       <div
         style={{ width, height }}
-        className="flex items-center justify-center rounded border border-gray-300"
+        className="flex items-center justify-center rounded-sm border border-gray-300"
       >
         <div>Failed to load molecular editor</div>
       </div>
@@ -237,7 +237,7 @@ function KetcherComponent({
           }}
         />
       </div>
-      <div className="mt-4 rounded bg-gray-100 p-3 dark:bg-gray-700">
+      <div className="mt-4 rounded-sm bg-gray-100 p-3 dark:bg-gray-700">
         <p className="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
           Generated SMILES:
         </p>
@@ -256,7 +256,7 @@ const DynamicKetcherComponent = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="flex items-center justify-center rounded border border-gray-300"
+        className="flex items-center justify-center rounded-sm border border-gray-300"
         style={{ width: '500px', height: '450px' }}
       >
         <div>Loading molecular editor...</div>

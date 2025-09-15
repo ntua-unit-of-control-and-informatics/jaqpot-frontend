@@ -6,7 +6,7 @@ import { ApiResponse } from '@/app/util/response';
 import { DatasetDto, OrganizationDto } from '@/app/api.types';
 import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import React, { useEffect, useState } from 'react';
-import { Spinner } from '@nextui-org/spinner';
+import { Spinner } from "@heroui/spinner";
 import useSWRMutation from 'swr/mutation';
 import { useSession } from 'next-auth/react';
 import { logger } from '@/logger';

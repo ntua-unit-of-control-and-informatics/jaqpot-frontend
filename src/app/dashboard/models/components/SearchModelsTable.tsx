@@ -8,17 +8,17 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from '@nextui-org/table';
-import { Pagination } from '@nextui-org/pagination';
+} from "@heroui/table";
+import { Pagination } from "@heroui/pagination";
 import { ModelsResponseDto, ModelSummaryDto } from '@/app/api.types';
 import useSWR from 'swr';
-import { Spinner } from '@nextui-org/spinner';
+import { Spinner } from "@heroui/spinner";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import { ApiResponse } from '@/app/util/response';
-import { Input } from '@nextui-org/input';
-import { Button } from '@nextui-org/button';
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
 
 const fetchWithQueryParams = async (
   url: string,

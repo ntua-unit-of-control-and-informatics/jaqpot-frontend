@@ -1,14 +1,14 @@
 'use client';
 
 import { ApiKeyDto } from '@/app/api.types';
-import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import { Accordion, AccordionItem } from "@heroui/accordion";
 import { KeyIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import CreateAPIKeyButton from '@/app/dashboard/api-keys/components/CreateAPIKeyButton';
-import { Snippet } from '@nextui-org/snippet';
-import { Switch } from '@nextui-org/switch';
+import { Snippet } from "@heroui/snippet";
+import { Switch } from "@heroui/switch";
 import ApiKeyContent from '@/app/dashboard/api-keys/components/ApiKeyContent';
-import { Link } from '@nextui-org/link';
+import { Link } from "@heroui/link";
 
 export default function ApiKeys({ apiKeys }: { apiKeys: ApiKeyDto[] }) {
   return (

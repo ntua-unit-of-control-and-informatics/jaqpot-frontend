@@ -64,7 +64,7 @@ export default function KetcherWrapper({
           setTimeout(() => {
             try {
               editor.setMolecule(smiles);
-            } catch (err) {
+            } catch (err: any) {
               log.error('Error setting initial SMILES:', err);
             }
           }, 1000);
@@ -85,7 +85,7 @@ export default function KetcherWrapper({
                 .catch((err: any) => {
                   log.error('Error getting SMILES:', err);
                 });
-            } catch (err) {
+            } catch (err: any) {
               log.error('Error in checkForChanges:', err);
             }
           };
@@ -106,7 +106,7 @@ export default function KetcherWrapper({
             document.removeEventListener('mouseup', handleMouseUp);
           };
         }
-      } catch (err) {
+      } catch (err: any) {
         log.error('Failed to load Ketcher:', err);
         if (mounted) {
           setError('Failed to load molecular editor');
@@ -121,7 +121,7 @@ export default function KetcherWrapper({
       if (ketcherRef.current) {
         try {
           ketcherRef.current.destroy?.();
-        } catch (err) {
+        } catch (err: any) {
           log.error('Error destroying Ketcher:', err);
         }
       }
@@ -133,7 +133,7 @@ export default function KetcherWrapper({
     if (ketcherRef.current && smiles && isLoaded) {
       try {
         ketcherRef.current.setMolecule(smiles);
-      } catch (err) {
+      } catch (err: any) {
         log.error('Error updating SMILES:', err);
       }
     }
@@ -143,7 +143,7 @@ export default function KetcherWrapper({
     return (
       <div
         style={{ width, height }}
-        className="flex items-center justify-center rounded border border-gray-300"
+        className="flex items-center justify-center rounded-sm border border-gray-300"
       >
         <div className="text-red-500">{error}</div>
       </div>
@@ -154,7 +154,7 @@ export default function KetcherWrapper({
     return (
       <div
         style={{ width, height }}
-        className="flex items-center justify-center rounded border border-gray-300"
+        className="flex items-center justify-center rounded-sm border border-gray-300"
       >
         <div>Loading molecular editor...</div>
       </div>
@@ -168,11 +168,11 @@ export default function KetcherWrapper({
         style={{ width, height }}
         className="rounded border border-gray-300"
       />
-      <div className="mt-4 rounded bg-gray-100 p-3 dark:bg-gray-700">
+      <div className="mt-4 rounded-sm bg-gray-100 p-3 dark:bg-gray-700">
         <p className="mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
           Generated SMILES:
         </p>
-        <p className="break-all font-mono text-xs text-gray-600 dark:text-gray-400">
+        <p className="font-mono text-xs break-all text-gray-600 dark:text-gray-400">
           {currentSmiles || '(empty - draw a molecule above)'}
         </p>
       </div>

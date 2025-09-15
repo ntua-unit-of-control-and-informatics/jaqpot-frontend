@@ -41,7 +41,7 @@ export default function DashboardStats({
     <ResponsiveContainer
       width={width}
       height={height}
-      className="p-5 border-1 rounded"
+      className="p-5 border rounded-sm"
     >
       <BarChart data={data}>
         <XAxis dataKey="x" />

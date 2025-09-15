@@ -1,7 +1,7 @@
 'use client';
 
 import { OrganizationDto } from '@/app/api.types';
-import { BreadcrumbItem, Breadcrumbs } from '@nextui-org/breadcrumbs';
+import { BreadcrumbItem, Breadcrumbs } from "@heroui/breadcrumbs";
 import React from 'react';
 
 export default function OrganizationBreadcrumbs(props: {

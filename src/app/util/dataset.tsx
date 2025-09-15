@@ -1,4 +1,4 @@
-import { Chip } from '@nextui-org/chip';
+import { Chip } from "@heroui/chip";
 import React, { ReactNode } from 'react';
 import { DatasetDto, FeatureDto, ModelDto } from '@/app/api.types';
 import { Fetcher } from 'swr';

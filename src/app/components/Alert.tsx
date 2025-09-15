@@ -26,7 +26,7 @@ export default function Alert({
           className={`mb-4 flex gap-3 rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-600 dark:text-blue-400 ${className}`}
           role="alert"
         >
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <InformationCircleIcon className="size-6" />
           </div>
           <div>
@@ -39,7 +39,7 @@ export default function Alert({
         <div
           className={`mb-4 flex gap-3 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-600 dark:text-red-400 ${className}`}
         >
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <XCircleIcon className="size-6" />
           </div>
           <div role="alert">
@@ -53,7 +53,7 @@ export default function Alert({
           className={`mb-4 flex gap-3 rounded-lg bg-green-50 p-4 text-sm text-green-800 dark:bg-gray-600 dark:text-green-400 ${className}`}
           role="alert"
         >
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <CheckCircleIcon className="size-6" />
           </div>
           <div>
@@ -67,7 +67,7 @@ export default function Alert({
           className={`mb-4 flex gap-3 rounded-lg bg-amber-100 p-4 text-sm text-amber-800 dark:bg-gray-600 dark:text-yellow-300 ${className}`}
           role="alert"
         >
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <ExclamationTriangleIcon className="size-6" />
           </div>
           <div>

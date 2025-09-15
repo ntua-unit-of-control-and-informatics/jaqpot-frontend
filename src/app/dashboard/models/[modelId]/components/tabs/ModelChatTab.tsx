@@ -1,4 +1,4 @@
-import { Tab, Tabs } from '@nextui-org/tabs';
+import { Tab, Tabs } from "@heroui/tabs";
 import { ModelDto } from '@/app/api.types';
 import { LLMForm } from '@/app/dashboard/models/[modelId]/components/llm/LLMForm';
 import { usePathname } from 'next/navigation';

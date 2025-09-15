@@ -1,7 +1,7 @@
 import { JAQPOT_METADATA_KEY } from '@/app/util/dataset';
-import { Card, CardBody } from '@nextui-org/react';
-import { CardHeader } from '@nextui-org/card';
-import { Divider } from '@nextui-org/divider';
+import { Card, CardBody } from '@heroui/card';
+import { CardHeader } from '@heroui/card';
+import { Divider } from '@heroui/divider';
 import React from 'react';
 
 interface DoaCardsProps {
@@ -22,7 +22,7 @@ export default function DoaCards({ doaDetails }: DoaCardsProps) {
         {Object.entries(doaDetails).map(([key, value]) => {
           if (key === 'majorityVoting') return null;
           return (
-            <Card key={key} className="max-w-[400px] flex-grow">
+            <Card key={key} className="max-w-[400px] grow">
               <CardHeader>
                 Method: <strong className="ml-1">{key}</strong>
               </CardHeader>

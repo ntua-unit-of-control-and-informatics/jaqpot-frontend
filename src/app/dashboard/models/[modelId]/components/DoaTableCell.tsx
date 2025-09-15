@@ -1,7 +1,7 @@
 import { ResultTableRow } from '@/app/util/dataset';
-import { TableCell } from '@nextui-org/table';
-import { getKeyValue } from '@nextui-org/react';
-import { Button } from '@nextui-org/button';
+import { TableCell } from "@heroui/table";
+import { getKeyValue } from "@heroui/react";
+import { Button } from "@heroui/button";
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import React from 'react';
 

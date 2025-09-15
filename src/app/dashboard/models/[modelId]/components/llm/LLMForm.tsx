@@ -1,13 +1,13 @@
-import { Textarea } from '@nextui-org/input';
+import { Textarea } from "@heroui/input";
 import { DatasetDto, ModelDto } from '@/app/api.types';
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
 import { KeyboardEvent } from '@react-types/shared/src/events';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody } from "@heroui/react";
 import useSWR from 'swr';
 import { datasetFetcher } from '@/app/util/dataset';
-import { Spinner } from '@nextui-org/spinner';
+import { Spinner } from "@heroui/spinner";
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import ChatGrid from '@/app/dashboard/models/[modelId]/components/llm/ChatMessage';
 import toast from 'react-hot-toast';

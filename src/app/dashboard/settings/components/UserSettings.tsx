@@ -1,7 +1,7 @@
 'use client';
 
 import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
-import { Switch } from '@nextui-org/switch';
+import { Switch } from "@heroui/switch";
 import React, { useContext } from 'react';
 import { useSession } from 'next-auth/react';
 import {} from '@/app/dashboard/dashboard-layout';

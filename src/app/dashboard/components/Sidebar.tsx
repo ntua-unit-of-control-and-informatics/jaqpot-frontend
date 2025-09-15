@@ -15,8 +15,8 @@ import { signIn, useSession } from 'next-auth/react';
 import { ReactElement, useContext, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { isAuthenticated } from '@/app/util/auth';
-import { Button } from '@nextui-org/button';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Button } from "@heroui/button";
+import { Tooltip } from "@heroui/tooltip";
 import JLogo from '@/app/dashboard/components/Logo/JLogo';
 import UserOrganizations from '@/app/dashboard/components/UserOrganizations';
 import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
@@ -111,7 +111,7 @@ export default function Sidebar() {
           updateUserSettings({ ...userSettings, collapseSidebar: false })
         }
         type="button"
-        className="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-gray-200 sm:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-indigo-100 focus:outline-hidden focus:ring-2 focus:ring-gray-200 sm:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
         <span className="sr-only">Open sidebar</span>
         <svg
@@ -187,7 +187,7 @@ export default function Sidebar() {
                   className="group flex w-full gap-x-3 rounded-lg p-2 text-indigo-200 hover:bg-indigo-700 dark:text-white dark:hover:bg-gray-700"
                 >
                   <svg
-                    className="h-5 w-5 flex-shrink-0 text-indigo-200 transition duration-75 group-hover:text-white dark:text-gray-400 dark:group-hover:text-white"
+                    className="h-5 w-5 shrink-0 text-indigo-200 transition duration-75 group-hover:text-white dark:text-gray-400 dark:group-hover:text-white"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

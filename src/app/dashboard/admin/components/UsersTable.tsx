@@ -8,18 +8,19 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from '@nextui-org/table';
-import { Pagination } from '@nextui-org/pagination';
+} from '@heroui/table';
+import { Pagination } from '@heroui/pagination';
 import { UserDto } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
-import { Spinner } from '@nextui-org/spinner';
+import { Spinner } from '@heroui/spinner';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
 import { JaqpotCustomError } from '@/app/types/jaqpot-custom-error';
 import { ApiResponse } from '@/app/util/response';
 import { SortDescriptor } from '@react-types/shared/src/collections';
 import { convertSortDirection, SORT_DELIMITER } from '@/app/util/sort';
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { Chip, getKeyValue } from '@nextui-org/react';
+import { Chip } from '@heroui/chip';
+import { getKeyValue } from '@heroui/react';
 import { format } from 'date-fns';
 
 interface UsersResponseDto {
@@ -180,9 +181,10 @@ export default function UsersTable({ usersEndpoint }: UsersTableProps) {
         onSortChange={onSortChange}
         topContent={
           data ? (
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <span className="text-small text-default-400">
-                Total {data.totalElements} user{data.totalElements === 1 ? '' : 's'}
+                Total {data.totalElements} user
+                {data.totalElements === 1 ? '' : 's'}
               </span>
             </div>
           ) : null

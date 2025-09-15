@@ -1,13 +1,13 @@
 import DoaCards from '@/app/dashboard/models/[modelId]/components/DoaCards';
 import React from 'react';
 import {
-  Button,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from '@nextui-org/react';
+} from '@heroui/modal';
+import { Button } from '@heroui/button';
 
 interface DoaModalProps {
   isOpen: boolean;

@@ -11,12 +11,12 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
-} from '@nextui-org/react';
-import { Button } from '@nextui-org/button';
-import { Tooltip } from '@nextui-org/tooltip';
+} from "@heroui/react";
+import { Button } from "@heroui/button";
+import { Tooltip } from "@heroui/tooltip";
 import { getAvatarFallbackImg } from '@/app/util/avatar';
-import { Avatar } from '@nextui-org/avatar';
-import { Link } from '@nextui-org/link';
+import { Avatar } from "@heroui/avatar";
+import { Link } from "@heroui/link";
 
 interface OrganizationMembersProps {
   organization: OrganizationDto;

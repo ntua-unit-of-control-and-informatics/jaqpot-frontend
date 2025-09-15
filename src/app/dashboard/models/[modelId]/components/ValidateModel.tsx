@@ -11,7 +11,7 @@ import useSWR from 'swr';
 import { datasetFetcher } from '@/app/util/dataset';
 import DatasetResults from '@/app/dashboard/models/[modelId]/components/DatasetResults';
 import ValidateModelResults from '@/app/dashboard/models/[modelId]/components/ValidateModelResults';
-import { Spinner } from '@nextui-org/spinner';
+import { Spinner } from "@heroui/spinner";
 
 interface ValidateModelProps {
   model: ModelDto;

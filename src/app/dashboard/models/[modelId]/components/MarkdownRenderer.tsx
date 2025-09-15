@@ -1,7 +1,7 @@
 'use client';
 
 import Markdown from 'react-markdown';
-import { Link } from '@nextui-org/link';
+import { Link } from "@heroui/link";
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';

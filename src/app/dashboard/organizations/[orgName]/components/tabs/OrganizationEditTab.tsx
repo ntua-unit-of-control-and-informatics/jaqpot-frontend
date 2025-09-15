@@ -4,15 +4,15 @@ import {
   OrganizationDto,
   PartiallyUpdateModelRequestDto,
 } from '@/app/api.types';
-import { Input, Textarea } from '@nextui-org/input';
-import { Button } from '@nextui-org/button';
-import { Select, SelectItem } from '@nextui-org/react';
+import { Input, Textarea } from '@heroui/input';
+import { Button } from '@heroui/button';
+import { Select, SelectItem } from '@heroui/select';
 import React, { useState } from 'react';
 import { organizationVisibilitySelectValues } from '@/app/types/organization-select.types';
 import { ApiResponse } from '@/app/util/response';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { Link } from '@nextui-org/link';
+import { Link } from '@heroui/link';
 
 interface OrganizationEditTabProps {
   organization: OrganizationDto;

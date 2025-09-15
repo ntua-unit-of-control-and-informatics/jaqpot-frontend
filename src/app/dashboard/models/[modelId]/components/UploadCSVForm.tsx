@@ -1,9 +1,9 @@
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import { ArrowDownTrayIcon, ArrowUpTrayIcon } from '@heroicons/react/24/solid';
 import React, { ChangeEvent, useState } from 'react';
 import { ModelDto } from '@/app/api.types';
-import { Input } from '@nextui-org/input';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Input } from "@heroui/input";
+import { Tooltip } from "@heroui/tooltip";
 import { logger } from '@/logger';
 
 const log = logger.child({ module: 'uploadCSVForm' });

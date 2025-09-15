@@ -9,9 +9,9 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from '@nextui-org/dropdown';
-import { Button } from '@nextui-org/button';
-import { User } from '@nextui-org/react';
+} from '@heroui/dropdown';
+import { Button } from '@heroui/button';
+import { User } from '@heroui/user';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import React from 'react';
 import { useUserSettingsStore } from '@/app/stores/userSettingsStore';
