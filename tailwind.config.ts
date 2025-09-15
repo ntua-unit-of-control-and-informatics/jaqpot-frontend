@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss';
-import { heroui } from "@heroui/react";
 
 const config: Config = {
   content: [
@@ -12,45 +11,6 @@ const config: Config = {
     extend: {},
   },
   plugins: [
-    heroui({
-      themes: {
-        light: {
-          colors: {
-            background: '#FFFFFF', // or DEFAULT
-            foreground: '#000000', // or 50 to 900 DEFAULT
-            primary: {
-              //... 50 to 900
-              foreground: '#FFFFFF',
-              DEFAULT: '#4F46E5',
-            },
-            // ... rest of the colors
-          },
-        },
-        dark: {
-          colors: {
-            background: '#94A3B8', // or DEFAULT
-            foreground: '#FFFFFF', // or 50 to 900 DEFAULT
-            primary: {
-              //... 50 to 900
-              foreground: '#FFFFFF',
-              DEFAULT: '#006FEE',
-            },
-          },
-          // ... rest of the colors
-        },
-        mytheme: {
-          // custom theme
-          extend: 'dark',
-          colors: {
-            primary: {
-              DEFAULT: '#BEF264',
-              foreground: '#000000',
-            },
-            focus: '#BEF264',
-          },
-        },
-      },
-    }),
     require('tailwind-scrollbar')({
       nocompatible: true,
       preferredStrategy: 'pseudoelements',
