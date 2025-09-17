@@ -1,9 +1,8 @@
 import NextAuth, { DefaultSession } from 'next-auth';
-import KeycloakProvider from 'next-auth/providers/keycloak';
 
 import { DefaultJWT } from '@auth/core/jwt';
 import { jwtDecode } from 'jwt-decode';
-import Keycloak from 'next-auth/providers/keycloak';
+import KeycloakProvider from 'next-auth/providers/keycloak';
 import { logger } from '@/logger';
 
 const log = logger.child({ module: 'error' });
@@ -27,25 +26,43 @@ declare module 'next-auth' {
 }
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  providers: [Keycloak],
+  session: {
+    strategy: 'jwt',
+    maxAge: 180 * 24 * 60 * 60,
+  },
+  providers: [
+    KeycloakProvider({
+      issuer: process.env.AUTH_KEYCLOAK_ISSUER,
+      clientId: process.env.AUTH_KEYCLOAK_ID!,
+      clientSecret: process.env.AUTH_KEYCLOAK_SECRET,
+      authorization: {
+        params: {
+          scope: 'openid profile email offline_access',
+        },
+      },
+    }),
+  ],
   callbacks: {
     jwt: async ({ token, user, account }) => {
       // Initial sign in
       if (account && account.access_token) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
-        if (account.expires_at) {
-          token.accessTokenExpires = account.expires_at * 1000;
-        }
+        const expiresAt = (account as any).expires_at
+          ? (account as any).expires_at * 1000
+          : (account as any).expires_in
+          ? Date.now() + (account as any).expires_in * 1000
+          : undefined;
+        if (expiresAt) token.accessTokenExpires = expiresAt;
       }
 
       // return token;
 
       // Return previous token if the access token has not expired yet
-      if (
-        !token.accessTokenExpires ||
-        Date.now() < (token.accessTokenExpires as number)
-      ) {
+      const expires = token.accessTokenExpires as number | undefined;
+      const hasValidExpiry = typeof expires === 'number';
+      const isStillValid = hasValidExpiry && Date.now() < expires - 60_000;
+      if (isStillValid) {
         return token;
       }
 
