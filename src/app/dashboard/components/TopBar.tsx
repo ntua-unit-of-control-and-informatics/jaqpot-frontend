@@ -91,7 +91,7 @@ export default function TopBar() {
           </Button>
           {/*DIVIDER*/}
           <div
-            className="h-6 w-px bg-gray-900 bg-opacity-10"
+            className="h-6 w-px bg-gray-900/10"
             aria-hidden="true"
           ></div>
           <UserAvatar session={session} />
