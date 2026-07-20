@@ -76,23 +76,35 @@ export default function Dashboard() {
             <Divider className="my-8" />
 
             <div className="sm:justify-center">
-              <div className="relative text-tiny leading-6">
-                Developed by the{' '}
-                <Link
-                  href="https://www.chemeng.ntua.gr/labs/control_lab/"
-                  isExternal
-                  className="text-tiny"
-                >
-                  Unit of Process Control and Informatics
-                </Link>{' '}
-                at the{' '}
-                <Link
-                  href="https://www.ntua.gr/en/"
-                  isExternal
-                  className="text-tiny"
-                >
-                  National Technical University of Athens
-                </Link>
+              <div className="relative leading-10 text-center">
+                <p className="text-2xl font-bold">
+                  Jaqpot is a cloud-based platform operated by{' '}
+                  <Link
+                    href="https://www.euclia.io/"
+                    isExternal
+                    className="text-2xl font-bold"
+                  >
+                    Euclia
+                  </Link>
+                </p>
+                <p className="text-sm text-default-500 mt-2">
+                  with scientific support from the{' '}
+                  <Link
+                    href="https://www.chemeng.ntua.gr/labs/control_lab/"
+                    isExternal
+                    className="text-sm"
+                  >
+                    Unit of Process Control and Informatics
+                  </Link>{' '}
+                  at the{' '}
+                  <Link
+                    href="https://www.ntua.gr/en/"
+                    isExternal
+                    className="text-sm"
+                  >
+                    National Technical University of Athens
+                  </Link>
+                </p>
               </div>
             </div>
           </div>
