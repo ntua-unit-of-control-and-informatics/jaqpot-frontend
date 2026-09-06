@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import ModelsTable from '@/app/dashboard/models/components/ModelsTable';
 import UsersTable from '@/app/dashboard/admin/components/UsersTable';
+import DatasetsTable from '@/app/dashboard/admin/components/DatasetsTable';
 import React from 'react';
 import { generateSharedMetadata } from '@/app/shared.metadata';
 import ModelsBreadcrumbs from '@/app/dashboard/models/components/ModelsBreadcrumbs';
@@ -32,6 +33,21 @@ export default async function AdminPage() {
       </div>
 
       <ModelsTable modelsEndpoint="/api/admin/models" showCreator={true} />
+
+      {/* Datasets Section */}
+      <div className="mb-5 mt-10 flex items-center">
+        <h2 className="text-2xl font-bold leading-7 sm:text-3xl sm:tracking-tight">
+          All datasets
+        </h2>
+        <Tooltip
+          content="All prediction requests in the Jaqpot platform ordered by request date — shows who requested what (user, model, type, status) and when"
+          closeDelay={0}
+        >
+          <InformationCircleIcon className="ml-1 size-5 text-gray-400" />
+        </Tooltip>
+      </div>
+
+      <DatasetsTable datasetsEndpoint="/api/admin/datasets" />
 
       {/* Users Section */}
       <div className="mb-5 mt-10 flex items-center">

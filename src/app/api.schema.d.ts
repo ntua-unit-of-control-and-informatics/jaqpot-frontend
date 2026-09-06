@@ -26,6 +26,13 @@ export interface paths {
      */
     get: operations["getAllModels"];
   };
+  "/v1/admin/datasets": {
+    /**
+     * Get all datasets for admins
+     * @description Retrieve a paginated list of all prediction datasets (request history) in the system, newest first. Only accessible by admin or UPCI users. Input/result payloads are omitted; use GET /v1/datasets/{id} for a single dataset.
+     */
+    get: operations["getAllDatasets"];
+  };
   "/v1/user/models": {
     /** Get paginated models */
     get: operations["getModels"];
@@ -51,6 +58,13 @@ export interface paths {
      * @description Unarchives a previously archived model. This will cancel any scheduled deletion.
      */
     post: operations["unarchiveModel"];
+  };
+  "/v1/models/{modelId}/download/urls": {
+    /**
+     * Get all presigned download URLs for model assets
+     * @description Get presigned URLs to download all available model assets (model file, preprocessor, and DOAs) directly from S3.
+     */
+    get: operations["getModelDownloadUrls"];
   };
   "/v1/user/shared-models": {
     /** Get paginated shared models */
@@ -436,7 +450,7 @@ export interface components {
       name: string;
     };
     /** @enum {string} */
-    ModelType: "SKLEARN_ONNX" | "TORCH_ONNX" | "TORCH_SEQUENCE_ONNX" | "TORCH_GEOMETRIC_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "DOCKER" | "OPENAI_LLM" | "CUSTOM_LLM" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
+    ModelType: "SKLEARN_ONNX" | "TORCH_ONNX" | "TORCH_GEOMETRIC_ONNX" | "TORCHSCRIPT" | "R_BNLEARN_DISCRETE" | "R_CARET" | "R_GBM" | "R_NAIVE_BAYES" | "R_PBPK" | "R_RF" | "R_RPART" | "R_SVM" | "R_TREE_CLASS" | "R_TREE_REGR" | "DOCKER" | "OPENAI_LLM" | "CUSTOM_LLM" | "QSAR_TOOLBOX_CALCULATOR" | "QSAR_TOOLBOX_QSAR_MODEL" | "QSAR_TOOLBOX_PROFILER";
     /** @description A preprocessor for the model */
     Transformer: {
       /** Format: int64 */
@@ -1013,6 +1027,41 @@ export interface operations {
       };
     };
   };
+  /**
+   * Get all datasets for admins
+   * @description Retrieve a paginated list of all prediction datasets (request history) in the system, newest first. Only accessible by admin or UPCI users. Input/result payloads are omitted; use GET /v1/datasets/{id} for a single dataset.
+   */
+  getAllDatasets: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description Paginated list of datasets */
+      200: {
+        content: {
+          "application/json": {
+            content?: components["schemas"]["Dataset"][];
+            totalElements?: number;
+            totalPages?: number;
+            pageSize?: number;
+            pageNumber?: number;
+          };
+        };
+      };
+      /** @description Unauthorized - user must be authenticated as admin or UPCI user */
+      401: {
+        content: never;
+      };
+      /** @description Forbidden - insufficient privileges */
+      403: {
+        content: never;
+      };
+    };
+  };
   /** Get paginated models */
   getModels: {
     parameters: {
@@ -1164,6 +1213,64 @@ export interface operations {
       };
       /** @description Model is not currently archived */
       409: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * Get all presigned download URLs for model assets
+   * @description Get presigned URLs to download all available model assets (model file, preprocessor, and DOAs) directly from S3.
+   */
+  getModelDownloadUrls: {
+    parameters: {
+      query?: {
+        /** @description URL expiration time in minutes (default 10, max 20) */
+        expirationMinutes?: number;
+      };
+      path: {
+        /** @description The ID of the model to get download URLs for */
+        modelId: number;
+      };
+    };
+    responses: {
+      /** @description Presigned download URLs generated successfully */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * Format: uri
+             * @description Presigned S3 URL for downloading the model file
+             */
+            modelUrl?: string | null;
+            /**
+             * Format: uri
+             * @description Presigned S3 URL for downloading the preprocessor
+             */
+            preprocessorUrl?: string | null;
+            /** @description Presigned S3 URLs for downloading DOA files */
+            doaUrls?: {
+                /** @description DOA method name */
+                method?: string;
+                /**
+                 * Format: uri
+                 * @description Presigned S3 URL for downloading the DOA file
+                 */
+                downloadUrl?: string;
+              }[];
+            /**
+             * Format: date-time
+             * @description URL expiration timestamp for all URLs
+             */
+            expiresAt?: string;
+          };
+        };
+      };
+      /** @description Insufficient permissions to download the model */
+      403: {
+        content: never;
+      };
+      /** @description Model not found */
+      404: {
         content: never;
       };
     };
