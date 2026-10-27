@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Link } from "@heroui/link";
+import { Link } from '@heroui/link';
 
 const LOCAL_STORAGE_KEY = 'jaqpotCookieConsent';
 
@@ -23,12 +23,12 @@ export default function CookiesConsent() {
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-700/70">
-      <div className="fixed bottom-0 left-0 right-0 z-10 flex items-center justify-between bg-gray-100 px-4 py-8">
+      <div className="fixed right-0 bottom-0 left-0 z-10 flex items-center justify-between bg-gray-100 px-4 py-8">
         <span className="text-dark mr-16 text-base">
           This website uses cookies to improve user experience. By using our
           website you consent to all cookies in accordance with our{' '}
           <Link href="https://jaqpot.org/privacy-policy" isExternal>
-            Cookie Policy
+            Privacy Policy
           </Link>
         </span>
         <button
