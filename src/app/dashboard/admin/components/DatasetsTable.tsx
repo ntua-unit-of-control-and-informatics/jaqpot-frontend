@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@heroui/table';
 import { Pagination } from '@heroui/pagination';
-import { AdminDatasetsResponseDto, DatasetDto } from '@/app/api.types';
+import { AdminDatasetsResponseDto, AdminDatasetDto } from '@/app/api.types';
 import useSWR, { Fetcher } from 'swr';
 import { Spinner } from '@heroui/spinner';
 import SWRClientFetchError from '@/app/components/SWRClientFetchError';
@@ -79,11 +79,15 @@ function useDatasetsPage(
 function formatDateTime(value?: string | null) {
   if (!value) return <div className="text-sm text-gray-500">-</div>;
   return (
-    <div className="text-sm">{format(new Date(value), 'MMM dd, yyyy HH:mm')}</div>
+    <div className="text-sm">
+      {format(new Date(value), 'MMM dd, yyyy HH:mm')}
+    </div>
   );
 }
 
-export default function DatasetsTable({ datasetsEndpoint }: DatasetsTableProps) {
+export default function DatasetsTable({
+  datasetsEndpoint,
+}: DatasetsTableProps) {
   const [page, setPage] = useState(1);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>();
   const [sort, setSort] = useState<string[]>(['createdAt|desc']); // Default sort by newest request
@@ -105,8 +109,8 @@ export default function DatasetsTable({ datasetsEndpoint }: DatasetsTableProps) 
       label: 'Model',
     },
     {
-      key: 'userId',
-      label: 'User ID',
+      key: 'user',
+      label: 'User',
     },
     {
       key: 'type',
@@ -130,7 +134,13 @@ export default function DatasetsTable({ datasetsEndpoint }: DatasetsTableProps) 
     },
   ];
 
-  const rows = data?.content?.map((dataset: DatasetDto) => {
+  const rows = data?.content?.map((dataset: AdminDatasetDto) => {
+    const fullName = [dataset.user?.firstName, dataset.user?.lastName]
+      .filter(Boolean)
+      .join(' ');
+    const userName =
+      fullName || dataset.user?.username || dataset.userId || '-';
+
     return {
       ...dataset,
       key: dataset.id,
@@ -152,15 +162,20 @@ export default function DatasetsTable({ datasetsEndpoint }: DatasetsTableProps) 
           {dataset.modelName ?? dataset.modelId}
         </Link>
       ),
-      userId: (
-        <div className="max-w-56 truncate font-mono text-xs" title={dataset.userId}>
-          {dataset.userId}
+      user: (
+        <div
+          className="max-w-56 truncate text-sm"
+          title={dataset.user?.username || dataset.userId}
+        >
+          {userName}
         </div>
       ),
       type: <div className="text-sm">{dataset.type}</div>,
       status: getDatasetStatusNode(dataset),
       createdAt: dataset.createdAt ? (
-        <JaqpotTimeAgo date={new Date(dataset.createdAt as unknown as string)} />
+        <JaqpotTimeAgo
+          date={new Date(dataset.createdAt as unknown as string)}
+        />
       ) : (
         <div className="text-sm text-gray-500">-</div>
       ),

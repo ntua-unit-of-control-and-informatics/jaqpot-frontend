@@ -669,6 +669,10 @@ export interface components {
       /** Format: date-time */
       updatedAt?: string;
     };
+    /** @description Dataset request metadata enriched with the requesting user's details. Only returned to administrators. */
+    AdminDataset: components["schemas"]["Dataset"] & {
+      user?: components["schemas"]["User"];
+    };
     DatasetCSV: {
       /**
        * Format: int64
@@ -1044,7 +1048,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            content?: components["schemas"]["Dataset"][];
+            content?: components["schemas"]["AdminDataset"][];
             totalElements?: number;
             totalPages?: number;
             pageSize?: number;
